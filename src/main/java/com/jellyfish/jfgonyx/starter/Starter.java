@@ -1,0 +1,90 @@
+/*******************************************************************************
+ * Copyright (c) 2015, 2016, 2017, Thomas.H Warner.
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without modification, 
+ * are permitted provided that the following conditions are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright notice, this 
+ * list of conditions and the following disclaimer.
+ *
+ * 2. Redistributions in binary form must reproduce the above copyright notice, 
+ * this list of conditions and the following disclaimer in the documentation and/or 
+ * other materials provided with the distribution.
+ *
+ * 3. Neither the name of the copyright holder nor the names of its contributors 
+ * may be used to endorse or promote products derived from this software without 
+ * specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED 
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ * IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY 
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES 
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; 
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON 
+ * ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT 
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS 
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
+ *******************************************************************************/
+
+package com.jellyfish.jfgonyx.starter;
+
+import com.jellyfish.jfgonyx.entities.OnyxDiamondCollection;
+import com.jellyfish.jfgonyx.entities.OnyxPosCollection;
+import com.jellyfish.jfgonyx.helpers.GraphicsHelper;
+import com.jellyfish.jfgonyx.ui.MainFrame;
+import com.jellyfish.jfgonyx.ui.OnyxBoard;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+
+/**
+ *
+ * @author thw
+ */
+public class Starter {
+    
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+        
+        // <editor-fold defaultstate="collapsed" desc="UI Manager">    
+        try {
+            // Set System L&F
+            UIManager.setLookAndFeel(
+                    UIManager.getSystemLookAndFeelClassName());
+        } catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+            System.err.println("Look & feel setup failed.");
+        }
+        //</editor-fold>
+        
+        final OnyxDiamondCollection diamonds = new OnyxDiamondCollection().init();
+        GraphicsHelper.buildPolygons(diamonds);
+        final OnyxPosCollection positions = new OnyxPosCollection();
+        positions.initPosition(diamonds);
+        final OnyxBoard board = new OnyxBoard(diamonds, positions);
+        board.initStartLayout();
+        final MainFrame mainFrame = new MainFrame(board);
+        
+        /** 
+         * Stupid UI test, add 5 new random positions... .. .
+         *
+        try {
+            String k = OnyxEngine.SEARCH.get(SEARCH_TYPE.RANDOM).randomMoveFirstFound(positions, GraphicsConst.COLOR.BLACK);
+            positions.getPosition(k).addPiece(new OnyxPiece(GraphicsConst.COLOR.BLACK));
+            k = OnyxEngine.SEARCH.get(SEARCH_TYPE.RANDOM).randomMoveFirstFound(positions, GraphicsConst.COLOR.WHITE);
+            positions.getPosition(k).addPiece(new OnyxPiece(GraphicsConst.COLOR.WHITE));
+            k = OnyxEngine.SEARCH.get(SEARCH_TYPE.RANDOM).randomMoveFirstFound(positions, GraphicsConst.COLOR.BLACK);
+            positions.getPosition(k).addPiece(new OnyxPiece(GraphicsConst.COLOR.BLACK));
+            k = OnyxEngine.SEARCH.get(SEARCH_TYPE.RANDOM).randomMoveFirstFound(positions, GraphicsConst.COLOR.WHITE);
+            positions.getPosition(k).addPiece(new OnyxPiece(GraphicsConst.COLOR.WHITE));
+            k = OnyxEngine.SEARCH.get(SEARCH_TYPE.RANDOM).randomMoveFirstFound(positions, GraphicsConst.COLOR.BLACK);
+            positions.getPosition(k).addPiece(new OnyxPiece(GraphicsConst.COLOR.BLACK));
+        } catch (final NoValidOnysPositionsFound Nvopf) {
+            Logger.getLogger(Starter.class.getName()).log(Level.SEVERE, null, Nvopf);
+        }
+         */
+    }
+    
+}
