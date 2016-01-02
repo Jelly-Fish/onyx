@@ -39,18 +39,13 @@ import com.jellyfish.jfgonyx.constants.GraphicsConst;
 public class OnyxPiece {
     
     public final GraphicsConst.COLOR color;
-    private boolean virtual = false;
+    protected boolean virtual = false;
     private OnyxPos tmpOnyxPosition = null;
 
     public OnyxPiece(final GraphicsConst.COLOR c) {
         this.color = c;
     }
-    
-    public OnyxPiece(final GraphicsConst.COLOR c, final boolean virtual) {
-        this.color = c;
-        this.virtual = virtual;
-    }
-    
+
     public boolean isVirtual() {
         return this.virtual;
     }

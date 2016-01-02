@@ -41,6 +41,7 @@ public class OnyxVirtualPiece extends OnyxPiece {
 
     public OnyxVirtualPiece(final GraphicsConst.COLOR c) {
         super(c);
+        this.virtual = true;
     }
     
 }

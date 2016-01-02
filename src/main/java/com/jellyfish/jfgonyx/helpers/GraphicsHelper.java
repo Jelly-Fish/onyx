@@ -34,10 +34,12 @@ package com.jellyfish.jfgonyx.helpers;
 import com.jellyfish.jfgonyx.constants.GraphicsConst;
 import com.jellyfish.jfgonyx.entities.*;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Polygon;
 import java.awt.RenderingHints;
+import java.awt.Stroke;
 import java.awt.geom.AffineTransform;
 
 /**
@@ -164,6 +166,9 @@ public class GraphicsHelper {
         }
 
         GraphicsHelper.drawPieces(g, p);
+        if (p.hasVirtualPiece()) {
+            GraphicsHelper.drawPiece(g, p.getVirtualPiece().getTmpOnyxPosition(), p.getVirtualPiece());
+        }
         g.setTransform(previous);
     }
 
@@ -174,10 +179,6 @@ public class GraphicsHelper {
             if (p.isOccupied()) {
                 GraphicsHelper.drawPiece(g, p, p.getPiece());
             }
-            
-            if (p.isVirtuallyOccupied()) {
-                GraphicsHelper.drawPiece(g, p, p.getVirtualPiece());
-            }
         }
     }
 
@@ -186,7 +187,7 @@ public class GraphicsHelper {
         if (p.x % 2 == 0) {
             g.translate(0, 15);
         }
-
+        
         if (p.y % 2 == 0) {
             g.translate(15, 0);
         }
@@ -196,6 +197,14 @@ public class GraphicsHelper {
         g.drawOval(p.gX - 15, p.gY - 15, 30, 30);
         g.setColor(piece.color.color);
         g.fillOval(p.gX - 15, p.gY - 15, 30, 30);
+        
+        if (piece.isVirtual()) {
+            final Stroke s = g.getStroke();
+            g.setStroke(new BasicStroke(2));
+            g.setColor(GraphicsConst.VIRTUAL_OUTLINE);
+            g.drawOval(p.gX - 15, p.gY - 15, 30, 30);
+            g.setStroke(s);
+        }
 
         if (p.x % 2 == 0) {
             g.translate(0, -15);
@@ -204,6 +213,33 @@ public class GraphicsHelper {
         if (p.y % 2 == 0) {
             g.translate(-15, 0);
         }
+    }
+    
+    private static void drawCenterPiece(Graphics2D g, final OnyxPos p, final OnyxPiece piece) {
+
+        /**
+         * FIXME : test and debug.
+         */
+        
+        g.translate(0, 7.5);
+        g.translate(7.5, 0);
+
+        g.setColor(piece.color.boolColor
+                ? GraphicsConst.BLACK_OUTLINE : GraphicsConst.WHITE_OUTLINE);
+        g.drawOval(p.gX - 15, p.gY - 15, 30, 30);
+        g.setColor(piece.color.color);
+        g.fillOval(p.gX - 15, p.gY - 15, 30, 30);
+        
+        if (piece.isVirtual()) {
+            final Stroke s = g.getStroke();
+            g.setStroke(new BasicStroke(2));
+            g.setColor(GraphicsConst.VIRTUAL_OUTLINE);
+            g.drawOval(p.gX - 15, p.gY - 15, 30, 30);
+            g.setStroke(s);
+        }
+
+        g.translate(0, -7.5);
+        g.translate(-7.5, 0);
     }
 
 }

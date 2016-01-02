@@ -43,7 +43,8 @@ public interface OnyxExecutable {
      * Action or execution.
      * @param e event code.
      * @param board the OnyBoard to which the listener has been added.
+     * @return true is move is validated and must swap turns.
      */
-    void exec(final int e, final OnyxBoard board);
+    boolean exec(final int e, final OnyxBoard board);
     
 }

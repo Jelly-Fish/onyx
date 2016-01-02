@@ -32,7 +32,6 @@
 package com.jellyfish.jfgonyx.entities;
 
 import com.jellyfish.jfgonyx.constants.GraphicsConst;
-import com.jellyfish.jfgonyx.exceptions.InvalidOnyxPositionException;
 import java.util.HashMap;
 import org.apache.commons.lang3.StringUtils;
 
@@ -42,7 +41,7 @@ import org.apache.commons.lang3.StringUtils;
 public class OnyxPosCollection {
     
     /**
-     * intmap matrix width & height int value = 24.
+     * intmap mtx width & height int value = 24.
      */
     public static final int MTX_WH = 24;
     public static final String KEY_FORMAT = "%.1f-%.1f";
@@ -102,6 +101,10 @@ public class OnyxPosCollection {
         }
         
         return null;
+    }
+    
+    public boolean hasVirtualPiece() {
+        return this.getVirtualPiece() != null;
     }
     
 }

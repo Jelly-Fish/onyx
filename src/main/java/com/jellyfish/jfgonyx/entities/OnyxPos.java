@@ -67,7 +67,7 @@ public class OnyxPos {
     }
     
     public boolean isDiamondCenter() {
-        return this.x % 2 != 0 || this.y % 2 != 0;
+        return this.x % 2 != 0 && this.y % 2 != 0;
     }
         
     public void addPiece(final OnyxPiece p) {

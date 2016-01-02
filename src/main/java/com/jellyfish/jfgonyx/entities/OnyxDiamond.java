@@ -79,12 +79,13 @@ public class OnyxDiamond {
     
     public boolean isCenterPosUsable(final OnyxPos p) {
         
-        if (!this.isFivePosDiamond()) return false;
-        if (this.positions[4].isOccupied()) return false;
+        final OnyxPiece piece = p.isVirtuallyOccupied() ? p.getVirtualPiece() : p.getPiece();
+        if (!p.diamond.isFivePosDiamond()) return false;
+        if (p.diamond.positions[4].isOccupied()) return false;
         
         int posCount = 0;
         for (int i = 0; i < 4; i++) {
-            if (this.positions[i].isOccupied(p.getPiece().color.bitColor)) ++posCount;
+            if (p.diamond.positions[i].isOccupied(piece.color.bitColor)) ++posCount;
         }
         return posCount == 4;
     }
@@ -93,10 +94,8 @@ public class OnyxDiamond {
         
         if (this.isFivePosDiamond()) {
             return this.positions[4];
-        } else {
-            throw new InvalidOnyxPositionException(
-                String.format(InvalidOnyxPositionException.INVALID_CENTER_POS, this.toString()));
         }
+        return null;
     }
     
     /**
