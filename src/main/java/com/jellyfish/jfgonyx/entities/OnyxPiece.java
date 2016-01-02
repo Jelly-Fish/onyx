@@ -40,6 +40,7 @@ public class OnyxPiece {
     
     public final GraphicsConst.COLOR color;
     private boolean virtual = false;
+    private OnyxPos tmpOnyxPosition = null;
 
     public OnyxPiece(final GraphicsConst.COLOR c) {
         this.color = c;
@@ -54,4 +55,12 @@ public class OnyxPiece {
         return this.virtual;
     }
     
+    public OnyxPos getTmpOnyxPosition() {
+        return tmpOnyxPosition;
+    }
+
+    public void setTmpOnyxPosition(OnyxPos tempOnyxPosition) {
+        this.tmpOnyxPosition = tempOnyxPosition;
+    }
+
 }

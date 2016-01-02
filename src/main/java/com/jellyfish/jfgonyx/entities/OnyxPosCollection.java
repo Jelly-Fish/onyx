@@ -61,7 +61,7 @@ public class OnyxPosCollection {
     
     public void spawnVirtualPiece(final GraphicsConst.COLOR c) {
         
-        this.positions.get(String.format(OnyxPosCollection.KEY_FORMAT, 12f, 1f)).setPiece(
+        this.positions.get(String.format(OnyxPosCollection.KEY_FORMAT, 6f, 6f)).setVirtualPiece(
                 new OnyxVirtualPiece(c)
         );
     }
@@ -90,15 +90,18 @@ public class OnyxPosCollection {
         return matrix;
     }
     
-    public OnyxVirtualPiece getVirtual() throws InvalidOnyxPositionException {
+    public OnyxVirtualPiece getVirtualPiece() {
         
+        OnyxVirtualPiece vP = null;
         for (OnyxPos p : this.positions.values()) {
-            if (p.isOccupied() && p.getPiece().isVirtual()) { 
-                return (OnyxVirtualPiece) p.getPiece();
+            if (p.isVirtuallyOccupied()) {
+                vP = (OnyxVirtualPiece) p.getVirtualPiece();
+                vP.setTmpOnyxPosition(p);
+                return vP;
             }
         }
         
-        throw new InvalidOnyxPositionException();
+        return null;
     }
     
 }

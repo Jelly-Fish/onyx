@@ -31,6 +31,8 @@
  */
 package com.jellyfish.jfgonyx.onyx.interfaces;
 
+import com.jellyfish.jfgonyx.ui.OnyxBoard;
+
 /**
  *
  * @author thw
@@ -40,7 +42,8 @@ public interface OnyxExecutable {
     /**
      * Action or execution.
      * @param e event code.
+     * @param board the OnyBoard to which the listener has been added.
      */
-    void exec(final int e);
+    void exec(final int e, final OnyxBoard board);
     
 }

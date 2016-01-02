@@ -26,8 +26,8 @@
  * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
  * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGE. 
- ******************************************************************************
+ * POSSIBILITY OF SUCH DAMAGE.
+ * *****************************************************************************
  */
 package com.jellyfish.jfgonyx.helpers;
 
@@ -44,97 +44,99 @@ import java.awt.geom.AffineTransform;
  * @author thw
  */
 public class GraphicsHelper {
-    
+
     public static void buildPolygons(final OnyxDiamondCollection c) {
-        
+
         for (OnyxDiamond d : c.diamonds.values()) {
-            
+
             if (d.onPairLine) {
                 if (d.isFivePosDiamond()) {
                     d.setPolygon(new Polygon(
-                            new int[] {
+                            new int[]{
                                 d.positions[0].gX, d.positions[1].gX + GraphicsConst.ZIGZAG,
                                 d.positions[2].gX + GraphicsConst.ZIGZAG, d.positions[3].gX
-                            }, 
-                            new int[] {
-                                d.positions[0].gY + GraphicsConst.ZIGZAG, 
-                                d.positions[1].gY + GraphicsConst.ZIGZAG, 
+                            },
+                            new int[]{
+                                d.positions[0].gY + GraphicsConst.ZIGZAG,
+                                d.positions[1].gY + GraphicsConst.ZIGZAG,
                                 d.positions[2].gY, d.positions[3].gY
                             }, 4));
                 } else {
                     d.setPolygon(new Polygon(
-                            new int[] {
+                            new int[]{
                                 d.positions[0].gX, d.positions[1].gX + GraphicsConst.ZIGZAG,
                                 d.positions[2].gX + GraphicsConst.ZIGZAG, d.positions[3].gX
-                            }, 
-                            new int[] {
-                                d.positions[0].gY, d.positions[1].gY, 
-                                d.positions[2].gY + GraphicsConst.ZIGZAG, 
+                            },
+                            new int[]{
+                                d.positions[0].gY, d.positions[1].gY,
+                                d.positions[2].gY + GraphicsConst.ZIGZAG,
                                 d.positions[3].gY + GraphicsConst.ZIGZAG
                             }, 4));
                 }
             } else {
                 if (d.isFivePosDiamond()) {
                     d.setPolygon(new Polygon(
-                            new int[] {
+                            new int[]{
                                 d.positions[0].gX + GraphicsConst.ZIGZAG, d.positions[1].gX,
                                 d.positions[2].gX, d.positions[3].gX + GraphicsConst.ZIGZAG
-                            }, 
-                            new int[] {
-                                d.positions[0].gY, d.positions[1].gY, 
-                                d.positions[2].gY + GraphicsConst.ZIGZAG, 
+                            },
+                            new int[]{
+                                d.positions[0].gY, d.positions[1].gY,
+                                d.positions[2].gY + GraphicsConst.ZIGZAG,
                                 d.positions[3].gY + GraphicsConst.ZIGZAG
                             }, 4));
                 } else {
                     d.setPolygon(new Polygon(
-                            new int[] {
+                            new int[]{
                                 d.positions[0].gX + GraphicsConst.ZIGZAG, d.positions[1].gX,
                                 d.positions[2].gX, d.positions[3].gX + GraphicsConst.ZIGZAG
-                            }, 
-                            new int[] {
-                                d.positions[0].gY + GraphicsConst.ZIGZAG, 
-                                d.positions[1].gY + GraphicsConst.ZIGZAG, 
+                            },
+                            new int[]{
+                                d.positions[0].gY + GraphicsConst.ZIGZAG,
+                                d.positions[1].gY + GraphicsConst.ZIGZAG,
                                 d.positions[2].gY, d.positions[3].gY
                             }, 4));
                 }
             }
         }
     }
-    
+
     public static void drawBoard(Graphics2D g, final OnyxDiamondCollection c,
             final OnyxPosCollection p, final OnyxBoard board) {
-        
+
+        g.clearRect(board.getX(), board.getY(), board.getWidth(), board.getHeight());
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_NORMALIZE);
-        
+
         /**
          * Translate board before rotation.
          */
-        g.translate(board.getWidth() - GraphicsConst.SQUARE_WIDTH, 
+        g.translate(board.getWidth() - GraphicsConst.SQUARE_WIDTH,
                 board.getHeight() - GraphicsConst.SQUARE_WIDTH);
         final AffineTransform previous = g.getTransform();
         g.rotate(Math.toRadians(180.0));
-        
+
         g.setColor(Color.BLACK);
-        
+
         for (OnyxDiamond d : c.diamonds.values()) {
-            
+
             if (d.onPairLine) {
                 if (d.isFivePosDiamond()) {
                     g.setColor(GraphicsConst.FULL_DIAMOND);
                     g.fillPolygon(d.getPolygon());
                     g.setColor(GraphicsConst.LINE);
                     g.drawPolygon(d.getPolygon());
-                    g.drawLine(d.positions[0].gX, d.positions[0].gY + GraphicsConst.ZIGZAG, 
+                    g.drawLine(d.positions[0].gX, d.positions[0].gY + GraphicsConst.ZIGZAG,
                             d.positions[2].gX + GraphicsConst.ZIGZAG, d.positions[2].gY);
-                    g.drawLine(d.positions[1].gX + GraphicsConst.ZIGZAG, d.positions[1].gY + GraphicsConst.ZIGZAG, 
+                    g.drawLine(d.positions[1].gX + GraphicsConst.ZIGZAG,
+                            d.positions[1].gY + GraphicsConst.ZIGZAG,
                             d.positions[3].gX, d.positions[3].gY);
                 } else {
                     g.setColor(GraphicsConst.DIAMOND);
                     g.fillPolygon(d.getPolygon());
                     g.setColor(GraphicsConst.LINE);
                     g.drawPolygon(d.getPolygon());
-                    g.drawLine(d.positions[1].gX + GraphicsConst.ZIGZAG, d.positions[1].gY, 
+                    g.drawLine(d.positions[1].gX + GraphicsConst.ZIGZAG, d.positions[1].gY,
                             d.positions[3].gX, d.positions[3].gY + GraphicsConst.ZIGZAG);
                 }
             } else {
@@ -143,41 +145,65 @@ public class GraphicsHelper {
                     g.fillPolygon(d.getPolygon());
                     g.setColor(GraphicsConst.LINE);
                     g.drawPolygon(d.getPolygon());
-                    g.drawLine(d.positions[0].gX + GraphicsConst.ZIGZAG, d.positions[0].gY, 
+                    g.drawLine(d.positions[0].gX + GraphicsConst.ZIGZAG, d.positions[0].gY,
                             d.positions[2].gX, d.positions[2].gY + GraphicsConst.ZIGZAG);
-                    g.drawLine(d.positions[1].gX, d.positions[1].gY, 
-                            d.positions[3].gX + GraphicsConst.ZIGZAG, d.positions[3].gY + GraphicsConst.ZIGZAG);
+                    g.drawLine(d.positions[1].gX, d.positions[1].gY,
+                            d.positions[3].gX + GraphicsConst.ZIGZAG,
+                            d.positions[3].gY + GraphicsConst.ZIGZAG);
                 } else {
                     g.setColor(GraphicsConst.DIAMOND);
                     g.setColor(GraphicsConst.DIAMOND);
                     g.fillPolygon(d.getPolygon());
                     g.setColor(GraphicsConst.LINE);
                     g.drawPolygon(d.getPolygon());
-                    g.drawLine(d.positions[0].gX + GraphicsConst.ZIGZAG, d.positions[0].gY + GraphicsConst.ZIGZAG, 
+                    g.drawLine(d.positions[0].gX + GraphicsConst.ZIGZAG,
+                            d.positions[0].gY + GraphicsConst.ZIGZAG,
                             d.positions[2].gX, d.positions[2].gY);
                 }
             }
         }
-        
-        GraphicsHelper.drawPieces(g, p, board);
+
+        GraphicsHelper.drawPieces(g, p);
         g.setTransform(previous);
     }
-    
-    private static void drawPieces(Graphics2D g, final OnyxPosCollection c, final OnyxBoard board) {
+
+    private static void drawPieces(Graphics2D g, final OnyxPosCollection c) {
 
         for (OnyxPos p : c.positions.values()) {
+
             if (p.isOccupied()) {
-                if (p.x % 2 == 0) g.translate(0, 15);
-                if (p.y % 2 == 0) g.translate(15, 0);
-                g.setColor(p.getPiece().color.boolColor ? 
-                        GraphicsConst.BLACK_OUTLINE : GraphicsConst.WHITE_OUTLINE);
-                g.drawOval(p.gX - 15, p.gY - 15, 30, 30);
-                g.setColor(p.getPiece().color.color);
-                g.fillOval(p.gX - 15, p.gY - 15, 30, 30);
-                if (p.x % 2 == 0) g.translate(0, -15);
-                if (p.y % 2 == 0) g.translate(-15, 0);
+                GraphicsHelper.drawPiece(g, p, p.getPiece());
+            }
+            
+            if (p.isVirtuallyOccupied()) {
+                GraphicsHelper.drawPiece(g, p, p.getVirtualPiece());
             }
         }
     }
-    
+
+    private static void drawPiece(Graphics2D g, final OnyxPos p, final OnyxPiece piece) {
+
+        if (p.x % 2 == 0) {
+            g.translate(0, 15);
+        }
+
+        if (p.y % 2 == 0) {
+            g.translate(15, 0);
+        }
+
+        g.setColor(piece.color.boolColor
+                ? GraphicsConst.BLACK_OUTLINE : GraphicsConst.WHITE_OUTLINE);
+        g.drawOval(p.gX - 15, p.gY - 15, 30, 30);
+        g.setColor(piece.color.color);
+        g.fillOval(p.gX - 15, p.gY - 15, 30, 30);
+
+        if (p.x % 2 == 0) {
+            g.translate(0, -15);
+        }
+
+        if (p.y % 2 == 0) {
+            g.translate(-15, 0);
+        }
+    }
+
 }

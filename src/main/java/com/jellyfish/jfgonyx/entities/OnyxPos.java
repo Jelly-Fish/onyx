@@ -42,6 +42,8 @@ public class OnyxPos {
     public final float x, y;
     public final int gX, gY;
     private OnyxPiece piece;
+    private OnyxVirtualPiece vPiece;
+
     public final OnyxDiamond diamond;
 
     public OnyxPos(final float x, final float y, final OnyxDiamond d) {
@@ -58,6 +60,10 @@ public class OnyxPos {
     
     boolean isOccupied(final int bitColor) {
         return this.isOccupied() && this.piece.color.bitColor == bitColor;
+    }
+    
+    public boolean isVirtuallyOccupied() {
+        return this.vPiece != null;
     }
     
     public boolean isDiamondCenter() {
@@ -106,6 +112,14 @@ public class OnyxPos {
             return false;
         }
         return Float.floatToIntBits(this.y) == Float.floatToIntBits(other.y);
+    } 
+    
+    public OnyxVirtualPiece getVirtualPiece() {
+        return vPiece;
+    }
+
+    public void setVirtualPiece(OnyxVirtualPiece vPiece) {
+        this.vPiece = vPiece;
     }
     
 }

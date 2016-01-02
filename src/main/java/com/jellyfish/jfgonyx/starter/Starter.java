@@ -67,26 +67,9 @@ public class Starter {
         positions.spawnVirtualPiece(GraphicsConst.COLOR.VIRTUAL_BLACK);
         final OnyxBoard board = new OnyxBoard(diamonds, positions);
         board.initStartLayout();
+        board.getOnyxKeyListener().init(board);
         final MainFrame mainFrame = new MainFrame(board);
-        
-        /** 
-         * Stupid UI test, add 5 new random positions... .. .
-         *
-        try {
-            String k = OnyxEngine.SEARCH.get(SEARCH_TYPE.RANDOM).randomMoveFirstFound(positions, GraphicsConst.COLOR.BLACK);
-            positions.getPosition(k).addPiece(new OnyxPiece(GraphicsConst.COLOR.BLACK));
-            k = OnyxEngine.SEARCH.get(SEARCH_TYPE.RANDOM).randomMoveFirstFound(positions, GraphicsConst.COLOR.WHITE);
-            positions.getPosition(k).addPiece(new OnyxPiece(GraphicsConst.COLOR.WHITE));
-            k = OnyxEngine.SEARCH.get(SEARCH_TYPE.RANDOM).randomMoveFirstFound(positions, GraphicsConst.COLOR.BLACK);
-            positions.getPosition(k).addPiece(new OnyxPiece(GraphicsConst.COLOR.BLACK));
-            k = OnyxEngine.SEARCH.get(SEARCH_TYPE.RANDOM).randomMoveFirstFound(positions, GraphicsConst.COLOR.WHITE);
-            positions.getPosition(k).addPiece(new OnyxPiece(GraphicsConst.COLOR.WHITE));
-            k = OnyxEngine.SEARCH.get(SEARCH_TYPE.RANDOM).randomMoveFirstFound(positions, GraphicsConst.COLOR.BLACK);
-            positions.getPosition(k).addPiece(new OnyxPiece(GraphicsConst.COLOR.BLACK));
-        } catch (final NoValidOnysPositionsFound Nvopf) {
-            Logger.getLogger(Starter.class.getName()).log(Level.SEVERE, null, Nvopf);
-        }
-         */
+
     }
     
 }

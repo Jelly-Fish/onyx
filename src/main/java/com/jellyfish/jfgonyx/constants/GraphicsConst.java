@@ -51,8 +51,8 @@ public class GraphicsConst {
     public static enum COLOR {
         
         WHITE("white", Color.WHITE, false, 0), BLACK("black", Color.BLACK, true, 1),
-        VIRTUAL_WHITE("white", new Color(1f,1f,1f,.4f), false, 0), 
-        VIRTUAL_BLACK("black", new Color(0f,0f,0f,.4f), true, 1);
+        VIRTUAL_WHITE("white", new Color(1f,1f,1f,.6f), false, 0), 
+        VIRTUAL_BLACK("black", new Color(0f,0f,0f,.6f), true, 1);
         
         public final String strColor;
         public final Boolean boolColor;

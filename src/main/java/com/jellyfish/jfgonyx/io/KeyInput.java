@@ -31,25 +31,34 @@
  */
 package com.jellyfish.jfgonyx.io;
 
+import com.jellyfish.jfgonyx.io.events.MoveVirutalPiece;
 import com.jellyfish.jfgonyx.onyx.interfaces.OnyxExecutable;
+import com.jellyfish.jfgonyx.ui.OnyxBoard;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.HashMap;
 
 /**
- *
  * @author thw
  */
 public class KeyInput implements KeyListener {
 
-    private final HashMap<Integer, OnyxExecutable> ops = new HashMap<>();
-    static {
-        
+    private OnyxBoard board = null;
+    private final HashMap<KeyInput.EVENT, OnyxExecutable> ops = new HashMap<>();
+    
+    public static enum EVENT {
+        VIRTUAL_P_MOVE
+    }
+    
+    public void init(final OnyxBoard board) {
+        this.board = board;
+        this.ops.put(KeyInput.EVENT.VIRTUAL_P_MOVE, new MoveVirutalPiece());
     }
     
     @Override
     public void keyReleased(KeyEvent e) {
-        System.out.println("Pressed " + e.getExtendedKeyCode());
+        System.out.println("keyReleased: " + e.getKeyCode());
+        this.ops.get(KeyInput.EVENT.VIRTUAL_P_MOVE).exec(e.getKeyCode(), board);
     }
     
     @Override

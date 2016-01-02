@@ -40,6 +40,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.KeyListener;
 
 /**
  *
@@ -49,6 +50,7 @@ public class OnyxBoard extends javax.swing.JPanel {
     
     private final OnyxDiamondCollection diamonds;
     private final OnyxPosCollection positions;
+    private final KeyListener keyInput;
 
     public OnyxBoard(final OnyxDiamondCollection diamonds, final OnyxPosCollection positions) {
         
@@ -59,7 +61,8 @@ public class OnyxBoard extends javax.swing.JPanel {
         this.setOpaque(true);
         this.setPreferredSize(new Dimension(GraphicsConst.BOARD_WIDTH, GraphicsConst.BOARD_WIDTH));
         this.setBackground(Color.WHITE);
-        this.addKeyListener(new KeyInput());
+        this.keyInput = new KeyInput();
+        this.addKeyListener(keyInput);
         this.setFocusable(true);
         this.requestFocusInWindow();
     }
@@ -82,7 +85,15 @@ public class OnyxBoard extends javax.swing.JPanel {
         
         super.paintComponent(g);
         g.clearRect(0, 0, this.getWidth(), this.getHeight());
-        GraphicsHelper.drawBoard((Graphics2D) g, diamonds, positions, this);
+        GraphicsHelper.drawBoard((Graphics2D) g, this.diamonds, this.positions, this);
+    }
+    
+    public KeyInput getOnyxKeyListener() {
+        return (KeyInput) this.keyInput;
+    }
+    
+    public OnyxPosCollection getPosCollection() {
+        return this.positions;
     }
     
 }
