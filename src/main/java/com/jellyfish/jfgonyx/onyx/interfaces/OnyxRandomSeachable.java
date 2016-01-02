@@ -29,24 +29,29 @@
  * POSSIBILITY OF SUCH DAMAGE. 
  ******************************************************************************
  */
-package com.jellyfish.jfgonyx.engine;
+package com.jellyfish.jfgonyx.onyx.interfaces;
 
-import com.jellyfish.jfgonyx.engine.interfaces.OnyxAbstractSearchable;
-import java.util.HashMap;
+import com.jellyfish.jfgonyx.constants.GraphicsConst;
+import com.jellyfish.jfgonyx.entities.OnyxPosCollection;
+import com.jellyfish.jfgonyx.exceptions.NoValidOnysPositionsFound;
 
 /**
+ *
  * @author thw
  */
-public class OnyxEngine {
+public interface OnyxRandomSeachable extends OnyxAbstractSearchable {
     
-    public static enum SEARCH_TYPE {
-        RANDOM, ONYXPOSCOL
-    }
-    
-    public final static HashMap<SEARCH_TYPE, OnyxAbstractSearchable> SEARCH = new HashMap<>();
-    static {
-        SEARCH.put(SEARCH_TYPE.RANDOM, new OnyxRandomSearch());
-        SEARCH.put(SEARCH_TYPE.ONYXPOSCOL, new OnyxPosCollectionSearch());
-    }
+    /**
+     * Get the first dumb move found by looping through OnyxPos collection - all diamond center
+     * positions are discarded which is stupid too.
+     * @param color the color awsking for random dumb move, all equal colors will be discarded.
+     * @see OnyxPos position definition.
+     * @see OnyxDiamond Onyx diamond definition.
+     * @param c collection of unique Onyx positions - positions are independent from OnyxDiamond instances.
+     * @return the key of any stupid unoccupied Onyx position, infact the first one found.
+     * @throws NoValidOnysPositionsFound if no position if found, seems like all the board is occupied ???
+     */
+    @Override
+    String search(final OnyxPosCollection c, final GraphicsConst.COLOR color) throws NoValidOnysPositionsFound;
     
 }

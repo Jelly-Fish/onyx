@@ -29,29 +29,33 @@
  * POSSIBILITY OF SUCH DAMAGE. 
  ******************************************************************************
  */
-package com.jellyfish.jfgonyx.entities;
+package com.jellyfish.jfgonyx.io;
 
-import com.jellyfish.jfgonyx.constants.GraphicsConst;
+import com.jellyfish.jfgonyx.onyx.interfaces.OnyxExecutable;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.util.HashMap;
 
 /**
+ *
  * @author thw
  */
-public class OnyxPiece {
-    
-    public final GraphicsConst.COLOR color;
-    private boolean virtual = false;
+public class KeyInput implements KeyListener {
 
-    public OnyxPiece(final GraphicsConst.COLOR c) {
-        this.color = c;
+    private final HashMap<Integer, OnyxExecutable> ops = new HashMap<>();
+    static {
+        
     }
     
-    public OnyxPiece(final GraphicsConst.COLOR c, final boolean virtual) {
-        this.color = c;
-        this.virtual = virtual;
+    @Override
+    public void keyReleased(KeyEvent e) {
+        System.out.println("Pressed " + e.getExtendedKeyCode());
     }
     
-    public boolean isVirtual() {
-        return this.virtual;
-    }
+    @Override
+    public void keyTyped(KeyEvent e) { }
+
+    @Override
+    public void keyPressed(KeyEvent e) { }
     
 }

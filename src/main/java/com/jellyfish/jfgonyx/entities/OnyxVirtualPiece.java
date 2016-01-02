@@ -29,32 +29,18 @@
  * POSSIBILITY OF SUCH DAMAGE. 
  ******************************************************************************
  */
-package com.jellyfish.jfgonyx.engine;
+package com.jellyfish.jfgonyx.entities;
 
-import com.jellyfish.jfgonyx.engine.interfaces.OnyxRandomSeachable;
 import com.jellyfish.jfgonyx.constants.GraphicsConst;
-import com.jellyfish.jfgonyx.entities.OnyxPos;
-import com.jellyfish.jfgonyx.entities.OnyxPosCollection;
-import com.jellyfish.jfgonyx.exceptions.NoValidOnysPositionsFound;
 
 /**
  *
  * @author thw
  */
-class OnyxRandomSearch implements OnyxRandomSeachable {
-    
-    @Override
-    public String search(final OnyxPosCollection c, final GraphicsConst.COLOR color) throws NoValidOnysPositionsFound {
-        
-        for (OnyxPos p : c.positions.values()) {
-            if (!p.isOccupied()) {
-                if (p.diamond.isFivePosDiamond() && p.isDiamondCenter() && p.diamond.isCenterPosUsable(p)) {
-                    return p.getKey();
-                }
-                return p.getKey();
-            }
-        }
-        throw new NoValidOnysPositionsFound();
+public class OnyxVirtualPiece extends OnyxPiece {
+
+    public OnyxVirtualPiece(final GraphicsConst.COLOR c) {
+        super(c);
     }
     
 }

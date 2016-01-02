@@ -29,29 +29,17 @@
  * POSSIBILITY OF SUCH DAMAGE. 
  ******************************************************************************
  */
-package com.jellyfish.jfgonyx.entities;
+package com.jellyfish.jfgonyx.onyx.interfaces;
 
 import com.jellyfish.jfgonyx.constants.GraphicsConst;
+import com.jellyfish.jfgonyx.entities.OnyxPosCollection;
+import com.jellyfish.jfgonyx.exceptions.NoValidOnysPositionsFound;
 
 /**
  * @author thw
  */
-public class OnyxPiece {
+public abstract interface OnyxAbstractSearchable {
     
-    public final GraphicsConst.COLOR color;
-    private boolean virtual = false;
-
-    public OnyxPiece(final GraphicsConst.COLOR c) {
-        this.color = c;
-    }
-    
-    public OnyxPiece(final GraphicsConst.COLOR c, final boolean virtual) {
-        this.color = c;
-        this.virtual = virtual;
-    }
-    
-    public boolean isVirtual() {
-        return this.virtual;
-    }
+    String search(final OnyxPosCollection c, final GraphicsConst.COLOR color) throws NoValidOnysPositionsFound;
     
 }

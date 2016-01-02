@@ -169,7 +169,8 @@ public class GraphicsHelper {
             if (p.isOccupied()) {
                 if (p.x % 2 == 0) g.translate(0, 15);
                 if (p.y % 2 == 0) g.translate(15, 0);
-                g.setColor(p.getPiece().color.boolColor ? GraphicsConst.BLACK_OUTLINE : GraphicsConst.WHITE_OUTLINE);
+                g.setColor(p.getPiece().color.boolColor ? 
+                        GraphicsConst.BLACK_OUTLINE : GraphicsConst.WHITE_OUTLINE);
                 g.drawOval(p.gX - 15, p.gY - 15, 30, 30);
                 g.setColor(p.getPiece().color.color);
                 g.fillOval(p.gX - 15, p.gY - 15, 30, 30);

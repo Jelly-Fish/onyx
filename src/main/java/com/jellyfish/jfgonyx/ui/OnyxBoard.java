@@ -35,6 +35,7 @@ import com.jellyfish.jfgonyx.entities.OnyxDiamondCollection;
 import com.jellyfish.jfgonyx.entities.OnyxPiece;
 import com.jellyfish.jfgonyx.entities.OnyxPosCollection;
 import com.jellyfish.jfgonyx.helpers.GraphicsHelper;
+import com.jellyfish.jfgonyx.io.KeyInput;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -58,6 +59,9 @@ public class OnyxBoard extends javax.swing.JPanel {
         this.setOpaque(true);
         this.setPreferredSize(new Dimension(GraphicsConst.BOARD_WIDTH, GraphicsConst.BOARD_WIDTH));
         this.setBackground(Color.WHITE);
+        this.addKeyListener(new KeyInput());
+        this.setFocusable(true);
+        this.requestFocusInWindow();
     }
     
     public void initStartLayout() {

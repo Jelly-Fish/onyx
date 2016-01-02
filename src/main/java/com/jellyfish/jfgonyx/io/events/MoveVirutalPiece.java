@@ -29,29 +29,30 @@
  * POSSIBILITY OF SUCH DAMAGE. 
  ******************************************************************************
  */
-package com.jellyfish.jfgonyx.entities;
+package com.jellyfish.jfgonyx.io.events;
 
-import com.jellyfish.jfgonyx.constants.GraphicsConst;
+import com.jellyfish.jfgonyx.onyx.interfaces.OnyxExecutable;
+import java.awt.event.KeyEvent;
 
 /**
+ *
  * @author thw
  */
-public class OnyxPiece {
+public class MoveVirutalPiece implements OnyxExecutable {
     
-    public final GraphicsConst.COLOR color;
-    private boolean virtual = false;
-
-    public OnyxPiece(final GraphicsConst.COLOR c) {
-        this.color = c;
-    }
-    
-    public OnyxPiece(final GraphicsConst.COLOR c, final boolean virtual) {
-        this.color = c;
-        this.virtual = virtual;
-    }
-    
-    public boolean isVirtual() {
-        return this.virtual;
+    @Override
+    public void exec(final int e) {
+        
+        switch (e) {
+            case KeyEvent.VK_LEFT:
+                break;
+            case KeyEvent.VK_UP:
+                break;
+            case KeyEvent.VK_RIGHT:
+                break;
+            case KeyEvent.VK_DOWN:
+                break;
+        }
     }
     
 }

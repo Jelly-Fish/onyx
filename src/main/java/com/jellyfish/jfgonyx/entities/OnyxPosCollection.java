@@ -31,6 +31,8 @@
  */
 package com.jellyfish.jfgonyx.entities;
 
+import com.jellyfish.jfgonyx.constants.GraphicsConst;
+import com.jellyfish.jfgonyx.exceptions.InvalidOnyxPositionException;
 import java.util.HashMap;
 import org.apache.commons.lang3.StringUtils;
 
@@ -46,7 +48,7 @@ public class OnyxPosCollection {
     public static final String KEY_FORMAT = "%.1f-%.1f";
     public final HashMap<String, OnyxPos> positions = new HashMap<>();
     
-    public void initPosition(final OnyxDiamondCollection c) {
+    public void initStartPosition(final OnyxDiamondCollection c) {
         
         for (OnyxDiamond d : c.diamonds.values()) {
             for (OnyxPos p : d.positions) {
@@ -55,6 +57,13 @@ public class OnyxPosCollection {
                 }
             }
         }
+    }
+    
+    public void spawnVirtualPiece(final GraphicsConst.COLOR c) {
+        
+        this.positions.get(String.format(OnyxPosCollection.KEY_FORMAT, 12f, 1f)).setPiece(
+                new OnyxVirtualPiece(c)
+        );
     }
     
     public OnyxPos getPosition(final String k) {
@@ -79,6 +88,17 @@ public class OnyxPosCollection {
         }
         
         return matrix;
+    }
+    
+    public OnyxVirtualPiece getVirtual() throws InvalidOnyxPositionException {
+        
+        for (OnyxPos p : this.positions.values()) {
+            if (p.isOccupied() && p.getPiece().isVirtual()) { 
+                return (OnyxVirtualPiece) p.getPiece();
+            }
+        }
+        
+        throw new InvalidOnyxPositionException();
     }
     
 }

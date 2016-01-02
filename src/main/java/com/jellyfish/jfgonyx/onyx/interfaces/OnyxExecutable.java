@@ -29,29 +29,18 @@
  * POSSIBILITY OF SUCH DAMAGE. 
  ******************************************************************************
  */
-package com.jellyfish.jfgonyx.engine.interfaces;
-
-import com.jellyfish.jfgonyx.constants.GraphicsConst;
-import com.jellyfish.jfgonyx.entities.OnyxPosCollection;
-import com.jellyfish.jfgonyx.exceptions.NoValidOnysPositionsFound;
+package com.jellyfish.jfgonyx.onyx.interfaces;
 
 /**
  *
  * @author thw
  */
-public interface OnyxRandomSeachable extends OnyxAbstractSearchable {
+public interface OnyxExecutable {
     
     /**
-     * Get the first dumb move found by looping through OnyxPos collection - all diamond center
-     * positions are discarded which is stupid too.
-     * @param color the color awsking for random dumb move, all equal colors will be discarded.
-     * @see OnyxPos position definition.
-     * @see OnyxDiamond Onyx diamond definition.
-     * @param c collection of unique Onyx positions - positions are independent from OnyxDiamond instances.
-     * @return the key of any stupid unoccupied Onyx position, infact the first one found.
-     * @throws NoValidOnysPositionsFound if no position if found, seems like all the board is occupied ???
+     * Action or execution.
+     * @param e event code.
      */
-    @Override
-    String search(final OnyxPosCollection c, final GraphicsConst.COLOR color) throws NoValidOnysPositionsFound;
+    void exec(final int e);
     
 }

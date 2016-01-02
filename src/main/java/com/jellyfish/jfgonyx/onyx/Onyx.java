@@ -29,17 +29,24 @@
  * POSSIBILITY OF SUCH DAMAGE. 
  ******************************************************************************
  */
-package com.jellyfish.jfgonyx.engine.interfaces;
+package com.jellyfish.jfgonyx.onyx;
 
-import com.jellyfish.jfgonyx.constants.GraphicsConst;
-import com.jellyfish.jfgonyx.entities.OnyxPosCollection;
-import com.jellyfish.jfgonyx.exceptions.NoValidOnysPositionsFound;
+import com.jellyfish.jfgonyx.onyx.interfaces.OnyxAbstractSearchable;
+import java.util.HashMap;
 
 /**
  * @author thw
  */
-public abstract interface OnyxAbstractSearchable {
+public class Onyx {
     
-    String search(final OnyxPosCollection c, final GraphicsConst.COLOR color) throws NoValidOnysPositionsFound;
+    public static enum SEARCH_TYPE {
+        RANDOM, ONYXPOSCOL
+    }
+    
+    public final static HashMap<SEARCH_TYPE, OnyxAbstractSearchable> SEARCH = new HashMap<>();
+    static {
+        SEARCH.put(SEARCH_TYPE.RANDOM, new OnyxRandomSearch());
+        SEARCH.put(SEARCH_TYPE.ONYXPOSCOL, new OnyxPosCollectionSearch());
+    }
     
 }
