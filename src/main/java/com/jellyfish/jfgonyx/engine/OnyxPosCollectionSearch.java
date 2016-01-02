@@ -32,7 +32,6 @@
 package com.jellyfish.jfgonyx.engine;
 
 import com.jellyfish.jfgonyx.constants.GraphicsConst;
-import com.jellyfish.jfgonyx.engine.OnyxEngine.SEARCH_TYPE;
 import com.jellyfish.jfgonyx.engine.interfaces.OnyxPosCollectionSearchable;
 import com.jellyfish.jfgonyx.entities.OnyxDiamond;
 import com.jellyfish.jfgonyx.entities.OnyxPos;
@@ -62,8 +61,8 @@ class OnyxPosCollectionSearch implements OnyxPosCollectionSearchable {
     
         String res = StringUtils.EMPTY;
         final String take = this.getTakePos(c, color.bitColor);
-        final String counter = this.getCounterPos(c, color.boolColor);
-        final String neighbour = this.getNeighbourPos(c, color.boolColor);
+        final String counter = this.getCounterPos(c, color.bitColor);
+        final String neighbour = this.getNeighbourPos(c);
         return StringUtils.isBlank(take) ? 
                 (StringUtils.isBlank(counter) ? 
                     (StringUtils.isBlank(neighbour) ? null : neighbour) : counter) : take;
@@ -71,21 +70,46 @@ class OnyxPosCollectionSearch implements OnyxPosCollectionSearchable {
     
     /**
      * @param c Onyx position collection.
-     * @param boolColor boolean color value, black OR white.
      * @return Strongest move found or NULL if no such position has been found.
      */
-    private String getNeighbourPos(final OnyxPosCollection c, final boolean boolColor) throws NoValidOnysPositionsFound {
-        return OnyxEngine.SEARCH.get(SEARCH_TYPE.RANDOM).search(c, GraphicsConst.COLOR.getOposite(boolColor));
+    private String getNeighbourPos(final OnyxPosCollection c) throws NoValidOnysPositionsFound {
+        
+        OnyxDiamond diamond = null;
+        for (OnyxPos p : c.positions.values()) {
+            diamond = p.diamond;
+            if (!p.diamond.equals(diamond) && !p.isDiamondCenter()) {    
+                for (OnyxPos dPos : diamond.positions) {
+                    if (!p.equals(dPos) && !dPos.isOccupied()) return dPos.getKey();
+                }
+            }
+        }
+        
+        return null;
     }
     
     /**
      * @param c Onyx position collection.
-     * @param boolColor boolean color value, black OR white.
+     * @param bitColor bit color value, black OR white (white=0, black=1).
      * @return Strongest counter attack move found (to prevent sealing positions) 
      * or NULL if no such position has been found.
      */
-    private String getCounterPos(final OnyxPosCollection c, final boolean boolColor) throws NoValidOnysPositionsFound {
-        return OnyxEngine.SEARCH.get(SEARCH_TYPE.RANDOM).search(c, GraphicsConst.COLOR.getOposite(boolColor));
+    private String getCounterPos(final OnyxPosCollection c, final int bitColor) throws NoValidOnysPositionsFound {
+        
+        int count = 0;
+        OnyxDiamond diamond = null;
+        for (OnyxPos p : c.positions.values()) {
+            diamond = p.diamond;
+            count = 0;
+            if (!p.diamond.equals(diamond) && !p.isDiamondCenter()) {    
+                for (OnyxPos dPos : diamond.positions) {
+                    count = dPos.isOccupied() && dPos.getPiece().color.bitColor != bitColor &&
+                            !p.equals(dPos) ? ++count : count;
+                }
+                if (count == 3) return p.getKey();
+            }
+        }
+        
+        return null;
     }
     
     /**
@@ -100,12 +124,10 @@ class OnyxPosCollectionSearch implements OnyxPosCollectionSearchable {
 
         OnyxDiamond diamond = null;
         for (OnyxPos p : c.positions.values()) {
-            if ((!p.diamond.equals(diamond) || diamond == null) && 
-                    p.diamond.isTakePosition(p, bitColor)) {                
+            diamond = p.diamond;
+            if (!p.diamond.equals(diamond) && p.diamond.isTakePosition(p, bitColor)) {    
                 positions.add(p);
-                diamonds.add(p.diamond);
-            } else {
-                diamond = p.diamond;
+                diamonds.add(diamond);
             }
         }
         

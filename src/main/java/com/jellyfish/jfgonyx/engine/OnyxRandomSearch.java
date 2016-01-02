@@ -47,7 +47,10 @@ class OnyxRandomSearch implements OnyxRandomSeachable {
     public String search(final OnyxPosCollection c, final GraphicsConst.COLOR color) throws NoValidOnysPositionsFound {
         
         for (OnyxPos p : c.positions.values()) {
-            if (!p.isOccupied() && !p.isDiamondCenter()) {
+            if (!p.isOccupied()) {
+                if (p.diamond.isFivePosDiamond() && p.isDiamondCenter() && p.diamond.isCenterPosUsable(p)) {
+                    return p.getKey();
+                }
                 return p.getKey();
             }
         }

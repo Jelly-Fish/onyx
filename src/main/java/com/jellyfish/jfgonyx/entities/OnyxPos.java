@@ -56,6 +56,10 @@ public class OnyxPos {
         return !(this.piece == null);
     }
     
+    boolean isOccupied(final int bitColor) {
+        return this.isOccupied() && this.piece.color.bitColor == bitColor;
+    }
+    
     public boolean isDiamondCenter() {
         return this.x % 2 != 0 || this.y % 2 != 0;
     }

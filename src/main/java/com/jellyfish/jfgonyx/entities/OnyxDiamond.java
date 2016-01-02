@@ -32,7 +32,6 @@
 package com.jellyfish.jfgonyx.entities;
 
 import com.jellyfish.jfgonyx.constants.ConstructPosConst;
-import com.jellyfish.jfgonyx.constants.GraphicsConst;
 import com.jellyfish.jfgonyx.exceptions.InvalidOnyxPositionException;
 import java.awt.Polygon;
 import java.util.Arrays;
@@ -76,6 +75,18 @@ public class OnyxDiamond {
     
     public boolean isFivePosDiamond() {
         return this.positions.length == 5;
+    }
+    
+    public boolean isCenterPosUsable(final OnyxPos p) {
+        
+        if (!this.isFivePosDiamond()) return false;
+        if (this.positions[4].isOccupied()) return false;
+        
+        int posCount = 0;
+        for (int i = 0; i < 4; i++) {
+            if (this.positions[i].isOccupied(p.getPiece().color.bitColor)) ++posCount;
+        }
+        return posCount == 4;
     }
     
     public OnyxPos getCenterPos() throws InvalidOnyxPositionException {
@@ -169,8 +180,6 @@ public class OnyxDiamond {
         return this.onPairLine == other.onPairLine;
     }
      
-    
-    
     public Polygon getPolygon() {
         return polygon;
     }
