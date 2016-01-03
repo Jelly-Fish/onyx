@@ -41,7 +41,6 @@ import com.jellyfish.jfgonyx.ui.OnyxBoard;
 import org.apache.commons.lang3.StringUtils;
 
 /**
- *
  * @author thw
  */
 public class OnyxGame {
@@ -50,18 +49,28 @@ public class OnyxGame {
     private static boolean requestInitialized = false;
     
     /**
-     * 
+     * Perform move - move request must be initialized first.
+     * @see OnyxGame openRequest.
      * @param c OnyxPos collection.
      * @param board OnyxBoard instance.
      * @throws OnyxGameSyncException
      * @throws NoValidOnyxPositionsFound 
      */
-    public static void requestOpponentMove(final OnyxPosCollection c, final OnyxBoard board) throws OnyxGameSyncException, NoValidOnyxPositionsFound {
+    public static void performMove(final OnyxPosCollection c, final OnyxBoard board) throws OnyxGameSyncException, NoValidOnyxPositionsFound {
         
-        OnyxGame.check();
+        OnyxGame.checkInit();
+        OnyxGame.requestMove(c, board);
+        OnyxGame.appendNewVirtual(c, board);
+        OnyxGame.closeMove();
+    }
+    
+    private static void requestMove(final OnyxPosCollection c, final OnyxBoard board) throws NoValidOnyxPositionsFound {
         final String k = Onyx.getSEARCH().get(Onyx.SEARCH_TYPE.ONYXPOSCOL).search(c, board, OnyxGame.colorToPlay);
         if (StringUtils.isBlank(k)) throw new NoValidOnyxPositionsFound();
         c.getPosition(k).setPiece(new OnyxPiece(colorToPlay));
+    }
+    
+    private static void appendNewVirtual(final OnyxPosCollection c, final OnyxBoard board) throws NoValidOnyxPositionsFound {
         final String virtualKey = Onyx.getSEARCH().get(Onyx.SEARCH_TYPE.RANDOM).search(c, board, OnyxGame.colorToPlay);
         c.getPosition(virtualKey).setVirtualPiece(
              new OnyxVirtualPiece(GraphicsConst.COLOR.getVirtualOposite(colorToPlay.boolColor))
@@ -71,21 +80,25 @@ public class OnyxGame {
     /**
      * @param color the color to play next or to search move for and append to board.
      */
-    public static void openRequest(final GraphicsConst.COLOR color) {
+    public static void initMove(final GraphicsConst.COLOR color) {
         OnyxGame.colorToPlay = color;
-        OnyxGame.initRequest();
+        OnyxGame.initMoveRequest();
     }
     
-    public static void closeRequest() {
+    public static void closeMove() {
         OnyxGame.colorToPlay = null;
-        OnyxGame.initRequest();
+        OnyxGame.initMoveRequest();
     }
     
-    private static void initRequest() {
+    private static void initMoveRequest() {
         OnyxGame.requestInitialized = OnyxGame.colorToPlay != null;
     }
     
-    private static void check() throws OnyxGameSyncException {
+    /**
+     * Check that move request color value has been set/initialized.
+     * @throws OnyxGameSyncException 
+     */
+    private static void checkInit() throws OnyxGameSyncException {
         if (OnyxGame.colorToPlay == null) throw new OnyxGameSyncException();
         if (!requestInitialized) throw new OnyxGameSyncException(
                 String.format(OnyxGameSyncException.WRONG_TURN_MSG, colorToPlay.strColor));

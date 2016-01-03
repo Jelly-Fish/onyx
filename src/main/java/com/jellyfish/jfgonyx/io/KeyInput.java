@@ -32,7 +32,9 @@
 package com.jellyfish.jfgonyx.io;
 
 import com.jellyfish.jfgonyx.constants.GraphicsConst;
+import com.jellyfish.jfgonyx.entities.OnyxVirtualPiece;
 import com.jellyfish.jfgonyx.io.events.MoveVirutalPiece;
+import com.jellyfish.jfgonyx.onyx.Onyx;
 import com.jellyfish.jfgonyx.onyx.OnyxGame;
 import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFound;
 import com.jellyfish.jfgonyx.onyx.exceptions.OnyxGameSyncException;
@@ -65,10 +67,11 @@ public class KeyInput implements KeyListener {
     public void keyReleased(KeyEvent e) {
         
         final GraphicsConst.COLOR c = board.getPosCollection().getVirtualPiece().color;
-        OnyxGame.openRequest(GraphicsConst.COLOR.getOposite(c.boolColor));
+        OnyxGame.initMove(GraphicsConst.COLOR.getOposite(c.boolColor));
         if (this.ops.get(KeyInput.EVENT.VIRTUAL_P_MOVE).exec(e.getKeyCode(), board)) {
             try {
-                OnyxGame.requestOpponentMove(board.getPosCollection(), board);
+                OnyxGame.performMove(board.getPosCollection(), board);
+                
             } catch (final OnyxGameSyncException Ogsex) {
                 Logger.getLogger(KeyInput.class.getName()).log(Level.SEVERE, null, Ogsex);
             } catch (NoValidOnyxPositionsFound ex) {
@@ -76,7 +79,7 @@ public class KeyInput implements KeyListener {
             }
         } 
         
-        OnyxGame.closeRequest();
+        OnyxGame.closeMove();
     }
     
     @Override
