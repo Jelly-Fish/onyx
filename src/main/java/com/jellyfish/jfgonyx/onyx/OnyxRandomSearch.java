@@ -35,7 +35,8 @@ import com.jellyfish.jfgonyx.onyx.interfaces.OnyxRandomSeachable;
 import com.jellyfish.jfgonyx.constants.GraphicsConst;
 import com.jellyfish.jfgonyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.entities.OnyxPosCollection;
-import com.jellyfish.jfgonyx.exceptions.NoValidOnysPositionsFound;
+import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFound;
+import com.jellyfish.jfgonyx.ui.OnyxBoard;
 
 /**
  *
@@ -44,17 +45,15 @@ import com.jellyfish.jfgonyx.exceptions.NoValidOnysPositionsFound;
 class OnyxRandomSearch implements OnyxRandomSeachable {
     
     @Override
-    public String search(final OnyxPosCollection c, final GraphicsConst.COLOR color) throws NoValidOnysPositionsFound {
+    public String search(final OnyxPosCollection c, final OnyxBoard board, final GraphicsConst.COLOR color) throws NoValidOnyxPositionsFound {
         
         for (OnyxPos p : c.positions.values()) {
-            if (!p.isOccupied()) {
-                if (p.diamond.isFivePosDiamond() && p.isDiamondCenter() && p.diamond.isCenterPosUsable(p)) {
-                    return p.getKey();
-                }
+            if (!p.isOccupied() && !p.isDiamondCenter()) {
                 return p.getKey();
             }
         }
-        throw new NoValidOnysPositionsFound();
+        
+        throw new NoValidOnyxPositionsFound();
     }
     
 }

@@ -32,7 +32,7 @@
 package com.jellyfish.jfgonyx.entities;
 
 import com.jellyfish.jfgonyx.constants.ConstructPosConst;
-import com.jellyfish.jfgonyx.exceptions.InvalidOnyxPositionException;
+import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import java.awt.Polygon;
 import java.util.Arrays;
 
@@ -147,6 +147,22 @@ public class OnyxDiamond {
         }
         
         return false;
+    }
+    
+    public String[] getCornerKeys() {
+        return new String[] { 
+            this.positions[0].getKey(), this.positions[1].getKey(),
+            this.positions[2].getKey(), this.positions[3].getKey()
+        };
+    }
+    
+    public String[] getAllKeys() {
+        if (!this.isFivePosDiamond()) return this.getCornerKeys();
+        else return new String[] { 
+            this.positions[0].getKey(), this.positions[1].getKey(),
+            this.positions[2].getKey(), this.positions[3].getKey(),
+            this.positions[4].getKey()
+        };
     }
     
     @Override

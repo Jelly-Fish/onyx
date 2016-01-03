@@ -29,48 +29,22 @@
  * POSSIBILITY OF SUCH DAMAGE. 
  ******************************************************************************
  */
-package com.jellyfish.jfgonyx.constants;
-
-import java.awt.Color;
+package com.jellyfish.jfgonyx.onyx.exceptions;
 
 /**
  *
  * @author thw
  */
-public class GraphicsConst {
-    
-    public static final int SQUARE_WIDTH = 50;
-    public static final int BOARD_WIDTH = 700;
-    public static final int ZIGZAG = 12;
-    public static final Color FULL_DIAMOND = new Color(192,192,192);
-    public static final Color DIAMOND = new Color(232,232,232);
-    public static final Color LINE = new Color(12,12,12);
-    public static final Color WHITE_OUTLINE = new Color(16,16,16);
-    public static final Color BLACK_OUTLINE = new Color(196,196,196);
-    public static final Color VIRTUAL_OUTLINE = Color.CYAN;
-    
-    public static enum COLOR {
-        
-        WHITE("white", Color.WHITE, false, 0), BLACK("black", Color.BLACK, true, 1),
-        VIRTUAL_WHITE("virtual white", new Color(1f,1f,1f,.8f), false, 0), 
-        VIRTUAL_BLACK("virtual black", new Color(0f,0f,0f,.8f), true, 1);
-        
-        public final String strColor;
-        public final Boolean boolColor;
-        public final int bitColor;
-        public final Color color;
-        
-        COLOR(final String strColor, final Color color, final Boolean bColor, final int bitColor) {
-            this.strColor = strColor;
-            this.boolColor = bColor;
-            this.bitColor = bitColor;
-            this.color = color;
-        }
-        
-        public static COLOR getOposite(final boolean bool) {
-            return bool ? COLOR.WHITE : COLOR.BLACK;
-        }
-        
+public class InvalidOnyxPositionException extends OnyxException {
+
+    public static final String MSG_STRING_ARGS = "Onyx position %s-%s is invalid.";
+    public static final String MSG_FLOAT_ARGS = "Onyx position %f-%f is invalid.";
+    public static final String INVALID_CENTER_POS = "Onyx diamond %s does not include a center position.";
+     
+    public InvalidOnyxPositionException() { }
+
+    public InvalidOnyxPositionException(final String message) {
+        super(message);
     }
     
 }

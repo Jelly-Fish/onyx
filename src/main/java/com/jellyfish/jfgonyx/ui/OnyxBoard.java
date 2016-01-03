@@ -96,4 +96,8 @@ public class OnyxBoard extends javax.swing.JPanel {
         return this.positions;
     }
     
+    public OnyxDiamondCollection getDiamondCollection() {
+        return diamonds;
+    }
+    
 }

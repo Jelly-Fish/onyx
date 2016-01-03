@@ -69,8 +69,12 @@ public class OnyxPosCollection {
         return this.positions.get(k);
     }
     
+    @Deprecated
     public int[][] getMatrix() {
         
+        /**
+         * FIXME
+         */
         OnyxPos p = null;
         String k = StringUtils.EMPTY;
         int x = 0, y = 0;
@@ -79,9 +83,11 @@ public class OnyxPosCollection {
             for (float j = 0f; j < 24f; j += 0.5f) {
                 k = String.format(OnyxPosCollection.KEY_FORMAT, i, j);
                 p = this.positions.get(k);
-                matrix[x][y] = p == null ? 2 : p.getPiece().color.bitColor;     
+                matrix[x][y] = p == null ? -1 : p.getPiece().color.bitColor;
+                System.out.print(matrix[x][y]);     
                 ++y;
             }
+            System.out.print('\n');
             y = 0;
             ++x;
         }

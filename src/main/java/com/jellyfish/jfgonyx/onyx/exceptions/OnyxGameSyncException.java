@@ -29,21 +29,21 @@
  * POSSIBILITY OF SUCH DAMAGE. 
  ******************************************************************************
  */
-package com.jellyfish.jfgonyx.exceptions;
+package com.jellyfish.jfgonyx.onyx.exceptions;
 
 /**
- *
  * @author thw
  */
-public class InvalidOnyxPositionException extends OnyxException {
+public class OnyxGameSyncException extends OnyxException {
 
-    public static final String MSG_STRING_ARGS = "Onyx position %s-%s is invalid.";
-    public static final String MSG_FLOAT_ARGS = "Onyx position %f-%f is invalid.";
-    public static final String INVALID_CENTER_POS = "Onyx diamond %s does not include a center position.";
-     
-    public InvalidOnyxPositionException() { }
-
-    public InvalidOnyxPositionException(final String message) {
+    public static final String DEFAULT_MSG = "Sorry but the current game is not correctly synchronized";
+    public static final String WRONG_TURN_MSG = "Sorry but the current game is not correctly synchronized: wrong turn playing %s color.\nPerhaps OnyxGame has not been initialized correctly. Use OnyxGame.openRequest(final GraphicsConst.COLOR color) before sending move requests.";
+    
+    public OnyxGameSyncException() {
+        super(OnyxGameSyncException.DEFAULT_MSG);
+    }
+    
+    public OnyxGameSyncException(final String message) {
         super(message);
     }
     

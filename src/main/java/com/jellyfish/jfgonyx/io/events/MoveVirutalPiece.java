@@ -36,7 +36,7 @@ import com.jellyfish.jfgonyx.entities.OnyxPiece;
 import com.jellyfish.jfgonyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.entities.OnyxPosCollection;
 import com.jellyfish.jfgonyx.entities.OnyxVirtualPiece;
-import com.jellyfish.jfgonyx.exceptions.InvalidOnyxPositionException;
+import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import com.jellyfish.jfgonyx.onyx.interfaces.OnyxExecutable;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
 import java.awt.event.KeyEvent;
@@ -101,7 +101,6 @@ public class MoveVirutalPiece implements OnyxExecutable {
         final String oldK = String.format(OnyxPosCollection.KEY_FORMAT, x, y);
 
         if (board.getPosCollection().positions.containsKey(k)) {
-            
             v.setTmpOnyxPosition(board.getPosCollection().positions.get(k));
             board.getPosCollection().positions.get(k).setVirtualPiece(v);
             board.getPosCollection().positions.get(oldK).setVirtualPiece(null);
@@ -111,9 +110,7 @@ public class MoveVirutalPiece implements OnyxExecutable {
     private boolean validateMove(final OnyxBoard board, final OnyxVirtualPiece v) {
                
         final String k = v.getTmpOnyxPosition().getKey();
-        
         if (board.getPosCollection().getPosition(k).isOccupied()) return false;
-        
         board.getPosCollection().getPosition(k).setPiece(
                 new OnyxPiece(v.color.boolColor ? GraphicsConst.COLOR.BLACK : GraphicsConst.COLOR.WHITE)
         );

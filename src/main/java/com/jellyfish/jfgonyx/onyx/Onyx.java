@@ -43,10 +43,14 @@ public class Onyx {
         RANDOM, ONYXPOSCOL
     }
     
-    public final static HashMap<SEARCH_TYPE, OnyxAbstractSearchable> SEARCH = new HashMap<>();
+    private final static HashMap<SEARCH_TYPE, OnyxAbstractSearchable> SEARCH = new HashMap<>();
     static {
         SEARCH.put(SEARCH_TYPE.RANDOM, new OnyxRandomSearch());
         SEARCH.put(SEARCH_TYPE.ONYXPOSCOL, new OnyxPosCollectionSearch());
+    }
+    
+    public static HashMap<SEARCH_TYPE, OnyxAbstractSearchable> getSEARCH() {
+        return SEARCH;
     }
     
 }

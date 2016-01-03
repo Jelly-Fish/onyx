@@ -36,7 +36,8 @@ import com.jellyfish.jfgonyx.onyx.interfaces.OnyxPosCollectionSearchable;
 import com.jellyfish.jfgonyx.entities.OnyxDiamond;
 import com.jellyfish.jfgonyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.entities.OnyxPosCollection;
-import com.jellyfish.jfgonyx.exceptions.NoValidOnysPositionsFound;
+import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFound;
+import com.jellyfish.jfgonyx.ui.OnyxBoard;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
@@ -57,12 +58,11 @@ class OnyxPosCollectionSearch implements OnyxPosCollectionSearchable {
      *   Find forward positions depending on color
      */
     @Override
-    public String search(final OnyxPosCollection c, final GraphicsConst.COLOR color) throws NoValidOnysPositionsFound {
+    public String search(final OnyxPosCollection c, final OnyxBoard board, final GraphicsConst.COLOR color) throws NoValidOnyxPositionsFound {
     
-        String res = StringUtils.EMPTY;
-        final String take = this.getTakePos(c, color.bitColor);
-        final String counter = this.getCounterPos(c, color.bitColor);
-        final String neighbour = this.getNeighbourPos(c);
+        final String take = this.getTakePos(c, board, color.bitColor);
+        final String counter = this.getCounterPos(c, board, color.bitColor);
+        final String neighbour = this.getNeighbourPos(c, board, color.bitColor);
         return StringUtils.isBlank(take) ? 
                 (StringUtils.isBlank(counter) ? 
                     (StringUtils.isBlank(neighbour) ? null : neighbour) : counter) : take;
@@ -70,18 +70,23 @@ class OnyxPosCollectionSearch implements OnyxPosCollectionSearchable {
     
     /**
      * @param c Onyx position collection.
+     * @param b Onyx board instance.
+     * @param bitColor the color to play's bit value (0=white, 1=black).
      * @return Strongest move found or NULL if no such position has been found.
      */
-    private String getNeighbourPos(final OnyxPosCollection c) throws NoValidOnysPositionsFound {
+    private String getNeighbourPos(final OnyxPosCollection c, final OnyxBoard b, final int bitColor) throws NoValidOnyxPositionsFound {
         
-        OnyxDiamond diamond = null;
-        for (OnyxPos p : c.positions.values()) {
-            diamond = p.diamond;
-            if (!p.diamond.equals(diamond) && !p.isDiamondCenter()) {    
-                for (OnyxPos dPos : diamond.positions) {
-                    if (!p.equals(dPos) && !dPos.isOccupied()) return dPos.getKey();
-                }
+        int count;
+        OnyxPos pos = null;
+        String key = StringUtils.EMPTY;
+        for (OnyxDiamond d : b.getDiamondCollection().diamonds.values()) {
+            count = 0;
+            for (String k : d.getCornerKeys()) {
+                pos = c.getPosition(k);
+                if (pos.isOccupied() && pos.getPiece().color.bitColor == bitColor) ++count;
+                else key = k;
             }
+            if (count > 1  && !c.getPosition(key).isOccupied()) return key;
         }
         
         return null;
@@ -89,24 +94,25 @@ class OnyxPosCollectionSearch implements OnyxPosCollectionSearchable {
     
     /**
      * @param c Onyx position collection.
-     * @param bitColor bit color value, black OR white (white=0, black=1).
+     * @param b Onyx board instance.
+     * @param bitColor the color to play's bit value (0=white, 1=black).
      * @return Strongest counter attack move found (to prevent sealing positions) 
      * or NULL if no such position has been found.
      */
-    private String getCounterPos(final OnyxPosCollection c, final int bitColor) throws NoValidOnysPositionsFound {
-        
-        int count = 0;
-        OnyxDiamond diamond = null;
-        for (OnyxPos p : c.positions.values()) {
-            diamond = p.diamond;
+    @SuppressWarnings("null")
+    private String getCounterPos(final OnyxPosCollection c, final OnyxBoard b, final int bitColor) throws NoValidOnyxPositionsFound {
+
+        int count;
+        OnyxPos pos = null;
+        String key = StringUtils.EMPTY;
+        for (OnyxDiamond d : b.getDiamondCollection().diamonds.values()) {
             count = 0;
-            if (!p.diamond.equals(diamond) && !p.isDiamondCenter()) {    
-                for (OnyxPos dPos : diamond.positions) {
-                    count = dPos.isOccupied() && dPos.getPiece().color.bitColor != bitColor &&
-                            !p.equals(dPos) ? ++count : count;
-                }
-                if (count == 3) return p.getKey();
+            for (String k : d.getCornerKeys()) {
+                pos = c.getPosition(k);
+                if (pos.isOccupied() && pos.getPiece().color.bitColor != bitColor) ++count;
+                else key = k;
             }
+            if (count == 3 && !c.getPosition(key).isOccupied()) return key;
         }
         
         return null;
@@ -114,10 +120,16 @@ class OnyxPosCollectionSearch implements OnyxPosCollectionSearchable {
     
     /**
      * @param c Onyx position collection.
-     * @param bitColor bit color value, black OR white (white=0, black=1).
+     * @param b Onyx board instance.
+     * @param bitColor the color to play's bit value (0=white, 1=black).
      * @return Strongest take move found or NULL if no such position has been found.
      */
-    private String getTakePos(final OnyxPosCollection c, final int bitColor) {
+    private String getTakePos(final OnyxPosCollection c, final OnyxBoard b, final int bitColor) {
+        
+        /**
+         * FIXME : see getCount & Neighbour pos methods of this class.
+         * Do not use c.positions.diamond, instead loop on board diamonds.
+         */
         
         final List<OnyxPos> positions = new ArrayList<>();
         final List<OnyxDiamond> diamonds = new ArrayList<>();

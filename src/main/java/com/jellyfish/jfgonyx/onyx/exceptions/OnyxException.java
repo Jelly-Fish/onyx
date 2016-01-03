@@ -29,17 +29,17 @@
  * POSSIBILITY OF SUCH DAMAGE. 
  ******************************************************************************
  */
-package com.jellyfish.jfgonyx.exceptions;
+package com.jellyfish.jfgonyx.onyx.exceptions;
 
 /**
  * @author thw
  */
-public class NoValidOnysPositionsFound extends OnyxException {
+public abstract class OnyxException extends Exception {
 
-    public static final String DEFAULT_MSG = "Sory, but no valid Onyx position has been found on the current board... :S";
-    
-    public NoValidOnysPositionsFound() {
-        super(NoValidOnysPositionsFound.DEFAULT_MSG);
+    public OnyxException() { }
+
+    public OnyxException(final String message) {
+        super(message);
     }
     
 }

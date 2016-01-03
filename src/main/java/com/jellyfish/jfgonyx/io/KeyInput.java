@@ -32,10 +32,10 @@
 package com.jellyfish.jfgonyx.io;
 
 import com.jellyfish.jfgonyx.constants.GraphicsConst;
-import com.jellyfish.jfgonyx.entities.OnyxPiece;
-import com.jellyfish.jfgonyx.exceptions.NoValidOnysPositionsFound;
 import com.jellyfish.jfgonyx.io.events.MoveVirutalPiece;
-import com.jellyfish.jfgonyx.onyx.Onyx;
+import com.jellyfish.jfgonyx.onyx.OnyxGame;
+import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFound;
+import com.jellyfish.jfgonyx.onyx.exceptions.OnyxGameSyncException;
 import com.jellyfish.jfgonyx.onyx.interfaces.OnyxExecutable;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
 import java.awt.event.KeyEvent;
@@ -64,22 +64,19 @@ public class KeyInput implements KeyListener {
     @Override
     public void keyReleased(KeyEvent e) {
         
+        final GraphicsConst.COLOR c = board.getPosCollection().getVirtualPiece().color;
+        OnyxGame.openRequest(GraphicsConst.COLOR.getOposite(c.boolColor));
         if (this.ops.get(KeyInput.EVENT.VIRTUAL_P_MOVE).exec(e.getKeyCode(), board)) {
-            
-            /**
-             * FIXME : refactor...
-             */
             try {
-                final String k = Onyx.SEARCH.get(Onyx.SEARCH_TYPE.RANDOM).search(
-                        board.getPosCollection(), GraphicsConst.COLOR.WHITE);
-                System.out.println("key=" + k);
-                board.getPosCollection().getPosition(k).setPiece(
-                        new OnyxPiece(GraphicsConst.COLOR.WHITE)
-                );
-            } catch (final NoValidOnysPositionsFound ex) {
+                OnyxGame.requestOpponentMove(board.getPosCollection(), board);
+            } catch (final OnyxGameSyncException Ogsex) {
+                Logger.getLogger(KeyInput.class.getName()).log(Level.SEVERE, null, Ogsex);
+            } catch (NoValidOnyxPositionsFound ex) {
                 Logger.getLogger(KeyInput.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }
+        } 
+        
+        OnyxGame.closeRequest();
     }
     
     @Override

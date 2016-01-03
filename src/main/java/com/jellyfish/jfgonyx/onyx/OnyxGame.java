@@ -31,12 +31,64 @@
  */
 package com.jellyfish.jfgonyx.onyx;
 
+import com.jellyfish.jfgonyx.constants.GraphicsConst;
+import com.jellyfish.jfgonyx.entities.OnyxPiece;
+import com.jellyfish.jfgonyx.entities.OnyxPosCollection;
+import com.jellyfish.jfgonyx.entities.OnyxVirtualPiece;
+import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFound;
+import com.jellyfish.jfgonyx.onyx.exceptions.OnyxGameSyncException;
+import com.jellyfish.jfgonyx.ui.OnyxBoard;
+import org.apache.commons.lang3.StringUtils;
+
 /**
  *
  * @author thw
  */
 public class OnyxGame {
     
+    private static GraphicsConst.COLOR colorToPlay = null;
+    private static boolean requestInitialized = false;
     
+    /**
+     * 
+     * @param c OnyxPos collection.
+     * @param board OnyxBoard instance.
+     * @throws OnyxGameSyncException
+     * @throws NoValidOnyxPositionsFound 
+     */
+    public static void requestOpponentMove(final OnyxPosCollection c, final OnyxBoard board) throws OnyxGameSyncException, NoValidOnyxPositionsFound {
+        
+        OnyxGame.check();
+        final String k = Onyx.getSEARCH().get(Onyx.SEARCH_TYPE.ONYXPOSCOL).search(c, board, OnyxGame.colorToPlay);
+        if (StringUtils.isBlank(k)) throw new NoValidOnyxPositionsFound();
+        c.getPosition(k).setPiece(new OnyxPiece(colorToPlay));
+        final String virtualKey = Onyx.getSEARCH().get(Onyx.SEARCH_TYPE.RANDOM).search(c, board, OnyxGame.colorToPlay);
+        c.getPosition(virtualKey).setVirtualPiece(
+             new OnyxVirtualPiece(GraphicsConst.COLOR.getOposite(colorToPlay.boolColor))
+        );
+    }
+    
+    /**
+     * @param color the color to play next or to search move for and append to board.
+     */
+    public static void openRequest(final GraphicsConst.COLOR color) {
+        OnyxGame.colorToPlay = color;
+        OnyxGame.initRequest();
+    }
+    
+    public static void closeRequest() {
+        OnyxGame.colorToPlay = null;
+        OnyxGame.initRequest();
+    }
+    
+    private static void initRequest() {
+        OnyxGame.requestInitialized = OnyxGame.colorToPlay != null;
+    }
+    
+    private static void check() throws OnyxGameSyncException {
+        if (OnyxGame.colorToPlay == null) throw new OnyxGameSyncException();
+        if (!requestInitialized) throw new OnyxGameSyncException(
+                String.format(OnyxGameSyncException.WRONG_TURN_MSG, colorToPlay.strColor));
+    }
     
 }

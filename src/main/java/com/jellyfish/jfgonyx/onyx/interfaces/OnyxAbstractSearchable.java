@@ -33,13 +33,14 @@ package com.jellyfish.jfgonyx.onyx.interfaces;
 
 import com.jellyfish.jfgonyx.constants.GraphicsConst;
 import com.jellyfish.jfgonyx.entities.OnyxPosCollection;
-import com.jellyfish.jfgonyx.exceptions.NoValidOnysPositionsFound;
+import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFound;
+import com.jellyfish.jfgonyx.ui.OnyxBoard;
 
 /**
  * @author thw
  */
 public abstract interface OnyxAbstractSearchable {
     
-    String search(final OnyxPosCollection c, final GraphicsConst.COLOR color) throws NoValidOnysPositionsFound;
+    String search(final OnyxPosCollection c, final OnyxBoard board, final GraphicsConst.COLOR color) throws NoValidOnyxPositionsFound;
     
 }
