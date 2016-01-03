@@ -30,8 +30,8 @@
 
 package com.jellyfish.jfgonyx.ui;
 
+import com.jellyfish.jfgonyx.constants.GraphicsConst;
 import java.awt.BorderLayout;
-import java.awt.Color;
 
 /**
  *
@@ -46,6 +46,7 @@ public class MainFrame extends javax.swing.JFrame {
     public MainFrame(final OnyxBoard board) {
         initComponents();
         this.add(board, BorderLayout.CENTER);
+        this.setBackground(GraphicsConst.BACKGROUND);
         this.pack();
         this.setLocationRelativeTo(null);
         this.setSize(650, 700);

@@ -64,7 +64,7 @@ public class OnyxGame {
         c.getPosition(k).setPiece(new OnyxPiece(colorToPlay));
         final String virtualKey = Onyx.getSEARCH().get(Onyx.SEARCH_TYPE.RANDOM).search(c, board, OnyxGame.colorToPlay);
         c.getPosition(virtualKey).setVirtualPiece(
-             new OnyxVirtualPiece(GraphicsConst.COLOR.getOposite(colorToPlay.boolColor))
+             new OnyxVirtualPiece(GraphicsConst.COLOR.getVirtualOposite(colorToPlay.boolColor))
         );
     }
     

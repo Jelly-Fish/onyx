@@ -42,11 +42,12 @@ public class GraphicsConst {
     public static final int SQUARE_WIDTH = 50;
     public static final int BOARD_WIDTH = 700;
     public static final int ZIGZAG = 12;
-    public static final Color FULL_DIAMOND = new Color(192,192,192);
-    public static final Color DIAMOND = new Color(232,232,232);
+    public static final Color BACKGROUND = new Color(210,160,48);
+    public static final Color FULL_DIAMOND = new Color(169,125,16);
+    public static final Color DIAMOND = new Color(218,164,50);
     public static final Color LINE = new Color(12,12,12);
     public static final Color WHITE_OUTLINE = new Color(16,16,16);
-    public static final Color BLACK_OUTLINE = new Color(196,196,196);
+    public static final Color BLACK_OUTLINE = new Color(64,64,64);
     public static final Color VIRTUAL_OUTLINE = Color.CYAN;
     
     public static enum COLOR {
@@ -69,6 +70,14 @@ public class GraphicsConst {
         
         public static COLOR getOposite(final boolean bool) {
             return bool ? COLOR.WHITE : COLOR.BLACK;
+        }
+        
+        public static COLOR getVirtualOposite(final boolean bool) {
+            return bool ? COLOR.VIRTUAL_WHITE : COLOR.VIRTUAL_BLACK;
+        }
+        
+        public static COLOR getVirtual(final boolean bool) {
+            return bool ? COLOR.VIRTUAL_BLACK : COLOR.VIRTUAL_WHITE;
         }
         
     }
