@@ -35,7 +35,7 @@ import com.jellyfish.jfgonyx.constants.GraphicsConst;
 import com.jellyfish.jfgonyx.entities.OnyxDiamond;
 import com.jellyfish.jfgonyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.entities.OnyxPosCollection;
-import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFound;
+import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
 
 /**
@@ -51,9 +51,9 @@ public interface OnyxPosCollectionSearchable extends OnyxAbstractSearchable {
      * @param c collection of unique Onyx positions - positions are independent from OnyxDiamond instances.
      * @return String value key of position.
      * @see OnyxPosCollection OnyxPos instaces mapped to string key coordinates.
-     * @throws NoValidOnyxPositionsFound if no position if found.
+     * @throws NoValidOnyxPositionsFoundException if no position if found.
      */
     @Override
-    String search(final OnyxPosCollection c, final OnyxBoard board, final GraphicsConst.COLOR color) throws NoValidOnyxPositionsFound;
+    String search(final OnyxPosCollection c, final OnyxBoard board, final GraphicsConst.COLOR color) throws NoValidOnyxPositionsFoundException;
     
 }

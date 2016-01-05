@@ -175,7 +175,6 @@ public class GraphicsHelper {
     private static void drawPieces(Graphics2D g, final OnyxPosCollection c) {
 
         for (OnyxPos p : c.positions.values()) {
-
             if (p.isOccupied()) {
                 GraphicsHelper.drawPiece(g, p, p.getPiece());
             }
@@ -184,13 +183,7 @@ public class GraphicsHelper {
 
     private static void drawPiece(Graphics2D g, final OnyxPos p, final OnyxPiece piece) {
 
-        if (p.x % 2 == 0) {
-            g.translate(0, 15);
-        }
-        
-        if (p.y % 2 == 0) {
-            g.translate(15, 0);
-        }
+        GraphicsHelper.translate(g, p);
 
         g.setColor(piece.color.boolColor
                 ? GraphicsConst.BLACK_OUTLINE : GraphicsConst.WHITE_OUTLINE);
@@ -206,40 +199,47 @@ public class GraphicsHelper {
             g.setStroke(s);
         }
 
+        GraphicsHelper.unTranslate(g, p);
+    }
+    
+    private static void translate(Graphics2D g, final OnyxPos p) {
+        
+        int c = 0;
         if (p.x % 2 == 0) {
-            g.translate(0, -15);
+            g.translate(0, GraphicsConst.TRANSLATION);
+        } else if (p.isDiamondCenter()) {
+            ++c;
         }
-
+        
         if (p.y % 2 == 0) {
-            g.translate(-15, 0);
+            g.translate(GraphicsConst.TRANSLATION, 0);
+        } else if (p.isDiamondCenter()) {
+            ++c;
+        }
+        
+        if (c == 2) {
+            g.translate(GraphicsConst.CENTER_TRANSLATION, GraphicsConst.CENTER_TRANSLATION);
         }
     }
     
-    private static void drawCenterPiece(Graphics2D g, final OnyxPos p, final OnyxPiece piece) {
-
-        /**
-         * FIXME : test and debug.
-         */
+    private static void unTranslate(Graphics2D g, final OnyxPos p) {
         
-        g.translate(0, 7.5);
-        g.translate(7.5, 0);
-
-        g.setColor(piece.color.boolColor
-                ? GraphicsConst.BLACK_OUTLINE : GraphicsConst.WHITE_OUTLINE);
-        g.drawOval(p.gX - 15, p.gY - 15, 30, 30);
-        g.setColor(piece.color.color);
-        g.fillOval(p.gX - 15, p.gY - 15, 30, 30);
-        
-        if (piece.isVirtual()) {
-            final Stroke s = g.getStroke();
-            g.setStroke(new BasicStroke(2));
-            g.setColor(GraphicsConst.VIRTUAL_OUTLINE);
-            g.drawOval(p.gX - 15, p.gY - 15, 30, 30);
-            g.setStroke(s);
+        int c = 0;
+        if (p.x % 2 == 0) {
+            g.translate(0, -GraphicsConst.TRANSLATION);
+        } else if (p.isDiamondCenter()) {
+            ++c;
         }
-
-        g.translate(0, -7.5);
-        g.translate(-7.5, 0);
+        
+        if (p.y % 2 == 0) {
+            g.translate(-GraphicsConst.TRANSLATION, 0);
+        } else if (p.isDiamondCenter()) {
+            ++c;
+        }
+        
+        if (c == 2) {
+            g.translate(-GraphicsConst.CENTER_TRANSLATION, -GraphicsConst.CENTER_TRANSLATION);
+        }
     }
 
 }

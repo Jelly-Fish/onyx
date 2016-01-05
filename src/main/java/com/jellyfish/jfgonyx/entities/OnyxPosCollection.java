@@ -60,7 +60,7 @@ public class OnyxPosCollection {
     
     public void spawnVirtualPiece(final GraphicsConst.COLOR c) {
         
-        this.positions.get(String.format(OnyxPosCollection.KEY_FORMAT, 6f, 6f)).setVirtualPiece(
+        this.positions.get(String.format(OnyxPosCollection.KEY_FORMAT, 7f, 6f)).setVirtualPiece(
                 new OnyxVirtualPiece(c)
         );
     }

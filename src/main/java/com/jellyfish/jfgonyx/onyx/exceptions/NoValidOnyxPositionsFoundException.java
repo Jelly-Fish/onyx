@@ -34,12 +34,12 @@ package com.jellyfish.jfgonyx.onyx.exceptions;
 /**
  * @author thw
  */
-public class NoValidOnyxPositionsFound extends OnyxException {
+public class NoValidOnyxPositionsFoundException extends OnyxException {
 
     public static final String DEFAULT_MSG = "Sorry, but no valid Onyx position has been found on the current board... :S";
     
-    public NoValidOnyxPositionsFound() {
-        super(NoValidOnyxPositionsFound.DEFAULT_MSG);
+    public NoValidOnyxPositionsFoundException() {
+        super(NoValidOnyxPositionsFoundException.DEFAULT_MSG);
     }
     
 }

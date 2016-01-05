@@ -32,6 +32,7 @@
 package com.jellyfish.jfgonyx.entities;
 
 import com.jellyfish.jfgonyx.constants.GraphicsConst;
+import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 
 /**
  * Onyx position definition.
@@ -67,7 +68,13 @@ public class OnyxPos {
     }
     
     public boolean isDiamondCenter() {
-        return this.x % 2 != 0 && this.y % 2 != 0;
+        
+        try {
+            final String k = this.diamond.getCenterPos().getKey();
+            return k.equals(this.getKey());
+        } catch (final InvalidOnyxPositionException Iopex) {
+            return false;
+        }
     }
         
     public void addPiece(final OnyxPiece p) {
@@ -76,14 +83,6 @@ public class OnyxPos {
     
     public String getKey() {
         return String.format(OnyxPosCollection.KEY_FORMAT, this.x, this.y);
-    }
-    
-    public OnyxPiece getPiece() {
-        return this.piece;
-    }
-
-    public void setPiece(final OnyxPiece piece) {
-        this.piece = piece;
     }
     
     @Override
@@ -120,6 +119,14 @@ public class OnyxPos {
 
     public void setVirtualPiece(OnyxVirtualPiece vPiece) {
         this.vPiece = vPiece;
+    }
+        
+    public OnyxPiece getPiece() {
+        return this.piece;
+    }
+
+    public void setPiece(final OnyxPiece piece) {
+        this.piece = piece;
     }
     
 }

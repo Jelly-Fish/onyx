@@ -33,7 +33,8 @@ package com.jellyfish.jfgonyx.onyx.interfaces;
 
 import com.jellyfish.jfgonyx.constants.GraphicsConst;
 import com.jellyfish.jfgonyx.entities.OnyxPosCollection;
-import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFound;
+import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
+import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
 
 /**
@@ -41,6 +42,7 @@ import com.jellyfish.jfgonyx.ui.OnyxBoard;
  */
 public abstract interface OnyxAbstractSearchable {
     
-    String search(final OnyxPosCollection c, final OnyxBoard board, final GraphicsConst.COLOR color) throws NoValidOnyxPositionsFound;
+    String search(final OnyxPosCollection c, final OnyxBoard board, final GraphicsConst.COLOR color) 
+            throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException;
     
 }

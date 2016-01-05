@@ -31,11 +31,13 @@
 package com.jellyfish.jfgonyx.ui;
 
 import com.jellyfish.jfgonyx.constants.GraphicsConst;
+import com.jellyfish.jfgonyx.entities.OnyxDiamond;
 import com.jellyfish.jfgonyx.entities.OnyxDiamondCollection;
 import com.jellyfish.jfgonyx.entities.OnyxPiece;
 import com.jellyfish.jfgonyx.entities.OnyxPosCollection;
 import com.jellyfish.jfgonyx.helpers.GraphicsHelper;
 import com.jellyfish.jfgonyx.io.KeyInput;
+import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -86,6 +88,43 @@ public class OnyxBoard extends javax.swing.JPanel {
         super.paintComponent(g);
         g.clearRect(0, 0, this.getWidth(), this.getHeight());
         GraphicsHelper.drawBoard((Graphics2D) g, this.diamonds, this.positions, this);
+    }
+    
+    public boolean isCenterPosPlayable(final String k, final int bitColor) {
+        
+        OnyxDiamond tmpDiamond = null;
+        if (k == null || !this.positions.positions.containsKey(k)) return false;
+        
+        for (OnyxDiamond d : this.diamonds.diamonds.values()) {
+            try {
+                if (d.getCenterPos().getKey().equals(k)) {
+                    tmpDiamond = d;
+                    break;
+                }
+            } catch (final InvalidOnyxPositionException Iopex) { }
+        }
+        
+        int c = 0;
+        if (tmpDiamond == null || !tmpDiamond.isFivePosDiamond()) return false;
+        for (String dK : tmpDiamond.getAllKeys()) {
+            c = this.positions.getPosition(dK).isOccupied() && 
+                this.positions.getPosition(dK).getPiece().color.bitColor == bitColor ?
+                c + 1 : c;
+        }
+        
+        return c == 4;
+    }
+
+    public boolean isDiamondCenter(final String k) {
+        
+        for (OnyxDiamond d : this.diamonds.diamonds.values()) {
+            try {
+                if (d.getCenterPos().getKey().equals(k)) {
+                    return true;
+                }
+            } catch (final InvalidOnyxPositionException Iopex) { }
+        }
+        return false;
     }
     
     public KeyInput getOnyxKeyListener() {

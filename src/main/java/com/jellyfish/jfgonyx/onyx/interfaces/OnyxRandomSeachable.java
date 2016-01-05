@@ -33,7 +33,8 @@ package com.jellyfish.jfgonyx.onyx.interfaces;
 
 import com.jellyfish.jfgonyx.constants.GraphicsConst;
 import com.jellyfish.jfgonyx.entities.OnyxPosCollection;
-import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFound;
+import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
+import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
 
 /**
@@ -47,13 +48,15 @@ public interface OnyxRandomSeachable extends OnyxAbstractSearchable {
      * positions are discarded which is stupid too.
      * @param color the color awsking for random dumb move, all equal colors will be discarded.
      * @param board Onyx board instance.
+     * @throws com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException
      * @see OnyxPos position definition.
      * @see OnyxDiamond Onyx diamond definition.
      * @param c collection of unique Onyx positions - positions are independent from OnyxDiamond instances.
      * @return the key of any stupid unoccupied Onyx position, infact the first one found.
-     * @throws NoValidOnyxPositionsFound if no position if found, seems like all the board is occupied ???
+     * @throws NoValidOnyxPositionsFoundException if no position if found, seems like all the board is occupied ???
      */
     @Override
-    String search(final OnyxPosCollection c, final OnyxBoard board, final GraphicsConst.COLOR color) throws NoValidOnyxPositionsFound;
+    String search(final OnyxPosCollection c, final OnyxBoard board, final GraphicsConst.COLOR color) 
+            throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException;
     
 }

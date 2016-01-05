@@ -33,6 +33,7 @@ package com.jellyfish.jfgonyx.entities;
 
 import com.jellyfish.jfgonyx.constants.ConstructPosConst;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
+import com.jellyfish.jfgonyx.ui.OnyxBoard;
 import java.awt.Polygon;
 import java.util.Arrays;
 
@@ -77,17 +78,24 @@ public class OnyxDiamond {
         return this.positions.length == 5;
     }
     
-    public boolean isCenterPosUsable(final OnyxPos p) {
-        
-        final OnyxPiece piece = p.isVirtuallyOccupied() ? p.getVirtualPiece() : p.getPiece();
-        if (!p.diamond.isFivePosDiamond()) return false;
-        if (p.diamond.positions[4].isOccupied()) return false;
-        
-        int posCount = 0;
-        for (int i = 0; i < 4; i++) {
-            if (p.diamond.positions[i].isOccupied(piece.color.bitColor)) ++posCount;
+    public boolean isCenterPosUsable(final OnyxPos p, final OnyxVirtualPiece piece, final OnyxBoard b) {
+         
+        int count = 0;
+        for (OnyxDiamond d : b.getDiamondCollection().diamonds.values()) {
+            count = 0;
+            if (d.contains(p)) {
+                for (String k : d.getAllKeys()) {
+                    if (b.getPosCollection().getPosition(k).isOccupied() && 
+                            b.getPosCollection().getPosition(k).getPiece().color.bitColor == 
+                            b.getPosCollection().getPosition(piece.getTmpOnyxPosition().getKey()
+                            ).getPiece().color.bitColor)
+                    ++count;
+                }
+                if (count == 4) return true;
+            }
         }
-        return posCount == 4;
+        
+        return false;
     }
     
     public OnyxPos getCenterPos() throws InvalidOnyxPositionException {
@@ -95,7 +103,7 @@ public class OnyxDiamond {
         if (this.isFivePosDiamond()) {
             return this.positions[4];
         }
-        return null;
+        throw new InvalidOnyxPositionException();
     }
     
     /**

@@ -36,7 +36,7 @@ import com.jellyfish.jfgonyx.onyx.interfaces.OnyxPosCollectionSearchable;
 import com.jellyfish.jfgonyx.entities.OnyxDiamond;
 import com.jellyfish.jfgonyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.entities.OnyxPosCollection;
-import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFound;
+import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
 import java.util.ArrayList;
 import java.util.List;
@@ -58,7 +58,7 @@ class OnyxPosCollectionSearch implements OnyxPosCollectionSearchable {
      *   Find forward positions depending on color
      */
     @Override
-    public String search(final OnyxPosCollection c, final OnyxBoard board, final GraphicsConst.COLOR color) throws NoValidOnyxPositionsFound {
+    public String search(final OnyxPosCollection c, final OnyxBoard board, final GraphicsConst.COLOR color) throws NoValidOnyxPositionsFoundException {
     
         final String take = this.getTakePos(c, board, color.bitColor);
         final String counter = this.getCounterPos(c, board, color.bitColor);
@@ -74,7 +74,7 @@ class OnyxPosCollectionSearch implements OnyxPosCollectionSearchable {
      * @param bitColor the color to play's bit value (0=white, 1=black).
      * @return Strongest move found or NULL if no such position has been found.
      */
-    private String getNeighbourPos(final OnyxPosCollection c, final OnyxBoard b, final int bitColor) throws NoValidOnyxPositionsFound {
+    private String getNeighbourPos(final OnyxPosCollection c, final OnyxBoard b, final int bitColor) throws NoValidOnyxPositionsFoundException {
         
         int count;
         OnyxPos pos = null;
@@ -100,7 +100,7 @@ class OnyxPosCollectionSearch implements OnyxPosCollectionSearchable {
      * or NULL if no such position has been found.
      */
     @SuppressWarnings("null")
-    private String getCounterPos(final OnyxPosCollection c, final OnyxBoard b, final int bitColor) throws NoValidOnyxPositionsFound {
+    private String getCounterPos(final OnyxPosCollection c, final OnyxBoard b, final int bitColor) throws NoValidOnyxPositionsFoundException {
 
         int count;
         OnyxPos pos = null;
