@@ -39,12 +39,13 @@ import com.jellyfish.jfgonyx.entities.OnyxVirtualPiece;
 import com.jellyfish.jfgonyx.onyx.interfaces.OnyxExecutable;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
 import java.awt.event.KeyEvent;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  *
  * @author thw
  */
-public class MoveVirutalPiece implements OnyxExecutable {
+public class KeyMoveVirutalPiece implements OnyxExecutable {
 
     @Override
     public boolean exec(final int e, final OnyxBoard board) {
@@ -64,16 +65,16 @@ public class MoveVirutalPiece implements OnyxExecutable {
 
         switch (e) {
             case KeyEvent.VK_LEFT:
-                this.move(x, y, x + .5f, y + .5f, board, v);
+                this.move(x, y, x + .5f, y + .5f, board, v, KeyEvent.VK_LEFT);
                 break;
             case KeyEvent.VK_UP:
-                this.move(x, y, x - .5f, y + .5f, board, v);
+                this.move(x, y, x - .5f, y + .5f, board, v, KeyEvent.VK_UP);
                 break;
             case KeyEvent.VK_RIGHT:
-                this.move(x, y, x - .5f, y - .5f, board, v);
+                this.move(x, y, x - .5f, y - .5f, board, v, KeyEvent.VK_RIGHT);
                 break;
             case KeyEvent.VK_DOWN:
-                this.move(x, y, x + .5f, y - .5f, board, v);
+                this.move(x, y, x + .5f, y - .5f, board, v, KeyEvent.VK_DOWN);
                 break;
             case KeyEvent.VK_ENTER:
                 moved = this.validateMove(board, v);
@@ -86,16 +87,24 @@ public class MoveVirutalPiece implements OnyxExecutable {
         return moved;
     }
 
+    /**
+     * Move piece from positions - if position is not found (diagonal on 4 point
+     * diamond) then persue serach by incrementing by .5f the move value.
+     * @param x X exiting position coordinate.
+     * @param y Y exiting position coordinate.
+     * @param nX X new position coordinate.
+     * @param nY Y new position coordinate.
+     * @param board OnyxBoard onyx board instance.
+     * @param v OnyxVirtualPiece virtual piece instance.
+     * @param keyEvt KeyEvent constant integer value.
+     */
     private void move(final float x, final float y, final float nX, final float nY,
-            final OnyxBoard board, final OnyxVirtualPiece v) {
+            final OnyxBoard board, final OnyxVirtualPiece v, final int keyEvt) {
         
         String k = String.format(OnyxPosCollection.KEY_FORMAT, nX, nY);
         final String oldK = String.format(OnyxPosCollection.KEY_FORMAT, x, y);
-        
-        if (board.getPosCollection().positions.containsKey(k)) {
-            v.setTmpOnyxPosition(board.getPosCollection().positions.get(k));
-            board.getPosCollection().positions.get(k).setVirtualPiece(v);
-            board.getPosCollection().positions.get(oldK).setVirtualPiece(null);
+        if (!this.applyMove(k, oldK, v, board)) {
+            this.applyMove(this.forwardMove(nX, nY, keyEvt), oldK, v, board);
         }
     }
     
@@ -112,6 +121,34 @@ public class MoveVirutalPiece implements OnyxExecutable {
         board.getPosCollection().getPosition(k).setVirtualPiece(null);
         
         return true;
+    }
+
+    private boolean applyMove(final String k, final String oldK, final OnyxVirtualPiece v, 
+            final OnyxBoard board) {
+        
+        if (board.getPosCollection().positions.containsKey(k)) {
+            v.setTmpOnyxPosition(board.getPosCollection().positions.get(k));
+            board.getPosCollection().positions.get(k).setVirtualPiece(v);
+            board.getPosCollection().positions.get(oldK).setVirtualPiece(null);
+            return true;
+        }
+        return false;
+    }
+
+    private String forwardMove(final float nX, final float nY, final int keyEvt) {
+        
+        switch (keyEvt) {
+            case KeyEvent.VK_LEFT:
+                return String.format(OnyxPosCollection.KEY_FORMAT, nX + .5f, nY + .5f);
+            case KeyEvent.VK_UP:
+                return String.format(OnyxPosCollection.KEY_FORMAT, nX - .5f, nY + .5f);
+            case KeyEvent.VK_RIGHT:
+                return String.format(OnyxPosCollection.KEY_FORMAT, nX - .5f, nY - .5f);
+            case KeyEvent.VK_DOWN:
+                return String.format(OnyxPosCollection.KEY_FORMAT, nX + .5f, nY - .5f);
+            default:
+                return StringUtils.EMPTY;
+        }
     }
 
 }

@@ -32,7 +32,7 @@
 package com.jellyfish.jfgonyx.io;
 
 import com.jellyfish.jfgonyx.constants.GraphicsConst;
-import com.jellyfish.jfgonyx.io.events.MoveVirutalPiece;
+import com.jellyfish.jfgonyx.io.events.KeyMoveVirutalPiece;
 import com.jellyfish.jfgonyx.onyx.OnyxGame;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException;
@@ -59,7 +59,7 @@ public class KeyInput implements KeyListener {
     
     public void init(final OnyxBoard board) {
         this.board = board;
-        this.ops.put(KeyInput.EVENT.VIRTUAL_P_MOVE, new MoveVirutalPiece());
+        this.ops.put(KeyInput.EVENT.VIRTUAL_P_MOVE, new KeyMoveVirutalPiece());
     }
     
     @Override
