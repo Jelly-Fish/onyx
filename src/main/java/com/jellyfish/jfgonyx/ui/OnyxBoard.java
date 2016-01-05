@@ -86,7 +86,6 @@ public class OnyxBoard extends javax.swing.JPanel {
     public void paintComponent(Graphics g) {
         
         super.paintComponent(g);
-        g.clearRect(0, 0, this.getWidth(), this.getHeight());
         GraphicsHelper.drawBoard((Graphics2D) g, this.diamonds, this.positions, this);
     }
     

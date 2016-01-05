@@ -118,8 +118,8 @@ public class GraphicsHelper {
         final AffineTransform previous = g.getTransform();
         g.rotate(Math.toRadians(180.0));
 
-        g.setColor(Color.BLACK);
-
+        GraphicsHelper.drawBorders(g, board);
+        
         for (OnyxDiamond d : c.diamonds.values()) {
 
             if (d.onPairLine) {
@@ -242,4 +242,15 @@ public class GraphicsHelper {
         }
     }
 
+    private static void drawBorders(Graphics2D g, final OnyxBoard board) {
+        
+        final Stroke s = g.getStroke();
+        g.setColor(GraphicsConst.BACKGROUND);
+        g.fillRect(board.getX(), board.getY(), board.getWidth(), board.getHeight());
+        g.setColor(Color.BLACK);
+        g.setStroke(new BasicStroke(2));
+        g.drawRect(board.getX(), board.getY(), board.getWidth(), board.getHeight());
+        g.setStroke(s);
+    }
+    
 }

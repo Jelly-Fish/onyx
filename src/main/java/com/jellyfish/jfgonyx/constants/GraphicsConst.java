@@ -44,7 +44,7 @@ public class GraphicsConst {
     public static final int ZIGZAG = 12;
     public static final Color BACKGROUND = new Color(210,160,48);
     public static final Color FULL_DIAMOND = new Color(169,125,16);
-    public static final Color DIAMOND = new Color(218,164,50);
+    public static final Color DIAMOND = new Color(212,170,54);
     public static final Color LINE = new Color(12,12,12);
     public static final Color WHITE_OUTLINE = new Color(16,16,16);
     public static final Color BLACK_OUTLINE = new Color(64,64,64);
