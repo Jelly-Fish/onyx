@@ -55,26 +55,19 @@ public class KeyMoveVirutalPiece implements OnyxExecutable {
         final float x = v.getTmpOnyxPosition().x;
         final float y = v.getTmpOnyxPosition().y;
         boolean moved = false;
-        
-        /**
-         * FIXME 2-1-2016 :
-         * Due to 180° board rotation, X coordinates are inverted; 
-         * therefor, left move = ++x and right --x - the x=0 y=0 position
-         * being in the right bottom corner (and not left bottom).
-         */
 
         switch (e) {
             case KeyEvent.VK_LEFT:
-                this.move(x, y, x + .5f, y + .5f, board, v, KeyEvent.VK_LEFT);
+                this.move(x, y, x - .5f, y - .5f, board, v, KeyEvent.VK_LEFT);
                 break;
             case KeyEvent.VK_UP:
-                this.move(x, y, x - .5f, y + .5f, board, v, KeyEvent.VK_UP);
+                this.move(x, y, x + .5f, y - .5f, board, v, KeyEvent.VK_UP);
                 break;
             case KeyEvent.VK_RIGHT:
-                this.move(x, y, x - .5f, y - .5f, board, v, KeyEvent.VK_RIGHT);
+                this.move(x, y, x + .5f, y + .5f, board, v, KeyEvent.VK_RIGHT);
                 break;
             case KeyEvent.VK_DOWN:
-                this.move(x, y, x + .5f, y - .5f, board, v, KeyEvent.VK_DOWN);
+                this.move(x, y, x - .5f, y + .5f, board, v, KeyEvent.VK_DOWN);
                 break;
             case KeyEvent.VK_ENTER:
                 moved = this.validateMove(board, v);
@@ -139,13 +132,13 @@ public class KeyMoveVirutalPiece implements OnyxExecutable {
         
         switch (keyEvt) {
             case KeyEvent.VK_LEFT:
-                return String.format(OnyxPosCollection.KEY_FORMAT, nX + .5f, nY + .5f);
-            case KeyEvent.VK_UP:
-                return String.format(OnyxPosCollection.KEY_FORMAT, nX - .5f, nY + .5f);
-            case KeyEvent.VK_RIGHT:
                 return String.format(OnyxPosCollection.KEY_FORMAT, nX - .5f, nY - .5f);
-            case KeyEvent.VK_DOWN:
+            case KeyEvent.VK_UP:
                 return String.format(OnyxPosCollection.KEY_FORMAT, nX + .5f, nY - .5f);
+            case KeyEvent.VK_RIGHT:
+                return String.format(OnyxPosCollection.KEY_FORMAT, nX + .5f, nY + .5f);
+            case KeyEvent.VK_DOWN:
+                return String.format(OnyxPosCollection.KEY_FORMAT, nX - .5f, nY + .5f);
             default:
                 return StringUtils.EMPTY;
         }

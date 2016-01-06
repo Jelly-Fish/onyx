@@ -35,7 +35,6 @@ import com.jellyfish.jfgonyx.constants.GraphicsConst;
 import com.jellyfish.jfgonyx.entities.*;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
 import java.awt.BasicStroke;
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Polygon;
 import java.awt.RenderingHints;
@@ -113,12 +112,12 @@ public class GraphicsHelper {
         /**
          * Translate board before rotation.
          */
-        g.translate(board.getWidth() - GraphicsConst.SQUARE_WIDTH,
+        /*g.translate(board.getWidth() - GraphicsConst.SQUARE_WIDTH,
                 board.getHeight() - GraphicsConst.SQUARE_WIDTH);
         final AffineTransform previous = g.getTransform();
-        g.rotate(Math.toRadians(180.0));
-
-        GraphicsHelper.drawBorders(g, board);
+        g.rotate(Math.toRadians(180.0));*/
+        
+        GraphicsHelper.drawBackground(g, board);
         
         for (OnyxDiamond d : c.diamonds.values()) {
 
@@ -169,7 +168,7 @@ public class GraphicsHelper {
         if (p.hasVirtualPiece()) {
             GraphicsHelper.drawPiece(g, p.getVirtualPiece().getTmpOnyxPosition(), p.getVirtualPiece());
         }
-        g.setTransform(previous);
+        //g.setTransform(previous);
     }
 
     private static void drawPieces(Graphics2D g, final OnyxPosCollection c) {
@@ -242,15 +241,9 @@ public class GraphicsHelper {
         }
     }
 
-    private static void drawBorders(Graphics2D g, final OnyxBoard board) {
-        
-        final Stroke s = g.getStroke();
+    private static void drawBackground(Graphics2D g, final OnyxBoard board) {
         g.setColor(GraphicsConst.BACKGROUND);
         g.fillRect(board.getX(), board.getY(), board.getWidth(), board.getHeight());
-        g.setColor(Color.BLACK);
-        g.setStroke(new BasicStroke(2));
-        g.drawRect(board.getX(), board.getY(), board.getWidth(), board.getHeight());
-        g.setStroke(s);
     }
     
 }

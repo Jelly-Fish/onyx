@@ -39,6 +39,7 @@ import com.jellyfish.jfgonyx.helpers.GraphicsHelper;
 import com.jellyfish.jfgonyx.io.KeyInput;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -59,10 +60,12 @@ public class OnyxBoard extends javax.swing.JPanel {
         super(true);
         this.diamonds = diamonds;
         this.positions = positions;
+        this.setLocation(10, 10);
         this.setSize(GraphicsConst.BOARD_WIDTH, GraphicsConst.BOARD_WIDTH);
-        this.setOpaque(true);
+        this.setOpaque(false);
+        this.setDoubleBuffered(true);
+        this.setCursor(new Cursor(Cursor.HAND_CURSOR));
         this.setPreferredSize(new Dimension(GraphicsConst.BOARD_WIDTH, GraphicsConst.BOARD_WIDTH));
-        this.setBackground(Color.WHITE);
         this.keyInput = new KeyInput();
         this.addKeyListener(keyInput);
         this.setFocusable(true);
@@ -87,6 +90,8 @@ public class OnyxBoard extends javax.swing.JPanel {
         
         super.paintComponent(g);
         GraphicsHelper.drawBoard((Graphics2D) g, this.diamonds, this.positions, this);
+        //this.updateUI();
+        this.getParent().repaint();
     }
     
     public boolean isCenterPosPlayable(final String k, final int bitColor) {
