@@ -38,6 +38,7 @@ import com.jellyfish.jfgonyx.entities.OnyxPosCollection;
 import com.jellyfish.jfgonyx.entities.OnyxVirtualPiece;
 import com.jellyfish.jfgonyx.onyx.interfaces.OnyxExecutable;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
+import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 import org.apache.commons.lang3.StringUtils;
 
@@ -48,7 +49,7 @@ import org.apache.commons.lang3.StringUtils;
 public class KeyMoveVirutalPiece implements OnyxExecutable {
 
     @Override
-    public boolean exec(final int e, final OnyxBoard board) {
+    public boolean exec(final InputEvent e, final OnyxBoard board) {
 
         final OnyxVirtualPiece v = board.getPosCollection().getVirtualPiece();
         if (v == null) return false;
@@ -56,7 +57,7 @@ public class KeyMoveVirutalPiece implements OnyxExecutable {
         final float y = v.getTmpOnyxPosition().y;
         boolean moved = false;
 
-        switch (e) {
+        switch (((KeyEvent) e).getKeyCode()) {
             case KeyEvent.VK_LEFT:
                 this.move(x, y, x - .5f, y - .5f, board, v, KeyEvent.VK_LEFT);
                 break;

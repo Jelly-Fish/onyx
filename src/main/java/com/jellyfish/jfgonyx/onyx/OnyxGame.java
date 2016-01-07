@@ -72,7 +72,7 @@ public class OnyxGame {
         
         final String k = Onyx.getSEARCH().get(Onyx.SEARCH_TYPE.ONYXPOSCOL).search(c, board, OnyxGame.colorToPlay);
         if (StringUtils.isBlank(k)) throw new NoValidOnyxPositionsFoundException();
-        c.getPosition(k).setPiece(new OnyxPiece(colorToPlay));
+        c.getPosition(k).setPiece(new OnyxPiece(OnyxGame.colorToPlay));
     }
     
     private static void appendNewVirtual(final OnyxPosCollection c, final OnyxBoard board) 
@@ -80,7 +80,7 @@ public class OnyxGame {
         
         final String virtualKey = Onyx.getSEARCH().get(Onyx.SEARCH_TYPE.RANDOM).search(c, board, OnyxGame.colorToPlay);
         c.getPosition(virtualKey).setVirtualPiece(
-             new OnyxVirtualPiece(GraphicsConst.COLOR.getVirtualOposite(colorToPlay.boolColor))
+             new OnyxVirtualPiece(GraphicsConst.COLOR.getVirtualOposite(OnyxGame.colorToPlay.boolColor))
         );
     }
     
@@ -107,8 +107,8 @@ public class OnyxGame {
      */
     private static void checkInit() throws OnyxGameSyncException {
         if (OnyxGame.colorToPlay == null) throw new OnyxGameSyncException();
-        if (!requestInitialized) throw new OnyxGameSyncException(
-                String.format(OnyxGameSyncException.WRONG_TURN_MSG, colorToPlay.strColor));
+        if (!OnyxGame.requestInitialized) throw new OnyxGameSyncException(
+                String.format(OnyxGameSyncException.WRONG_TURN_MSG, OnyxGame.colorToPlay.strColor));
     }
     
 }

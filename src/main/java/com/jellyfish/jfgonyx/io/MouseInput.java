@@ -29,23 +29,67 @@
  * POSSIBILITY OF SUCH DAMAGE. 
  ******************************************************************************
  */
-package com.jellyfish.jfgonyx.onyx.interfaces;
+package com.jellyfish.jfgonyx.io;
 
+import com.jellyfish.jfgonyx.io.events.BoardDragger;
+import com.jellyfish.jfgonyx.onyx.interfaces.OnyxExecutable;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
-import java.awt.event.InputEvent;
+import java.awt.Cursor;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
+import java.util.HashMap;
 
 /**
- *
  * @author thw
  */
-public interface OnyxExecutable {
+public class MouseInput implements MouseListener, MouseMotionListener {
+
+    public boolean mouseDown = false;
+    private OnyxBoard board = null;
+    private final HashMap<MouseInput.EVENT, OnyxExecutable> ops = new HashMap<>();
+    private final Cursor GRAB_CURSOR = new Cursor(Cursor.MOVE_CURSOR);
+    private final Cursor HAND_CURSOR = new Cursor(Cursor.HAND_CURSOR);
     
-    /**
-     * Action or execution.
-     * @param e event.
-     * @param board the OnyBoard to which the listener has been added.
-     * @return true is move is validated and must swap turns.
-     */
-    boolean exec(final InputEvent e, final OnyxBoard board);
+    public static enum EVENT {
+        DRAG_BOARD
+    }
+    
+    public void init(final OnyxBoard board) {
+        this.board = board;
+        this.ops.put(MouseInput.EVENT.DRAG_BOARD, BoardDragger.getInstance());
+    }
+    
+    @Override
+    public void mouseMoved(MouseEvent e) { }
+    
+    @Override
+    public void mousePressed(MouseEvent e) { 
+        this.mouseDown = true;
+        this.board.setCursor(this.GRAB_CURSOR);
+        BoardDragger.getInstance().update(e, this.board);
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) { 
+        this.mouseDown = false;
+        this.board.setCursor(this.HAND_CURSOR);
+    }
+    
+    @Override
+    public void mouseDragged(MouseEvent e) { 
+        if (this.mouseDown) {
+            ops.get(MouseInput.EVENT.DRAG_BOARD).exec(e, this.board);
+        }
+    }
+    
+    @Override
+    public void mouseClicked(MouseEvent e) { }
+
+    @Override
+    public void mouseEntered(MouseEvent e) { }
+
+    @Override
+    public void mouseExited(MouseEvent e) { }
     
 }

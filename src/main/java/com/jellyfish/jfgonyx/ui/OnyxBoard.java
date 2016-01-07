@@ -37,13 +37,12 @@ import com.jellyfish.jfgonyx.entities.OnyxPiece;
 import com.jellyfish.jfgonyx.entities.OnyxPosCollection;
 import com.jellyfish.jfgonyx.helpers.GraphicsHelper;
 import com.jellyfish.jfgonyx.io.KeyInput;
+import com.jellyfish.jfgonyx.io.MouseInput;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
-import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.event.KeyListener;
 
 /**
  *
@@ -53,7 +52,8 @@ public class OnyxBoard extends javax.swing.JPanel {
     
     private final OnyxDiamondCollection diamonds;
     private final OnyxPosCollection positions;
-    private final KeyListener keyInput;
+    private final KeyInput keyInput;
+    private final MouseInput mouseInput;
 
     public OnyxBoard(final OnyxDiamondCollection diamonds, final OnyxPosCollection positions) {
         
@@ -67,9 +67,17 @@ public class OnyxBoard extends javax.swing.JPanel {
         this.setCursor(new Cursor(Cursor.HAND_CURSOR));
         this.setPreferredSize(new Dimension(GraphicsConst.BOARD_WIDTH, GraphicsConst.BOARD_WIDTH));
         this.keyInput = new KeyInput();
+        this.mouseInput = new MouseInput();
         this.addKeyListener(keyInput);
+        this.addMouseListener(mouseInput);
+        this.addMouseMotionListener(mouseInput);
         this.setFocusable(true);
         this.requestFocusInWindow();
+    }
+    
+    public void initInput() {
+        this.keyInput.init(this);
+        this.mouseInput.init(this);
     }
     
     public void initStartLayout() {
@@ -87,11 +95,8 @@ public class OnyxBoard extends javax.swing.JPanel {
     
     @Override
     public void paintComponent(Graphics g) {
-        
         super.paintComponent(g);
         GraphicsHelper.drawBoard((Graphics2D) g, this.diamonds, this.positions, this);
-        //this.updateUI();
-        this.getParent().repaint();
     }
     
     public boolean isCenterPosPlayable(final String k, final int bitColor) {
@@ -129,10 +134,6 @@ public class OnyxBoard extends javax.swing.JPanel {
             } catch (final InvalidOnyxPositionException Iopex) { }
         }
         return false;
-    }
-    
-    public KeyInput getOnyxKeyListener() {
-        return (KeyInput) this.keyInput;
     }
     
     public OnyxPosCollection getPosCollection() {

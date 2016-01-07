@@ -65,13 +65,13 @@ public class KeyInput implements KeyListener {
     @Override
     public void keyReleased(KeyEvent e) {
         
-        final GraphicsConst.COLOR c = board.getPosCollection().getVirtualPiece().color;
+        final GraphicsConst.COLOR c = this.board.getPosCollection().getVirtualPiece().color;
         OnyxGame.initMove(GraphicsConst.COLOR.getOposite(c.boolColor));
-        if (this.ops.get(KeyInput.EVENT.VIRTUAL_P_MOVE).exec(e.getKeyCode(), board)) {
+        if (this.ops.get(KeyInput.EVENT.VIRTUAL_P_MOVE).exec(e, this.board)) {
             
             try {
                 
-                OnyxGame.performMove(board.getPosCollection(), board);
+                OnyxGame.performMove(this.board.getPosCollection(), this.board);
                 
             } catch (final OnyxGameSyncException | NoValidOnyxPositionsFoundException | 
                     InvalidOnyxPositionException ex) {

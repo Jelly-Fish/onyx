@@ -29,23 +29,44 @@
  * POSSIBILITY OF SUCH DAMAGE. 
  ******************************************************************************
  */
-package com.jellyfish.jfgonyx.onyx.interfaces;
+package com.jellyfish.jfgonyx.io.events;
 
+import com.jellyfish.jfgonyx.onyx.interfaces.OnyxExecutable;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
 import java.awt.event.InputEvent;
+import java.awt.event.MouseEvent;
 
 /**
- *
  * @author thw
  */
-public interface OnyxExecutable {
+public class BoardDragger implements OnyxExecutable {
+
+    private static BoardDragger instance = null;
+    private int iX = 0, iY = 0;
     
-    /**
-     * Action or execution.
-     * @param e event.
-     * @param board the OnyBoard to which the listener has been added.
-     * @return true is move is validated and must swap turns.
-     */
-    boolean exec(final InputEvent e, final OnyxBoard board);
+    @Override
+    public boolean exec(final InputEvent e, final OnyxBoard board) {
+        
+        final MouseEvent evt = (MouseEvent) e;
+        board.setLocation(evt.getLocationOnScreen().x - this.iX, evt.getLocationOnScreen().y - this.iY);
+        this.iX = evt.getLocationOnScreen().x - board.getX();
+        this.iY = evt.getLocationOnScreen().y - board.getY();
+        return true;
+    }
+    
+    public void update(MouseEvent e, final OnyxBoard board) {
+        if (board.contains(e.getPoint())) {
+            this.iX = e.getLocationOnScreen().x - board.getX();
+            this.iY = e.getLocationOnScreen().y - board.getY();
+        }
+    }
+      
+    public static BoardDragger getInstance() {
+        
+        if (BoardDragger.instance == null) {
+            BoardDragger.instance = new BoardDragger();
+        }
+        return BoardDragger.instance;
+    }
     
 }

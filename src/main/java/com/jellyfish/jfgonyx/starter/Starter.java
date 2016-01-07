@@ -67,7 +67,7 @@ public class Starter {
         positions.spawnVirtualPiece(GraphicsConst.COLOR.VIRTUAL_BLACK);
         final OnyxBoard board = new OnyxBoard(diamonds, positions);
         board.initStartLayout();
-        board.getOnyxKeyListener().init(board);
+        board.initInput();
         final MainFrame mainFrame = new MainFrame(board);
 
     }

@@ -39,7 +39,6 @@ import java.awt.Graphics2D;
 import java.awt.Polygon;
 import java.awt.RenderingHints;
 import java.awt.Stroke;
-import java.awt.geom.AffineTransform;
 
 /**
  * @author thw
@@ -109,14 +108,6 @@ public class GraphicsHelper {
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_NORMALIZE);
 
-        /**
-         * Translate board before rotation.
-         */
-        /*g.translate(board.getWidth() - GraphicsConst.SQUARE_WIDTH,
-                board.getHeight() - GraphicsConst.SQUARE_WIDTH);
-        final AffineTransform previous = g.getTransform();
-        g.rotate(Math.toRadians(180.0));*/
-        
         GraphicsHelper.drawBackground(g, board);
         
         for (OnyxDiamond d : c.diamonds.values()) {
@@ -168,7 +159,6 @@ public class GraphicsHelper {
         if (p.hasVirtualPiece()) {
             GraphicsHelper.drawPiece(g, p.getVirtualPiece().getTmpOnyxPosition(), p.getVirtualPiece());
         }
-        //g.setTransform(previous);
     }
 
     private static void drawPieces(Graphics2D g, final OnyxPosCollection c) {
@@ -243,7 +233,7 @@ public class GraphicsHelper {
 
     private static void drawBackground(Graphics2D g, final OnyxBoard board) {
         g.setColor(GraphicsConst.BACKGROUND);
-        g.fillRect(board.getX(), board.getY(), board.getWidth(), board.getHeight());
+        g.fillRect(0, 0, board.getWidth(), board.getHeight());
     }
     
 }
