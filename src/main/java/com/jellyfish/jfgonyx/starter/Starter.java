@@ -35,6 +35,7 @@ import com.jellyfish.jfgonyx.entities.OnyxDiamondCollection;
 import com.jellyfish.jfgonyx.entities.OnyxPosCollection;
 import com.jellyfish.jfgonyx.helpers.GraphicsHelper;
 import com.jellyfish.jfgonyx.ui.MainFrame;
+import com.jellyfish.jfgonyx.ui.MainPanel;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -68,7 +69,9 @@ public class Starter {
         final OnyxBoard board = new OnyxBoard(diamonds, positions);
         board.initStartLayout();
         board.initInput();
-        final MainFrame mainFrame = new MainFrame(board);
+        final MainPanel panel = new MainPanel(board);
+        panel.init();
+        final MainFrame mainFrame = new MainFrame(panel, board);
 
     }
     

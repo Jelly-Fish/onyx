@@ -62,17 +62,19 @@ public class OnyxGame {
             throws OnyxGameSyncException, NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
         
         OnyxGame.checkInit();
-        OnyxGame.requestMove(c, board);
+        final String k = OnyxGame.requestMove(c, board);
         OnyxGame.appendNewVirtual(c, board);
         OnyxGame.closeMove();
+        board.getObserver().notifyMove(k);
     }
     
-    private static void requestMove(final OnyxPosCollection c, final OnyxBoard board) 
+    private static String requestMove(final OnyxPosCollection c, final OnyxBoard board) 
             throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
         
         final String k = Onyx.getSEARCH().get(Onyx.SEARCH_TYPE.ONYXPOSCOL).search(c, board, OnyxGame.colorToPlay);
         if (StringUtils.isBlank(k)) throw new NoValidOnyxPositionsFoundException();
         c.getPosition(k).setPiece(new OnyxPiece(OnyxGame.colorToPlay));
+        return k;
     }
     
     private static void appendNewVirtual(final OnyxPosCollection c, final OnyxBoard board) 

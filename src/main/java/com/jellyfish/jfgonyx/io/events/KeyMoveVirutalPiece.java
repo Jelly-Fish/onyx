@@ -113,6 +113,7 @@ public class KeyMoveVirutalPiece implements OnyxExecutable {
                 new OnyxPiece(v.color.boolColor ? GraphicsConst.COLOR.BLACK : GraphicsConst.COLOR.WHITE)
         );
         board.getPosCollection().getPosition(k).setVirtualPiece(null);
+        board.getObserver().notifyMove(tmpPos.toString());
         
         return true;
     }

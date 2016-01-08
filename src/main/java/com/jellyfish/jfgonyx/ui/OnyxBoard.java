@@ -39,6 +39,7 @@ import com.jellyfish.jfgonyx.helpers.GraphicsHelper;
 import com.jellyfish.jfgonyx.io.KeyInput;
 import com.jellyfish.jfgonyx.io.MouseInput;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
+import com.jellyfish.jfgonyx.onyx.interfaces.OnyxObserver;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -54,13 +55,13 @@ public class OnyxBoard extends javax.swing.JPanel {
     private final OnyxPosCollection positions;
     private final KeyInput keyInput;
     private final MouseInput mouseInput;
-
+    private OnyxObserver observer;
+    
     public OnyxBoard(final OnyxDiamondCollection diamonds, final OnyxPosCollection positions) {
         
-        super(true);
+        super();
         this.diamonds = diamonds;
         this.positions = positions;
-        this.setLocation(10, 10);
         this.setSize(GraphicsConst.BOARD_WIDTH, GraphicsConst.BOARD_WIDTH);
         this.setOpaque(false);
         this.setDoubleBuffered(true);
@@ -144,4 +145,12 @@ public class OnyxBoard extends javax.swing.JPanel {
         return diamonds;
     }
     
+    public OnyxObserver getObserver() {
+        return observer;
+    }
+
+    public void setObserver(final OnyxObserver observer) {
+        this.observer = observer;
+    }
+
 }

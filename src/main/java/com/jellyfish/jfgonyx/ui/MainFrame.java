@@ -30,7 +30,9 @@
 
 package com.jellyfish.jfgonyx.ui;
 
+import com.jellyfish.jfgonyx.constants.GraphicsConst;
 import java.awt.BorderLayout;
+import java.awt.Toolkit;
 
 /**
  *
@@ -38,16 +40,23 @@ import java.awt.BorderLayout;
  */
 public class MainFrame extends javax.swing.JFrame {
 
+    private final MainPanel mainPanel;
+    
     /**
      * Creates new form MainFrame
+     * @param panel
      * @param board
      */
-    public MainFrame(final OnyxBoard board) {
+    public MainFrame(final MainPanel panel, final OnyxBoard board) {
         initComponents();
-        this.frameContainerPanel.add(board, BorderLayout.CENTER);
+        this.mainPanel = panel;
+        this.setLayout(new BorderLayout());
+        this.mainPanel.add(board);
+        this.add(mainPanel, BorderLayout.CENTER);
         this.pack();
-        this.setLocationRelativeTo(null);
-        this.setSize(650, 700);
+        this.setSize(GraphicsConst.BOARD_WIDTH + 18, GraphicsConst.BOARD_WIDTH + 66);
+        this.setLocation(((int)(Toolkit.getDefaultToolkit().getScreenSize().getWidth() / 2)) - 
+                (this.getWidth() / 2), 20);
         this.setTitle("Onyx");
         this.setVisible(true);
     }
@@ -61,25 +70,14 @@ public class MainFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        frameContainerPanel = new javax.swing.JPanel();
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         editMenu = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setName("mainFrame"); // NOI18N
 
-        frameContainerPanel.setBackground(new java.awt.Color(51, 51, 51));
-
-        javax.swing.GroupLayout frameContainerPanelLayout = new javax.swing.GroupLayout(frameContainerPanel);
-        frameContainerPanel.setLayout(frameContainerPanelLayout);
-        frameContainerPanelLayout.setHorizontalGroup(
-            frameContainerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 783, Short.MAX_VALUE)
-        );
-        frameContainerPanelLayout.setVerticalGroup(
-            frameContainerPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 599, Short.MAX_VALUE)
-        );
+        menuBar.setDoubleBuffered(true);
 
         fileMenu.setText("File");
         menuBar.add(fileMenu);
@@ -93,11 +91,11 @@ public class MainFrame extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(frameContainerPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGap(0, 387, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(frameContainerPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGap(0, 522, Short.MAX_VALUE)
         );
 
         pack();
@@ -106,7 +104,6 @@ public class MainFrame extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu editMenu;
     private javax.swing.JMenu fileMenu;
-    private javax.swing.JPanel frameContainerPanel;
     private javax.swing.JMenuBar menuBar;
     // End of variables declaration//GEN-END:variables
 }

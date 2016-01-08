@@ -42,6 +42,7 @@ public class GraphicsConst {
     public static final int SQUARE_WIDTH = 50;
     public static final int BOARD_WIDTH = 670;
     public static final int ZIGZAG = 12;
+    public static final Color MAIN_PANEL_BACKGROUND_COLOR = new Color(136,136,136);
     public static final Color BACKGROUND = new Color(210,160,48);
     public static final Color FULL_DIAMOND = new Color(169,125,16);
     public static final Color DIAMOND = new Color(212,170,54);
