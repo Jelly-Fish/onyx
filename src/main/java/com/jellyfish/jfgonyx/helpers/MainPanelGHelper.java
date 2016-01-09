@@ -29,54 +29,34 @@
  * POSSIBILITY OF SUCH DAMAGE. 
  ******************************************************************************
  */
-package com.jellyfish.jfgonyx.ui;
+package com.jellyfish.jfgonyx.helpers;
 
 import com.jellyfish.jfgonyx.constants.GraphicsConst;
-import com.jellyfish.jfgonyx.entities.OnyxPos;
-import com.jellyfish.jfgonyx.helpers.MainPanelGHelper;
-import com.jellyfish.jfgonyx.onyx.interfaces.OnyxObserver;
+import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
-import java.util.LinkedList;
-import javax.swing.JPanel;
+import java.util.List;
 
 /**
+ * Main panel graphics helper.
  * @author thw
  */
-public class MainPanel extends JPanel implements OnyxObserver {
-
-    private final OnyxBoard board;
-    private final Font FONT = new Font("consolas", Font.BOLD, 14);
-    private final LinkedList<String> moveLabels = new LinkedList<>();
-    private final String labelFormat = "%d - %s";
+public class MainPanelGHelper {
     
-    public MainPanel(final OnyxBoard board) {
+    public static void drawMove(Graphics g, final Font font, final String format, final List<String> moves) {
         
-        super();
-        this.setDoubleBuffered(true);
-        this.board = board;
-        this.setBackground(GraphicsConst.MAIN_PANEL_BACKGROUND_COLOR);
-    }
-    
-    @Override
-    public void paintComponent(Graphics g) {
-        
-        super.paintComponent(g);
-        MainPanelGHelper.drawMove(g, this.FONT, this.labelFormat, this.moveLabels);
-    }
-    
-    @Override
-    public void notifyMove(final String m) {
-        this.moveLabels.add(m);
-        this.repaint();
-    }
-    
-    public void init() {
-        this.board.setObserver(this);
-        for (OnyxPos p : this.board.getPosCollection().positions.values()) {
-            if (p.isOccupied()) {
-                this.moveLabels.add(p.toString());
+        g.setFont(font);
+        int c = 1, y = 20, x = 10, marginTop = font.getSize();
+        for (String m : moves) {
+            g.setColor(c % 2 == 0 ? GraphicsConst.WHITE : GraphicsConst.BLACK);
+            m = String.format(format, c, m);
+            g.drawString(m, x, y);
+            x += m.length() + (font.getSize() * 7);
+            if (c % 4 == 0 && c > 0) {
+                y += marginTop;
+                x = 10;
             }
+            ++c;
         }
     }
     

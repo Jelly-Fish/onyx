@@ -35,7 +35,7 @@ import com.jellyfish.jfgonyx.entities.OnyxDiamond;
 import com.jellyfish.jfgonyx.entities.OnyxDiamondCollection;
 import com.jellyfish.jfgonyx.entities.OnyxPiece;
 import com.jellyfish.jfgonyx.entities.OnyxPosCollection;
-import com.jellyfish.jfgonyx.helpers.GraphicsHelper;
+import com.jellyfish.jfgonyx.helpers.OnyxBoardGHelper;
 import com.jellyfish.jfgonyx.io.KeyInput;
 import com.jellyfish.jfgonyx.io.MouseInput;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
@@ -97,7 +97,7 @@ public class OnyxBoard extends javax.swing.JPanel {
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        GraphicsHelper.drawBoard((Graphics2D) g, this.diamonds, this.positions, this);
+        OnyxBoardGHelper.drawBoard((Graphics2D) g, this.diamonds, this.positions, this);
     }
     
     public boolean isCenterPosPlayable(final String k, final int bitColor) {

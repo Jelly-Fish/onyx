@@ -32,6 +32,7 @@
 package com.jellyfish.jfgonyx.helpers;
 
 import com.jellyfish.jfgonyx.constants.GraphicsConst;
+import com.jellyfish.jfgonyx.constants.OnyxBoardPositionOutlineConst;
 import com.jellyfish.jfgonyx.entities.*;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
 import java.awt.BasicStroke;
@@ -39,11 +40,13 @@ import java.awt.Graphics2D;
 import java.awt.Polygon;
 import java.awt.RenderingHints;
 import java.awt.Stroke;
+import org.apache.commons.lang3.StringUtils;
 
 /**
+ * Onyx board graphics helper.
  * @author thw
  */
-public class GraphicsHelper {
+public class OnyxBoardGHelper {
 
     public static void buildPolygons(final OnyxDiamondCollection c) {
 
@@ -108,7 +111,8 @@ public class GraphicsHelper {
         g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_NORMALIZE);
 
-        GraphicsHelper.drawBackground(g, board);
+        OnyxBoardGHelper.drawBackground(g, board);
+        OnyxBoardGHelper.drawPositionOutline(g, board);
         
         for (OnyxDiamond d : c.diamonds.values()) {
 
@@ -155,9 +159,9 @@ public class GraphicsHelper {
             }
         }
 
-        GraphicsHelper.drawPieces(g, p);
+        OnyxBoardGHelper.drawPieces(g, p);
         if (p.hasVirtualPiece()) {
-            GraphicsHelper.drawPiece(g, p.getVirtualPiece().getTmpOnyxPosition(), p.getVirtualPiece());
+            OnyxBoardGHelper.drawPiece(g, p.getVirtualPiece().getTmpOnyxPosition(), p.getVirtualPiece());
         }
     }
 
@@ -165,14 +169,14 @@ public class GraphicsHelper {
 
         for (OnyxPos p : c.positions.values()) {
             if (p.isOccupied()) {
-                GraphicsHelper.drawPiece(g, p, p.getPiece());
+                OnyxBoardGHelper.drawPiece(g, p, p.getPiece());
             }
         }
     }
 
     private static void drawPiece(Graphics2D g, final OnyxPos p, final OnyxPiece piece) {
 
-        GraphicsHelper.translate(g, p);
+        OnyxBoardGHelper.translate(g, p);
 
         g.setColor(piece.color.boolColor
                 ? GraphicsConst.BLACK_OUTLINE : GraphicsConst.WHITE_OUTLINE);
@@ -188,7 +192,7 @@ public class GraphicsHelper {
             g.setStroke(s);
         }
 
-        GraphicsHelper.unTranslate(g, p);
+        OnyxBoardGHelper.unTranslate(g, p);
     }
     
     private static void translate(Graphics2D g, final OnyxPos p) {
@@ -234,6 +238,52 @@ public class GraphicsHelper {
     private static void drawBackground(Graphics2D g, final OnyxBoard board) {
         g.setColor(GraphicsConst.BACKGROUND);
         g.fillRect(0, 0, board.getWidth(), board.getHeight());
+    }
+    
+    private static void drawPositionOutline(Graphics2D g, final OnyxBoard board) {
+        
+        g.setColor(GraphicsConst.BLACK);
+        for (Polygon p : OnyxBoardPositionOutlineConst.OUTLINE_POLYGONS) {
+            g.fillPolygon(p);
+            g.setColor(
+                g.getColor().equals(GraphicsConst.BLACK) ? GraphicsConst.WHITE : GraphicsConst.BLACK);
+        }
+        
+        g.setColor(GraphicsConst.BACKGROUND);
+        g.setFont(OnyxBoardPositionOutlineConst.POS_FONT);
+        String value = StringUtils.EMPTY;
+        
+        int x = 4;
+        int y = GraphicsConst.BOARD_WIDTH - GraphicsConst.SQUARE_WIDTH - 12;
+        for (int i = 1; i <= 12; ++i) {
+            value = String.valueOf(i);
+            g.drawString(value, value.length() > 1 ? x : x * 2, y);
+            y -= GraphicsConst.SQUARE_WIDTH;
+        }
+        
+        x = GraphicsConst.BOARD_WIDTH - 20;
+        y = GraphicsConst.BOARD_WIDTH - GraphicsConst.SQUARE_WIDTH - 4;
+        for (int i = 1; i <= 12; ++i) {
+            value = String.valueOf(i);
+            g.drawString(value, value.length() > 1 ? x : x + 4, y);
+            y -= GraphicsConst.SQUARE_WIDTH;
+        }
+        
+        x = GraphicsConst.SQUARE_WIDTH - 8;
+        y = 17;
+        for (int i = 0; i < OnyxBoardPositionOutlineConst.CHAR_VALUES.length; ++i) {
+            value = OnyxBoardPositionOutlineConst.CHAR_VALUES[i];
+            g.drawString(value, x, y);
+            x += GraphicsConst.SQUARE_WIDTH;
+        }
+        
+        x = GraphicsConst.SQUARE_WIDTH + 8;
+        y = GraphicsConst.BOARD_WIDTH - 7;
+        for (int i = 0; i < OnyxBoardPositionOutlineConst.CHAR_VALUES.length; ++i) {
+            value = OnyxBoardPositionOutlineConst.CHAR_VALUES[i];
+            g.drawString(value, x, y);
+            x += GraphicsConst.SQUARE_WIDTH;
+        }
     }
     
 }

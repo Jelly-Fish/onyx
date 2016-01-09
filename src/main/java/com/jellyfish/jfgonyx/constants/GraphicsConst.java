@@ -42,6 +42,8 @@ public class GraphicsConst {
     public static final int SQUARE_WIDTH = 50;
     public static final int BOARD_WIDTH = 670;
     public static final int ZIGZAG = 12;
+    public static final Color WHITE = Color.WHITE;
+    public static final Color BLACK = Color.BLACK;
     public static final Color MAIN_PANEL_BACKGROUND_COLOR = new Color(136,136,136);
     public static final Color BACKGROUND = new Color(210,160,48);
     public static final Color FULL_DIAMOND = new Color(169,125,16);
@@ -55,7 +57,7 @@ public class GraphicsConst {
     
     public static enum COLOR {
         
-        WHITE("white", Color.WHITE, false, 0), BLACK("black", Color.BLACK, true, 1),
+        WHITE("white", GraphicsConst.WHITE, false, 0), BLACK("black", GraphicsConst.BLACK, true, 1),
         VIRTUAL_WHITE("virtual white", new Color(1f,1f,1f,.8f), false, 0), 
         VIRTUAL_BLACK("virtual black", new Color(0f,0f,0f,.8f), true, 1);
         

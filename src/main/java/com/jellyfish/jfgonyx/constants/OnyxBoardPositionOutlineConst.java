@@ -29,55 +29,51 @@
  * POSSIBILITY OF SUCH DAMAGE. 
  ******************************************************************************
  */
-package com.jellyfish.jfgonyx.ui;
+package com.jellyfish.jfgonyx.constants;
 
-import com.jellyfish.jfgonyx.constants.GraphicsConst;
-import com.jellyfish.jfgonyx.entities.OnyxPos;
-import com.jellyfish.jfgonyx.helpers.MainPanelGHelper;
-import com.jellyfish.jfgonyx.onyx.interfaces.OnyxObserver;
 import java.awt.Font;
-import java.awt.Graphics;
-import java.util.LinkedList;
-import javax.swing.JPanel;
+import java.awt.Polygon;
 
 /**
  * @author thw
  */
-public class MainPanel extends JPanel implements OnyxObserver {
+public class OnyxBoardPositionOutlineConst {
+    
+    public final static Polygon[] OUTLINE_POLYGONS = new Polygon[4];
+    static {
+        
+        OnyxBoardPositionOutlineConst.OUTLINE_POLYGONS[0] =
+        new Polygon(
+            new int[] { 0, GraphicsConst.BOARD_WIDTH, 
+                GraphicsConst.BOARD_WIDTH - 24, 24 },
+            new int[] { 0, 0, 24, 24 }, 4
+        );
+        OnyxBoardPositionOutlineConst.OUTLINE_POLYGONS[1] =
+        new Polygon(
+            new int[] { GraphicsConst.BOARD_WIDTH - 24, 
+                GraphicsConst.BOARD_WIDTH, GraphicsConst.BOARD_WIDTH,
+                GraphicsConst.BOARD_WIDTH - 24 },
+            new int[] { 24, 0, GraphicsConst.BOARD_WIDTH,
+                GraphicsConst.BOARD_WIDTH - 24 }, 4
+        );
+        OnyxBoardPositionOutlineConst.OUTLINE_POLYGONS[2] =
+        new Polygon(
+            new int[] { 24, GraphicsConst.BOARD_WIDTH - 24, 
+                GraphicsConst.BOARD_WIDTH, 0 },
+            new int[] { GraphicsConst.BOARD_WIDTH - 24, 
+                GraphicsConst.BOARD_WIDTH - 24, GraphicsConst.BOARD_WIDTH,
+                GraphicsConst.BOARD_WIDTH }, 4
+        );
+        OnyxBoardPositionOutlineConst.OUTLINE_POLYGONS[3] =
+        new Polygon(
+            new int[] { 0, 24, 24, 0 },
+            new int[] { 0, 24, GraphicsConst.BOARD_WIDTH - 24,
+                GraphicsConst.BOARD_WIDTH }, 4
+        );
+        
+    }
+    public final static Font POS_FONT = new Font("arial", Font.BOLD, 14);
+    public final static String[] CHAR_VALUES = new String[] 
+        { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L" };
 
-    private final OnyxBoard board;
-    private final Font FONT = new Font("consolas", Font.BOLD, 14);
-    private final LinkedList<String> moveLabels = new LinkedList<>();
-    private final String labelFormat = "%d - %s";
-    
-    public MainPanel(final OnyxBoard board) {
-        
-        super();
-        this.setDoubleBuffered(true);
-        this.board = board;
-        this.setBackground(GraphicsConst.MAIN_PANEL_BACKGROUND_COLOR);
-    }
-    
-    @Override
-    public void paintComponent(Graphics g) {
-        
-        super.paintComponent(g);
-        MainPanelGHelper.drawMove(g, this.FONT, this.labelFormat, this.moveLabels);
-    }
-    
-    @Override
-    public void notifyMove(final String m) {
-        this.moveLabels.add(m);
-        this.repaint();
-    }
-    
-    public void init() {
-        this.board.setObserver(this);
-        for (OnyxPos p : this.board.getPosCollection().positions.values()) {
-            if (p.isOccupied()) {
-                this.moveLabels.add(p.toString());
-            }
-        }
-    }
-    
 }
