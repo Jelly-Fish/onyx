@@ -36,6 +36,7 @@ import com.jellyfish.jfgonyx.entities.OnyxPiece;
 import com.jellyfish.jfgonyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.entities.OnyxPosCollection;
 import com.jellyfish.jfgonyx.entities.OnyxVirtualPiece;
+import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import com.jellyfish.jfgonyx.onyx.interfaces.OnyxExecutable;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
 import java.awt.event.InputEvent;
@@ -49,7 +50,7 @@ import org.apache.commons.lang3.StringUtils;
 public class KeyMoveVirutalPiece implements OnyxExecutable {
 
     @Override
-    public boolean exec(final InputEvent e, final OnyxBoard board) {
+    public boolean exec(final InputEvent e, final OnyxBoard board) throws InvalidOnyxPositionException {
 
         final OnyxVirtualPiece v = board.getPosCollection().getVirtualPiece();
         if (v == null) return false;
@@ -93,7 +94,7 @@ public class KeyMoveVirutalPiece implements OnyxExecutable {
      * @param keyEvt KeyEvent constant integer value.
      */
     private void move(final float x, final float y, final float nX, final float nY,
-            final OnyxBoard board, final OnyxVirtualPiece v, final int keyEvt) {
+            final OnyxBoard board, final OnyxVirtualPiece v, final int keyEvt) throws InvalidOnyxPositionException {
         
         String k = String.format(OnyxPosCollection.KEY_FORMAT, nX, nY);
         final String oldK = String.format(OnyxPosCollection.KEY_FORMAT, x, y);
@@ -102,16 +103,23 @@ public class KeyMoveVirutalPiece implements OnyxExecutable {
         }
     }
     
-    private boolean validateMove(final OnyxBoard board, final OnyxVirtualPiece v) {
+    private boolean validateMove(final OnyxBoard board, final OnyxVirtualPiece v) throws InvalidOnyxPositionException {
 
         final String k = v.getTmpOnyxPosition().getKey();
+        String takeKey = null;
         final OnyxPos tmpPos = board.getPosCollection().getPosition(k);
         if (board.isDiamondCenter(k) && !board.isCenterPosPlayable(k, v.color.bitColor)) return false;
         if (tmpPos.isOccupied()) return false;
         
+        if (board.getPosCollection().isTakePosition(k, v.color.bitColor, board)) {
+            System.out.println("TAKE POS");
+            takeKey = board.getPosCollection().performTake(k, v.color.bitColor, board);
+        }
+        
         board.getPosCollection().getPosition(k).setPiece(
-                new OnyxPiece(v.color.boolColor ? GraphicsConst.COLOR.BLACK : GraphicsConst.COLOR.WHITE)
+            new OnyxPiece(v.color.boolColor ? GraphicsConst.COLOR.BLACK : GraphicsConst.COLOR.WHITE)
         );
+        
         board.getPosCollection().getPosition(k).setVirtualPiece(null);
         board.getObserver().notifyMove(tmpPos.toString());
         
@@ -119,12 +127,13 @@ public class KeyMoveVirutalPiece implements OnyxExecutable {
     }
 
     private boolean applyMove(final String k, final String oldK, final OnyxVirtualPiece v, 
-            final OnyxBoard board) {
+            final OnyxBoard board) throws InvalidOnyxPositionException {
         
         if (board.getPosCollection().positions.containsKey(k)) {
             v.setTmpOnyxPosition(board.getPosCollection().positions.get(k));
             board.getPosCollection().positions.get(k).setVirtualPiece(v);
             board.getPosCollection().positions.get(oldK).setVirtualPiece(null);
+            
             return true;
         }
         return false;

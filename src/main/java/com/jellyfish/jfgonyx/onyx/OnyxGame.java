@@ -72,6 +72,7 @@ public class OnyxGame {
             throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
         
         final String k = Onyx.getSEARCH().get(Onyx.SEARCH_TYPE.ONYXPOSCOL).search(c, board, OnyxGame.colorToPlay);
+        System.out.println("searc k = " + k);
         if (StringUtils.isBlank(k)) throw new NoValidOnyxPositionsFoundException();
         c.getPosition(k).setPiece(new OnyxPiece(OnyxGame.colorToPlay));
         return k;

@@ -36,10 +36,13 @@ import com.jellyfish.jfgonyx.onyx.interfaces.OnyxPositionSearchable;
 import com.jellyfish.jfgonyx.entities.OnyxDiamond;
 import com.jellyfish.jfgonyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.entities.OnyxPosCollection;
+import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -63,7 +66,14 @@ class OnyxPositionSearch implements OnyxPositionSearchable {
         String take = this.getTakePos(c, board, color.bitColor);
         final String counter = this.getCounterPos(c, board, color.bitColor);
         final String neighbour = this.getNeighbourPos(c, board, color.bitColor);
-        take = c.performTake(take, color.bitColor, board.getDiamondCollection());
+        
+        try {
+            take = c.performTake(take, color.bitColor, board);
+        } catch (final InvalidOnyxPositionException Iopex) {
+            Logger.getLogger(OnyxPositionSearch.class.getName()).log(Level.SEVERE, null, Iopex);
+            Iopex.printStackTrace();
+        }
+        
         return StringUtils.isBlank(take) ? 
                 (StringUtils.isBlank(counter) ? 
                     (StringUtils.isBlank(neighbour) ? null : neighbour) : counter) : take;
@@ -141,22 +151,28 @@ class OnyxPositionSearch implements OnyxPositionSearchable {
                 ++i;
             }
             
-            if (count != 2) {
-                return null;
-            }
-            
-            if ((positions[0].isOccupied() && positions[2].isOccupied() &&
+            if (positions[0].isOccupied() && positions[2].isOccupied() &&
                     positions[0].getPiece().color.bitColor != bitColor && 
-                    positions[2].getPiece().color.bitColor != bitColor &&
-                    !positions[1].isOccupied() && !positions[3].isOccupied())) {               
-                posSet.add(positions[1]);
-                posSet.add(positions[3]);
+                    positions[2].getPiece().color.bitColor != bitColor) { 
+                
+                if (positions[3].isOccupied() && positions[3].getPiece().color.bitColor == bitColor &&
+                        !positions[1].isOccupied()) {
+                    posSet.add(positions[1]);
+                } else if (positions[1].isOccupied() && positions[1].getPiece().color.bitColor == bitColor &&
+                        !positions[3].isOccupied()) {
+                    posSet.add(positions[3]);
+                }
             } else if (positions[1].isOccupied() && positions[3].isOccupied() &&
                     positions[1].getPiece().color.bitColor != bitColor && 
-                    positions[3].getPiece().color.bitColor != bitColor &&
-                    !positions[0].isOccupied() && !positions[2].isOccupied()) {
-                posSet.add(positions[0]);
-                posSet.add(positions[2]);
+                    positions[3].getPiece().color.bitColor != bitColor) {
+                
+                if (positions[2].isOccupied() && positions[2].getPiece().color.bitColor == bitColor &&
+                        !positions[0].isOccupied()) {
+                    posSet.add(positions[0]);
+                } else if (positions[0].isOccupied() && positions[0].getPiece().color.bitColor == bitColor &&
+                        !positions[2].isOccupied()) {
+                    posSet.add(positions[2]);
+                }
             }
         }
         

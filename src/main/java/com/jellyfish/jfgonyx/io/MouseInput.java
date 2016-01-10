@@ -32,6 +32,7 @@
 package com.jellyfish.jfgonyx.io;
 
 import com.jellyfish.jfgonyx.io.events.BoardDragger;
+import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import com.jellyfish.jfgonyx.onyx.interfaces.OnyxExecutable;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
 import java.awt.Cursor;
@@ -39,6 +40,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * @author thw
@@ -78,8 +81,13 @@ public class MouseInput implements MouseListener, MouseMotionListener {
     
     @Override
     public void mouseDragged(MouseEvent e) { 
+        
         if (this.mouseDown) {
-            ops.get(MouseInput.EVENT.DRAG_BOARD).exec(e, this.board);
+            try {
+                ops.get(MouseInput.EVENT.DRAG_BOARD).exec(e, this.board);
+            } catch (final InvalidOnyxPositionException Iopex) {
+                Logger.getLogger(MouseInput.class.getName()).log(Level.SEVERE, null, Iopex);
+            }
         }
     }
     

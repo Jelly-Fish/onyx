@@ -78,72 +78,12 @@ public class OnyxDiamond {
         return this.positions.length == 5;
     }
     
-    public boolean isCenterPosUsable(final OnyxPos p, final OnyxVirtualPiece piece, final OnyxBoard b) {
-         
-        int count = 0;
-        for (OnyxDiamond d : b.getDiamondCollection().diamonds.values()) {
-            count = 0;
-            if (d.contains(p)) {
-                for (String k : d.getAllKeys()) {
-                    if (b.getPosCollection().getPosition(k).isOccupied() && 
-                            b.getPosCollection().getPosition(k).getPiece().color.bitColor == 
-                            b.getPosCollection().getPosition(piece.getTmpOnyxPosition().getKey()
-                            ).getPiece().color.bitColor)
-                    ++count;
-                }
-                if (count == 4) return true;
-            }
-        }
-        
-        return false;
-    }
-    
     public OnyxPos getCenterPos() throws InvalidOnyxPositionException {
         
         if (this.isFivePosDiamond()) {
             return this.positions[4];
         }
         throw new InvalidOnyxPositionException();
-    }
-    
-    /**
-     * @param p OnyxPosition instance.
-     * @param c bit color (white=0, black=1).
-     * @return true if Onyx position p in parameter 1 is a take position.
-     */
-    public boolean isTakePosition(final OnyxPos p, final int c) {              
-        return this.checkTakePosition(p, c, 0, 2, 1, 3) || this.checkTakePosition(p, c, 1, 3, 0, 2);
-    }
-    
-    /**
-     * The rule for capturing allows a player to capture two enemy pieces in a single turn. 
-     * All of the following conditions must be met:
-     * 1 - the two enemy pieces occupy opposite corners of a square;
-     * 2 - a third corner of the square is already occupied by a piece belonging to the capturing player; 
-     * 3 - the midpoint of the square is unoccupied.
-     * 
-     * @param p OnyxPos instance.
-     * @param c this color to check the take possibility.
-     * @param i opponent side index position.
-     * @param j the opposite to i index position.
-     * @param k the possible index position for a take.
-     * @param l the opposite to k index position for a take.
-     * @return true if OnyxPos p in parameter 1 is a take position.
-     */
-    private boolean checkTakePosition(final OnyxPos p, final int c, 
-            final int i, final int j, final int k, final int l) {
-        
-        if (this.isFivePosDiamond() && this.positions[4].isOccupied()) {
-            return false;
-        }
-        
-        return this.positions[i].isOccupied() && this.positions[i].getPiece().color.bitColor != c &&
-                !this.positions[i].equals(p) && this.positions[j].isOccupied() && 
-                this.positions[j].getPiece().color.bitColor != c && !this.positions[j].equals(p) &&
-                ((!this.positions[k].isOccupied() && this.positions[l].isOccupied() && 
-                this.positions[l].getPiece().color.bitColor == c) || 
-                (!this.positions[l].isOccupied() && this.positions[k].isOccupied() && 
-                this.positions[k].getPiece().color.bitColor == c));
     }
 
     public boolean contains(final OnyxPos p) {

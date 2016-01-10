@@ -31,6 +31,7 @@
  */
 package com.jellyfish.jfgonyx.io.events;
 
+import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import com.jellyfish.jfgonyx.onyx.interfaces.OnyxExecutable;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
 import java.awt.event.InputEvent;
@@ -45,7 +46,7 @@ public class BoardDragger implements OnyxExecutable {
     private int iX = 0, iY = 0;
     
     @Override
-    public boolean exec(final InputEvent e, final OnyxBoard board) {
+    public boolean exec(final InputEvent e, final OnyxBoard board) throws InvalidOnyxPositionException {
         
         final MouseEvent evt = (MouseEvent) e;
         board.setLocation(evt.getLocationOnScreen().x - this.iX, evt.getLocationOnScreen().y - this.iY);

@@ -67,17 +67,20 @@ public class KeyInput implements KeyListener {
         
         final GraphicsConst.COLOR c = this.board.getPosCollection().getVirtualPiece().color;
         OnyxGame.initMove(GraphicsConst.COLOR.getOposite(c.boolColor));
-        if (this.ops.get(KeyInput.EVENT.VIRTUAL_P_MOVE).exec(e, this.board)) {
-            
-            try {
-                
+
+        try {
+            if (this.ops.get(KeyInput.EVENT.VIRTUAL_P_MOVE).exec(e, this.board)) {
+                /**
+                 * After take moves OnyxGame does not perform move.
+                 * Yet virtul piece is appended.
+                 */
                 OnyxGame.performMove(this.board.getPosCollection(), this.board);
-                
-            } catch (final OnyxGameSyncException | NoValidOnyxPositionsFoundException | 
-                    InvalidOnyxPositionException ex) {
-                Logger.getLogger(KeyInput.class.getName()).log(Level.SEVERE, null, ex);
             }
-        } 
+        } catch (final OnyxGameSyncException | NoValidOnyxPositionsFoundException | 
+                InvalidOnyxPositionException ex) {
+            Logger.getLogger(KeyInput.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
+        }
         
         OnyxGame.closeMove();
     }
