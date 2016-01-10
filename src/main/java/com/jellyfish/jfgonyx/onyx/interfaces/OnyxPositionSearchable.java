@@ -41,7 +41,7 @@ import com.jellyfish.jfgonyx.ui.OnyxBoard;
 /**
  * @author thw
  */
-public interface OnyxPosCollectionSearchable extends OnyxAbstractSearchable {
+public interface OnyxPositionSearchable extends OnyxAbstractSearchable {
     
     /**
      * @param color the color awsking for move, all equal colors will be discarded.

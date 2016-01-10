@@ -32,7 +32,9 @@
 package com.jellyfish.jfgonyx.entities;
 
 import com.jellyfish.jfgonyx.constants.GraphicsConst;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -111,6 +113,40 @@ public class OnyxPosCollection {
     
     public boolean hasVirtualPiece() {
         return this.getVirtualPiece() != null;
+    }
+
+    public String performTake(final String key, final int bitColor, final OnyxDiamondCollection b) {
+        
+        if (StringUtils.isBlank(key)) return null;
+        
+        String[] tmpKeys = new String[4];
+        final List<String> keys = new ArrayList<>();
+        
+        for (OnyxDiamond d : b.diamonds.values()) {
+            
+            tmpKeys = d.getCornerKeys();
+            for (String k : tmpKeys) {
+                if (key.equals(k)) {
+                    for (String removeKey : tmpKeys) {
+                        if (!removeKey.equals(key) && this.positions.containsKey(removeKey) &&
+                                !key.contains(removeKey)) {
+                            keys.add(removeKey);
+                        }
+                    }
+                }
+            }
+        }
+        
+        if (keys.size() <= 0) return null;
+        
+        for (String k : keys) {
+            if (this.positions.get(k).isOccupied() && 
+                this.positions.get(k).getPiece().color.bitColor != bitColor) {
+                this.positions.remove(k);
+            }
+        }
+        
+        return key;
     }
     
 }

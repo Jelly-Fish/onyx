@@ -33,6 +33,7 @@ package com.jellyfish.jfgonyx.entities;
 
 import com.jellyfish.jfgonyx.constants.GraphicsConst;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
+import java.util.List;
 
 /**
  * Onyx position definition.
@@ -77,6 +78,16 @@ public class OnyxPos {
         }
     }
         
+    public int occursCount(final OnyxPos p, final List<OnyxPos> posSet) {
+        
+        int count = 0;
+        for (OnyxPos pos : posSet) {
+            if (p.equals(pos)) ++count;
+        }
+        
+        return count;
+    }
+    
     public void addPiece(final OnyxPiece p) {
         this.piece = p;
     }

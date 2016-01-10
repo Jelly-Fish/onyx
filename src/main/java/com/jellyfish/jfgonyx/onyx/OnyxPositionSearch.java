@@ -32,7 +32,7 @@
 package com.jellyfish.jfgonyx.onyx;
 
 import com.jellyfish.jfgonyx.constants.GraphicsConst;
-import com.jellyfish.jfgonyx.onyx.interfaces.OnyxPosCollectionSearchable;
+import com.jellyfish.jfgonyx.onyx.interfaces.OnyxPositionSearchable;
 import com.jellyfish.jfgonyx.entities.OnyxDiamond;
 import com.jellyfish.jfgonyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.entities.OnyxPosCollection;
@@ -45,7 +45,7 @@ import org.apache.commons.lang3.StringUtils;
 /**
  * @author thw
  */
-class OnyxPosCollectionSearch implements OnyxPosCollectionSearchable {
+class OnyxPositionSearch implements OnyxPositionSearchable {
     
     /**
      * Look for all possible take moves
@@ -60,9 +60,10 @@ class OnyxPosCollectionSearch implements OnyxPosCollectionSearchable {
     @Override
     public String search(final OnyxPosCollection c, final OnyxBoard board, final GraphicsConst.COLOR color) throws NoValidOnyxPositionsFoundException {
     
-        final String take = this.getTakePos(c, board, color.bitColor);
+        String take = this.getTakePos(c, board, color.bitColor);
         final String counter = this.getCounterPos(c, board, color.bitColor);
         final String neighbour = this.getNeighbourPos(c, board, color.bitColor);
+        take = c.performTake(take, color.bitColor, board.getDiamondCollection());
         return StringUtils.isBlank(take) ? 
                 (StringUtils.isBlank(counter) ? 
                     (StringUtils.isBlank(neighbour) ? null : neighbour) : counter) : take;
@@ -126,42 +127,54 @@ class OnyxPosCollectionSearch implements OnyxPosCollectionSearchable {
      */
     private String getTakePos(final OnyxPosCollection c, final OnyxBoard b, final int bitColor) {
         
-        /**
-         * FIXME : see getCount & Neighbour pos methods of this class.
-         * Do not use c.positions.diamond, instead loop on board diamonds.
-         */
+        int count, i;
+        OnyxPos[] positions = new OnyxPos[4];
+        final List<OnyxPos> posSet = new ArrayList<>();
         
-        final List<OnyxPos> positions = new ArrayList<>();
-        final List<OnyxDiamond> diamonds = new ArrayList<>();
-
-        OnyxDiamond diamond = null;
-        for (OnyxPos p : c.positions.values()) {
-            diamond = p.diamond;
-            if (!p.diamond.equals(diamond) && p.diamond.isTakePosition(p, bitColor)) {    
-                positions.add(p);
-                diamonds.add(diamond);
+        for (OnyxDiamond d : b.getDiamondCollection().diamonds.values()) {
+            
+            count = 0;
+            i = 0;
+            for (String k : d.getCornerKeys()) {
+                positions[i] = c.getPosition(k);
+                count = positions[i].isOccupied() ? ++count : count;
+                ++i;
+            }
+            
+            if (count != 2) {
+                return null;
+            }
+            
+            if ((positions[0].isOccupied() && positions[2].isOccupied() &&
+                    positions[0].getPiece().color.bitColor != bitColor && 
+                    positions[2].getPiece().color.bitColor != bitColor &&
+                    !positions[1].isOccupied() && !positions[3].isOccupied())) {               
+                posSet.add(positions[1]);
+                posSet.add(positions[3]);
+            } else if (positions[1].isOccupied() && positions[3].isOccupied() &&
+                    positions[1].getPiece().color.bitColor != bitColor && 
+                    positions[3].getPiece().color.bitColor != bitColor &&
+                    !positions[0].isOccupied() && !positions[2].isOccupied()) {
+                posSet.add(positions[0]);
+                posSet.add(positions[2]);
             }
         }
         
-        if (positions.size() == 1 && diamonds.size() <= 1) return positions.get(0).getKey();
-        if (positions.size() < 1) return null;
+        if (posSet.size() <= 0) return null;
+        if (posSet.size() == 1) return posSet.get(0).getKey();
         
-        OnyxPos pos = null;
-        int maxF = 1;
-        for (OnyxPos p : positions) {
-            
-            int f = 0;
-            for (OnyxDiamond d : diamonds) {
-                if (d.contains(p)) ++f;
-            }
-            
-            if (f >= maxF) {
-                pos = p;
-                maxF = f;
-            }
+        count = 0;
+        i = -1;
+        int tmpCount = 0;
+        for (OnyxPos p : posSet) {
+            tmpCount = p.occursCount(p, posSet);
+            if (tmpCount > count) {
+                count = tmpCount;
+                i = posSet.indexOf(p);
+            }            
         }
         
-        if (pos != null) return pos.getKey();
+        if (i > -1) return posSet.get(i).getKey();
         
         return null;
     }
