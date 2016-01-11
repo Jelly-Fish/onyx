@@ -29,19 +29,47 @@
  * POSSIBILITY OF SUCH DAMAGE. 
  ******************************************************************************
  */
-package com.jellyfish.jfgonyx.entities;
+package com.jellyfish.jfgonyx.onyx.entities;
 
 import com.jellyfish.jfgonyx.constants.GraphicsConst;
 
 /**
- *
  * @author thw
  */
-public class OnyxVirtualPiece extends OnyxPiece {
+public class OnyxPiece {
+    
+    public final GraphicsConst.COLOR color;
+    protected boolean virtual = false;
+    protected boolean engineMove = false;
+    private OnyxPos tmpOnyxPosition = null;
 
-    public OnyxVirtualPiece(final GraphicsConst.COLOR c) {
-        super(c);
-        this.virtual = true;
+    public OnyxPiece(final GraphicsConst.COLOR c) {
+        this.color = c;
     }
     
+    public OnyxPiece(final GraphicsConst.COLOR c, final boolean engineMove) {
+        this(c);
+        this.engineMove = engineMove;
+    }
+
+    public boolean isVirtual() {
+        return this.virtual;
+    }
+    
+    public boolean isEngineMove() {
+        return engineMove;
+    }
+    
+    public void setEngineMove(final boolean engineMove) {
+        this.engineMove = engineMove;
+    }
+    
+    public OnyxPos getTmpOnyxPosition() {
+        return tmpOnyxPosition;
+    }
+
+    public void setTmpOnyxPosition(OnyxPos tempOnyxPosition) {
+        this.tmpOnyxPosition = tempOnyxPosition;
+    }
+
 }

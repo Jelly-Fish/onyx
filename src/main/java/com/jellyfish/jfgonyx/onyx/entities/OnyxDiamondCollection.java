@@ -29,28 +29,57 @@
  * POSSIBILITY OF SUCH DAMAGE. 
  ******************************************************************************
  */
-package com.jellyfish.jfgonyx.onyx;
+package com.jellyfish.jfgonyx.onyx.entities;
 
-import com.jellyfish.jfgonyx.onyx.interfaces.OnyxAbstractSearchable;
+import com.jellyfish.jfgonyx.constants.OnyxConst;
+import java.awt.Point;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * @author thw
  */
-class Onyx {
+public class OnyxDiamondCollection {
     
-    static enum SEARCH_TYPE {
-        RANDOM, ONYXPOSCOL
+    public final HashMap<Point, OnyxDiamond> diamonds = new HashMap<>();
+    
+    public final OnyxDiamondCollection init() {
+        
+        boolean mod = false;
+        int k = 0;
+        
+        for (int i = 0; i < OnyxConst.BOARD_SIDE_SQUARE_COUNT; ++i) {
+            for (int j = 0; j < OnyxConst.BOARD_SIDE_SQUARE_COUNT; j++) {
+                if ((j % 2 == 0) == mod) {
+                    diamonds.put(new Point(j, i), new OnyxDiamond(j, i, true));
+                } else {
+                    diamonds.put(new Point(j, i), new OnyxDiamond(j, i, false));
+                }
+            }
+            mod = !mod;
+        }
+        
+        return this;
     }
     
-    private final static HashMap<SEARCH_TYPE, OnyxAbstractSearchable> SEARCH = new HashMap<>();
-    static {
-        SEARCH.put(SEARCH_TYPE.RANDOM, new OnyxRandomSearch());
-        SEARCH.put(SEARCH_TYPE.ONYXPOSCOL, new OnyxPositionSearch());
+    private void print() {
+        for (OnyxDiamond d : this.diamonds.values()) {
+            System.out.println(d.toString());
+        }
     }
     
-    public static HashMap<SEARCH_TYPE, OnyxAbstractSearchable> getSEARCH() {
-        return SEARCH;
+    public List<OnyxDiamond> getDiamondsByPosKey(final String key) {
+        
+        List<OnyxDiamond> dList = new ArrayList<>();
+        for (OnyxDiamond d : this.diamonds.values()) {
+
+            for (String k : d.getCornerKeys()) {
+                if (key.equals(k) && !dList.contains(d)) dList.add(d);
+            }
+        }
+        
+        return dList;
     }
     
 }

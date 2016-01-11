@@ -31,9 +31,10 @@
 package com.jellyfish.jfgonyx.starter;
 
 import com.jellyfish.jfgonyx.constants.GraphicsConst;
-import com.jellyfish.jfgonyx.entities.OnyxDiamondCollection;
-import com.jellyfish.jfgonyx.entities.OnyxPosCollection;
+import com.jellyfish.jfgonyx.onyx.entities.OnyxDiamondCollection;
+import com.jellyfish.jfgonyx.onyx.entities.OnyxPosCollection;
 import com.jellyfish.jfgonyx.helpers.OnyxBoardGHelper;
+import com.jellyfish.jfgonyx.onyx.OnyxGame;
 import com.jellyfish.jfgonyx.ui.MainFrame;
 import com.jellyfish.jfgonyx.ui.MainPanel;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
@@ -72,7 +73,7 @@ public class Starter {
         final MainPanel panel = new MainPanel(board);
         panel.init();
         final MainFrame mainFrame = new MainFrame(panel, board);
-
+        OnyxGame.init();
     }
     
 }

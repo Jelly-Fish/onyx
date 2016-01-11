@@ -32,13 +32,15 @@
 package com.jellyfish.jfgonyx.onyx;
 
 import com.jellyfish.jfgonyx.constants.GraphicsConst;
-import com.jellyfish.jfgonyx.entities.OnyxPiece;
-import com.jellyfish.jfgonyx.entities.OnyxPosCollection;
-import com.jellyfish.jfgonyx.entities.OnyxVirtualPiece;
+import com.jellyfish.jfgonyx.onyx.entities.OnyxPiece;
+import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
+import com.jellyfish.jfgonyx.onyx.entities.OnyxPosCollection;
+import com.jellyfish.jfgonyx.onyx.entities.OnyxVirtualPiece;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException;
 import com.jellyfish.jfgonyx.onyx.exceptions.OnyxGameSyncException;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
+import java.util.HashMap;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -46,8 +48,17 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class OnyxGame {
     
+    private static final HashMap<Integer, OnyxMove> moves = new HashMap<>();
     private static GraphicsConst.COLOR colorToPlay = null;
     private static boolean requestInitialized = false;
+    public static boolean wait = false;
+    
+    public static void init() {
+        OnyxGame.moves.clear();
+        OnyxGame.wait = false;
+        OnyxGame.requestInitialized = false;
+        OnyxGame.colorToPlay = null;
+    }
     
     /**
      * Perform move - move request must be initialized first.
@@ -63,30 +74,17 @@ public class OnyxGame {
         
         OnyxGame.checkInit();
         final String k = OnyxGame.requestMove(c, board);
+        OnyxGame.appendMove(c.getPosition(k), c.getPosition(k).getPiece());
         OnyxGame.appendNewVirtual(c, board);
         OnyxGame.closeMove();
         board.getObserver().notifyMove(k);
     }
     
-    private static String requestMove(final OnyxPosCollection c, final OnyxBoard board) 
-            throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
-        
-        final String k = Onyx.getSEARCH().get(Onyx.SEARCH_TYPE.ONYXPOSCOL).search(c, board, OnyxGame.colorToPlay);
-        System.out.println("searc k = " + k);
-        if (StringUtils.isBlank(k)) throw new NoValidOnyxPositionsFoundException();
-        c.getPosition(k).setPiece(new OnyxPiece(OnyxGame.colorToPlay));
-        return k;
+    public static void closeMove() {
+        OnyxGame.colorToPlay = null;
+        OnyxGame.initMoveRequest();
     }
-    
-    private static void appendNewVirtual(final OnyxPosCollection c, final OnyxBoard board) 
-            throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
-        
-        final String virtualKey = Onyx.getSEARCH().get(Onyx.SEARCH_TYPE.RANDOM).search(c, board, OnyxGame.colorToPlay);
-        c.getPosition(virtualKey).setVirtualPiece(
-             new OnyxVirtualPiece(GraphicsConst.COLOR.getVirtualOposite(OnyxGame.colorToPlay.boolColor))
-        );
-    }
-    
+      
     /**
      * @param color the color to play next or to search move for and append to board.
      */
@@ -95,11 +93,31 @@ public class OnyxGame {
         OnyxGame.initMoveRequest();
     }
     
-    public static void closeMove() {
-        OnyxGame.colorToPlay = null;
-        OnyxGame.initMoveRequest();
+    public static void appendMove(final OnyxPos pos, final OnyxPiece piece) {
+        OnyxGame.moves.put(OnyxGame.moves.size() + 1, 
+            new OnyxMove(pos, piece)
+        );
     }
     
+    private static String requestMove(final OnyxPosCollection c, final OnyxBoard board) 
+            throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
+        
+        final String k = Onyx.getSEARCH().get(Onyx.SEARCH_TYPE.ONYXPOSCOL).search(c, board, OnyxGame.colorToPlay);
+        System.out.println("searc k = " + k);
+        if (StringUtils.isBlank(k)) throw new NoValidOnyxPositionsFoundException();
+        else board.getPosCollection().clearOutlines();
+        c.getPosition(k).setPiece(new OnyxPiece(OnyxGame.colorToPlay, true));
+        return k;
+    }
+    
+    private static void appendNewVirtual(final OnyxPosCollection c, final OnyxBoard board) 
+            throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
+        
+        final String virtualKey = Onyx.getSEARCH().get(Onyx.SEARCH_TYPE.RANDOM).search(c, board, OnyxGame.colorToPlay);
+        c.getPosition(virtualKey).setVirtualPiece(new OnyxVirtualPiece(GraphicsConst.COLOR.getVirtualOposite(OnyxGame.colorToPlay.boolColor))
+        );
+    }
+            
     private static void initMoveRequest() {
         OnyxGame.requestInitialized = OnyxGame.colorToPlay != null;
     }

@@ -32,10 +32,11 @@
 package com.jellyfish.jfgonyx.io.events;
 
 import com.jellyfish.jfgonyx.constants.GraphicsConst;
-import com.jellyfish.jfgonyx.entities.OnyxPiece;
-import com.jellyfish.jfgonyx.entities.OnyxPos;
-import com.jellyfish.jfgonyx.entities.OnyxPosCollection;
-import com.jellyfish.jfgonyx.entities.OnyxVirtualPiece;
+import com.jellyfish.jfgonyx.onyx.OnyxGame;
+import com.jellyfish.jfgonyx.onyx.entities.OnyxPiece;
+import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
+import com.jellyfish.jfgonyx.onyx.entities.OnyxPosCollection;
+import com.jellyfish.jfgonyx.onyx.entities.OnyxVirtualPiece;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import com.jellyfish.jfgonyx.onyx.interfaces.OnyxExecutable;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
@@ -122,6 +123,8 @@ public class KeyMoveVirutalPiece implements OnyxExecutable {
         
         board.getPosCollection().getPosition(k).setVirtualPiece(null);
         board.getObserver().notifyMove(tmpPos.toString());
+        OnyxGame.appendMove(board.getPosCollection().getPosition(k), 
+                board.getPosCollection().getPosition(k).getPiece());
         
         return true;
     }

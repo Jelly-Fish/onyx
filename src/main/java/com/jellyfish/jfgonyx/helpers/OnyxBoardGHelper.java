@@ -31,9 +31,13 @@
  */
 package com.jellyfish.jfgonyx.helpers;
 
+import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
+import com.jellyfish.jfgonyx.onyx.entities.OnyxDiamondCollection;
+import com.jellyfish.jfgonyx.onyx.entities.OnyxPiece;
+import com.jellyfish.jfgonyx.onyx.entities.OnyxPosCollection;
+import com.jellyfish.jfgonyx.onyx.entities.OnyxDiamond;
 import com.jellyfish.jfgonyx.constants.GraphicsConst;
 import com.jellyfish.jfgonyx.constants.OnyxBoardPositionOutlineConst;
-import com.jellyfish.jfgonyx.entities.*;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
 import java.awt.BasicStroke;
 import java.awt.Graphics2D;
@@ -184,10 +188,11 @@ public class OnyxBoardGHelper {
         g.setColor(piece.color.color);
         g.fillOval(p.gX - 15, p.gY - 15, 30, 30);
         
-        if (piece.isVirtual()) {
+        if (piece.isVirtual() || piece.isEngineMove()) {
             final Stroke s = g.getStroke();
             g.setStroke(new BasicStroke(2));
-            g.setColor(GraphicsConst.VIRTUAL_OUTLINE);
+            g.setColor(piece.isEngineMove() ?
+                GraphicsConst.ONYX_ENGINE_MOVE_OUTLINE : GraphicsConst.VIRTUAL_OUTLINE);
             g.drawOval(p.gX - 15, p.gY - 15, 30, 30);
             g.setStroke(s);
         }

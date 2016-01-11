@@ -29,14 +29,12 @@
  * POSSIBILITY OF SUCH DAMAGE. 
  ******************************************************************************
  */
-package com.jellyfish.jfgonyx.entities;
+package com.jellyfish.jfgonyx.onyx.entities;
 
 import com.jellyfish.jfgonyx.constants.GraphicsConst;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -72,33 +70,7 @@ public class OnyxPosCollection {
     public OnyxPos getPosition(final String k) {
         return this.positions.get(k);
     }
-    
-    @Deprecated
-    public int[][] getMatrix() {
-        
-        /**
-         * FIXME
-         */
-        OnyxPos p = null;
-        String k = StringUtils.EMPTY;
-        int x = 0, y = 0;
-        final int[][] matrix = new int[OnyxPosCollection.MTX_WH][OnyxPosCollection.MTX_WH];
-        for (float i = 0f; i < 24f; i += 0.5f) {
-            for (float j = 0f; j < 24f; j += 0.5f) {
-                k = String.format(OnyxPosCollection.KEY_FORMAT, i, j);
-                p = this.positions.get(k);
-                matrix[x][y] = p == null ? -1 : p.getPiece().color.bitColor;
-                System.out.print(matrix[x][y]);     
-                ++y;
-            }
-            System.out.print('\n');
-            y = 0;
-            ++x;
-        }
-        
-        return matrix;
-    }
-    
+
     public OnyxVirtualPiece getVirtualPiece() {
         
         OnyxVirtualPiece vP = null;
@@ -117,13 +89,55 @@ public class OnyxPosCollection {
         return this.getVirtualPiece() != null;
     }
 
-    public String performTake(final String key, final int bitColor, final OnyxBoard b) throws InvalidOnyxPositionException {
+    public String performTake(final String key, final int bitColor, final OnyxBoard board) throws InvalidOnyxPositionException {
         
         if (StringUtils.isBlank(key)) return null;
-        
-        String[] tmpKeys = new String[4];
-        final List<String> keys = new ArrayList<>();
 
+        String[] keys = null;
+        int i, j, lI;
+        for (OnyxDiamond d : board.getDiamondCollection().getDiamondsByPosKey(key)) {
+            
+            if (d.isFivePosDiamond() && 
+                board.getPosCollection().getPosition(d.getCenterPos().getKey()).isOccupied()) {
+                continue;
+            }
+            
+            lI = 0; i = 0; j = 0;
+            keys = d.getCornerKeys();
+            for (int index = 0; index < keys.length; ++index) {
+                if (!key.equals(keys[index]) && board.getPosCollection().positions.containsKey(keys[index])) {
+
+                    if (board.getPosCollection().getPosition(keys[index]).isOccupied() &&
+                        board.getPosCollection().getPosition(keys[index]).getPiece().color.bitColor != bitColor) {
+                        if (i == 1) {
+                            if (lI == 0 && index == 2) ++i;
+                            if (lI == 1 && index == 3) ++i;
+                        } else if (i == 0) {
+                            ++i;
+                            lI = index;
+                        }
+                    } else if (board.getPosCollection().getPosition(keys[index]).isOccupied() &&
+                        board.getPosCollection().getPosition(keys[index]).getPiece().color.bitColor == bitColor) {
+                        ++j;
+                    }
+                }
+            }
+            
+            if (i == 2 && j == 1) {
+                for (String k : keys) {
+                    if (board.getPosCollection().positions.containsKey(k) &&
+                            !key.equals(k) && 
+                            board.getPosCollection().positions.get(k).isOccupied() &&
+                            board.getPosCollection().positions.get(k).getPiece().color.bitColor != bitColor) {
+                        board.getPosCollection().getPosition(k).setPiece(null);
+                    }
+                }
+            }
+        }
+
+         return key;
+         
+        /*
         for (OnyxDiamond d : b.getDiamondCollection().diamonds.values()) {
             
             /**
@@ -131,7 +145,7 @@ public class OnyxPosCollection {
              * Use same as in this.isTakePosition : must check following :
              * opposite corners, != color, key is contained in d
              * and opposite key == occupied & == color.
-             */
+             *
             
             tmpKeys = d.getCornerKeys();
             for (String k : tmpKeys) {
@@ -155,22 +169,14 @@ public class OnyxPosCollection {
             }
         }
         
-        return key;
+        return key;*/
     }
 
     public boolean isTakePosition(final String key, final int bitColor, final OnyxBoard board) throws InvalidOnyxPositionException {
         
-        List<OnyxDiamond> diamonds = new ArrayList<>();
-        for (OnyxDiamond d : board.getDiamondCollection().diamonds.values()) {
-
-            for (String k : d.getCornerKeys()) {
-                if (key.equals(k) && !diamonds.contains(d)) diamonds.add(d);
-            }
-        }
-
         String[] keys = null;
         int i, j, lI;
-        for (OnyxDiamond d : diamonds) {
+        for (OnyxDiamond d : board.getDiamondCollection().getDiamondsByPosKey(key)) {
             
             if (d.isFivePosDiamond() && 
                 board.getPosCollection().getPosition(d.getCenterPos().getKey()).isOccupied()) {
@@ -203,6 +209,12 @@ public class OnyxPosCollection {
         
         
         return false;
+    }
+    
+    public void clearOutlines() {
+        for (OnyxPos p : positions.values()) {
+            if (p.isOccupied() && p.getPiece().isEngineMove()) p.getPiece().setEngineMove(false);
+        }
     }
     
 }

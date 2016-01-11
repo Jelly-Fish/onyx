@@ -29,42 +29,30 @@
  * POSSIBILITY OF SUCH DAMAGE. 
  ******************************************************************************
  */
-package com.jellyfish.jfgonyx.entities;
+package com.jellyfish.jfgonyx.onyx;
 
-import com.jellyfish.jfgonyx.constants.OnyxConst;
-import java.awt.Point;
-import java.util.HashMap;
+import com.jellyfish.jfgonyx.onyx.entities.OnyxPiece;
+import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 
 /**
  * @author thw
  */
-public class OnyxDiamondCollection {
+class OnyxMove {
     
-    public final HashMap<Point, OnyxDiamond> diamonds = new HashMap<>();
-    
-    public final OnyxDiamondCollection init() {
-        
-        boolean mod = false;
-        int k = 0;
-        
-        for (int i = 0; i < OnyxConst.BOARD_SIDE_SQUARE_COUNT; ++i) {
-            for (int j = 0; j < OnyxConst.BOARD_SIDE_SQUARE_COUNT; j++) {
-                if ((j % 2 == 0) == mod) {
-                    diamonds.put(new Point(j, i), new OnyxDiamond(j, i, true));
-                } else {
-                    diamonds.put(new Point(j, i), new OnyxDiamond(j, i, false));
-                }
-            }
-            mod = !mod;
-        }
-        
-        return this;
+    private final OnyxPos pos;
+    private final OnyxPiece piece;
+
+    public OnyxMove(final OnyxPos pos, final OnyxPiece piece) {
+        this.pos = pos;
+        this.piece = piece;
     }
     
-    private void print() {
-        for (OnyxDiamond d : this.diamonds.values()) {
-            System.out.println(d.toString());
-        }
+    public OnyxPos getPos() {
+        return pos;
     }
+
+    public OnyxPiece getPiece() {
+        return piece;
+    }  
     
 }

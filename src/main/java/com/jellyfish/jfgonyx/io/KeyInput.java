@@ -70,16 +70,12 @@ public class KeyInput implements KeyListener {
 
         try {
             if (this.ops.get(KeyInput.EVENT.VIRTUAL_P_MOVE).exec(e, this.board)) {
-                /**
-                 * After take moves OnyxGame does not perform move.
-                 * Yet virtul piece is appended.
-                 */
                 OnyxGame.performMove(this.board.getPosCollection(), this.board);
             }
         } catch (final OnyxGameSyncException | NoValidOnyxPositionsFoundException | 
                 InvalidOnyxPositionException ex) {
             Logger.getLogger(KeyInput.class.getName()).log(Level.SEVERE, null, ex);
-            ex.printStackTrace();
+            System.err.println(ex.getMessage());
         }
         
         OnyxGame.closeMove();
