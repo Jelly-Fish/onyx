@@ -48,7 +48,7 @@ public class MainPanel extends JPanel implements OnyxObserver {
     private final OnyxBoard board;
     private final Font FONT = new Font("consolas", Font.BOLD, 14);
     private final LinkedList<String> moveLabels = new LinkedList<>();
-    private final String labelFormat = "%d - %s";
+    private final String labelFormat = "%d: %s";
     
     public MainPanel(final OnyxBoard board) {
         
