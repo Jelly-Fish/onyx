@@ -75,7 +75,6 @@ public class KeyInput implements KeyListener {
         } catch (final OnyxGameSyncException | NoValidOnyxPositionsFoundException | 
                 InvalidOnyxPositionException ex) {
             Logger.getLogger(KeyInput.class.getName()).log(Level.SEVERE, null, ex);
-            System.err.println(ex.getMessage());
         }
         
         OnyxGame.closeMove();

@@ -107,14 +107,12 @@ public class KeyMoveVirutalPiece implements OnyxExecutable {
     private boolean validateMove(final OnyxBoard board, final OnyxVirtualPiece v) throws InvalidOnyxPositionException {
 
         final String k = v.getTmpOnyxPosition().getKey();
-        String takeKey = null;
         final OnyxPos tmpPos = board.getPosCollection().getPosition(k);
         if (board.isDiamondCenter(k) && !board.isCenterPosPlayable(k, v.color.bitColor)) return false;
         if (tmpPos.isOccupied()) return false;
         
         if (board.getPosCollection().isTakePosition(k, v.color.bitColor, board)) {
-            System.out.println("TAKE POS");
-            takeKey = board.getPosCollection().performTake(k, v.color.bitColor, board);
+            board.getPosCollection().performTake(k, v.color.bitColor, board);
         }
         
         board.getPosCollection().getPosition(k).setPiece(

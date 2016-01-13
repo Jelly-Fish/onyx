@@ -71,7 +71,6 @@ class OnyxPositionSearch implements OnyxPositionSearchable {
             take = c.performTake(take, color.bitColor, board);
         } catch (final InvalidOnyxPositionException Iopex) {
             Logger.getLogger(OnyxPositionSearch.class.getName()).log(Level.SEVERE, null, Iopex);
-            Iopex.printStackTrace();
         }
         
         return StringUtils.isBlank(take) ? 
