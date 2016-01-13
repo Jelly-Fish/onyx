@@ -32,6 +32,7 @@
 package com.jellyfish.jfgonyx.onyx;
 
 import com.jellyfish.jfgonyx.constants.GraphicsConst;
+import com.jellyfish.jfgonyx.onyx.abstractions.AbstractOnyxSearch;
 import com.jellyfish.jfgonyx.onyx.interfaces.OnyxPositionSearchable;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxDiamond;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
@@ -48,7 +49,7 @@ import org.apache.commons.lang3.StringUtils;
 /**
  * @author thw
  */
-class OnyxPositionSearch implements OnyxPositionSearchable {
+class OnyxPositionSearch extends AbstractOnyxSearch implements OnyxPositionSearchable {
     
     /**
      * Look for all possible take moves
