@@ -45,8 +45,8 @@ class Onyx {
     
     private final static HashMap<SEARCH_TYPE, OnyxAbstractSearchable> SEARCH = new HashMap<>();
     static {
-        SEARCH.put(SEARCH_TYPE.RANDOM, new OnyxRandomSearch());
         SEARCH.put(SEARCH_TYPE.ONYXPOSCOL, new OnyxPositionSearch());
+        SEARCH.put(SEARCH_TYPE.RANDOM, new OnyxRandomSearch());
     }
     
     public static HashMap<SEARCH_TYPE, OnyxAbstractSearchable> getSEARCH() {

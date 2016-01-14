@@ -33,7 +33,6 @@ package com.jellyfish.jfgonyx.onyx.entities;
 
 import com.jellyfish.jfgonyx.constants.ConstructPosConst;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
-import com.jellyfish.jfgonyx.ui.OnyxBoard;
 import java.awt.Polygon;
 import java.util.Arrays;
 

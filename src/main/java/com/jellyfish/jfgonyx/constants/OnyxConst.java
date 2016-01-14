@@ -39,6 +39,7 @@ import java.util.HashMap;
  */
 public class OnyxConst {
     
+    public static final String KEY_SEPARATOR = "/";
     public static final int BOARD_SIDE_SQUARE_COUNT = 11;
     public static final HashMap<String, String> POS_MAP = new HashMap<>();
     static {

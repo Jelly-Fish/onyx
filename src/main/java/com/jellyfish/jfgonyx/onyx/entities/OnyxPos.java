@@ -45,7 +45,6 @@ public class OnyxPos {
     public final int gX, gY;
     private OnyxPiece piece;
     private OnyxVirtualPiece vPiece;
-
     public final OnyxDiamond diamond;
 
     public OnyxPos(final float x, final float y, final OnyxDiamond d) {

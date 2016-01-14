@@ -32,6 +32,7 @@
 package com.jellyfish.jfgonyx.io.events;
 
 import com.jellyfish.jfgonyx.constants.GraphicsConst;
+import com.jellyfish.jfgonyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.OnyxGame;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPiece;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
@@ -111,7 +112,8 @@ public class KeyMoveVirutalPiece implements OnyxExecutable {
         if (board.isDiamondCenter(k) && !board.isCenterPosPlayable(k, v.color.bitColor)) return false;
         if (tmpPos.isOccupied()) return false;
         
-        if (board.getPosCollection().isTakePosition(k, v.color.bitColor, board)) {
+        final String res = board.getPosCollection().getTakePositions(k, v.color.bitColor, board);
+        if (!StringUtils.isBlank(res)) {
             board.getPosCollection().performTake(k, v.color.bitColor, board);
         }
         

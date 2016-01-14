@@ -32,6 +32,7 @@
 package com.jellyfish.jfgonyx.onyx.entities;
 
 import com.jellyfish.jfgonyx.constants.GraphicsConst;
+import com.jellyfish.jfgonyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
 import java.util.HashMap;
@@ -135,46 +136,13 @@ public class OnyxPosCollection {
             }
         }
 
-         return key;
-         
-        /*
-        for (OnyxDiamond d : b.getDiamondCollection().diamonds.values()) {
-            
-            /**
-             * FIXME : to many takes.
-             * Use same as in this.isTakePosition : must check following :
-             * opposite corners, != color, key is contained in d
-             * and opposite key == occupied & == color.
-             *
-            
-            tmpKeys = d.getCornerKeys();
-            for (String k : tmpKeys) {
-                if (key.equals(k)) {
-                    for (String removeKey : tmpKeys) {
-                        if (!removeKey.equals(key) && this.positions.containsKey(removeKey) &&
-                                !keys.contains(removeKey)) {
-                            keys.add(removeKey);
-                        }
-                    }
-                }
-            }
-        }
-        
-        if (keys.size() <= 0) return null;
-        
-        for (String k : keys) {
-            if (this.positions.get(k).isOccupied() && 
-                this.positions.get(k).getPiece().color.bitColor != bitColor) {
-                this.positions.get(k).setPiece(null);
-            }
-        }
-        
-        return key;*/
+        return key;
     }
 
-    public boolean isTakePosition(final String key, final int bitColor, final OnyxBoard board) throws InvalidOnyxPositionException {
-        
+    public String getTakePositions(final String key, final int bitColor, final OnyxBoard board) throws InvalidOnyxPositionException {
+
         String[] keys = null;
+        String res = StringUtils.EMPTY;
         int i, j, lI;
         for (OnyxDiamond d : board.getDiamondCollection().getDiamondsByPosKey(key)) {
             
@@ -191,11 +159,17 @@ public class OnyxPosCollection {
                     if (board.getPosCollection().getPosition(keys[index]).isOccupied() &&
                         board.getPosCollection().getPosition(keys[index]).getPiece().color.bitColor != bitColor) {
                         if (i == 1) {
-                            if (lI == 0 && index == 2) ++i;
-                            if (lI == 1 && index == 3) ++i;
+                            
+                            if ((lI == 0 && index == 2) || (lI == 1 && index == 3)) {
+                                ++i;
+                                res += OnyxConst.KEY_SEPARATOR + 
+                                    board.getPosCollection().getPosition(keys[index]).getKey();
+                            }
                         } else if (i == 0) {
                             ++i;
                             lI = index;
+                            res += OnyxConst.KEY_SEPARATOR + 
+                                    board.getPosCollection().getPosition(keys[index]).getKey();
                         }
                     } else if (board.getPosCollection().getPosition(keys[index]).isOccupied() &&
                         board.getPosCollection().getPosition(keys[index]).getPiece().color.bitColor == bitColor) {
@@ -204,11 +178,10 @@ public class OnyxPosCollection {
                 }
             }
             
-            if (i == 2 && j == 1) return true;
+            if (i == 2 && j == 1) return res;
         }
         
-        
-        return false;
+        return null;
     }
     
     public void clearOutlines() {
