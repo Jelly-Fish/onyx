@@ -32,6 +32,7 @@
 package com.jellyfish.jfgonyx.onyx.interfaces;
 
 import com.jellyfish.jfgonyx.constants.GraphicsConst;
+import com.jellyfish.jfgonyx.onyx.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxDiamond;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPosCollection;
@@ -54,6 +55,6 @@ public interface OnyxPositionSearchable extends OnyxAbstractSearchable {
      * @throws NoValidOnyxPositionsFoundException if no position if found.
      */
     @Override
-    String search(final OnyxPosCollection c, final OnyxBoard board, final GraphicsConst.COLOR color) throws NoValidOnyxPositionsFoundException;
+    OnyxMove search(final OnyxPosCollection c, final OnyxBoard board, final GraphicsConst.COLOR color) throws NoValidOnyxPositionsFoundException;
     
 }

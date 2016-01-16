@@ -32,10 +32,11 @@
 package com.jellyfish.jfgonyx.onyx.entities;
 
 import com.jellyfish.jfgonyx.constants.GraphicsConst;
-import com.jellyfish.jfgonyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -90,9 +91,9 @@ public class OnyxPosCollection {
         return this.getVirtualPiece() != null;
     }
 
-    public String performTake(final String key, final int bitColor, final OnyxBoard board) throws InvalidOnyxPositionException {
+    public void performTake(final String key, final int bitColor, final OnyxBoard board) throws InvalidOnyxPositionException {
         
-        if (StringUtils.isBlank(key)) return null;
+        if (StringUtils.isBlank(key)) throw new InvalidOnyxPositionException();
 
         String[] keys = null;
         int i, j, lI;
@@ -135,14 +136,12 @@ public class OnyxPosCollection {
                 }
             }
         }
-
-        return key;
     }
 
-    public String getTakePositions(final String key, final int bitColor, final OnyxBoard board) throws InvalidOnyxPositionException {
+    public List<OnyxPos> getTakePositions(final String key, final int bitColor, final OnyxBoard board) throws InvalidOnyxPositionException {
 
+        final List<OnyxPos> captured = new ArrayList<>();
         String[] keys = null;
-        String res = StringUtils.EMPTY;
         int i, j, lI;
         for (OnyxDiamond d : board.getDiamondCollection().getDiamondsByPosKey(key)) {
             
@@ -162,14 +161,12 @@ public class OnyxPosCollection {
                             
                             if ((lI == 0 && index == 2) || (lI == 1 && index == 3)) {
                                 ++i;
-                                res += OnyxConst.KEY_SEPARATOR + 
-                                    board.getPosCollection().getPosition(keys[index]).getKey();
+                                captured.add(board.getPosCollection().getPosition(keys[index]));
                             }
                         } else if (i == 0) {
                             ++i;
                             lI = index;
-                            res += OnyxConst.KEY_SEPARATOR + 
-                                    board.getPosCollection().getPosition(keys[index]).getKey();
+                            captured.add(board.getPosCollection().getPosition(keys[index]));
                         }
                     } else if (board.getPosCollection().getPosition(keys[index]).isOccupied() &&
                         board.getPosCollection().getPosition(keys[index]).getPiece().color.bitColor == bitColor) {
@@ -178,7 +175,7 @@ public class OnyxPosCollection {
                 }
             }
             
-            if (i == 2 && j == 1) return res;
+            if (i == 2 && j == 1) return captured;
         }
         
         return null;

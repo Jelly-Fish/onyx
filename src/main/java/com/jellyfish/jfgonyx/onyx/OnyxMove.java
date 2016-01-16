@@ -33,26 +33,44 @@ package com.jellyfish.jfgonyx.onyx;
 
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPiece;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
+import java.util.List;
 
 /**
  * @author thw
  */
-class OnyxMove {
+public class OnyxMove {
     
     private final OnyxPos pos;
     private final OnyxPiece piece;
+    private final List<OnyxPos> captured;
 
-    public OnyxMove(final OnyxPos pos, final OnyxPiece piece) {
+    public OnyxMove(final OnyxPos pos, final OnyxPiece piece, final List<OnyxPos> captured) {
         this.pos = pos;
         this.piece = piece;
+        this.captured = captured;
     }
     
+    public boolean isCapture() {
+        return this.captured != null;
+    }
+    
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        
+        return sb.toString();
+    }
+    
+    public List<OnyxPos> getCaptured() {
+        return captured;
+    }
+
     public OnyxPos getPos() {
         return pos;
     }
 
     public OnyxPiece getPiece() {
         return piece;
-    }  
+    }
     
 }

@@ -31,6 +31,8 @@
  */
 package com.jellyfish.jfgonyx.onyx.interfaces;
 
+import com.jellyfish.jfgonyx.onyx.OnyxMove;
+
 /**
  * @author thw
  */
@@ -38,8 +40,8 @@ public interface OnyxObserver {
     
     /**
      * Notify move to process by observer.
-     * @param m the move value to display.
+     * @param m the move display.
      */
-    void notifyMove(final String m);
+    void notifyMove(final OnyxMove m);
     
 }

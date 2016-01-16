@@ -34,6 +34,7 @@ package com.jellyfish.jfgonyx.io.events;
 import com.jellyfish.jfgonyx.constants.GraphicsConst;
 import com.jellyfish.jfgonyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.OnyxGame;
+import com.jellyfish.jfgonyx.onyx.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPiece;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPosCollection;
@@ -43,6 +44,7 @@ import com.jellyfish.jfgonyx.onyx.interfaces.OnyxExecutable;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -112,8 +114,8 @@ public class KeyMoveVirutalPiece implements OnyxExecutable {
         if (board.isDiamondCenter(k) && !board.isCenterPosPlayable(k, v.color.bitColor)) return false;
         if (tmpPos.isOccupied()) return false;
         
-        final String res = board.getPosCollection().getTakePositions(k, v.color.bitColor, board);
-        if (!StringUtils.isBlank(res)) {
+        final List<OnyxPos> captured = board.getPosCollection().getTakePositions(k, v.color.bitColor, board);
+        if (captured != null) {
             board.getPosCollection().performTake(k, v.color.bitColor, board);
         }
         
@@ -122,9 +124,10 @@ public class KeyMoveVirutalPiece implements OnyxExecutable {
         );
         
         board.getPosCollection().getPosition(k).setVirtualPiece(null);
-        board.getObserver().notifyMove(tmpPos.toString());
-        OnyxGame.appendMove(board.getPosCollection().getPosition(k), 
-                board.getPosCollection().getPosition(k).getPiece());
+        final OnyxMove m = new OnyxMove(board.getPosCollection().getPosition(k), 
+                board.getPosCollection().getPosition(k).getPiece(), captured);
+        OnyxGame.appendMove(m);
+        board.getObserver().notifyMove(m);
         
         return true;
     }

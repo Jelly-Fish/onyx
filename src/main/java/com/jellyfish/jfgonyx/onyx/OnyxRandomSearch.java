@@ -47,12 +47,12 @@ import com.jellyfish.jfgonyx.ui.OnyxBoard;
 class OnyxRandomSearch extends AbstractOnyxSearch implements OnyxRandomSeachable {
     
     @Override
-    public String search(final OnyxPosCollection c, final OnyxBoard board, final GraphicsConst.COLOR color)
+    public OnyxMove search(final OnyxPosCollection c, final OnyxBoard board, final GraphicsConst.COLOR color)
             throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
         
         for (OnyxPos p : c.positions.values()) {
             if (!p.isOccupied() && !p.isDiamondCenter()) {
-                return p.getKey();
+                return new OnyxMove(p, null, null);
             }
         }
         

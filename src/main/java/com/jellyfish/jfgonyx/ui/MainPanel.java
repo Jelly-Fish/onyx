@@ -34,6 +34,7 @@ package com.jellyfish.jfgonyx.ui;
 import com.jellyfish.jfgonyx.constants.GraphicsConst;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.helpers.MainPanelGHelper;
+import com.jellyfish.jfgonyx.onyx.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.interfaces.OnyxObserver;
 import java.awt.Font;
 import java.awt.Graphics;
@@ -66,8 +67,8 @@ public class MainPanel extends JPanel implements OnyxObserver {
     }
     
     @Override
-    public void notifyMove(final String m) {
-        this.moveLabels.add(m);
+    public void notifyMove(final OnyxMove m) {
+        this.moveLabels.add(m.toString());
         this.repaint();
     }
     
