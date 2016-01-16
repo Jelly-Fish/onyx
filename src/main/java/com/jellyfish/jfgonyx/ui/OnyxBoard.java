@@ -39,7 +39,6 @@ import com.jellyfish.jfgonyx.onyx.entities.OnyxPosCollection;
 import com.jellyfish.jfgonyx.helpers.OnyxBoardGHelper;
 import com.jellyfish.jfgonyx.io.KeyInput;
 import com.jellyfish.jfgonyx.io.MouseInput;
-import com.jellyfish.jfgonyx.onyx.OnyxGame;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import com.jellyfish.jfgonyx.onyx.interfaces.OnyxObserver;
 import java.awt.Cursor;
@@ -85,7 +84,7 @@ public class OnyxBoard extends javax.swing.JPanel {
     
     public void initStartLayout() {
         
-        for (OnyxPos p : this.positions.positions.values()) p.setPiece(null);
+        for (OnyxPos p : this.positions.getPositions().values()) p.setPiece(null);
         this.positions.getPosition("6,0-1,0").addPiece(new OnyxPiece(GraphicsConst.COLOR.WHITE));
         this.positions.getPosition("7,0-1,0").addPiece(new OnyxPiece(GraphicsConst.COLOR.WHITE));
         this.positions.getPosition("6,0-12,0").addPiece(new OnyxPiece(GraphicsConst.COLOR.WHITE));
@@ -106,9 +105,9 @@ public class OnyxBoard extends javax.swing.JPanel {
     public boolean isCenterPosPlayable(final String k, final int bitColor) {
         
         OnyxDiamond tmpDiamond = null;
-        if (k == null || !this.positions.positions.containsKey(k)) return false;
+        if (k == null || !this.positions.getPositions().containsKey(k)) return false;
         
-        for (OnyxDiamond d : this.diamonds.diamonds.values()) {
+        for (OnyxDiamond d : this.diamonds.getDiamonds().values()) {
             try {
                 if (d.getCenterPos().getKey().equals(k)) {
                     tmpDiamond = d;
@@ -130,7 +129,7 @@ public class OnyxBoard extends javax.swing.JPanel {
 
     public boolean isDiamondCenter(final String k) {
         
-        for (OnyxDiamond d : this.diamonds.diamonds.values()) {
+        for (OnyxDiamond d : this.diamonds.getDiamonds().values()) {
             try {
                 if (d.getCenterPos().getKey().equals(k)) {
                     return true;

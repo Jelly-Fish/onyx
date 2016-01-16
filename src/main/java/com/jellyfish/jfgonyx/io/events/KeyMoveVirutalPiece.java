@@ -135,10 +135,10 @@ public class KeyMoveVirutalPiece implements OnyxExecutable {
     private boolean applyMove(final String k, final String oldK, final OnyxVirtualPiece v, 
             final OnyxBoard board) throws InvalidOnyxPositionException {
         
-        if (board.getPosCollection().positions.containsKey(k)) {
-            v.setTmpOnyxPosition(board.getPosCollection().positions.get(k));
-            board.getPosCollection().positions.get(k).setVirtualPiece(v);
-            board.getPosCollection().positions.get(oldK).setVirtualPiece(null);
+        if (board.getPosCollection().getPositions().containsKey(k)) {
+            v.setTmpOnyxPosition(board.getPosCollection().getPositions().get(k));
+            board.getPosCollection().getPositions().get(k).setVirtualPiece(v);
+            board.getPosCollection().getPositions().get(oldK).setVirtualPiece(null);
             
             return true;
         }

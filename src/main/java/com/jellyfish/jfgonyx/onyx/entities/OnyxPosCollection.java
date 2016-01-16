@@ -32,6 +32,8 @@
 package com.jellyfish.jfgonyx.onyx.entities;
 
 import com.jellyfish.jfgonyx.constants.GraphicsConst;
+import com.jellyfish.jfgonyx.onyx.OnyxGame;
+import com.jellyfish.jfgonyx.onyx.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
 import java.util.ArrayList;
@@ -49,28 +51,36 @@ public class OnyxPosCollection {
      */
     public static final int MTX_WH = 24;
     public static final String KEY_FORMAT = "%.1f-%.1f";
-    public final HashMap<String, OnyxPos> positions = new HashMap<>();
+    private final HashMap<String, OnyxPos> positions = new HashMap<>();
     
     public void initStartPosition(final OnyxDiamondCollection c) {
         
-        for (OnyxDiamond d : c.diamonds.values()) {
+        String k = null;
+        OnyxMove m = null;
+        for (OnyxDiamond d : c.getDiamonds().values()) {
             for (OnyxPos p : d.positions) {
                 if (!this.positions.containsValue(p)) {
-                    this.positions.put(String.format(OnyxPosCollection.KEY_FORMAT, p.x, p.y), p);
+                    k = String.format(OnyxPosCollection.KEY_FORMAT, p.x, p.y);
+                    this.positions.put(k, p);
+                    m = new OnyxMove(this.positions.get(k), this.positions.get(k).getPiece(), null);
+                    OnyxGame.appendMove(m);
                 }
             }
         }
     }
     
     public void spawnVirtualPiece(final GraphicsConst.COLOR c) {
-        
         this.positions.get(String.format(OnyxPosCollection.KEY_FORMAT, 7f, 6f)).setVirtualPiece(
-                new OnyxVirtualPiece(c)
+            new OnyxVirtualPiece(c)
         );
     }
     
     public OnyxPos getPosition(final String k) {
         return this.positions.get(k);
+    }
+    
+    public HashMap<String, OnyxPos> getPositions() {
+        return positions;
     }
 
     public OnyxVirtualPiece getVirtualPiece() {
@@ -158,7 +168,6 @@ public class OnyxPosCollection {
                     if (board.getPosCollection().getPosition(keys[index]).isOccupied() &&
                         board.getPosCollection().getPosition(keys[index]).getPiece().color.bitColor != bitColor) {
                         if (i == 1) {
-                            
                             if ((lI == 0 && index == 2) || (lI == 1 && index == 3)) {
                                 ++i;
                                 captured.add(board.getPosCollection().getPosition(keys[index]));
@@ -175,6 +184,10 @@ public class OnyxPosCollection {
                 }
             }
             
+            /**
+             * FIXME : return only captures pieces positions 
+             * & not the additional == bitColor ++j position.
+             */
             if (i == 2 && j == 1) return captured;
         }
         

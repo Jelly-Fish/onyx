@@ -42,9 +42,9 @@ import java.util.List;
  */
 public class OnyxDiamondCollection {
     
-    public final HashMap<Point, OnyxDiamond> diamonds = new HashMap<>();
+    private final HashMap<Point, OnyxDiamond> diamonds = new HashMap<>();
     
-    public final OnyxDiamondCollection init() {
+    public final OnyxDiamondCollection build() {
         
         boolean mod = false;
         int k = 0;
@@ -82,4 +82,8 @@ public class OnyxDiamondCollection {
         return dList;
     }
     
+    public HashMap<Point, OnyxDiamond> getDiamonds() {
+        return diamonds;
+    }
+      
 }

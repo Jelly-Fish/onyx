@@ -32,8 +32,8 @@
 package com.jellyfish.jfgonyx.ui;
 
 import com.jellyfish.jfgonyx.constants.GraphicsConst;
-import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.helpers.MainPanelGHelper;
+import com.jellyfish.jfgonyx.onyx.OnyxGame;
 import com.jellyfish.jfgonyx.onyx.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.interfaces.OnyxObserver;
 import java.awt.Font;
@@ -44,24 +44,21 @@ import javax.swing.JPanel;
 /**
  * @author thw
  */
-public class MainPanel extends JPanel implements OnyxObserver {
+public class OnyxPanel extends JPanel implements OnyxObserver {
 
-    private final OnyxBoard board;
     private final Font FONT = new Font("consolas", Font.BOLD, 14);
     private final LinkedList<String> moveLabels = new LinkedList<>();
     private final String labelFormat = "%d: %s";
     
-    public MainPanel(final OnyxBoard board) {
+    public OnyxPanel() {
         
         super();
         this.setDoubleBuffered(true);
-        this.board = board;
         this.setBackground(GraphicsConst.MAIN_PANEL_BACKGROUND_COLOR);
     }
     
     @Override
     public void paintComponent(Graphics g) {
-        
         super.paintComponent(g);
         MainPanelGHelper.drawMove(g, this.FONT, this.labelFormat, this.moveLabels);
     }
@@ -73,10 +70,9 @@ public class MainPanel extends JPanel implements OnyxObserver {
     }
     
     public void init() {
-        this.board.setObserver(this);
-        for (OnyxPos p : this.board.getPosCollection().positions.values()) {
-            if (p.isOccupied()) {
-                this.moveLabels.add(p.toString());
+        for (OnyxMove m : OnyxGame.getMoves().values()) {
+            if (m.getPos().isOccupied()) {
+                this.moveLabels.add(m.toString());
             }
         }
     }

@@ -50,7 +50,7 @@ class OnyxRandomSearch extends AbstractOnyxSearch implements OnyxRandomSeachable
     public OnyxMove search(final OnyxPosCollection c, final OnyxBoard board, final GraphicsConst.COLOR color)
             throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
         
-        for (OnyxPos p : c.positions.values()) {
+        for (OnyxPos p : c.getPositions().values()) {
             if (!p.isOccupied() && !p.isDiamondCenter()) {
                 return new OnyxMove(p, null, null);
             }

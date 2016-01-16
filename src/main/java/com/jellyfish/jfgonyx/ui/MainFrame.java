@@ -39,7 +39,7 @@ import java.awt.Toolkit;
  */
 public class MainFrame extends javax.swing.JFrame {
 
-    private final MainPanel mainPanel;
+    private final OnyxPanel mainPanel;
     private final int initialWidth;
     private final int initialHeight;
     
@@ -48,7 +48,7 @@ public class MainFrame extends javax.swing.JFrame {
      * @param panel
      * @param board
      */
-    public MainFrame(final MainPanel panel, final OnyxBoard board) {
+    public MainFrame(final OnyxPanel panel, final OnyxBoard board) {
         initComponents();
         this.mainPanel = panel;
         this.mainPanel.add(board);

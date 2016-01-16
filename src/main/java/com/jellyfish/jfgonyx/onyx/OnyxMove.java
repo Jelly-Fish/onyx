@@ -31,9 +31,11 @@
  */
 package com.jellyfish.jfgonyx.onyx;
 
+import com.jellyfish.jfgonyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPiece;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import java.util.List;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author thw
@@ -57,7 +59,10 @@ public class OnyxMove {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        
+        sb.append(OnyxConst.POS_MAP.get(this.pos.getKey()));
+        if (this.captured != null && this.captured.size() > 0) {
+            sb.append(this.captured.size() == 2 ? "*" : this.captured.size() == 4 ? "**" : StringUtils.EMPTY);
+        }
         return sb.toString();
     }
     

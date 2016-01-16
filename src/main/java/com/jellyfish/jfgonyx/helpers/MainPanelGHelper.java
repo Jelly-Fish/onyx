@@ -32,7 +32,6 @@
 package com.jellyfish.jfgonyx.helpers;
 
 import com.jellyfish.jfgonyx.constants.GraphicsConst;
-import com.jellyfish.jfgonyx.constants.OnyxConst;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.util.List;
@@ -49,10 +48,10 @@ public class MainPanelGHelper {
         int c = 1, y = 20, x = 10, marginTop = font.getSize();
         for (String m : moves) {
             g.setColor(c % 2 == 0 ? GraphicsConst.WHITE : GraphicsConst.BLACK);
-            m = String.format(format, c, OnyxConst.POS_MAP.get(m));
+            m = String.format(format, c, m);
             g.drawString(m, x, y);
             x += m.length() * 10;
-            if (c % 4 == 0 && c > 0) {
+            if (c % 2 == 0 && c > 0) {
                 y += marginTop;
                 x = 10;
             }

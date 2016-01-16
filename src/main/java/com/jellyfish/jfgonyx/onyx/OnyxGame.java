@@ -136,4 +136,8 @@ public class OnyxGame {
                 String.format(OnyxGameSyncException.WRONG_TURN_MSG, OnyxGame.colorToPlay.strColor));
     }
     
+    public static HashMap<Integer, OnyxMove> getMoves() {
+        return moves;
+    }
+    
 }

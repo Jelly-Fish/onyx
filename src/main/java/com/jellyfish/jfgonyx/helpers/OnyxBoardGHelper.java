@@ -54,7 +54,7 @@ public class OnyxBoardGHelper {
 
     public static void buildPolygons(final OnyxDiamondCollection c) {
 
-        for (OnyxDiamond d : c.diamonds.values()) {
+        for (OnyxDiamond d : c.getDiamonds().values()) {
 
             if (d.onPairLine) {
                 if (d.isFivePosDiamond()) {
@@ -118,7 +118,7 @@ public class OnyxBoardGHelper {
         OnyxBoardGHelper.drawBackground(g, board);
         OnyxBoardGHelper.drawPositionOutline(g, board);
         
-        for (OnyxDiamond d : c.diamonds.values()) {
+        for (OnyxDiamond d : c.getDiamonds().values()) {
 
             if (d.onPairLine) {
                 if (d.isFivePosDiamond()) {
@@ -171,7 +171,7 @@ public class OnyxBoardGHelper {
 
     private static void drawPieces(Graphics2D g, final OnyxPosCollection c) {
 
-        for (OnyxPos p : c.positions.values()) {
+        for (OnyxPos p : c.getPositions().values()) {
             if (p.isOccupied()) {
                 OnyxBoardGHelper.drawPiece(g, p, p.getPiece());
             }

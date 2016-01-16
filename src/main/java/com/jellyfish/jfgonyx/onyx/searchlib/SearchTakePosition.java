@@ -55,7 +55,7 @@ public class SearchTakePosition {
         OnyxPos[] positions = new OnyxPos[4];
         final List<OnyxPos> posSet = new ArrayList<>();
         
-        for (OnyxDiamond d : b.getDiamondCollection().diamonds.values()) {
+        for (OnyxDiamond d : b.getDiamondCollection().getDiamonds().values()) {
             
             count = 0;
             i = 0;

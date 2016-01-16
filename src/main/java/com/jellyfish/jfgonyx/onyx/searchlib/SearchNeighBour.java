@@ -56,7 +56,7 @@ public class SearchNeighBour {
         int count;
         OnyxPos pos = null;
         String key = StringUtils.EMPTY;
-        for (OnyxDiamond d : b.getDiamondCollection().diamonds.values()) {
+        for (OnyxDiamond d : b.getDiamondCollection().getDiamonds().values()) {
             count = 0;
             for (String k : d.getCornerKeys()) {
                 pos = c.getPosition(k);
