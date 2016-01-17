@@ -115,9 +115,6 @@ public class KeyMoveVirutalPiece implements OnyxExecutable {
         if (tmpPos.isOccupied()) return false;
         
         final List<OnyxPos> captured = board.getPosCollection().getTakePositions(k, v.color.bitColor, board);
-        if (captured != null) {
-            board.getPosCollection().performTake(k, v.color.bitColor, board);
-        }
         
         board.getPosCollection().getPosition(k).setPiece(
             new OnyxPiece(v.color.boolColor ? GraphicsConst.COLOR.BLACK : GraphicsConst.COLOR.WHITE)
@@ -128,6 +125,10 @@ public class KeyMoveVirutalPiece implements OnyxExecutable {
                 board.getPosCollection().getPosition(k).getPiece(), captured);
         OnyxGame.appendMove(m);
         board.getObserver().notifyMove(m);
+        
+        if (captured != null) {
+            board.getPosCollection().performTake(k, v.color.bitColor, board);
+        }
         
         return true;
     }

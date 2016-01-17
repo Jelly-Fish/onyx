@@ -155,6 +155,7 @@ public class OnyxPosCollection {
         int i, j, lI;
         for (OnyxDiamond d : board.getDiamondCollection().getDiamondsByPosKey(key)) {
             
+            captured.clear();
             if (d.isFivePosDiamond() && 
                 board.getPosCollection().getPosition(d.getCenterPos().getKey()).isOccupied()) {
                 continue;
@@ -184,10 +185,6 @@ public class OnyxPosCollection {
                 }
             }
             
-            /**
-             * FIXME : return only captures pieces positions 
-             * & not the additional == bitColor ++j position.
-             */
             if (i == 2 && j == 1) return captured;
         }
         
