@@ -34,6 +34,7 @@ package com.jellyfish.jfgonyx.onyx.searchlib;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxDiamond;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPosCollection;
+import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
 import java.util.ArrayList;
 import java.util.List;
@@ -48,14 +49,19 @@ public class SearchTakePosition {
      * @param b Onyx board instance.
      * @param bitColor the color to play's bit value (0=white, 1=black).
      * @return Strongest take move key found or NULL if no such position has been found.
+     * @throws com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException
      */
-    public static String getTakePos(final OnyxPosCollection c, final OnyxBoard b, final int bitColor) {
+    public static String getTakePos(final OnyxPosCollection c, final OnyxBoard b, final int bitColor) throws InvalidOnyxPositionException {
         
         int count, i;
         OnyxPos[] positions = new OnyxPos[4];
         final List<OnyxPos> posSet = new ArrayList<>();
         
         for (OnyxDiamond d : b.getDiamondCollection().getDiamonds().values()) {
+            
+            if (d.isFivePosDiamond() && c.getPosition(d.getCenterPos().getKey()).isOccupied()) {
+                continue;
+            }
             
             count = 0;
             i = 0;

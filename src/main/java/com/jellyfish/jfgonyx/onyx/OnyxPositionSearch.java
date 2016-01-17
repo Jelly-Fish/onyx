@@ -61,28 +61,33 @@ class OnyxPositionSearch extends AbstractOnyxSearch implements OnyxPositionSearc
      *   Find forward positions depending on color
      */
     @Override
-    public OnyxMove search(final OnyxPosCollection c, final OnyxBoard board, final GraphicsConst.COLOR color) throws NoValidOnyxPositionsFoundException {
+    public OnyxMove search(final OnyxPosCollection c, final OnyxBoard board, final GraphicsConst.COLOR color) 
+            throws NoValidOnyxPositionsFoundException {
     
-        List<OnyxPos> captured = null;
-        String take = SearchTakePosition.getTakePos(c, board, color.bitColor);
-        final String counter = SearchCounterPosition.getCounterPos(c, board, color.bitColor);
-        final String neighbour = SearchNeighBour.getNeighbourPos(c, board, color.bitColor);
+        try {
         
-        if (!StringUtils.isBlank(take)) {
-            try {
+            List<OnyxPos> captured = null;
+            String take = SearchTakePosition.getTakePos(c, board, color.bitColor);
+            final String counter = SearchCounterPosition.getCounterPos(c, board, color.bitColor);
+            final String neighbour = SearchNeighBour.getNeighbourPos(c, board, color.bitColor);
+
+            if (!StringUtils.isBlank(take)) {
                 captured = c.getTakePositions(take, color.bitColor, board);
                 c.performTake(take, color.bitColor, board);
-            } catch (final InvalidOnyxPositionException Iopex) {
-                Logger.getLogger(OnyxPositionSearch.class.getName()).log(Level.SEVERE, null, Iopex);
             }
+
+            return StringUtils.isBlank(take) ? 
+                    (StringUtils.isBlank(counter) ? 
+                        (StringUtils.isBlank(neighbour) ? null : 
+                    new OnyxMove(c.getPosition(neighbour), c.getPosition(neighbour).getPiece(), null)) : 
+                    new OnyxMove(c.getPosition(counter), c.getPosition(counter).getPiece(), null)) : 
+                    new OnyxMove(c.getPosition(take), c.getPosition(take).getPiece(), captured);
+        
+        } catch (final InvalidOnyxPositionException Iopex) {
+            Logger.getLogger(OnyxPositionSearch.class.getName()).log(Level.SEVERE, null, Iopex);
         }
         
-        return StringUtils.isBlank(take) ? 
-                (StringUtils.isBlank(counter) ? 
-                    (StringUtils.isBlank(neighbour) ? null : 
-                new OnyxMove(c.getPosition(neighbour), c.getPosition(neighbour).getPiece(), null)) : 
-                new OnyxMove(c.getPosition(counter), c.getPosition(counter).getPiece(), null)) : 
-                new OnyxMove(c.getPosition(take), c.getPosition(take).getPiece(), captured);
+        throw new NoValidOnyxPositionsFoundException();
     }
     
 }
