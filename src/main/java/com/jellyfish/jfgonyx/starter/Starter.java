@@ -35,6 +35,7 @@ import com.jellyfish.jfgonyx.onyx.entities.OnyxDiamondCollection;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPosCollection;
 import com.jellyfish.jfgonyx.helpers.OnyxBoardGHelper;
 import com.jellyfish.jfgonyx.onyx.OnyxGame;
+import com.jellyfish.jfgonyx.onyx.interfaces.OnyxBoardI;
 import com.jellyfish.jfgonyx.ui.MainFrame;
 import com.jellyfish.jfgonyx.ui.OnyxPanel;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
@@ -74,7 +75,7 @@ public class Starter {
         board.setObserver(panel);
         panel.init();
         final MainFrame mainFrame = new MainFrame(panel, board);
-        OnyxGame.init();
+        OnyxGame.init((OnyxBoardI) board);
     }
     
 }

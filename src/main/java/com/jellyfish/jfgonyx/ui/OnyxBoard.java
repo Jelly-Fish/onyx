@@ -40,6 +40,7 @@ import com.jellyfish.jfgonyx.helpers.OnyxBoardGHelper;
 import com.jellyfish.jfgonyx.io.KeyInput;
 import com.jellyfish.jfgonyx.io.MouseInput;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
+import com.jellyfish.jfgonyx.onyx.interfaces.OnyxBoardI;
 import com.jellyfish.jfgonyx.onyx.interfaces.OnyxObserver;
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -50,7 +51,7 @@ import java.awt.Graphics2D;
  *
  * @author thw
  */
-public class OnyxBoard extends javax.swing.JPanel {
+public class OnyxBoard extends javax.swing.JPanel implements OnyxBoardI {
     
     private final OnyxDiamondCollection diamonds;
     private final OnyxPosCollection positions;
@@ -77,11 +78,13 @@ public class OnyxBoard extends javax.swing.JPanel {
         this.requestFocusInWindow();
     }
     
+    @Override
     public void initInput() {
         this.keyInput.init(this);
         this.mouseInput.init(this);
     }
     
+    @Override
     public void initStartLayout() {
         
         for (OnyxPos p : this.positions.getPositions().values()) p.setPiece(null);
@@ -102,6 +105,7 @@ public class OnyxBoard extends javax.swing.JPanel {
         OnyxBoardGHelper.drawBoard((Graphics2D) g, this.diamonds, this.positions, this);
     }
     
+    @Override
     public boolean isCenterPosPlayable(final String k, final int bitColor) {
         
         OnyxDiamond tmpDiamond = null;
@@ -125,6 +129,7 @@ public class OnyxBoard extends javax.swing.JPanel {
         return c == 0;
     }
 
+    @Override
     public boolean isDiamondCenter(final String k) {
         
         for (OnyxDiamond d : this.diamonds.getDiamonds().values()) {
@@ -137,18 +142,22 @@ public class OnyxBoard extends javax.swing.JPanel {
         return false;
     }
     
+    @Override
     public OnyxPosCollection getPosCollection() {
         return this.positions;
     }
     
+    @Override
     public OnyxDiamondCollection getDiamondCollection() {
         return diamonds;
     }
     
+    @Override
     public OnyxObserver getObserver() {
         return observer;
     }
 
+    @Override
     public void setObserver(final OnyxObserver observer) {
         this.observer = observer;
     }

@@ -39,6 +39,7 @@ import com.jellyfish.jfgonyx.onyx.entities.OnyxVirtualPiece;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException;
 import com.jellyfish.jfgonyx.onyx.exceptions.OnyxGameSyncException;
+import com.jellyfish.jfgonyx.onyx.interfaces.OnyxBoardI;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
 import java.util.HashMap;
 import java.util.List;
@@ -52,12 +53,14 @@ public class OnyxGame {
     private static GraphicsConst.COLOR colorToPlay = null;
     private static boolean requestInitialized = false;
     public static boolean wait = false;
+    private static OnyxBoardI boardInterface = null;
     
-    public static void init() {
+    public static void init(final OnyxBoardI boardInterface) {
         OnyxGame.moves.clear();
         OnyxGame.wait = false;
         OnyxGame.requestInitialized = false;
         OnyxGame.colorToPlay = null;
+        OnyxGame.boardInterface = boardInterface;
     }
     
     /**

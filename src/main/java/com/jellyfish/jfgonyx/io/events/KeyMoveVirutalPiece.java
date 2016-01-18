@@ -40,6 +40,7 @@ import com.jellyfish.jfgonyx.onyx.entities.OnyxPosCollection;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxVirtualPiece;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import com.jellyfish.jfgonyx.onyx.interfaces.OnyxExecutable;
+import com.jellyfish.jfgonyx.onyx.searchlib.OnyxIntmap;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
