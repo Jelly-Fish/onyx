@@ -34,7 +34,16 @@ package com.jellyfish.jfgonyx.onyx.searchlib;
 import com.jellyfish.jfgonyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPosCollection;
-import static com.jellyfish.jfgonyx.onyx.entities.OnyxPosCollection.KEY_FORMAT;
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author thw
@@ -42,24 +51,23 @@ import static com.jellyfish.jfgonyx.onyx.entities.OnyxPosCollection.KEY_FORMAT;
 public class OnyxIntmap {
     
     private final int[] intmap;
+    private final int width;
+    private static final String FILE_FORMAT = "src/main/resources/imap/%s/%d.onyx";
+    private static final String DIRECTORY_FORMAT = "src/main/resources/imap/%s";
 
     public OnyxIntmap(final OnyxPosCollection c) {
+        this.width = (OnyxConst.BOARD_SIDE_SQUARE_COUNT * 2) + 1;
         this.intmap = this.build(c);
     }
     
     private int[] build(final OnyxPosCollection c) {
-        
-        /**
-         * FIXME : Exception in thread "AWT-EventQueue-0" java.lang.ArrayIndexOutOfBoundsException: 484
-         * line 63
-         */
-        
+
         OnyxPos tmp = null;
-        final int[] bmap = new int[22 * 22];
+        final int[] bmap = new int[(int) Math.pow(this.width, 2.0)];
         int i = 0;
-        for (float y = 1.0f; y <= (float) (OnyxConst.BOARD_SIDE_SQUARE_COUNT * 2); y += .5f) {
-            for (float x = 1.0f; x <= (float) (OnyxConst.BOARD_SIDE_SQUARE_COUNT * 2); x += .5f) {
-                tmp = c.getPosition(String.format(KEY_FORMAT, x, y));
+        for (float y = 1.0f; y <= OnyxConst.BOARD_SIDE_SQUARE_COUNT + 1; y += .5f) {
+            for (float x = 1.0f; x <= OnyxConst.BOARD_SIDE_SQUARE_COUNT + 1; x += .5f) {
+                tmp = c.getPosition(String.format(OnyxPosCollection.KEY_FORMAT, x, y));
                 bmap[i] = tmp == null ? 3 : (tmp.isOccupied() ? tmp.getPiece().color.bitColor : 2);
                 ++i;
             }
@@ -68,13 +76,34 @@ public class OnyxIntmap {
         return bmap;
     }
     
-    public void print() {
-        for (int i = 0; i < this.intmap.length; ++i) {
-            if (i % (OnyxConst.BOARD_SIDE_SQUARE_COUNT * 2) != 0) {
-                System.out.print(this.intmap[i]);
-            } else {
-                System.out.print('\n');
+    public void print(final int m, final String dtStamp) {
+        
+        if (this.intmap == null) return;
+        
+        try {
+            
+            final File dir = new File(String.format(OnyxIntmap.DIRECTORY_FORMAT, dtStamp));
+            if(!dir.exists()) {
+                dir.mkdir();
+            } 
+            
+            String l = StringUtils.EMPTY;
+            final List<String> lines = new ArrayList<>();
+                  
+            for (int i = 0; i < this.intmap.length; ++i) {
+                if (i % this.width == 0) {
+                    lines.add(l);
+                    l = StringUtils.EMPTY;
+                } else {
+                    l += StringUtils.SPACE + this.intmap[i];
+                }
             }
+            
+            Files.write(Paths.get(String.format(OnyxIntmap.FILE_FORMAT, dtStamp, m)), lines, 
+                    Charset.forName("UTF-8"));
+            
+        } catch (final IOException ioex) {
+            Logger.getLogger(OnyxIntmap.class.getName()).log(Level.SEVERE, null, ioex);
         }
     }
     

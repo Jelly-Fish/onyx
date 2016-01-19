@@ -31,6 +31,7 @@
  */
 package com.jellyfish.jfgonyx.onyx;
 
+import com.jellyfish.jfgonyx.constants.DTStampConst;
 import com.jellyfish.jfgonyx.constants.GraphicsConst;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPiece;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
@@ -54,6 +55,7 @@ public class OnyxGame {
     private static boolean requestInitialized = false;
     public static boolean wait = false;
     private static OnyxBoardI boardInterface = null;
+    public static String dtStamp;
     
     public static void init(final OnyxBoardI boardInterface) {
         OnyxGame.moves.clear();
@@ -61,6 +63,7 @@ public class OnyxGame {
         OnyxGame.requestInitialized = false;
         OnyxGame.colorToPlay = null;
         OnyxGame.boardInterface = boardInterface;
+        OnyxGame.dtStamp = DTStampConst.sdf.format(new java.util.Date());
     }
     
     /**
