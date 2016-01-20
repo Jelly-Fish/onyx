@@ -39,8 +39,9 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.lang3.StringUtils;
@@ -50,61 +51,103 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class OnyxIntmap {
     
-    private final int[] intmap;
+    private final int[] linear_intmap;
+    private final int[][] mtx_intmap;
     private final int width;
-    private static final String FILE_FORMAT = "src/main/resources/imap/%s/%d.onyx";
+    private static final String FILE_FORMAT = "src/main/resources/imap/%s/%s.onyx";
     private static final String DIRECTORY_FORMAT = "src/main/resources/imap/%s";
-
+    private static final String LINE_START_FORMAT = "[%.1f]";
+    private static final String NEW_LINE = "\n";
+    private final String[] text_representation;
+    
     public OnyxIntmap(final OnyxPosCollection c) {
-        this.width = (OnyxConst.BOARD_SIDE_SQUARE_COUNT * 2) + 1;
-        this.intmap = this.build(c);
+        final int w = (OnyxConst.BOARD_SIDE_SQUARE_COUNT * 2) + 1;
+        this.width = w;
+        this.mtx_intmap = new int[w][w];
+        this.text_representation = new String[w];
+        this.linear_intmap = this.build(c);
+        
     }
     
     private int[] build(final OnyxPosCollection c) {
 
+        String l = StringUtils.EMPTY;
         OnyxPos tmp = null;
         final int[] bmap = new int[(int) Math.pow(this.width, 2.0)];
-        int i = 0;
+        int i = 0, j = 0, k = 0;
+        
         for (float y = 1.0f; y <= OnyxConst.BOARD_SIDE_SQUARE_COUNT + 1; y += .5f) {
+            l = String.format(OnyxIntmap.LINE_START_FORMAT, y); 
+            l += y < 10 ? StringUtils.SPACE : StringUtils.EMPTY;
             for (float x = 1.0f; x <= OnyxConst.BOARD_SIDE_SQUARE_COUNT + 1; x += .5f) {
                 tmp = c.getPosition(String.format(OnyxPosCollection.KEY_FORMAT, x, y));
                 bmap[i] = tmp == null ? 3 : (tmp.isOccupied() ? tmp.getPiece().color.bitColor : 2);
+                l += bmap[i] > 1 ? StringUtils.SPACE + StringUtils.SPACE :
+                        StringUtils.SPACE + bmap[i];
+                this.mtx_intmap[j][k] = bmap[i];
                 ++i;
+                ++k;
             }
+            this.text_representation[j] = l;
+            ++j;
+            k = 0;
         }
         
         return bmap;
     }
     
-    public void print(final int m, final String dtStamp) {
+    public final void print(final int m, final String dtStamp) {
         
-        if (this.intmap == null) return;
+        if (this.linear_intmap == null || this.text_representation == null) return;
         
         try {
-            
+            final ArrayList<String> lines = new ArrayList<>();
+            lines.add("[DATE STAMP] >> " + dtStamp);
+            lines.add("[STRING DISPLAY] >> MOVE N°" + m);
+            lines.addAll(Arrays.asList(this.text_representation));
+            lines.add(OnyxIntmap.NEW_LINE + "[INTEGER MATRIX] >> MOVE N°" + m + OnyxIntmap.NEW_LINE + this.printmtx());
             final File dir = new File(String.format(OnyxIntmap.DIRECTORY_FORMAT, dtStamp));
-            if(!dir.exists()) {
-                dir.mkdir();
-            } 
+            if(!dir.exists()) dir.mkdir();
             
-            String l = StringUtils.EMPTY;
-            final List<String> lines = new ArrayList<>();
-                  
-            for (int i = 0; i < this.intmap.length; ++i) {
-                if (i % this.width == 0) {
-                    lines.add(l);
-                    l = StringUtils.EMPTY;
-                } else {
-                    l += StringUtils.SPACE + this.intmap[i];
-                }
+            final File f = new File(Paths.get(String.format(OnyxIntmap.FILE_FORMAT, dtStamp, dtStamp)).toUri());
+            if (f.exists()) {
+                Files.write(Paths.get(String.format(OnyxIntmap.FILE_FORMAT, dtStamp, dtStamp)),
+                        lines, Charset.forName("UTF-8"), StandardOpenOption.APPEND);
+            } else {
+                Files.write(Paths.get(String.format(OnyxIntmap.FILE_FORMAT, dtStamp, dtStamp)),
+                    lines, Charset.forName("UTF-8"));
             }
-            
-            Files.write(Paths.get(String.format(OnyxIntmap.FILE_FORMAT, dtStamp, m)), lines, 
-                    Charset.forName("UTF-8"));
             
         } catch (final IOException ioex) {
             Logger.getLogger(OnyxIntmap.class.getName()).log(Level.SEVERE, null, ioex);
         }
+    }
+    
+    private String printmtx() {
+        
+        if (this.mtx_intmap == null) return null;
+        final StringBuilder s = new StringBuilder();
+        
+        for (int[] m : this.mtx_intmap) {
+            for (int i = 0; i < m.length; i++) {
+                s.append(StringUtils.SPACE).append(m[i]);
+            }
+            s.append(OnyxIntmap.NEW_LINE);
+        }
+        
+        return s.toString();
+    }
+    
+    public int[] getLinear_intmap() {
+        return linear_intmap;
+    }
+
+    public int[][] getMtx_intmap() {
+        return mtx_intmap;
+    }
+    
+    public String[] getText_representation() {
+        return text_representation;
     }
     
 }

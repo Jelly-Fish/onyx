@@ -52,6 +52,7 @@ public class Starter {
     /**
      * @param args the command line arguments
      */
+    @SuppressWarnings("ResultOfObjectAllocationIgnored")
     public static void main(String[] args) {
         
         // <editor-fold defaultstate="collapsed" desc="UI Manager">    
@@ -75,9 +76,8 @@ public class Starter {
         board.initInput();
         board.setObserver(panel);
         panel.init();
-        final MainFrame mainFrame = new MainFrame(panel, board);
+        new MainFrame(panel, board);
         OnyxGame.init((OnyxBoardI) board);
-        
         new OnyxIntmap(positions).print(0, OnyxGame.dtStamp);
     }
     

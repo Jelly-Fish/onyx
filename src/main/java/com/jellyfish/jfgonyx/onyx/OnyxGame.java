@@ -41,6 +41,7 @@ import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException;
 import com.jellyfish.jfgonyx.onyx.exceptions.OnyxGameSyncException;
 import com.jellyfish.jfgonyx.onyx.interfaces.OnyxBoardI;
+import com.jellyfish.jfgonyx.onyx.searchlib.OnyxIntmap;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
 import java.util.HashMap;
 import java.util.List;
@@ -53,9 +54,11 @@ public class OnyxGame {
     private static final HashMap<Integer, OnyxMove> moves = new HashMap<>();
     private static GraphicsConst.COLOR colorToPlay = null;
     private static boolean requestInitialized = false;
+    public static boolean initialized = false;
     public static boolean wait = false;
     private static OnyxBoardI boardInterface = null;
     public static String dtStamp;
+    private static int moveCount = 0;
     
     public static void init(final OnyxBoardI boardInterface) {
         OnyxGame.moves.clear();
@@ -107,6 +110,12 @@ public class OnyxGame {
     
     public static void appendMove(final OnyxMove move) {
         OnyxGame.moves.put(OnyxGame.moves.size() + 1, move);
+        if (OnyxGame.initialized) {
+            ++OnyxGame.moveCount;
+            new OnyxIntmap(OnyxGame.boardInterface.getPosCollection()).print(
+                    OnyxGame.moveCount, OnyxGame.dtStamp
+            );
+        }
     }
     
     private static OnyxMove requestMove(final OnyxPosCollection c, final OnyxBoard board) 

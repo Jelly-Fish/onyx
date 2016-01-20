@@ -67,6 +67,8 @@ public class OnyxPosCollection {
                 }
             }
         }
+        
+        OnyxGame.initialized = true;
     }
     
     public void spawnVirtualPiece(final GraphicsConst.COLOR c) {
