@@ -41,7 +41,6 @@ import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException;
 import com.jellyfish.jfgonyx.onyx.exceptions.OnyxGameSyncException;
 import com.jellyfish.jfgonyx.onyx.interfaces.OnyxBoardI;
-import com.jellyfish.jfgonyx.onyx.searchlib.OnyxIntmap;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
 import java.util.HashMap;
 import java.util.List;
@@ -104,7 +103,7 @@ public class OnyxGame {
     
     public static void appendMove(final OnyxPos pos, final OnyxPiece piece, final List<OnyxPos> captured) {
         OnyxGame.moves.put(OnyxGame.moves.size() + 1, 
-            new OnyxMove(pos, piece, captured)
+            new OnyxMove(pos, piece, captured, false)
         );
     }
     

@@ -29,7 +29,7 @@
  * POSSIBILITY OF SUCH DAMAGE. 
  ******************************************************************************
  */
-package com.jellyfish.jfgonyx.onyx.searchlib;
+package com.jellyfish.jfgonyx.onyx;
 
 import com.jellyfish.jfgonyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
@@ -48,6 +48,9 @@ import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author thw
+ * static linear and matricial integer arrays represent empty boards for compare
+ * usages. linear_intmap & mtx_intmap contain board's integer state value(s).
+ * text_representation String array is only for print purposes.
  */
 public class OnyxIntmap {
     
@@ -59,14 +62,17 @@ public class OnyxIntmap {
     private static final String LINE_START_FORMAT = "[%.1f]";
     private static final String NEW_LINE = "\n";
     private final String[] text_representation;
+    private final int[] linear_static;
+    private final int[][] mtx_static;
     
     public OnyxIntmap(final OnyxPosCollection c) {
         final int w = (OnyxConst.BOARD_SIDE_SQUARE_COUNT * 2) + 1;
         this.width = w;
         this.mtx_intmap = new int[w][w];
+        this.linear_static = new int[(int) Math.pow(w, 2.0)];
+        this.mtx_static = new int[w][w];
         this.text_representation = new String[w];
         this.linear_intmap = this.build(c);
-        
     }
     
     private int[] build(final OnyxPosCollection c) {
@@ -85,6 +91,8 @@ public class OnyxIntmap {
                 l += bmap[i] > 1 ? StringUtils.SPACE + StringUtils.SPACE :
                         StringUtils.SPACE + bmap[i];
                 this.mtx_intmap[j][k] = bmap[i];
+                this.mtx_static[j][k] = tmp == null ? 3 : 2;
+                this.linear_static[i] = tmp == null ? 3 : 2;
                 ++i;
                 ++k;
             }

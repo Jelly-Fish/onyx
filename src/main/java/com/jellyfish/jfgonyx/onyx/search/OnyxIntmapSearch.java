@@ -29,65 +29,71 @@
  * POSSIBILITY OF SUCH DAMAGE. 
  ******************************************************************************
  */
-package com.jellyfish.jfgonyx.onyx;
+package com.jellyfish.jfgonyx.onyx.search;
 
 import com.jellyfish.jfgonyx.constants.GraphicsConst;
+import com.jellyfish.jfgonyx.onyx.OnyxIntmap;
+import com.jellyfish.jfgonyx.onyx.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.abstractions.AbstractOnyxSearch;
-import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
-import com.jellyfish.jfgonyx.onyx.interfaces.OnyxPositionSearchable;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPosCollection;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException;
-import com.jellyfish.jfgonyx.onyx.searchlib.*;
+import com.jellyfish.jfgonyx.onyx.interfaces.OnyxRandomSeachable;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
+import java.awt.Point;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.apache.commons.lang3.StringUtils;
 
 /**
+ *
  * @author thw
  */
-class OnyxPositionSearch extends AbstractOnyxSearch implements OnyxPositionSearchable {
-    
-    /**
-     * Look for all possible take moves
-     * IF diamond has 2 corners set to != color
-     *   Search for neighbour diamonds with similar configuration
-     *   IF found then double take
-     * ELSE Look for counter attacks
-     *   Prevent full set diamonds where != color
-     * ELSE play neighbour != color positions
-     *   Find forward positions depending on color
-     */
+public class OnyxIntmapSearch extends AbstractOnyxSearch implements OnyxRandomSeachable {
+
     @Override
-    public OnyxMove search(final OnyxPosCollection c, final OnyxBoard board, final GraphicsConst.COLOR color) 
-            throws NoValidOnyxPositionsFoundException {
+    public OnyxMove search(final OnyxPosCollection c, final OnyxBoard board, 
+            final GraphicsConst.COLOR color) throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
+        
+        final boolean win = this.isWin(new OnyxIntmap(c), color);
+        return null;
+    }
     
-        try {
+    /*
+     * Depending on color
+     *   IF pos found on both sides THEN
+     *     seak connection
+     *     IF connection found return true
+     *     ELSE return false
+     *   ELSE return false
+     */
+    private boolean isWin(final OnyxIntmap imap, final GraphicsConst.COLOR c) {
         
-            List<OnyxPos> captured = null;
-            String take = SearchTakePosition.getTakePos(c, board, color.bitColor);
-            final String counter = SearchCounterPosition.getCounterPos(c, board, color.bitColor);
-            final String neighbour = SearchNeighBour.getNeighbourPos(c, board, color.bitColor);
-
-            if (!StringUtils.isBlank(take)) {
-                captured = c.getTakePositions(take, color.bitColor, board);
-                c.performTake(take, color.bitColor, board);
-            }
-
-            return StringUtils.isBlank(take) ? 
-                    (StringUtils.isBlank(counter) ? 
-                        (StringUtils.isBlank(neighbour) ? null : 
-                    new OnyxMove(c.getPosition(neighbour), c.getPosition(neighbour).getPiece(), null)) : 
-                    new OnyxMove(c.getPosition(counter), c.getPosition(counter).getPiece(), null)) : 
-                    new OnyxMove(c.getPosition(take), c.getPosition(take).getPiece(), captured);
+        final int[][] mtx = imap.getMtx_intmap();
+        final List<Point> bounds = this.getStartIndexes(mtx, c.bitColor);
+        return false;
+    }
+    
+    private List<Point> getStartIndexes(final int[][] mtx, final int bitColor) {
         
-        } catch (final InvalidOnyxPositionException Iopex) {
-            Logger.getLogger(OnyxPositionSearch.class.getName()).log(Level.SEVERE, null, Iopex);
+        final List<Point> p = new ArrayList<>();
+        
+        for (int i = 0; i < mtx.length; i++) {
+            if (mtx[i][0] == bitColor) p.add(new Point(i, 0));
         }
         
-        throw new NoValidOnyxPositionsFoundException();
+        for (int i = 0; i < mtx.length; i++) {
+            if (mtx[i][mtx[i].length - 1] == bitColor) p.add(new Point(i, mtx[i].length - 1));
+        }
+        
+        for (int i = 0; i < mtx.length; i++) {
+            if (mtx[0][i] == bitColor) p.add(new Point(0, i));
+        }
+        
+        for (int i = 0; i < mtx.length; i++) {
+            if (mtx[mtx[i].length - 1][i] == bitColor) p.add(new Point(mtx[i].length - 1, i));
+        }
+        
+        return p;
     }
     
 }

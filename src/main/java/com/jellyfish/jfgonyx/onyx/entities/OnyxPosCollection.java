@@ -62,7 +62,8 @@ public class OnyxPosCollection {
                 if (!this.positions.containsValue(p)) {
                     k = String.format(OnyxPosCollection.KEY_FORMAT, p.x, p.y);
                     this.positions.put(k, p);
-                    m = new OnyxMove(this.positions.get(k), this.positions.get(k).getPiece(), null);
+                    m = new OnyxMove(this.positions.get(k), this.positions.get(k).getPiece(), 
+                            null, false);
                     OnyxGame.appendMove(m);
                 }
             }

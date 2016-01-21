@@ -29,44 +29,35 @@
  * POSSIBILITY OF SUCH DAMAGE. 
  ******************************************************************************
  */
-package com.jellyfish.jfgonyx.onyx.searchlib;
+package com.jellyfish.jfgonyx.onyx.search;
 
-import com.jellyfish.jfgonyx.onyx.entities.OnyxDiamond;
+import com.jellyfish.jfgonyx.onyx.interfaces.OnyxRandomSeachable;
+import com.jellyfish.jfgonyx.constants.GraphicsConst;
+import com.jellyfish.jfgonyx.onyx.OnyxMove;
+import com.jellyfish.jfgonyx.onyx.abstractions.AbstractOnyxSearch;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPosCollection;
+import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
-import org.apache.commons.lang3.StringUtils;
 
 /**
  *
  * @author thw
  */
-public class SearchCounterPosition {
+public class OnyxRandomSearch extends AbstractOnyxSearch implements OnyxRandomSeachable {
     
-    /**
-     * @param c Onyx position collection.
-     * @param b Onyx board instance.
-     * @param bitColor the color to play's bit value (0=white, 1=black).
-     * @return Strongest counter attack move found (to prevent sealing positions) 
-     * or NULL if no such position has been found.
-     */
-    public static String getCounterPos(final OnyxPosCollection c, final OnyxBoard b, final int bitColor) throws NoValidOnyxPositionsFoundException {
-
-        int count;
-        OnyxPos pos = null;
-        String key = StringUtils.EMPTY;
-        for (OnyxDiamond d : b.getDiamondCollection().getDiamonds().values()) {
-            count = 0;
-            for (String k : d.getCornerKeys()) {
-                pos = c.getPosition(k);
-                if (pos.isOccupied() && pos.getPiece().color.bitColor != bitColor) ++count;
-                else key = k;
+    @Override
+    public OnyxMove search(final OnyxPosCollection c, final OnyxBoard board, final GraphicsConst.COLOR color)
+            throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
+        
+        for (OnyxPos p : c.getPositions().values()) {
+            if (!p.isOccupied() && !p.isDiamondCenter()) {
+                return new OnyxMove(p, null, null, false);
             }
-            if (count == 3 && !c.getPosition(key).isOccupied()) return key;
         }
         
-        return null;
+        throw new NoValidOnyxPositionsFoundException();
     }
     
 }

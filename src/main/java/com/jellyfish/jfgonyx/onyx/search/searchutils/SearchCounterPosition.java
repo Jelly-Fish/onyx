@@ -29,56 +29,44 @@
  * POSSIBILITY OF SUCH DAMAGE. 
  ******************************************************************************
  */
-package com.jellyfish.jfgonyx.onyx;
+package com.jellyfish.jfgonyx.onyx.search.searchutils;
 
-import com.jellyfish.jfgonyx.constants.OnyxConst;
-import com.jellyfish.jfgonyx.onyx.entities.OnyxPiece;
+import com.jellyfish.jfgonyx.onyx.entities.OnyxDiamond;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
-import java.util.List;
+import com.jellyfish.jfgonyx.onyx.entities.OnyxPosCollection;
+import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException;
+import com.jellyfish.jfgonyx.ui.OnyxBoard;
 import org.apache.commons.lang3.StringUtils;
 
 /**
+ *
  * @author thw
  */
-public class OnyxMove {
+public class SearchCounterPosition {
     
-    private final OnyxPos pos;
-    private final OnyxPiece piece;
-    private final List<OnyxPos> captured;
-    private final boolean win;
+    /**
+     * @param c Onyx position collection.
+     * @param b Onyx board instance.
+     * @param bitColor the color to play's bit value (0=white, 1=black).
+     * @return Strongest counter attack move found (to prevent sealing positions) 
+     * or NULL if no such position has been found.
+     */
+    public static String getCounterPos(final OnyxPosCollection c, final OnyxBoard b, final int bitColor) throws NoValidOnyxPositionsFoundException {
 
-    public OnyxMove(final OnyxPos pos, final OnyxPiece piece, final List<OnyxPos> captured, 
-            final boolean win) {
-        this.pos = pos;
-        this.piece = piece;
-        this.win = win;
-        this.captured = captured;
-    }
-    
-    public boolean isCapture() {
-        return this.captured != null;
-    }
-    
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(OnyxConst.POS_MAP.get(this.pos.getKey()));
-        if (this.captured != null && this.captured.size() > 0) {
-            sb.append(this.captured.size() == 2 ? "*" : this.captured.size() == 4 ? "**" : StringUtils.EMPTY);
+        int count;
+        OnyxPos pos = null;
+        String key = StringUtils.EMPTY;
+        for (OnyxDiamond d : b.getDiamondCollection().getDiamonds().values()) {
+            count = 0;
+            for (String k : d.getCornerKeys()) {
+                pos = c.getPosition(k);
+                if (pos.isOccupied() && pos.getPiece().color.bitColor != bitColor) ++count;
+                else key = k;
+            }
+            if (count == 3 && !c.getPosition(key).isOccupied()) return key;
         }
-        return sb.toString();
-    }
-    
-    public List<OnyxPos> getCaptured() {
-        return captured;
-    }
-
-    public OnyxPos getPos() {
-        return pos;
-    }
-
-    public OnyxPiece getPiece() {
-        return piece;
+        
+        return null;
     }
     
 }

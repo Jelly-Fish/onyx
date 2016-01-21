@@ -29,31 +29,65 @@
  * POSSIBILITY OF SUCH DAMAGE. 
  ******************************************************************************
  */
-package com.jellyfish.jfgonyx.onyx;
+package com.jellyfish.jfgonyx.onyx.search;
 
-import com.jellyfish.jfgonyx.onyx.interfaces.OnyxRandomSeachable;
+import com.jellyfish.jfgonyx.onyx.search.searchutils.SearchNeighBour;
+import com.jellyfish.jfgonyx.onyx.search.searchutils.SearchCounterPosition;
+import com.jellyfish.jfgonyx.onyx.search.searchutils.SearchTakePosition;
 import com.jellyfish.jfgonyx.constants.GraphicsConst;
+import com.jellyfish.jfgonyx.onyx.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.abstractions.AbstractOnyxSearch;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
+import com.jellyfish.jfgonyx.onyx.interfaces.OnyxPositionSearchable;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPosCollection;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.apache.commons.lang3.StringUtils;
 
 /**
- *
  * @author thw
  */
-class OnyxRandomSearch extends AbstractOnyxSearch implements OnyxRandomSeachable {
+public class OnyxPositionSearch extends AbstractOnyxSearch implements OnyxPositionSearchable {
     
+    /*
+     * Look for all possible take moves
+     * IF diamond has 2 corners set to != color
+     *   Search for neighbour diamonds with similar configuration
+     *   IF found then double take
+     * ELSE Look for counter attacks
+     *   Prevent full set diamonds where != color
+     * ELSE play neighbour != color positions
+     *   Find forward positions depending on color
+     */
     @Override
-    public OnyxMove search(final OnyxPosCollection c, final OnyxBoard board, final GraphicsConst.COLOR color)
-            throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
+    public OnyxMove search(final OnyxPosCollection c, final OnyxBoard board, final GraphicsConst.COLOR color) 
+            throws NoValidOnyxPositionsFoundException {
+    
+        try {
         
-        for (OnyxPos p : c.getPositions().values()) {
-            if (!p.isOccupied() && !p.isDiamondCenter()) {
-                return new OnyxMove(p, null, null);
+            List<OnyxPos> captured = null;
+            String take = SearchTakePosition.getTakePos(c, board, color.bitColor);
+            final String counter = SearchCounterPosition.getCounterPos(c, board, color.bitColor);
+            final String neighbour = SearchNeighBour.getNeighbourPos(c, board, color.bitColor);
+
+            if (!StringUtils.isBlank(take)) {
+                captured = c.getTakePositions(take, color.bitColor, board);
+                c.performTake(take, color.bitColor, board);
             }
+
+            return StringUtils.isBlank(take) ? 
+                    (StringUtils.isBlank(counter) ? 
+                        (StringUtils.isBlank(neighbour) ? null : 
+                    new OnyxMove(c.getPosition(neighbour), c.getPosition(neighbour).getPiece(), null, false)) : 
+                    new OnyxMove(c.getPosition(counter), c.getPosition(counter).getPiece(), null, false)) : 
+                    new OnyxMove(c.getPosition(take), c.getPosition(take).getPiece(), captured, false);
+        
+        } catch (final InvalidOnyxPositionException Iopex) {
+            Logger.getLogger(OnyxPositionSearch.class.getName()).log(Level.SEVERE, null, Iopex);
         }
         
         throw new NoValidOnyxPositionsFoundException();
