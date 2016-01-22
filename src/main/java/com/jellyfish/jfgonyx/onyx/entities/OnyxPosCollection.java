@@ -108,6 +108,7 @@ public class OnyxPosCollection {
         
         if (StringUtils.isBlank(key)) throw new InvalidOnyxPositionException();
 
+        List<OnyxPos> captured = new ArrayList<>();
         String[] keys = null;
         int i, j, lI;
         for (OnyxDiamond d : board.getDiamondCollection().getDiamondsByPosKey(key)) {
@@ -116,6 +117,12 @@ public class OnyxPosCollection {
                 board.getPosCollection().getPosition(d.getCenterPos().getKey()).isOccupied()) {
                 continue;
             }
+            
+            /**
+             * FIXME : take search finds double take but it is not performed.
+             * NOTE ! : on N iteration, position piece is set to null which
+             * braks the next iteration evalution.
+             */
             
             lI = 0; i = 0; j = 0;
             keys = d.getCornerKeys();
@@ -144,10 +151,17 @@ public class OnyxPosCollection {
                             !key.equals(k) && 
                             board.getPosCollection().positions.get(k).isOccupied() &&
                             board.getPosCollection().positions.get(k).getPiece().color.bitColor != bitColor) {
-                        board.getPosCollection().getPosition(k).setPiece(null);
+                        captured.add(board.getPosCollection().getPosition(k));
                     }
                 }
             }
+        }
+        
+        /**
+         * Finally, remove all captured pieces.
+         */
+        for (OnyxPos p : captured) {
+            board.getPosCollection().getPosition(p.getKey()).setPiece(null);
         }
     }
 

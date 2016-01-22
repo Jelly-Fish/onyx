@@ -67,31 +67,37 @@ public class SearchTakePosition {
             i = 0;
             for (String k : d.getCornerKeys()) {
                 positions[i] = c.getPosition(k);
-                count = positions[i].isOccupied() ? ++count : count;
+                count = c.getPosition(positions[i].getKey()).isOccupied() ? ++count : count;
                 ++i;
             }
             
-            if (positions[0].isOccupied() && positions[2].isOccupied() &&
-                    positions[0].getPiece().color.bitColor != bitColor && 
-                    positions[2].getPiece().color.bitColor != bitColor) { 
+            if (c.getPosition(positions[0].getKey()).isOccupied() && 
+                    c.getPosition(positions[2].getKey()).isOccupied() &&
+                    c.getPosition(positions[0].getKey()).getPiece().color.bitColor != bitColor && 
+                    c.getPosition(positions[2].getKey()).getPiece().color.bitColor != bitColor) { 
                 
-                if (positions[3].isOccupied() && positions[3].getPiece().color.bitColor == bitColor &&
-                        !positions[1].isOccupied()) {
+                if (c.getPosition(positions[3].getKey()).isOccupied() && 
+                        c.getPosition(positions[3].getKey()).getPiece().color.bitColor == bitColor &&
+                        !c.getPosition(positions[1].getKey()).isOccupied()) {
                     posSet.add(positions[1]);
-                } else if (positions[1].isOccupied() && positions[1].getPiece().color.bitColor == bitColor &&
-                        !positions[3].isOccupied()) {
-                    posSet.add(positions[3]);
+                } else if (c.getPosition(positions[1].getKey()).isOccupied() && 
+                        c.getPosition(positions[1].getKey()).getPiece().color.bitColor == bitColor &&
+                        !c.getPosition(positions[3].getKey()).isOccupied()) {
+                    posSet.add(c.getPosition(positions[3].getKey()));
                 }
-            } else if (positions[1].isOccupied() && positions[3].isOccupied() &&
-                    positions[1].getPiece().color.bitColor != bitColor && 
-                    positions[3].getPiece().color.bitColor != bitColor) {
+            } else if (c.getPosition(positions[1].getKey()).isOccupied() && 
+                    c.getPosition(positions[3].getKey()).isOccupied() &&
+                    c.getPosition(positions[1].getKey()).getPiece().color.bitColor != bitColor && 
+                    c.getPosition(positions[3].getKey()).getPiece().color.bitColor != bitColor) {
                 
-                if (positions[2].isOccupied() && positions[2].getPiece().color.bitColor == bitColor &&
-                        !positions[0].isOccupied()) {
-                    posSet.add(positions[0]);
-                } else if (positions[0].isOccupied() && positions[0].getPiece().color.bitColor == bitColor &&
-                        !positions[2].isOccupied()) {
-                    posSet.add(positions[2]);
+                if (c.getPosition(positions[2].getKey()).isOccupied() && 
+                    c.getPosition(positions[2].getKey()).getPiece().color.bitColor == bitColor &&
+                        !c.getPosition(positions[0].getKey()).isOccupied()) {
+                    posSet.add(c.getPosition(positions[0].getKey()));
+                } else if (c.getPosition(positions[0].getKey()).isOccupied() && 
+                        c.getPosition(positions[0].getKey()).getPiece().color.bitColor == bitColor &&
+                        !c.getPosition(positions[2].getKey()).isOccupied()) {
+                    posSet.add(c.getPosition(positions[2].getKey()));
                 }
             }
         }
@@ -109,6 +115,10 @@ public class SearchTakePosition {
                 i = posSet.indexOf(p);
             }            
         }
+        
+        /**
+         * FIXME : finds double take but perform take in pos collection needs a fix.
+         */
         
         if (i > -1) return posSet.get(i).getKey();
         
