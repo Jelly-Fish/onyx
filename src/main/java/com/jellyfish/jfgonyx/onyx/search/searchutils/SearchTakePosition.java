@@ -116,10 +116,6 @@ public class SearchTakePosition {
             }            
         }
         
-        /**
-         * FIXME : finds double take but perform take in pos collection needs a fix.
-         */
-        
         if (i > -1) return posSet.get(i).getKey();
         
         return null;

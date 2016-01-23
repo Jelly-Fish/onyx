@@ -69,14 +69,16 @@ public class OnyxPositionSearch extends AbstractOnyxSearch implements OnyxPositi
     
         try {
         
-            List<OnyxPos> captured = null;
+            List<OnyxPos> posSet = null;
             String take = SearchTakePosition.getTakePos(c, board, color.bitColor);
             final String counter = SearchCounterPosition.getCounterPos(c, board, color.bitColor);
             final String neighbour = SearchNeighBour.getNeighbourPos(c, board, color.bitColor);
 
             if (!StringUtils.isBlank(take)) {
-                captured = c.getTakePositions(take, color.bitColor, board);
-                c.performTake(take, color.bitColor, board);
+                posSet = c.getTakePositions(take, color.bitColor, board);
+                System.out.println(OnyxPositionSearch.class.getSimpleName() + 
+                        " >> take pos size = " + posSet.size());
+                posSet = c.performTake(take, color.bitColor, board);
             }
 
             return StringUtils.isBlank(take) ? 
@@ -84,7 +86,7 @@ public class OnyxPositionSearch extends AbstractOnyxSearch implements OnyxPositi
                         (StringUtils.isBlank(neighbour) ? null : 
                     new OnyxMove(c.getPosition(neighbour), c.getPosition(neighbour).getPiece(), null, false)) : 
                     new OnyxMove(c.getPosition(counter), c.getPosition(counter).getPiece(), null, false)) : 
-                    new OnyxMove(c.getPosition(take), c.getPosition(take).getPiece(), captured, false);
+                    new OnyxMove(c.getPosition(take), c.getPosition(take).getPiece(), posSet, false);
         
         } catch (final InvalidOnyxPositionException Iopex) {
             Logger.getLogger(OnyxPositionSearch.class.getName()).log(Level.SEVERE, null, Iopex);
