@@ -31,63 +31,50 @@
  */
 package com.jellyfish.jfgonyx.ui;
 
-import com.jellyfish.jfgonyx.constants.GraphicsConst;
-import com.jellyfish.jfgonyx.helpers.MainPanelGHelper;
 import com.jellyfish.jfgonyx.onyx.OnyxGame;
-import com.jellyfish.jfgonyx.onyx.OnyxMove;
-import com.jellyfish.jfgonyx.onyx.interfaces.OnyxObserver;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.util.LinkedList;
-import javax.swing.JPanel;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import org.apache.commons.lang3.StringUtils;
 
 /**
+ *
  * @author thw
  */
-public class OnyxPanel extends JPanel implements OnyxObserver {
+public class OnyxMoveHistory extends javax.swing.JTextArea implements MouseListener {
 
-    private final Font font = new Font("consolas", Font.BOLD, 14);
-    private final LinkedList<String> move_labels = new LinkedList<>();
-    private final String label_format = "%d: %s";
-    private OnyxMoveHistory moveHistory;
+    private final OnyxPanel panel;
     
-    public OnyxPanel() {
+    public OnyxMoveHistory(final OnyxPanel parent) {
         super();
-        this.setDoubleBuffered(true);
-        this.setBackground(GraphicsConst.MAIN_PANEL_BACKGROUND_COLOR);
+        this.panel = parent;
+        this.setFocusable(false);
     }
     
-    @Override
-    public void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        MainPanelGHelper.drawMove(g, this.font, this.label_format, this.move_labels);
+    public void appendMove(final String s) {
+        this.append(s + "\n");
     }
-    
-    @Override
-    public void notifyMove(final OnyxMove m) {
-        this.move_labels.add(m.toString());
-        this.updateMoveHistory();
-        this.repaint();
+
+    void clear() {
+        this.setText(StringUtils.EMPTY);
     }
-    
-    public void init() {
         
-        this.moveHistory = new OnyxMoveHistory(this);
-        this.moveHistory.setLineWrap(true);
-        this.moveHistory.setWrapStyleWord(true);
-        this.add(this.moveHistory);
-        
-        for (OnyxMove m : OnyxGame.getMoves().values()) {
-            if (m.getPos().isOccupied()) {
-                this.move_labels.add(m.toString());
-            }
-        }
-        this.updateMoveHistory();
+    @Override
+    public void mouseClicked(MouseEvent e) { }
+
+    @Override
+    public void mousePressed(MouseEvent e) { }
+
+    @Override
+    public void mouseReleased(MouseEvent e) { }
+
+    @Override
+    public void mouseEntered(MouseEvent e) { 
+        this.requestFocus();
     }
-    
-    private void updateMoveHistory() {
-        this.moveHistory.clear();
-        for (String m : this.move_labels) this.moveHistory.appendMove(m);
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+        OnyxGame.boardInterface.focus();
     }
     
 }

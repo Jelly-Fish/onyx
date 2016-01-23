@@ -56,7 +56,7 @@ public class OnyxGame {
     private static boolean requestInitialized = false;
     public static boolean initialized = false;
     public static boolean wait = false;
-    private static OnyxBoardI boardInterface = null;
+    public static OnyxBoardI boardInterface = null;
     public static String dtStamp;
     private static int moveCount = 0;
     

@@ -56,4 +56,6 @@ public interface OnyxBoardI {
 
     void setObserver(final OnyxObserver observer);
     
+    void focus();
+    
 }

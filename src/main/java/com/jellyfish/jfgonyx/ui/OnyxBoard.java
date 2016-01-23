@@ -162,4 +162,9 @@ public class OnyxBoard extends javax.swing.JPanel implements OnyxBoardI {
         this.observer = observer;
     }
 
+    @Override
+    public void focus() {
+        this.requestFocus();
+    }
+
 }
