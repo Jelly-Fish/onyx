@@ -75,7 +75,7 @@ public class OnyxBoard extends javax.swing.JPanel implements OnyxBoardI {
         this.addMouseListener(mouseInput);
         this.addMouseMotionListener(mouseInput);
         this.setFocusable(true);
-        this.requestFocusInWindow();
+        this.focus();
     }
     
     @Override
@@ -163,7 +163,7 @@ public class OnyxBoard extends javax.swing.JPanel implements OnyxBoardI {
     }
 
     @Override
-    public void focus() {
+    public final void focus() {
         this.requestFocus();
     }
 

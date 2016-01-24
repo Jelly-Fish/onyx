@@ -67,7 +67,7 @@ public class MouseInput implements MouseListener, MouseMotionListener {
     public void mouseMoved(MouseEvent e) { }
     
     @Override
-    public void mousePressed(MouseEvent e) { 
+    public void mousePressed(MouseEvent e) {
         this.mouseDown = true;
         this.board.setCursor(this.GRAB_CURSOR);
         BoardDragger.getInstance().update(e, this.board);

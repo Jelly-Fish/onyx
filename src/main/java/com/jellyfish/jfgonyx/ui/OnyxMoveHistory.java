@@ -32,49 +32,82 @@
 package com.jellyfish.jfgonyx.ui;
 
 import com.jellyfish.jfgonyx.onyx.OnyxGame;
+import java.awt.Cursor;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionListener;
 import org.apache.commons.lang3.StringUtils;
 
 /**
  *
  * @author thw
  */
-public class OnyxMoveHistory extends javax.swing.JTextArea implements MouseListener {
+public class OnyxMoveHistory extends javax.swing.JTextArea {
 
     private final OnyxPanel panel;
+    private int screenX, screenY, xPos, yPos;
+    private final Cursor GRAB_CURSOR = new Cursor(Cursor.MOVE_CURSOR);
+    private final Cursor CURSOR = new Cursor(Cursor.DEFAULT_CURSOR);
     
     public OnyxMoveHistory(final OnyxPanel parent) {
         super();
         this.panel = parent;
-        this.setFocusable(false);
+        this.setFocusable(true);
+        this.setEditable(false);
+        this.setDoubleBuffered(true);
+        this.initListeners();
     }
-    
-    public void appendMove(final String s) {
-        this.append(s + "\n");
+        
+    public void appendMove(final String m) {
+        this.append(m);
     }
 
     void clear() {
         this.setText(StringUtils.EMPTY);
     }
+
+    private void initListeners() {
         
-    @Override
-    public void mouseClicked(MouseEvent e) { }
+        this.addMouseListener(new MouseListener() {
+            
+            @Override
+            public void mouseClicked(MouseEvent e) { }
+                
+            @Override
+            public void mousePressed(MouseEvent e) {
+                screenX = e.getXOnScreen();
+                screenY = e.getYOnScreen();
+                xPos = getX();
+                yPos = getY();
+                setCursor(GRAB_CURSOR);
+            }
+            
+            @Override
+            public void mouseExited(MouseEvent e) { 
+                OnyxGame.boardInterface.focus();
+                setCursor(CURSOR);
+            }
 
-    @Override
-    public void mousePressed(MouseEvent e) { }
+            @Override
+            public void mouseReleased(MouseEvent e) { setCursor(CURSOR); }
 
-    @Override
-    public void mouseReleased(MouseEvent e) { }
+            @Override
+            public void mouseEntered(MouseEvent e) { }
+        });
+        
+        addMouseMotionListener(new MouseMotionListener() {
 
-    @Override
-    public void mouseEntered(MouseEvent e) { 
-        this.requestFocus();
-    }
+            @Override
+            public void mouseDragged(MouseEvent e) {
+                setCursor(GRAB_CURSOR);
+                final int deltaX = e.getXOnScreen() - screenX;
+                final int deltaY = e.getYOnScreen() - screenY;
+                setLocation(xPos + deltaX, yPos + deltaY);
+            }
 
-    @Override
-    public void mouseExited(MouseEvent e) {
-        OnyxGame.boardInterface.focus();
+            @Override
+            public void mouseMoved(MouseEvent e) { setCursor(GRAB_CURSOR); }
+        });
     }
     
 }

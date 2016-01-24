@@ -31,6 +31,7 @@
 package com.jellyfish.jfgonyx.ui;
 
 import com.jellyfish.jfgonyx.constants.GraphicsConst;
+import java.awt.BorderLayout;
 import java.awt.Toolkit;
 
 /**
@@ -50,12 +51,12 @@ public class MainFrame extends javax.swing.JFrame {
      */
     public MainFrame(final OnyxPanel panel, final OnyxBoard board) {
         initComponents();
+        this.setLayout(new BorderLayout());
         this.mainPanel = panel;
         this.mainPanel.add(board);
-        this.mainScrollPane.add(mainPanel);
-        this.mainScrollPane.setViewportView(mainPanel);
+        this.add(this.mainPanel);
         this.pack();
-        this.setSize(GraphicsConst.BOARD_WIDTH + 18, GraphicsConst.BOARD_WIDTH + 66);
+        this.setSize(GraphicsConst.BOARD_WIDTH + 120, GraphicsConst.BOARD_WIDTH + 66);
         this.initialHeight = this.getHeight();
         this.initialWidth = this.getWidth();
         this.setLocation(((int)(Toolkit.getDefaultToolkit().getScreenSize().getWidth() / 2)) - 
@@ -73,22 +74,12 @@ public class MainFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        mainScrollPane = new javax.swing.JScrollPane();
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         editMenu = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setName("mainFrame"); // NOI18N
-        addComponentListener(new java.awt.event.ComponentAdapter() {
-            public void componentResized(java.awt.event.ComponentEvent evt) {
-                formComponentResized(evt);
-            }
-        });
-
-        mainScrollPane.setBorder(null);
-        mainScrollPane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        mainScrollPane.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
 
         menuBar.setDoubleBuffered(true);
 
@@ -104,31 +95,20 @@ public class MainFrame extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(mainScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 387, Short.MAX_VALUE)
+            .addGap(0, 387, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(mainScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 522, Short.MAX_VALUE)
+            .addGap(0, 522, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void formComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentResized
-        if (this.getWidth() < this.initialWidth && this.getHeight() < this.initialHeight) {
-            this.updateScrollPanePolicy();
-        }
-    }//GEN-LAST:event_formComponentResized
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu editMenu;
     private javax.swing.JMenu fileMenu;
-    private javax.swing.JScrollPane mainScrollPane;
     private javax.swing.JMenuBar menuBar;
     // End of variables declaration//GEN-END:variables
 
-    private void updateScrollPanePolicy() {
-        mainScrollPane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        mainScrollPane.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-    }
 }

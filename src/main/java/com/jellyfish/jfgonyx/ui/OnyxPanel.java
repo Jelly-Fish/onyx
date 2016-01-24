@@ -87,7 +87,12 @@ public class OnyxPanel extends JPanel implements OnyxObserver {
     
     private void updateMoveHistory() {
         this.moveHistory.clear();
-        for (String m : this.move_labels) this.moveHistory.appendMove(m);
+        for (int i = 0; i < this.move_labels.size(); ++i) {
+            this.moveHistory.appendMove(
+                String.format(this.label_format, i + 1, this.move_labels.get(i)) +
+                "\n"
+            );
+        }
     }
     
 }
