@@ -49,7 +49,6 @@ public class OnyxPanel extends JPanel implements OnyxObserver {
     private final Font font = new Font("consolas", Font.BOLD, 14);
     private final LinkedList<String> move_labels = new LinkedList<>();
     private final String label_format = "%d: %s";
-    private OnyxMoveHistory moveHistory;
     
     public OnyxPanel() {
         super();
@@ -66,32 +65,15 @@ public class OnyxPanel extends JPanel implements OnyxObserver {
     @Override
     public void notifyMove(final OnyxMove m) {
         this.move_labels.add(m.toString());
-        this.updateMoveHistory();
         this.repaint();
     }
     
     public void init() {
         
-        this.moveHistory = new OnyxMoveHistory(this);
-        this.moveHistory.setLineWrap(true);
-        this.moveHistory.setWrapStyleWord(true);
-        this.add(this.moveHistory);
-        
         for (OnyxMove m : OnyxGame.getMoves().values()) {
             if (m.getPos().isOccupied()) {
                 this.move_labels.add(m.toString());
             }
-        }
-        this.updateMoveHistory();
-    }
-    
-    private void updateMoveHistory() {
-        this.moveHistory.clear();
-        for (int i = 0; i < this.move_labels.size(); ++i) {
-            this.moveHistory.appendMove(
-                String.format(this.label_format, i + 1, this.move_labels.get(i)) +
-                "\n"
-            );
         }
     }
     

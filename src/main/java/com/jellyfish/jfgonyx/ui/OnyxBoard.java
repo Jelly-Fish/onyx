@@ -48,7 +48,6 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 
 /**
- *
  * @author thw
  */
 public class OnyxBoard extends javax.swing.JPanel implements OnyxBoardI {
@@ -96,7 +95,6 @@ public class OnyxBoard extends javax.swing.JPanel implements OnyxBoardI {
         this.positions.getPosition("1,0-7,0").addPiece(new OnyxPiece(GraphicsConst.COLOR.BLACK));
         this.positions.getPosition("12,0-6,0").addPiece(new OnyxPiece(GraphicsConst.COLOR.BLACK));
         this.positions.getPosition("12,0-7,0").addPiece(new OnyxPiece(GraphicsConst.COLOR.BLACK));
-        
     }
     
     @Override

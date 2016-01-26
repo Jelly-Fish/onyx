@@ -56,6 +56,7 @@ public class BoardDragger implements OnyxExecutable {
     }
     
     public void update(MouseEvent e, final OnyxBoard board) {
+        
         if (board.contains(e.getPoint())) {
             this.iX = e.getLocationOnScreen().x - board.getX();
             this.iY = e.getLocationOnScreen().y - board.getY();
