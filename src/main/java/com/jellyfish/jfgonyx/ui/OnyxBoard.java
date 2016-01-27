@@ -39,6 +39,7 @@ import com.jellyfish.jfgonyx.onyx.entities.OnyxPosCollection;
 import com.jellyfish.jfgonyx.helpers.OnyxBoardGHelper;
 import com.jellyfish.jfgonyx.io.KeyInput;
 import com.jellyfish.jfgonyx.io.MouseInput;
+import com.jellyfish.jfgonyx.onyx.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import com.jellyfish.jfgonyx.onyx.interfaces.OnyxBoardI;
 import com.jellyfish.jfgonyx.onyx.interfaces.OnyxObserver;
@@ -46,6 +47,8 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author thw
@@ -56,7 +59,7 @@ public class OnyxBoard extends javax.swing.JPanel implements OnyxBoardI {
     private final OnyxPosCollection positions;
     private final KeyInput keyInput;
     private final MouseInput mouseInput;
-    private OnyxObserver observer;
+    private final List<OnyxObserver> observers = new ArrayList<>();
     
     public OnyxBoard(final OnyxDiamondCollection diamonds, final OnyxPosCollection positions) {
         
@@ -151,13 +154,15 @@ public class OnyxBoard extends javax.swing.JPanel implements OnyxBoardI {
     }
     
     @Override
-    public OnyxObserver getObserver() {
-        return observer;
+    public void notifyMove(final OnyxMove m) {
+        for (OnyxObserver obs : this.observers) {
+            obs.notifyMove(m);
+        }
     }
 
     @Override
     public void setObserver(final OnyxObserver observer) {
-        this.observer = observer;
+        this.observers.add(observer);
     }
 
     @Override

@@ -31,19 +31,37 @@
 package com.jellyfish.jfgonyx.ui;
 
 import com.jellyfish.jfgonyx.constants.GraphicsConst;
-import java.awt.BorderLayout;
+import com.jellyfish.jfgonyx.onyx.OnyxGame;
+import com.jellyfish.jfgonyx.onyx.OnyxMove;
+import com.jellyfish.jfgonyx.onyx.interfaces.OnyxObserver;
+import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.io.IOException;
+import java.util.LinkedList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JTextPane;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
+import javax.swing.text.html.HTMLDocument;
+import javax.swing.text.html.HTMLEditorKit;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  *
  * @author thw
  */
-public class MainFrame extends javax.swing.JFrame {
+public class MainFrame extends javax.swing.JFrame implements OnyxObserver {
 
     private final OnyxPanel mainPanel;
-    private final OnyxBoard board;
     private final int initialWidth;
     private final int initialHeight;
+    private final LinkedList<String> move_labels = new LinkedList<>();
+    private final String label_format = "%d: %s\n";
+    private HTMLEditorKit htmlEditorKit = null;
+    private Document doc = null;
     
     /**
      * Creates new form MainFrame
@@ -53,19 +71,16 @@ public class MainFrame extends javax.swing.JFrame {
     public MainFrame(final OnyxPanel panel, final OnyxBoard board) {
         
         initComponents();
-        this.board = board;
         this.mainPanel = panel;
-        this.mainPanel.add(board);
-        this.mainScrollPane.add(mainPanel);
-        this.mainScrollPane.setViewportView(mainPanel);
-        this.pack();
         this.initialHeight = board.getHeight();
         this.initialWidth = board.getWidth();
-        this.setSize(GraphicsConst.BOARD_WIDTH + 18, GraphicsConst.BOARD_WIDTH + 66);
-        this.setLocation(((int)(Toolkit.getDefaultToolkit().getScreenSize().getWidth() / 2)) - 
-                (this.getWidth() / 2), 20);
-        this.setTitle("Onyx");
-        this.setVisible(true);
+        init(panel, board);
+        
+        for (OnyxMove m : OnyxGame.getMoves().values()) {
+            if (m.getPos().isOccupied()) {
+                this.notifyMove(m);
+            }
+        }
     }
 
     /**
@@ -77,7 +92,10 @@ public class MainFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        mainSplitPane = new javax.swing.JSplitPane();
         mainScrollPane = new javax.swing.JScrollPane();
+        textScrollPane = new javax.swing.JScrollPane();
+        dataTextPane = new javax.swing.JTextPane();
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         editMenu = new javax.swing.JMenu();
@@ -90,10 +108,26 @@ public class MainFrame extends javax.swing.JFrame {
             }
         });
 
+        mainSplitPane.setBorder(null);
+        mainSplitPane.setDividerLocation(230);
+        mainSplitPane.setDividerSize(14);
+        mainSplitPane.setDoubleBuffered(true);
+        mainSplitPane.setOneTouchExpandable(true);
+
         mainScrollPane.setBorder(null);
         mainScrollPane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         mainScrollPane.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
         mainScrollPane.setDoubleBuffered(true);
+        mainSplitPane.setRightComponent(mainScrollPane);
+
+        textScrollPane.setBorder(null);
+
+        dataTextPane.setBackground(new java.awt.Color(245, 245, 240));
+        dataTextPane.setBorder(javax.swing.BorderFactory.createEmptyBorder(4, 8, 4, 4));
+        dataTextPane.setFont(new java.awt.Font("Consolas", 0, 14)); // NOI18N
+        textScrollPane.setViewportView(dataTextPane);
+
+        mainSplitPane.setLeftComponent(textScrollPane);
 
         menuBar.setDoubleBuffered(true);
 
@@ -109,11 +143,11 @@ public class MainFrame extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(mainScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 269, Short.MAX_VALUE)
+            .addComponent(mainSplitPane, javax.swing.GroupLayout.DEFAULT_SIZE, 445, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(mainScrollPane, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 249, Short.MAX_VALUE)
+            .addComponent(mainSplitPane, javax.swing.GroupLayout.DEFAULT_SIZE, 426, Short.MAX_VALUE)
         );
 
         pack();
@@ -126,15 +160,78 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_formComponentResized
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextPane dataTextPane;
     private javax.swing.JMenu editMenu;
     private javax.swing.JMenu fileMenu;
     private javax.swing.JScrollPane mainScrollPane;
+    private javax.swing.JSplitPane mainSplitPane;
     private javax.swing.JMenuBar menuBar;
+    private javax.swing.JScrollPane textScrollPane;
     // End of variables declaration//GEN-END:variables
 
     private void updateScrollPanePolicy() {
         mainScrollPane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         mainScrollPane.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+    }
+
+    private void init(final OnyxPanel panel, final OnyxBoard board) {
+        
+        this.mainPanel.add(board);
+        this.mainScrollPane.add(mainPanel);
+        this.mainScrollPane.setViewportView(mainPanel);
+        this.mainSplitPane.setOneTouchExpandable(true);
+        this.mainSplitPane.getLeftComponent().setMinimumSize(new Dimension());
+        this.mainSplitPane.setDividerLocation(0d);
+        
+        this.mainSplitPane.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseExited(MouseEvent e) {
+                board.focus();
+            }
+        });
+        this.dataTextPane.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseExited(MouseEvent e) {
+                board.focus();
+            }
+        });
+        this.dataTextPane.setContentType("text/html");
+        final HTMLEditorKit html = new HTMLEditorKit();
+        this.dataTextPane.setEditorKit(html);
+        this.htmlEditorKit = (HTMLEditorKit) this.dataTextPane.getEditorKit();
+        this.doc = this.dataTextPane.getDocument();
+        
+        board.focus();
+        this.pack();
+        
+        this.setSize(GraphicsConst.BOARD_WIDTH + 36, GraphicsConst.BOARD_WIDTH + 68);
+        this.setLocation(((int)(Toolkit.getDefaultToolkit().getScreenSize().getWidth() / 2)) - 
+                (this.getWidth() / 2), 20);
+        this.setTitle("Onyx");
+        this.setVisible(true);
+    }
+    
+    public JTextPane getTextPane() {
+        return this.dataTextPane;
+    }
+
+    @Override
+    public void notifyMove(final OnyxMove m) {
+        
+        this.move_labels.add(m.toString());
+        this.dataTextPane.setText(StringUtils.EMPTY);
+        int i = 1;            
+        try {
+            for (String s : this.move_labels) {
+                this.htmlEditorKit.insertHTML((HTMLDocument) this.doc, this.doc.getLength(), 
+                        "<b style=\"color: red;\">" + String.format(this.label_format, i, s) + "</b>"
+                        , 0, 0, null);
+                /*if ((i & 1) == 0) {} else {}*/
+                ++i;
+            }
+        } catch (BadLocationException | IOException ex) {
+            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
 }

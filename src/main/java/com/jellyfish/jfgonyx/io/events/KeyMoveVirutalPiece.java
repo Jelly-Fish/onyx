@@ -123,7 +123,7 @@ public class KeyMoveVirutalPiece implements OnyxExecutable {
         final OnyxMove m = new OnyxMove(board.getPosCollection().getPosition(k), 
                 board.getPosCollection().getPosition(k).getPiece(), captured, false);
         OnyxGame.appendMove(m);
-        board.getObserver().notifyMove(m);
+        board.notifyMove(m);
         
         if (captured != null) {
             board.getPosCollection().performTake(k, v.color.bitColor, board);

@@ -77,7 +77,8 @@ public class Starter {
         board.initInput();
         board.setObserver(panel);
         panel.init();
-        new MainFrame(panel, board);
+        final MainFrame mf = new MainFrame(panel, board);
+        board.setObserver(mf);
         OnyxGame.init((OnyxBoardI) board);
         new OnyxIntmap(positions).print(0, OnyxGame.dtStamp);
     }

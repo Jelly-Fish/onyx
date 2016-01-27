@@ -31,6 +31,7 @@
  */
 package com.jellyfish.jfgonyx.onyx.interfaces;
 
+import com.jellyfish.jfgonyx.onyx.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxDiamondCollection;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPosCollection;
 
@@ -51,10 +52,10 @@ public interface OnyxBoardI {
     OnyxPosCollection getPosCollection();
     
     OnyxDiamondCollection getDiamondCollection();
-    
-    OnyxObserver getObserver();
 
     void setObserver(final OnyxObserver observer);
+    
+    void notifyMove(final OnyxMove m);
     
     void focus();
     

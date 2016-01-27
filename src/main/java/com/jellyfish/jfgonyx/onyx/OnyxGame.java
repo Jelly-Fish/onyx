@@ -86,7 +86,7 @@ public class OnyxGame {
         OnyxGame.appendMove(m);
         OnyxGame.appendNewVirtual(c, board);
         OnyxGame.closeMove();
-        board.getObserver().notifyMove(m);
+        board.notifyMove(m);
     }
     
     public static void closeMove() {

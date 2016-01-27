@@ -32,7 +32,6 @@
 package com.jellyfish.jfgonyx.ui;
 
 import com.jellyfish.jfgonyx.constants.GraphicsConst;
-import com.jellyfish.jfgonyx.helpers.MainPanelGHelper;
 import com.jellyfish.jfgonyx.onyx.OnyxGame;
 import com.jellyfish.jfgonyx.onyx.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.interfaces.OnyxObserver;
@@ -59,7 +58,7 @@ public class OnyxPanel extends JPanel implements OnyxObserver {
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        MainPanelGHelper.drawMove(g, this.font, this.label_format, this.move_labels);
+        //MainPanelGHelper.drawMove(g, this.font, this.label_format, this.move_labels);
     }
     
     @Override
