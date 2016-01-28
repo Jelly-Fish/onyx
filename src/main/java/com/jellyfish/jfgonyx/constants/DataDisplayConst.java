@@ -29,51 +29,43 @@
  * POSSIBILITY OF SUCH DAMAGE. 
  ******************************************************************************
  */
-package com.jellyfish.jfgonyx.ui;
+package com.jellyfish.jfgonyx.constants;
 
-import com.jellyfish.jfgonyx.constants.GraphicsConst;
-import com.jellyfish.jfgonyx.onyx.OnyxGame;
-import com.jellyfish.jfgonyx.onyx.OnyxMove;
-import com.jellyfish.jfgonyx.onyx.interfaces.OnyxObserver;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.util.LinkedList;
-import javax.swing.JPanel;
+import org.apache.commons.lang3.StringUtils;
 
 /**
+ *
  * @author thw
  */
-public class OnyxPanel extends JPanel implements OnyxObserver {
-
-    private final Font font = new Font("consolas", Font.BOLD, 14);
-    private final LinkedList<String> move_labels = new LinkedList<>();
-    private final String label_format = "%d: %s";
+public class DataDisplayConst {
     
-    public OnyxPanel() {
-        super();
-        this.setDoubleBuffered(true);
-        this.setBackground(GraphicsConst.COMPONENTS_BACKGROUND_COLOR);
+    private static final String TR = "<tr>%s</tr>";
+    private static final String TD = "<td>%s</td>";
+    private static final String TABLE = "<table>%s</table>";
+    private static final String FONT_STYLE = "font-family: consolas; font-size: 14px;"; 
+    public static final String BLACK_SPAN_TEXT = "<b style=\"color: black;" + 
+            DataDisplayConst.FONT_STYLE + "\">%s</b>";
+    public static final String WHITE_SPAN_TEXT = "<b style=\"color: white;" + 
+            DataDisplayConst.FONT_STYLE + "\">%s</b>";
+    
+    public static String getMoveText(final int n) {
+        return ((n & 1) == 0) ? DataDisplayConst.WHITE_SPAN_TEXT :
+            DataDisplayConst.BLACK_SPAN_TEXT;
     }
     
-    @Override
-    public void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        //MainPanelGHelper.drawMove(g, this.font, this.label_format, this.move_labels);
-    }
-    
-    @Override
-    public void notifyMove(final OnyxMove m) {
-        this.move_labels.add(m.toString());
-        this.repaint();
-    }
-    
-    public void init() {
+    public static String buildMoveDataTable(final String[] m) {
         
-        for (OnyxMove m : OnyxGame.getMoves().values()) {
-            if (m.getPos().isOccupied()) {
-                this.move_labels.add(m.toString());
+        final StringBuilder innerTableHTML = new StringBuilder();
+        String row = StringUtils.EMPTY;
+        for (int i = 0; i < m.length; ++i) {
+            if ((i & 1) == 0) {
+                innerTableHTML.append(String.format(DataDisplayConst.TR, row));
+            } else {
+                row += String.format(DataDisplayConst.TD, m[i]);
             }
         }
+        
+        return String.format(DataDisplayConst.TABLE, innerTableHTML.toString());
     }
     
 }

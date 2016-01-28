@@ -30,10 +30,12 @@
 
 package com.jellyfish.jfgonyx.ui;
 
+import com.jellyfish.jfgonyx.constants.DataDisplayConst;
 import com.jellyfish.jfgonyx.constants.GraphicsConst;
 import com.jellyfish.jfgonyx.onyx.OnyxGame;
 import com.jellyfish.jfgonyx.onyx.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.interfaces.OnyxObserver;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
@@ -74,7 +76,7 @@ public class MainFrame extends javax.swing.JFrame implements OnyxObserver {
         this.mainPanel = panel;
         this.initialHeight = board.getHeight();
         this.initialWidth = board.getWidth();
-        init(panel, board);
+        initUI(board);
         
         for (OnyxMove m : OnyxGame.getMoves().values()) {
             if (m.getPos().isOccupied()) {
@@ -169,12 +171,7 @@ public class MainFrame extends javax.swing.JFrame implements OnyxObserver {
     private javax.swing.JScrollPane textScrollPane;
     // End of variables declaration//GEN-END:variables
 
-    private void updateScrollPanePolicy() {
-        mainScrollPane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-        mainScrollPane.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
-    }
-
-    private void init(final OnyxPanel panel, final OnyxBoard board) {
+    private void initUI(final OnyxBoard board) {
         
         this.mainPanel.add(board);
         this.mainScrollPane.add(mainPanel);
@@ -182,7 +179,7 @@ public class MainFrame extends javax.swing.JFrame implements OnyxObserver {
         this.mainSplitPane.setOneTouchExpandable(true);
         this.mainSplitPane.getLeftComponent().setMinimumSize(new Dimension());
         this.mainSplitPane.setDividerLocation(0d);
-        
+        this.mainSplitPane.setBackground(GraphicsConst.COMPONENTS_BACKGROUND_COLOR);
         this.mainSplitPane.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseExited(MouseEvent e) {
@@ -198,12 +195,12 @@ public class MainFrame extends javax.swing.JFrame implements OnyxObserver {
         this.dataTextPane.setContentType("text/html");
         final HTMLEditorKit html = new HTMLEditorKit();
         this.dataTextPane.setEditorKit(html);
+        this.dataTextPane.setBackground(GraphicsConst.COMPONENTS_BACKGROUND_COLOR);
         this.htmlEditorKit = (HTMLEditorKit) this.dataTextPane.getEditorKit();
-        this.doc = this.dataTextPane.getDocument();
-        
+        this.htmlEditorKit.setLinkCursor(new Cursor(Cursor.HAND_CURSOR));
+        this.doc = this.dataTextPane.getDocument();       
         board.focus();
         this.pack();
-        
         this.setSize(GraphicsConst.BOARD_WIDTH + 36, GraphicsConst.BOARD_WIDTH + 68);
         this.setLocation(((int)(Toolkit.getDefaultToolkit().getScreenSize().getWidth() / 2)) - 
                 (this.getWidth() / 2), 20);
@@ -211,22 +208,31 @@ public class MainFrame extends javax.swing.JFrame implements OnyxObserver {
         this.setVisible(true);
     }
     
+    private void updateScrollPanePolicy() {
+        mainScrollPane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        mainScrollPane.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+    }
+
     public JTextPane getTextPane() {
         return this.dataTextPane;
     }
 
     @Override
-    public void notifyMove(final OnyxMove m) {
+    public final void notifyMove(final OnyxMove m) {
         
         this.move_labels.add(m.toString());
         this.dataTextPane.setText(StringUtils.EMPTY);
-        int i = 1;            
+        int i = 1;  
+        final String[] moves = new String[this.move_labels.size()];
+        this.move_labels.toArray(moves);
+        
         try {
             for (String s : this.move_labels) {
                 this.htmlEditorKit.insertHTML((HTMLDocument) this.doc, this.doc.getLength(), 
-                        "<b style=\"color: red;\">" + String.format(this.label_format, i, s) + "</b>"
-                        , 0, 0, null);
-                /*if ((i & 1) == 0) {} else {}*/
+                    String.format(
+                        DataDisplayConst.getMoveText(i),
+                        String.format(this.label_format, i, s)    
+                ), 0, 0, null);
                 ++i;
             }
         } catch (BadLocationException | IOException ex) {
