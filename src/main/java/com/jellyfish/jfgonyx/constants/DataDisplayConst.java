@@ -40,28 +40,36 @@ import org.apache.commons.lang3.StringUtils;
 public class DataDisplayConst {
     
     private static final String TR = "<tr>%s</tr>";
-    private static final String TD = "<td>%s</td>";
-    private static final String TABLE = "<table>%s</table>";
+    private static final String TD = "<td style=\"border: 1px solid black; align: center;\">%s</td>";
+    private static final String TABLE = 
+        "<table style=\"border-collapse: collapse;\">%s</table>";
     private static final String FONT_STYLE = "font-family: consolas; font-size: 14px;"; 
-    public static final String BLACK_SPAN_TEXT = "<b style=\"color: black;" + 
+    public static final String DARKGREY_BOLD_TEXT = "<b style=\"color: orange;" + 
+            DataDisplayConst.FONT_STYLE + "\">%s</b>"; 
+    public static final String BLACK_BOLD_TEXT = "<b style=\"color: black;" + 
             DataDisplayConst.FONT_STYLE + "\">%s</b>";
-    public static final String WHITE_SPAN_TEXT = "<b style=\"color: white;" + 
+    public static final String WHITE_BOLD_TEXT = "<b style=\"color: white;" + 
             DataDisplayConst.FONT_STYLE + "\">%s</b>";
     
     public static String getMoveText(final int n) {
-        return ((n & 1) == 0) ? DataDisplayConst.WHITE_SPAN_TEXT :
-            DataDisplayConst.BLACK_SPAN_TEXT;
+        return ((n & 1) == 0) & n > 0 ? DataDisplayConst.WHITE_BOLD_TEXT :
+            DataDisplayConst.BLACK_BOLD_TEXT;
     }
     
     public static String buildMoveDataTable(final String[] m) {
         
         final StringBuilder innerTableHTML = new StringBuilder();
         String row = StringUtils.EMPTY;
-        for (int i = 0; i < m.length; ++i) {
+        
+        for (int i = 1; i <= m.length; ++i) {
             if ((i & 1) == 0) {
+                row += String.format(DataDisplayConst.TD, String.format(DARKGREY_BOLD_TEXT, i + "."));
+                row += String.format(DataDisplayConst.TD, String.format(WHITE_BOLD_TEXT, m[i - 1]));
                 innerTableHTML.append(String.format(DataDisplayConst.TR, row));
+                row = StringUtils.EMPTY;
             } else {
-                row += String.format(DataDisplayConst.TD, m[i]);
+                row += String.format(DataDisplayConst.TD, String.format(DARKGREY_BOLD_TEXT, i + "."));
+                row += String.format(DataDisplayConst.TD, String.format(BLACK_BOLD_TEXT, m[i - 1]));
             }
         }
         

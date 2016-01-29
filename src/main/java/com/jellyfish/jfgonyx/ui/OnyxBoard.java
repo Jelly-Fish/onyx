@@ -39,6 +39,7 @@ import com.jellyfish.jfgonyx.onyx.entities.OnyxPosCollection;
 import com.jellyfish.jfgonyx.helpers.OnyxBoardGHelper;
 import com.jellyfish.jfgonyx.io.KeyInput;
 import com.jellyfish.jfgonyx.io.MouseInput;
+import com.jellyfish.jfgonyx.onyx.OnyxGame;
 import com.jellyfish.jfgonyx.onyx.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import com.jellyfish.jfgonyx.onyx.interfaces.OnyxBoardI;
@@ -48,6 +49,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -90,14 +92,30 @@ public class OnyxBoard extends javax.swing.JPanel implements OnyxBoardI {
     public void initStartLayout() {
         
         for (OnyxPos p : this.positions.getPositions().values()) p.setPiece(null);
-        this.positions.getPosition("6,0-1,0").addPiece(new OnyxPiece(GraphicsConst.COLOR.WHITE));
-        this.positions.getPosition("7,0-1,0").addPiece(new OnyxPiece(GraphicsConst.COLOR.WHITE));
-        this.positions.getPosition("6,0-12,0").addPiece(new OnyxPiece(GraphicsConst.COLOR.WHITE));
-        this.positions.getPosition("7,0-12,0").addPiece(new OnyxPiece(GraphicsConst.COLOR.WHITE));
         this.positions.getPosition("1,0-6,0").addPiece(new OnyxPiece(GraphicsConst.COLOR.BLACK));
-        this.positions.getPosition("1,0-7,0").addPiece(new OnyxPiece(GraphicsConst.COLOR.BLACK));
-        this.positions.getPosition("12,0-6,0").addPiece(new OnyxPiece(GraphicsConst.COLOR.BLACK));
+        OnyxGame.getInstance().appendMove(new OnyxMove(this.positions.getPosition("1,0-6,0"), 
+                this.positions.getPosition("1,0-6,0").getPiece(), null, false));
+        this.positions.getPosition("6,0-1,0").addPiece(new OnyxPiece(GraphicsConst.COLOR.WHITE));
+        OnyxGame.getInstance().appendMove(new OnyxMove(this.positions.getPosition("6,0-1,0"), 
+                this.positions.getPosition("6,0-1,0").getPiece(), null, false));
         this.positions.getPosition("12,0-7,0").addPiece(new OnyxPiece(GraphicsConst.COLOR.BLACK));
+        OnyxGame.getInstance().appendMove(new OnyxMove(this.positions.getPosition("12,0-7,0"), 
+                this.positions.getPosition("12,0-7,0").getPiece(), null, false));
+        this.positions.getPosition("7,0-12,0").addPiece(new OnyxPiece(GraphicsConst.COLOR.WHITE));
+        OnyxGame.getInstance().appendMove(new OnyxMove(this.positions.getPosition("7,0-12,0"), 
+                this.positions.getPosition("7,0-12,0").getPiece(), null, false));
+        this.positions.getPosition("1,0-7,0").addPiece(new OnyxPiece(GraphicsConst.COLOR.BLACK));
+        OnyxGame.getInstance().appendMove(new OnyxMove(this.positions.getPosition("1,0-7,0"), 
+                this.positions.getPosition("1,0-7,0").getPiece(), null, false));
+        this.positions.getPosition("7,0-1,0").addPiece(new OnyxPiece(GraphicsConst.COLOR.WHITE));
+        OnyxGame.getInstance().appendMove(new OnyxMove(this.positions.getPosition("7,0-1,0"), 
+                this.positions.getPosition("7,0-1,0").getPiece(), null, false));
+        this.positions.getPosition("12,0-6,0").addPiece(new OnyxPiece(GraphicsConst.COLOR.BLACK));
+        OnyxGame.getInstance().appendMove(new OnyxMove(this.positions.getPosition("12,0-6,0"), 
+                this.positions.getPosition("12,0-6,0").getPiece(), null, false));
+        this.positions.getPosition("6,0-12,0").addPiece(new OnyxPiece(GraphicsConst.COLOR.WHITE));
+        OnyxGame.getInstance().appendMove(new OnyxMove(this.positions.getPosition("6,0-12,0"), 
+                this.positions.getPosition("6,0-12,0").getPiece(), null, false));
     }
     
     @Override
@@ -164,10 +182,22 @@ public class OnyxBoard extends javax.swing.JPanel implements OnyxBoardI {
     public void setObserver(final OnyxObserver observer) {
         this.observers.add(observer);
     }
-
+    
     @Override
     public final void focus() {
         this.requestFocus();
+    }
+       
+    @Override
+    public List<OnyxObserver> getObservers() {
+        return this.observers;
+    }
+    
+    @Override
+    public void notifyMoves(final Collection<OnyxMove> moves) {
+        for (OnyxObserver obs : this.observers) {
+            for (OnyxMove m : moves) obs.notifyMove(m);
+        }
     }
 
 }

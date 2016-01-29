@@ -40,7 +40,6 @@ import com.jellyfish.jfgonyx.onyx.search.OnyxIntmap;
 import com.jellyfish.jfgonyx.ui.MainFrame;
 import com.jellyfish.jfgonyx.ui.OnyxPanel;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
-import java.awt.Toolkit;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
@@ -70,7 +69,7 @@ public class Starter {
         final OnyxDiamondCollection diamonds = new OnyxDiamondCollection().build();
         OnyxBoardGHelper.buildPolygons(diamonds);
         final OnyxPosCollection positions = new OnyxPosCollection();
-        positions.initStartPosition(diamonds);
+        positions.initPositionCollection(diamonds);
         positions.spawnVirtualPiece(GraphicsConst.COLOR.VIRTUAL_BLACK);
         final OnyxBoard board = new OnyxBoard(diamonds, positions);
         board.initStartLayout();
@@ -79,8 +78,11 @@ public class Starter {
         panel.init();
         final MainFrame mf = new MainFrame(panel, board);
         board.setObserver(mf);
-        OnyxGame.init((OnyxBoardI) board);
-        new OnyxIntmap(positions).print(0, OnyxGame.dtStamp);
+        OnyxGame.getInstance().init((OnyxBoardI) board);
+        new OnyxIntmap(positions).print(0, OnyxGame.getInstance().dtStamp);
+        System.out.println("moves=" + OnyxGame.getInstance().moves.size());
+        OnyxGame.getInstance().boardInterface.notifyMoves(OnyxGame.getInstance().moves.values());
+        
     }
     
 }

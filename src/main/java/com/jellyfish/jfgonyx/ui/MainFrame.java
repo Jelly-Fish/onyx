@@ -77,12 +77,6 @@ public class MainFrame extends javax.swing.JFrame implements OnyxObserver {
         this.initialHeight = board.getHeight();
         this.initialWidth = board.getWidth();
         initUI(board);
-        
-        for (OnyxMove m : OnyxGame.getMoves().values()) {
-            if (m.getPos().isOccupied()) {
-                this.notifyMove(m);
-            }
-        }
     }
 
     /**
@@ -195,7 +189,7 @@ public class MainFrame extends javax.swing.JFrame implements OnyxObserver {
         this.dataTextPane.setContentType("text/html");
         final HTMLEditorKit html = new HTMLEditorKit();
         this.dataTextPane.setEditorKit(html);
-        this.dataTextPane.setBackground(GraphicsConst.COMPONENTS_BACKGROUND_COLOR);
+        this.dataTextPane.setBackground(GraphicsConst.COMPONENTS_BACKGROUND_COLOR2);
         this.htmlEditorKit = (HTMLEditorKit) this.dataTextPane.getEditorKit();
         this.htmlEditorKit.setLinkCursor(new Cursor(Cursor.HAND_CURSOR));
         this.doc = this.dataTextPane.getDocument();       
@@ -213,10 +207,6 @@ public class MainFrame extends javax.swing.JFrame implements OnyxObserver {
         mainScrollPane.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
     }
 
-    public JTextPane getTextPane() {
-        return this.dataTextPane;
-    }
-
     @Override
     public final void notifyMove(final OnyxMove m) {
         
@@ -227,14 +217,8 @@ public class MainFrame extends javax.swing.JFrame implements OnyxObserver {
         this.move_labels.toArray(moves);
         
         try {
-            for (String s : this.move_labels) {
-                this.htmlEditorKit.insertHTML((HTMLDocument) this.doc, this.doc.getLength(), 
-                    String.format(
-                        DataDisplayConst.getMoveText(i),
-                        String.format(this.label_format, i, s)    
-                ), 0, 0, null);
-                ++i;
-            }
+            this.htmlEditorKit.insertHTML((HTMLDocument) this.doc, this.doc.getLength(), 
+                DataDisplayConst.buildMoveDataTable(moves), 0, 0, null);
         } catch (BadLocationException | IOException ex) {
             Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
         }

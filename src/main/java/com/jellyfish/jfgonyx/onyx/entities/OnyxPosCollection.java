@@ -53,7 +53,7 @@ public class OnyxPosCollection {
     public static final String KEY_FORMAT = "%.1f-%.1f";
     private final HashMap<String, OnyxPos> positions = new HashMap<>();
     
-    public void initStartPosition(final OnyxDiamondCollection c) {
+    public void initPositionCollection(final OnyxDiamondCollection c) {
         
         String k = null;
         OnyxMove m = null;
@@ -64,12 +64,9 @@ public class OnyxPosCollection {
                     this.positions.put(k, p);
                     m = new OnyxMove(this.positions.get(k), this.positions.get(k).getPiece(), 
                             null, false);
-                    OnyxGame.appendMove(m);
                 }
             }
         }
-        
-        OnyxGame.initialized = true;
     }
     
     public void spawnVirtualPiece(final GraphicsConst.COLOR c) {

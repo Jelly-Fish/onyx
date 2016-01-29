@@ -45,6 +45,7 @@ public class GraphicsConst {
     public static final Color WHITE = Color.WHITE;
     public static final Color BLACK = Color.BLACK;
     public static final Color COMPONENTS_BACKGROUND_COLOR = new Color(172,172,162);
+    public static final Color COMPONENTS_BACKGROUND_COLOR2 = new Color(124,124,124);
     public static final Color BACKGROUND = new Color(210,160,48);
     public static final Color FULL_DIAMOND = new Color(169,125,16);
     public static final Color DIAMOND = new Color(212,170,54);

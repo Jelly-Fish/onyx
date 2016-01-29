@@ -69,7 +69,7 @@ public class OnyxPanel extends JPanel implements OnyxObserver {
     
     public void init() {
         
-        for (OnyxMove m : OnyxGame.getMoves().values()) {
+        for (OnyxMove m : OnyxGame.getInstance().getMoves().values()) {
             if (m.getPos().isOccupied()) {
                 this.move_labels.add(m.toString());
             }

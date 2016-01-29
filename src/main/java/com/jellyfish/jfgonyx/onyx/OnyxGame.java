@@ -51,22 +51,24 @@ import java.util.List;
  */
 public class OnyxGame {
     
-    private static final HashMap<Integer, OnyxMove> moves = new HashMap<>();
-    private static GraphicsConst.COLOR colorToPlay = null;
-    private static boolean requestInitialized = false;
-    public static boolean initialized = false;
-    public static boolean wait = false;
-    public static OnyxBoardI boardInterface = null;
-    public static String dtStamp;
-    private static int moveCount = 0;
+    private static OnyxGame instance = null;
+    public final HashMap<Integer, OnyxMove> moves = new HashMap<>();
+    private GraphicsConst.COLOR colorToPlay = null;
+    private boolean requestInitialized = false;
+    public boolean wait = false;
+    public OnyxBoardI boardInterface = null;
+    public String dtStamp;
+    private int moveCount = 0;
     
-    public static void init(final OnyxBoardI boardInterface) {
-        OnyxGame.moves.clear();
-        OnyxGame.wait = false;
-        OnyxGame.requestInitialized = false;
-        OnyxGame.colorToPlay = null;
-        OnyxGame.boardInterface = boardInterface;
-        OnyxGame.dtStamp = DTStampConst.sdf.format(new java.util.Date());
+    private OnyxGame() { }
+    
+    public void init(final OnyxBoardI boardInterface) {
+        this.moves.clear();
+        this.wait = false;
+        this.requestInitialized = false;
+        this.colorToPlay = null;
+        this.boardInterface = boardInterface;
+        this.dtStamp = DTStampConst.sdf.format(new java.util.Date());
     }
     
     /**
@@ -78,83 +80,94 @@ public class OnyxGame {
      * @throws OnyxGameSyncException
      * @throws NoValidOnyxPositionsFoundException 
      */
-    public static void performMove(final OnyxPosCollection c, final OnyxBoard board) 
+    public void performMove(final OnyxPosCollection c, final OnyxBoard board) 
             throws OnyxGameSyncException, NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
         
-        OnyxGame.checkInit();
-        final OnyxMove m = OnyxGame.requestMove(c, board);
-        OnyxGame.appendMove(m);
-        OnyxGame.appendNewVirtual(c, board);
-        OnyxGame.closeMove();
+        this.checkInit();
+        final OnyxMove m = this.requestMove(c, board);
+        this.appendMove(m);
+        this.appendNewVirtual(c, board);
+        this.closeMove();
         board.notifyMove(m);
     }
     
-    public static void closeMove() {
-        OnyxGame.colorToPlay = null;
-        OnyxGame.initMoveRequest();
+    public void closeMove() {
+        this.colorToPlay = null;
+        this.initMoveRequest();
     }
       
     /**
      * @param color the color to play next or to search move for and append to board.
      */
-    public static void initMove(final GraphicsConst.COLOR color) {
-        OnyxGame.colorToPlay = color;
-        OnyxGame.initMoveRequest();
+    public void initMove(final GraphicsConst.COLOR color) {
+        this.colorToPlay = color;
+        this.initMoveRequest();
     }
     
-    public static void appendMove(final OnyxPos pos, final OnyxPiece piece, final List<OnyxPos> captured) {
-        OnyxGame.moves.put(OnyxGame.moves.size() + 1, 
+    public void appendMove(final OnyxPos pos, final OnyxPiece piece, final List<OnyxPos> captured) {
+        this.moves.put(this.moves.size() + 1, 
             new OnyxMove(pos, piece, captured, false)
         );
     }
     
-    public static void appendMove(final OnyxMove move) {
-        OnyxGame.moves.put(OnyxGame.moves.size() + 1, move);
-        if (OnyxGame.initialized) {
-            ++OnyxGame.moveCount;
-            new OnyxIntmap(OnyxGame.boardInterface.getPosCollection()).print(
-                    OnyxGame.moveCount, OnyxGame.dtStamp
+    public void appendMove(final OnyxMove move) {
+        
+        this.moves.put(this.moves.size() + 1, move);
+        ++this.moveCount;
+        if (this.boardInterface != null) {
+            new OnyxIntmap(this.boardInterface.getPosCollection()).print(
+                this.moveCount, this.dtStamp
             );
         }
     }
     
-    private static OnyxMove requestMove(final OnyxPosCollection c, final OnyxBoard board) 
+    private OnyxMove requestMove(final OnyxPosCollection c, final OnyxBoard board) 
             throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
         
         final OnyxMove m = Onyx.getSEARCH().get(
-                Onyx.SEARCH_TYPE.ONYXPOSCOL).search(c, board, OnyxGame.colorToPlay);
+                Onyx.SEARCH_TYPE.ONYXPOSCOL).search(c, board, this.colorToPlay);
         if (m == null) throw new NoValidOnyxPositionsFoundException();
         else board.getPosCollection().clearOutlines();
-        c.getPosition(m.getPos().getKey()).setPiece(new OnyxPiece(OnyxGame.colorToPlay, true));
+        c.getPosition(m.getPos().getKey()).setPiece(new OnyxPiece(this.colorToPlay, true));
         return m;
     }
     
-    private static void appendNewVirtual(final OnyxPosCollection c, final OnyxBoard board) 
+    private void appendNewVirtual(final OnyxPosCollection c, final OnyxBoard board) 
             throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
         
         final OnyxMove m = Onyx.getSEARCH().get(
-                Onyx.SEARCH_TYPE.RANDOM).search(c, board, OnyxGame.colorToPlay);
+                Onyx.SEARCH_TYPE.RANDOM).search(c, board, this.colorToPlay);
         c.getPosition(m.getPos().getKey()).setVirtualPiece(
-            new OnyxVirtualPiece(GraphicsConst.COLOR.getVirtualOposite(OnyxGame.colorToPlay.boolColor))
+            new OnyxVirtualPiece(GraphicsConst.COLOR.getVirtualOposite(this.colorToPlay.boolColor))
         );
     }
             
-    private static void initMoveRequest() {
-        OnyxGame.requestInitialized = OnyxGame.colorToPlay != null;
+    private void initMoveRequest() {
+        this.requestInitialized = this.colorToPlay != null;
     }
     
     /**
      * Check that move request color value has been set/initialized.
      * @throws OnyxGameSyncException 
      */
-    private static void checkInit() throws OnyxGameSyncException {
-        if (OnyxGame.colorToPlay == null) throw new OnyxGameSyncException();
-        if (!OnyxGame.requestInitialized) throw new OnyxGameSyncException(
-                String.format(OnyxGameSyncException.WRONG_TURN_MSG, OnyxGame.colorToPlay.strColor));
+    private void checkInit() throws OnyxGameSyncException {
+        
+        if (this.colorToPlay == null) throw new OnyxGameSyncException();
+        if (!this.requestInitialized) throw new OnyxGameSyncException(
+                String.format(OnyxGameSyncException.WRONG_TURN_MSG, this.colorToPlay.strColor));
     }
     
-    public static HashMap<Integer, OnyxMove> getMoves() {
+    public HashMap<Integer, OnyxMove> getMoves() {
         return moves;
+    }
+    
+    public static OnyxGame getInstance() {
+        
+        if (OnyxGame.instance == null) {
+            OnyxGame.instance = new OnyxGame();
+        }
+        
+        return OnyxGame.instance;
     }
     
 }
