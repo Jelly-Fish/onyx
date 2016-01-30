@@ -49,7 +49,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -194,9 +194,9 @@ public class OnyxBoard extends javax.swing.JPanel implements OnyxBoardI {
     }
     
     @Override
-    public void notifyMoves(final Collection<OnyxMove> moves) {
+    public void notifyMoves(final HashMap<Integer, OnyxMove> moves) {
         for (OnyxObserver obs : this.observers) {
-            for (OnyxMove m : moves) obs.notifyMove(m);
+            for (OnyxMove m : moves.values()) obs.notifyMove(m);
         }
     }
 

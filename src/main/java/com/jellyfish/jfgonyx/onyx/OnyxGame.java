@@ -52,6 +52,7 @@ import java.util.List;
 public class OnyxGame {
     
     private static OnyxGame instance = null;
+    public boolean initialized = false;
     public final HashMap<Integer, OnyxMove> moves = new HashMap<>();
     private GraphicsConst.COLOR colorToPlay = null;
     private boolean requestInitialized = false;
@@ -63,7 +64,6 @@ public class OnyxGame {
     private OnyxGame() { }
     
     public void init(final OnyxBoardI boardInterface) {
-        this.moves.clear();
         this.wait = false;
         this.requestInitialized = false;
         this.colorToPlay = null;
@@ -114,7 +114,7 @@ public class OnyxGame {
         
         this.moves.put(this.moves.size() + 1, move);
         ++this.moveCount;
-        if (this.boardInterface != null) {
+        if (this.initialized && this.boardInterface != null) {
             new OnyxIntmap(this.boardInterface.getPosCollection()).print(
                 this.moveCount, this.dtStamp
             );

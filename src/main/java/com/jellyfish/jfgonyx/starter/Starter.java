@@ -80,8 +80,8 @@ public class Starter {
         board.setObserver(mf);
         OnyxGame.getInstance().init((OnyxBoardI) board);
         new OnyxIntmap(positions).print(0, OnyxGame.getInstance().dtStamp);
-        System.out.println("moves=" + OnyxGame.getInstance().moves.size());
-        OnyxGame.getInstance().boardInterface.notifyMoves(OnyxGame.getInstance().moves.values());
+        board.notifyMoves(OnyxGame.getInstance().moves);
+        OnyxGame.getInstance().initialized = true;
         
     }
     
