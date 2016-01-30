@@ -30,9 +30,8 @@
 
 package com.jellyfish.jfgonyx.ui;
 
-import com.jellyfish.jfgonyx.constants.DataDisplayConst;
 import com.jellyfish.jfgonyx.constants.GraphicsConst;
-import com.jellyfish.jfgonyx.onyx.OnyxGame;
+import com.jellyfish.jfgonyx.helpers.MainFrameGHelper;
 import com.jellyfish.jfgonyx.onyx.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.interfaces.OnyxObserver;
 import java.awt.Cursor;
@@ -40,14 +39,8 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.IOException;
 import java.util.LinkedList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JTextPane;
-import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
-import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLEditorKit;
 import org.apache.commons.lang3.StringUtils;
 
@@ -58,6 +51,7 @@ import org.apache.commons.lang3.StringUtils;
 public class MainFrame extends javax.swing.JFrame implements OnyxObserver {
 
     private final OnyxPanel mainPanel;
+    private final OnyxBoard board;
     private final int initialWidth;
     private final int initialHeight;
     private final LinkedList<String> move_labels = new LinkedList<>();
@@ -74,9 +68,10 @@ public class MainFrame extends javax.swing.JFrame implements OnyxObserver {
         
         initComponents();
         this.mainPanel = panel;
+        this.board = board;
         this.initialHeight = board.getHeight();
         this.initialWidth = board.getWidth();
-        initUI(board);
+        initUI();
     }
 
     /**
@@ -165,9 +160,9 @@ public class MainFrame extends javax.swing.JFrame implements OnyxObserver {
     private javax.swing.JScrollPane textScrollPane;
     // End of variables declaration//GEN-END:variables
 
-    private void initUI(final OnyxBoard board) {
+    private void initUI() {
         
-        this.mainPanel.add(board);
+        this.mainPanel.add(this.board);
         this.mainScrollPane.add(mainPanel);
         this.mainScrollPane.setViewportView(mainPanel);
         this.mainSplitPane.setOneTouchExpandable(true);
@@ -209,19 +204,10 @@ public class MainFrame extends javax.swing.JFrame implements OnyxObserver {
 
     @Override
     public final void notifyMove(final OnyxMove m) {
-        
         this.move_labels.add(m.toString());
-        this.dataTextPane.setText(StringUtils.EMPTY);
-        int i = 1;  
-        final String[] moves = new String[this.move_labels.size()];
-        this.move_labels.toArray(moves);
-        
-        try {
-            this.htmlEditorKit.insertHTML((HTMLDocument) this.doc, this.doc.getLength(), 
-                DataDisplayConst.buildMoveDataTable(moves), 0, 0, null);
-        } catch (BadLocationException | IOException ex) {
-            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        this.dataTextPane.setText(StringUtils.EMPTY); 
+        MainFrameGHelper.appendData(this.move_labels, this.board.getPosCollection(), 
+                this.htmlEditorKit, this.doc);
     }
     
 }

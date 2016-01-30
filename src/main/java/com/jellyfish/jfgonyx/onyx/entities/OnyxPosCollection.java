@@ -32,7 +32,6 @@
 package com.jellyfish.jfgonyx.onyx.entities;
 
 import com.jellyfish.jfgonyx.constants.GraphicsConst;
-import com.jellyfish.jfgonyx.onyx.OnyxGame;
 import com.jellyfish.jfgonyx.onyx.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
@@ -206,6 +205,28 @@ public class OnyxPosCollection {
         for (OnyxPos p : positions.values()) {
             if (p.isOccupied() && p.getPiece().isEngineMove()) p.getPiece().setEngineMove(false);
         }
+    }
+    
+    public int getBlackPieceCount() {
+        
+        int n = 0;
+        for (OnyxPos p : this.positions.values()) {
+            n = p.isOccupied() && p.getPiece().color.bitColor == GraphicsConst.COLOR.BLACK.bitColor ?
+                    ++n : n;
+        }
+        
+        return n;
+    }
+    
+    public int getWhitePieceCount() {
+        
+        int n = 0;
+        for (OnyxPos p : this.positions.values()) {
+            n = p.isOccupied() && p.getPiece().color.bitColor == GraphicsConst.COLOR.WHITE.bitColor ?
+                    ++n : n;
+        }
+        
+        return n;
     }
     
 }
