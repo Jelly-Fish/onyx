@@ -146,9 +146,7 @@ public class OnyxPosCollection {
                 }
             }
         }
-
-        System.out.println(OnyxPosCollection.class.getSimpleName() + 
-                " >> captured pieces count = " + captured.size());
+        
         final List<OnyxPos> posSet = new ArrayList<>();
         for (OnyxPos p : captured) {
             posSet.add(p);

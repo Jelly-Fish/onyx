@@ -31,7 +31,7 @@
  */
 package com.jellyfish.jfgonyx.onyx;
 
-import com.jellyfish.jfgonyx.onyx.search.OnyxIntmap;
+import com.jellyfish.jfgonyx.onyx.search.searchutils.Intmap;
 import com.jellyfish.jfgonyx.constants.DTStampConst;
 import com.jellyfish.jfgonyx.constants.GraphicsConst;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPiece;
@@ -115,7 +115,7 @@ public class OnyxGame {
         this.moves.put(this.moves.size() + 1, move);
         ++this.moveCount;
         if (this.initialized && this.boardInterface != null) {
-            new OnyxIntmap(this.boardInterface.getPosCollection()).print(
+            new Intmap(this.boardInterface.getPosCollection()).print(
                 this.moveCount, this.dtStamp
             );
         }

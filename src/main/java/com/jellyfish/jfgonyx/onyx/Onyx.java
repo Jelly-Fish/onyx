@@ -31,10 +31,10 @@
  */
 package com.jellyfish.jfgonyx.onyx;
 
-import com.jellyfish.jfgonyx.onyx.search.OnyxRandomSearch;
-import com.jellyfish.jfgonyx.onyx.search.OnyxPositionSearch;
+import com.jellyfish.jfgonyx.onyx.search.RandomSearch;
+import com.jellyfish.jfgonyx.onyx.search.PositionSearch;
 import com.jellyfish.jfgonyx.onyx.interfaces.OnyxAbstractSearchable;
-import com.jellyfish.jfgonyx.onyx.search.OnyxIntmapSearch;
+import com.jellyfish.jfgonyx.onyx.search.IntmapSearchWin;
 import java.util.HashMap;
 
 /**
@@ -43,14 +43,14 @@ import java.util.HashMap;
 class Onyx {
     
     static enum SEARCH_TYPE {
-        RANDOM, ONYXPOSCOL, IMAP_END_GAME
+        RANDOM, ONYXPOSCOL, INTMAP
     }
     
     private final static HashMap<SEARCH_TYPE, OnyxAbstractSearchable> SEARCH = new HashMap<>();
     static {
-        SEARCH.put(SEARCH_TYPE.ONYXPOSCOL, new OnyxPositionSearch());
-        SEARCH.put(SEARCH_TYPE.RANDOM, new OnyxRandomSearch());
-        SEARCH.put(SEARCH_TYPE.IMAP_END_GAME, new OnyxIntmapSearch());
+        SEARCH.put(SEARCH_TYPE.ONYXPOSCOL, new PositionSearch());
+        SEARCH.put(SEARCH_TYPE.RANDOM, new RandomSearch());
+        SEARCH.put(SEARCH_TYPE.INTMAP, new IntmapSearchWin());
         
     }
     

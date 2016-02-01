@@ -29,7 +29,7 @@
  * POSSIBILITY OF SUCH DAMAGE. 
  ******************************************************************************
  */
-package com.jellyfish.jfgonyx.onyx.search;
+package com.jellyfish.jfgonyx.onyx.search.searchutils;
 
 import com.jellyfish.jfgonyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
@@ -52,7 +52,7 @@ import org.apache.commons.lang3.StringUtils;
  * usages. linear_intmap & mtx_intmap contain board's integer state value(s).
  * text_representation String array is only for print purposes.
  */
-public class OnyxIntmap {
+public class Intmap {
     
     private final int[] linear_intmap;
     private final int[][] mtx_intmap;
@@ -65,7 +65,7 @@ public class OnyxIntmap {
     private final int[] linear_static;
     private final int[][] mtx_static;
     
-    public OnyxIntmap(final OnyxPosCollection c) {
+    public Intmap(final OnyxPosCollection c) {
         final int w = (OnyxConst.BOARD_SIDE_SQUARE_COUNT * 2) + 1;
         this.width = w;
         this.mtx_intmap = new int[w][w];
@@ -83,7 +83,7 @@ public class OnyxIntmap {
         int i = 0, j = 0, k = 0;
         
         for (float y = 1.0f; y <= OnyxConst.BOARD_SIDE_SQUARE_COUNT + 1; y += .5f) {
-            l = String.format(OnyxIntmap.LINE_START_FORMAT, y); 
+            l = String.format(Intmap.LINE_START_FORMAT, y); 
             l += y < 10 ? StringUtils.SPACE : StringUtils.EMPTY;
             for (float x = 1.0f; x <= OnyxConst.BOARD_SIDE_SQUARE_COUNT + 1; x += .5f) {
                 tmp = c.getPosition(String.format(OnyxPosCollection.KEY_FORMAT, x, y));
@@ -113,21 +113,21 @@ public class OnyxIntmap {
             lines.add("[DATE STAMP] >> " + dtStamp);
             lines.add("[STRING DISPLAY] >> MOVE N°" + m);
             lines.addAll(Arrays.asList(this.text_representation));
-            lines.add(OnyxIntmap.NEW_LINE + "[INTEGER MATRIX] >> MOVE N°" + m + OnyxIntmap.NEW_LINE + this.printmtx());
-            final File dir = new File(String.format(OnyxIntmap.DIRECTORY_FORMAT, dtStamp));
+            lines.add(Intmap.NEW_LINE + "[INTEGER MATRIX] >> MOVE N°" + m + Intmap.NEW_LINE + this.printmtx());
+            final File dir = new File(String.format(Intmap.DIRECTORY_FORMAT, dtStamp));
             if(!dir.exists()) dir.mkdir();
             
-            final File f = new File(Paths.get(String.format(OnyxIntmap.FILE_FORMAT, dtStamp, dtStamp)).toUri());
+            final File f = new File(Paths.get(String.format(Intmap.FILE_FORMAT, dtStamp, dtStamp)).toUri());
             if (f.exists()) {
-                Files.write(Paths.get(String.format(OnyxIntmap.FILE_FORMAT, dtStamp, dtStamp)),
+                Files.write(Paths.get(String.format(Intmap.FILE_FORMAT, dtStamp, dtStamp)),
                         lines, Charset.forName("UTF-8"), StandardOpenOption.APPEND);
             } else {
-                Files.write(Paths.get(String.format(OnyxIntmap.FILE_FORMAT, dtStamp, dtStamp)),
+                Files.write(Paths.get(String.format(Intmap.FILE_FORMAT, dtStamp, dtStamp)),
                     lines, Charset.forName("UTF-8"));
             }
             
         } catch (final IOException ioex) {
-            Logger.getLogger(OnyxIntmap.class.getName()).log(Level.SEVERE, null, ioex);
+            Logger.getLogger(Intmap.class.getName()).log(Level.SEVERE, null, ioex);
         }
     }
     
@@ -140,7 +140,7 @@ public class OnyxIntmap {
             for (int i = 0; i < m.length; i++) {
                 s.append(StringUtils.SPACE).append(m[i]);
             }
-            s.append(OnyxIntmap.NEW_LINE);
+            s.append(Intmap.NEW_LINE);
         }
         
         return s.toString();

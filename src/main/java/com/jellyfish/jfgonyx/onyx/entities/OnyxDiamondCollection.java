@@ -63,12 +63,6 @@ public class OnyxDiamondCollection {
         return this;
     }
     
-    private void print() {
-        for (OnyxDiamond d : this.diamonds.values()) {
-            System.out.println(d.toString());
-        }
-    }
-    
     public List<OnyxDiamond> getDiamondsByPosKey(final String key) {
         
         List<OnyxDiamond> dList = new ArrayList<>();

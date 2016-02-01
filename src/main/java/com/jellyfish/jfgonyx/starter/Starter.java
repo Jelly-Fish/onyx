@@ -36,7 +36,7 @@ import com.jellyfish.jfgonyx.onyx.entities.OnyxPosCollection;
 import com.jellyfish.jfgonyx.helpers.OnyxBoardGHelper;
 import com.jellyfish.jfgonyx.onyx.OnyxGame;
 import com.jellyfish.jfgonyx.onyx.interfaces.OnyxBoardI;
-import com.jellyfish.jfgonyx.onyx.search.OnyxIntmap;
+import com.jellyfish.jfgonyx.onyx.search.searchutils.Intmap;
 import com.jellyfish.jfgonyx.ui.MainFrame;
 import com.jellyfish.jfgonyx.ui.OnyxPanel;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
@@ -79,7 +79,7 @@ public class Starter {
         final MainFrame mf = new MainFrame(panel, board);
         board.setObserver(mf);
         OnyxGame.getInstance().init((OnyxBoardI) board);
-        new OnyxIntmap(positions).print(0, OnyxGame.getInstance().dtStamp);
+        new Intmap(positions).print(0, OnyxGame.getInstance().dtStamp);
         board.notifyMoves(OnyxGame.getInstance().moves);
         OnyxGame.getInstance().initialized = true;
         

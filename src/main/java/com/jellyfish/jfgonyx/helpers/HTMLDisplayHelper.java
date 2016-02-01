@@ -45,7 +45,11 @@ public class HTMLDisplayHelper {
     private static final String TABLE = 
         "<table style=\"border-collapse: collapse;\">%s</table>";
     private static final String FONT_STYLE = "font-family: consolas; font-size: 14px;"; 
-    public static final String ORANGE_BOLD_TEXT = "<b style=\"color: orange;" + 
+    public static final String GRAY_BOLD_TEXT = "<b style=\"color: rgb(124,124,124);" + 
+            HTMLDisplayHelper.FONT_STYLE + "\">%s</b>"; 
+    public static final String LIGHTGRAY_BOLD_TEXT = "<b style=\"color: rgb(216,216,216);" + 
+            HTMLDisplayHelper.FONT_STYLE + "\">%s</b>"; 
+    public static final String DARKGRAY_BOLD_TEXT = "<b style=\"color: rgb(60,60,60);" + 
             HTMLDisplayHelper.FONT_STYLE + "\">%s</b>"; 
     private static final String BLACK_BOLD_TEXT = "<b style=\"color: black;" + 
             HTMLDisplayHelper.FONT_STYLE + "\">%s</b>";
@@ -71,12 +75,12 @@ public class HTMLDisplayHelper {
         
         for (int i = 1; i <= m.length; ++i) {
             if ((i & 1) == 0) {
-                row += String.format(HTMLDisplayHelper.TD, String.format(ORANGE_BOLD_TEXT, i + "."));
+                row += String.format(HTMLDisplayHelper.TD, String.format(DARKGRAY_BOLD_TEXT, i + "."));
                 row += String.format(HTMLDisplayHelper.TD, String.format(WHITE_BOLD_TEXT, m[i - 1]));
                 innerTableHTML.append(String.format(HTMLDisplayHelper.TR, row));
                 row = StringUtils.EMPTY;
             } else {
-                row += String.format(HTMLDisplayHelper.TD, String.format(ORANGE_BOLD_TEXT, i + "."));
+                row += String.format(HTMLDisplayHelper.TD, String.format(DARKGRAY_BOLD_TEXT, i + "."));
                 row += String.format(HTMLDisplayHelper.TD, String.format(BLACK_BOLD_TEXT, m[i - 1]));
             }
         }
@@ -88,10 +92,10 @@ public class HTMLDisplayHelper {
         
         final StringBuilder data = new StringBuilder();
         data.append("<p>");
-        data.append(String.format(String.format(ORANGE_BOLD_TEXT, "WHITE PIECE COUNT: "))); 
+        data.append(String.format(String.format(LIGHTGRAY_BOLD_TEXT, "WHITE PIECE COUNT: "))); 
         data.append(String.format(WHITE_BOLD_TEXT, String.valueOf(whites)));
         data.append("<br>");
-        data.append(String.format(String.format(ORANGE_BOLD_TEXT, "BLACK PIECE COUNT: "))); 
+        data.append(String.format(String.format(LIGHTGRAY_BOLD_TEXT, "BLACK PIECE COUNT: "))); 
         data.append(String.format(BLACK_BOLD_TEXT, String.valueOf(blacks)));
         data.append("</p><br>");
         
