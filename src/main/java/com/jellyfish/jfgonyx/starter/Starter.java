@@ -31,8 +31,8 @@
 package com.jellyfish.jfgonyx.starter;
 
 import com.jellyfish.jfgonyx.constants.GraphicsConst;
-import com.jellyfish.jfgonyx.onyx.entities.OnyxDiamondCollection;
-import com.jellyfish.jfgonyx.onyx.entities.OnyxPosCollection;
+import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxDiamondCollection;
+import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
 import com.jellyfish.jfgonyx.helpers.OnyxBoardGHelper;
 import com.jellyfish.jfgonyx.onyx.OnyxGame;
 import com.jellyfish.jfgonyx.onyx.interfaces.OnyxBoardI;
@@ -69,7 +69,7 @@ public class Starter {
         final OnyxDiamondCollection diamonds = new OnyxDiamondCollection().build();
         OnyxBoardGHelper.buildPolygons(diamonds);
         final OnyxPosCollection positions = new OnyxPosCollection();
-        positions.initPositionCollection(diamonds);
+        positions.init(diamonds);
         positions.spawnVirtualPiece(GraphicsConst.COLOR.VIRTUAL_BLACK);
         final OnyxBoard board = new OnyxBoard(diamonds, positions);
         board.initStartLayout();

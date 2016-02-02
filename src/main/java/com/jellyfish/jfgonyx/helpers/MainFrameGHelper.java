@@ -31,7 +31,7 @@
  */
 package com.jellyfish.jfgonyx.helpers;
 
-import com.jellyfish.jfgonyx.onyx.entities.OnyxPosCollection;
+import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
 import com.jellyfish.jfgonyx.ui.MainFrame;
 import java.io.IOException;
 import java.util.LinkedList;

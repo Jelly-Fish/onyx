@@ -29,10 +29,13 @@
  * POSSIBILITY OF SUCH DAMAGE. 
  ******************************************************************************
  */
-package com.jellyfish.jfgonyx.onyx.entities;
+package com.jellyfish.jfgonyx.onyx.entities.collections;
 
 import com.jellyfish.jfgonyx.constants.GraphicsConst;
 import com.jellyfish.jfgonyx.onyx.OnyxMove;
+import com.jellyfish.jfgonyx.onyx.entities.OnyxDiamond;
+import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
+import com.jellyfish.jfgonyx.onyx.entities.OnyxVirtualPiece;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
 import java.util.ArrayList;
@@ -52,17 +55,29 @@ public class OnyxPosCollection {
     public static final String KEY_FORMAT = "%.1f-%.1f";
     private final HashMap<String, OnyxPos> positions = new HashMap<>();
     
-    public void initPositionCollection(final OnyxDiamondCollection c) {
+    public void init(final OnyxDiamondCollection c) {
+        this.initPositionCollection(c);
+        this.initConnections(c);
+    }
+    
+    private void initConnections(final OnyxDiamondCollection c) {
+        for (OnyxPos p : this.positions.values()) {
+            if (p.isDiamondCenter()) {
+                p.conections = p.getCenterConnectionKeys(this);
+            } else {
+                p.conections = p.getConnectionKeys(this);
+            }
+        }
+    }
+    
+    private void initPositionCollection(final OnyxDiamondCollection c) {
         
         String k = null;
-        OnyxMove m = null;
         for (OnyxDiamond d : c.getDiamonds().values()) {
             for (OnyxPos p : d.positions) {
                 if (!this.positions.containsValue(p)) {
                     k = String.format(OnyxPosCollection.KEY_FORMAT, p.x, p.y);
                     this.positions.put(k, p);
-                    m = new OnyxMove(this.positions.get(k), this.positions.get(k).getPiece(), 
-                            null, false);
                 }
             }
         }

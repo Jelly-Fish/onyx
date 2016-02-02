@@ -33,7 +33,7 @@ package com.jellyfish.jfgonyx.onyx.search.searchutils;
 
 import com.jellyfish.jfgonyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
-import com.jellyfish.jfgonyx.onyx.entities.OnyxPosCollection;
+import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;

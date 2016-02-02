@@ -32,8 +32,8 @@
 package com.jellyfish.jfgonyx.onyx.interfaces;
 
 import com.jellyfish.jfgonyx.onyx.OnyxMove;
-import com.jellyfish.jfgonyx.onyx.entities.OnyxDiamondCollection;
-import com.jellyfish.jfgonyx.onyx.entities.OnyxPosCollection;
+import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxDiamondCollection;
+import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
 import java.util.HashMap;
 import java.util.List;
 

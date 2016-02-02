@@ -31,8 +31,10 @@
  */
 package com.jellyfish.jfgonyx.onyx.entities;
 
+import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
 import com.jellyfish.jfgonyx.constants.GraphicsConst;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -46,6 +48,7 @@ public class OnyxPos {
     private OnyxPiece piece;
     private OnyxVirtualPiece vPiece;
     public final OnyxDiamond diamond;
+    public String[] conections;
 
     public OnyxPos(final float x, final float y, final OnyxDiamond d) {
         this.x = x;
@@ -93,6 +96,72 @@ public class OnyxPos {
     
     public String getKey() {
         return String.format(OnyxPosCollection.KEY_FORMAT, this.x, this.y);
+    }
+    
+    public String[] getCenterConnectionKeys(final OnyxPosCollection c) {
+
+        String[] res = new String[8];
+        res[0] = String.format(OnyxPosCollection.KEY_FORMAT, this.x, this.y - .5f);
+        res[1] = String.format(OnyxPosCollection.KEY_FORMAT, this.x + .5f, this.y - .5f);
+        res[2] = String.format(OnyxPosCollection.KEY_FORMAT, this.x + .5f, this.y);
+        res[3] = String.format(OnyxPosCollection.KEY_FORMAT, this.x + .5f, this.y + .5f);
+        res[4] = String.format(OnyxPosCollection.KEY_FORMAT, this.x, this.y + .5f);
+        res[5] = String.format(OnyxPosCollection.KEY_FORMAT, this.x - .5f, this.y + .5f);
+        res[6] = String.format(OnyxPosCollection.KEY_FORMAT, this.x - .5f, this.y);
+        res[7] = String.format(OnyxPosCollection.KEY_FORMAT, this.x - .5f, this.y - .5f);
+        
+        final List<String> connections = new ArrayList<>();
+        for (String k : res) {
+            if (c.getPosition(k) != null) {
+                connections.add(k);
+            }
+        }
+
+        res = new String[connections.size()];
+        return connections.toArray(res);
+    }
+    
+    public String[] getConnectionKeys(final OnyxPosCollection c) {
+
+        /**
+         * FIXME : add's foreign position in the case of 4 point diamonds.
+         * If 5 points diamons positions have been found on NE, NW, SE, SW
+         * diagonals then discard searchs.
+         * Use x y pair/impar for discarding diagonals.
+         * 
+         * Try Diamond collection getDiamondsByPosKey() meth.
+         */
+        
+        String[] res = new String[16];
+        res[0] = String.format(OnyxPosCollection.KEY_FORMAT, this.x, this.y - .5f);
+        res[1] = String.format(OnyxPosCollection.KEY_FORMAT, this.x + .5f, this.y - .5f);
+        res[2] = String.format(OnyxPosCollection.KEY_FORMAT, this.x + .5f, this.y);
+        res[3] = String.format(OnyxPosCollection.KEY_FORMAT, this.x + .5f, this.y + .5f);
+        res[4] = String.format(OnyxPosCollection.KEY_FORMAT, this.x, this.y + .5f);
+        res[5] = String.format(OnyxPosCollection.KEY_FORMAT, this.x - .5f, this.y + .5f);
+        res[6] = String.format(OnyxPosCollection.KEY_FORMAT, this.x - .5f, this.y);
+        res[7] = String.format(OnyxPosCollection.KEY_FORMAT, this.x - .5f, this.y - .5f);
+        res[8] = String.format(OnyxPosCollection.KEY_FORMAT, this.x, this.y - 1f);
+        res[9] = String.format(OnyxPosCollection.KEY_FORMAT, this.x + 1f, this.y - 1f);
+        res[10] = String.format(OnyxPosCollection.KEY_FORMAT, this.x + 1f, this.y);
+        res[11] = String.format(OnyxPosCollection.KEY_FORMAT, this.x + 1f, this.y + 1f);
+        res[12] = String.format(OnyxPosCollection.KEY_FORMAT, this.x, this.y + 1f);
+        res[13] = String.format(OnyxPosCollection.KEY_FORMAT, this.x - 1f, this.y + 1f);
+        res[14] = String.format(OnyxPosCollection.KEY_FORMAT, this.x - 1f, this.y);
+        res[15] = String.format(OnyxPosCollection.KEY_FORMAT, this.x - 1f, this.y - 1f);
+        
+        final List<String> connections = new ArrayList<>();
+        for (String k : res) {
+            if (c.getPosition(k) != null) {
+                connections.add(k);
+                if (this.getKey().equals("1,0-6,0")) {
+                    System.out.println("1,0-6,0  connection  = " + k);
+                }
+            }
+        }
+
+        res = new String[connections.size()];
+        return connections.toArray(res);
     }
     
     @Override
