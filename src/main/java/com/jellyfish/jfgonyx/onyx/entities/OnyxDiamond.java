@@ -48,11 +48,11 @@ public class OnyxDiamond {
     public final boolean onPairLine;
     private Polygon polygon;
     
-    public OnyxDiamond(final int x, final int y, final boolean full) {
+    public OnyxDiamond(final int x, final int y, final boolean isFivePosDiamond) {
         
         this.onPairLine = y % 2 == 0;
         
-        if (full) {
+        if (isFivePosDiamond) {
             this.positions = new OnyxPos[5];
             positions[4] = new OnyxPos(ConstructPosConst.CHARPOS.getPos(x).getFloatValue() + 
                     (ConstructPosConst.CHARPOS.getPos(0).getFloatValue() / 2),

@@ -41,6 +41,8 @@ import com.jellyfish.jfgonyx.ui.OnyxBoard;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -62,11 +64,7 @@ public class OnyxPosCollection {
     
     private void initConnections(final OnyxDiamondCollection c) {
         for (OnyxPos p : this.positions.values()) {
-            if (p.isDiamondCenter()) {
-                p.conections = p.getCenterConnectionKeys(this);
-            } else {
-                p.conections = p.getConnectionKeys(this);
-            }
+            p.conections = p.getConnectionKeys(this, c);
         }
     }
     
@@ -91,6 +89,10 @@ public class OnyxPosCollection {
     
     public OnyxPos getPosition(final String k) {
         return this.positions.get(k);
+    }
+    
+    public boolean containsPosition(final String k) {
+        return this.getPosition(k) != null;
     }
     
     public HashMap<String, OnyxPos> getPositions() {
