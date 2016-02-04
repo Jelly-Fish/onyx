@@ -33,10 +33,7 @@ package com.jellyfish.jfgonyx.onyx.entities;
 
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
 import com.jellyfish.jfgonyx.constants.GraphicsConst;
-import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxDiamondCollection;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
-import com.jellyfish.jfgonyx.onyx.search.searchutils.OnyxPositionUtils;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -50,7 +47,7 @@ public class OnyxPos {
     private OnyxPiece piece;
     private OnyxVirtualPiece vPiece;
     public final OnyxDiamond diamond;
-    public String[] conections;
+    public String[] connections;
 
     public OnyxPos(final float x, final float y, final OnyxDiamond d) {
         this.x = x;
@@ -98,24 +95,6 @@ public class OnyxPos {
     
     public String getKey() {
         return String.format(OnyxPosCollection.KEY_FORMAT, this.x, this.y);
-    }
-    
-    public String[] getConnectionKeys(final OnyxPosCollection c, final OnyxDiamondCollection diamonds) {
-        
-        /**
-         * FIXME §/.?¨¨£%/M4!!
-         * @see KeyMoveVirutalPiece applyMove and forwardMove methods.
-         * For all possible connection candidates, if move is possible then
-         * add k to connections.
-         */
-        
-        String[] res = null;
-        for (String k : OnyxPositionUtils.getConnectionCandidates(this)) {
-            
-        }
-        
-        //res = new String[connections.size()];
-        return res; //connections.toArray(res);
     }
     
     @Override

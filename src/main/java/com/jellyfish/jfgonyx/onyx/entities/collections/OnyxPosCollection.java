@@ -32,7 +32,7 @@
 package com.jellyfish.jfgonyx.onyx.entities.collections;
 
 import com.jellyfish.jfgonyx.constants.GraphicsConst;
-import com.jellyfish.jfgonyx.onyx.OnyxMove;
+import com.jellyfish.jfgonyx.helpers.OnyxConnectionHelper;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxDiamond;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxVirtualPiece;
@@ -41,8 +41,6 @@ import com.jellyfish.jfgonyx.ui.OnyxBoard;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -59,13 +57,8 @@ public class OnyxPosCollection {
     
     public void init(final OnyxDiamondCollection c) {
         this.initPositionCollection(c);
-        this.initConnections(c);
-    }
-    
-    private void initConnections(final OnyxDiamondCollection c) {
-        for (OnyxPos p : this.positions.values()) {
-            p.conections = p.getConnectionKeys(this, c);
-        }
+        OnyxConnectionHelper.buildPosConnections(this);
+        OnyxConnectionHelper.print(this);
     }
     
     private void initPositionCollection(final OnyxDiamondCollection c) {
