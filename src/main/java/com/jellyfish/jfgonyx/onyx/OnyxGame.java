@@ -31,6 +31,7 @@
  */
 package com.jellyfish.jfgonyx.onyx;
 
+import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.search.searchutils.Intmap;
 import com.jellyfish.jfgonyx.constants.DTStampConst;
 import com.jellyfish.jfgonyx.constants.GraphicsConst;
@@ -124,7 +125,7 @@ public class OnyxGame {
     private OnyxMove requestMove(final OnyxPosCollection c, final OnyxBoard board) 
             throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
         
-        final OnyxMove m = Onyx.getSEARCH().get(
+        final OnyxMove m = Onyx.get().get(
                 Onyx.SEARCH_TYPE.ONYXPOSCOL).search(c, board, this.colorToPlay);
         if (m == null) throw new NoValidOnyxPositionsFoundException();
         else board.getPosCollection().clearOutlines();
@@ -135,7 +136,7 @@ public class OnyxGame {
     private void appendNewVirtual(final OnyxPosCollection c, final OnyxBoard board) 
             throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
         
-        final OnyxMove m = Onyx.getSEARCH().get(
+        final OnyxMove m = Onyx.get().get(
                 Onyx.SEARCH_TYPE.RANDOM).search(c, board, this.colorToPlay);
         c.getPosition(m.getPos().getKey()).setVirtualPiece(
             new OnyxVirtualPiece(GraphicsConst.COLOR.getVirtualOposite(this.colorToPlay.boolColor))

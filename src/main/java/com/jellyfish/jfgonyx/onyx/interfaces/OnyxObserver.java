@@ -31,7 +31,7 @@
  */
 package com.jellyfish.jfgonyx.onyx.interfaces;
 
-import com.jellyfish.jfgonyx.onyx.OnyxMove;
+import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
 
 /**
  * @author thw

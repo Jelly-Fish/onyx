@@ -29,41 +29,56 @@
  * POSSIBILITY OF SUCH DAMAGE. 
  ******************************************************************************
  */
-package com.jellyfish.jfgonyx.onyx;
+package com.jellyfish.jfgonyx.onyx.entities;
 
-import com.jellyfish.jfgonyx.onyx.interfaces.OnyxAbstractSearchable;
-import com.jellyfish.jfgonyx.onyx.search.*;
-import java.util.HashMap;
+import com.jellyfish.jfgonyx.constants.OnyxConst;
+import com.jellyfish.jfgonyx.onyx.entities.OnyxPiece;
+import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
+import java.util.List;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author thw
  */
-class Onyx {
+public class OnyxMove {
     
-    static enum SEARCH_TYPE {
-        
-        RANDOM("Random dumb search :X"), 
-        ONYXPOSCOL("Use onyx position collection for take or counter position searches."),
-        INTMAP("Integer map search."), 
-        CNX("Connection search style building & taking advantage of position trees.");
-        
-        private final String desc;
-        
-        SEARCH_TYPE(final String desc) {
-            this.desc = desc;
-        }   
+    private final OnyxPos pos;
+    private final OnyxPiece piece;
+    private final List<OnyxPos> captured;
+    private final boolean win;
+
+    public OnyxMove(final OnyxPos pos, final OnyxPiece piece, final List<OnyxPos> captured, 
+            final boolean win) {
+        this.pos = pos;
+        this.piece = piece;
+        this.win = win;
+        this.captured = captured;
     }
     
-    private final static HashMap<SEARCH_TYPE, OnyxAbstractSearchable> SEARCH = new HashMap<>();
-    static {
-        SEARCH.put(SEARCH_TYPE.ONYXPOSCOL, new PositionSearch());
-        SEARCH.put(SEARCH_TYPE.RANDOM, new RandomSearch());
-        SEARCH.put(SEARCH_TYPE.INTMAP, new IntmapSearch());
-        SEARCH.put(SEARCH_TYPE.CNX, new ConnectionSearch());
+    public boolean isCapture() {
+        return this.captured != null;
     }
     
-    public static HashMap<SEARCH_TYPE, OnyxAbstractSearchable> get() {
-        return SEARCH;
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(OnyxConst.POS_MAP.get(this.pos.getKey()));
+        if (this.captured != null && this.captured.size() > 0) {
+            sb.append(this.captured.size() == 2 ? "*" : this.captured.size() == 4 ? "**" : StringUtils.EMPTY);
+        }
+        return sb.toString();
+    }
+    
+    public List<OnyxPos> getCaptured() {
+        return captured;
+    }
+
+    public OnyxPos getPos() {
+        return pos;
+    }
+
+    public OnyxPiece getPiece() {
+        return piece;
     }
     
 }

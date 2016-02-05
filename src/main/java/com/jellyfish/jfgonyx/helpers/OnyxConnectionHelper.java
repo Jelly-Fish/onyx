@@ -35,8 +35,12 @@ import com.jellyfish.jfgonyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
 import static com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection.KEY_FORMAT;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -44,6 +48,14 @@ import org.apache.commons.lang3.StringUtils;
  * @author thw
  */
 public class OnyxConnectionHelper {
+    
+    private final static String FILLER = ">> ######################################################################";
+    private final static String PRINT_FORMAT_TITLE = ">> START ONYX CONNECTIONS.\n>> FOR ALL POSITION, ALL CONNECTED POSITIONS ARE PRINTED.";
+    private final static String PRINT_FORMAT_HEAD = ">>\t %s [connections=%d] :";
+    private final static String PRINT_FORMAT_TAIL = ">> END CONNECTIONS.\n>> CHECKED ONYX POSITIONS = [%d]";
+    private final static String PRINT_FORMAT_CNX = ">>\t\t CNX-%d --> %s";
+    private final static String BACKSLASH_N = "\n";
+    private static final String FILE_PATH = "src/main/resources/onyxcnx";
     
     public static final void buildPosConnections(final OnyxPosCollection c) {
         
@@ -142,12 +154,48 @@ public class OnyxConnectionHelper {
         return found.toArray(new String[found.size()]);
     }
     
-    public static final void print(final OnyxPosCollection c) {
+    public static final void systemPrint(final OnyxPosCollection c) {
         
         for (OnyxPos p : c.getPositions().values()) {
             final String k = p.getKey();
             final int count = p.connections.length;
-            System.out.println("k: " + k + " connections count = " + count);
+            System.out.println(String.format(PRINT_FORMAT_HEAD, OnyxConst.POS_MAP.get(p.getKey()), count));
+            for (int i = 0; i < count; ++i) {
+                System.out.println(String.format(PRINT_FORMAT_CNX, i, OnyxConst.POS_MAP.get(p.connections[i])));
+            }
+        }
+    }
+    
+    public static final void print(final OnyxPosCollection c) {
+        
+        int posCount = 0;
+        final StringBuilder sb = new StringBuilder(FILLER);
+        sb.append(BACKSLASH_N);
+        sb.append(PRINT_FORMAT_TITLE);
+        sb.append(BACKSLASH_N);
+        
+        for (OnyxPos p : c.getPositions().values()) {
+            ++posCount;
+            final String k = p.getKey();
+            final int count = p.connections.length;
+            sb.append(String.format(PRINT_FORMAT_HEAD, 
+                OnyxConst.POS_MAP.get(p.getKey()), count)).append(BACKSLASH_N);
+            for (int i = 0; i < count; ++i) {
+                sb.append(String.format(PRINT_FORMAT_CNX, i,
+                    OnyxConst.POS_MAP.get(p.connections[i]))).append(BACKSLASH_N);
+            }
+        }
+        
+        sb.append(String.format(PRINT_FORMAT_TAIL, posCount));
+        sb.append(BACKSLASH_N);
+        sb.append(FILLER);
+        
+        try {
+            FileWriter f = new FileWriter(FILE_PATH, false);
+            f.write(sb.toString());
+            f.close();
+        } catch (final IOException iOex) {
+            Logger.getLogger(OnyxConnectionHelper.class.getName()).log(Level.SEVERE, null, iOex);
         }
     }
     

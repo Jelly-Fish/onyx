@@ -60,6 +60,10 @@ public class Intmap {
     private static final String FILE_FORMAT = "src/main/resources/imap/%s/%s.onyx";
     private static final String DIRECTORY_FORMAT = "src/main/resources/imap/%s";
     private static final String LINE_START_FORMAT = "[%.1f]";
+    private static final String DT_STAMP = "[DATE STAMP] >> %s";
+    private static final String MOVE_N = "[STRING DISPLAY] >> MOVE N°%d";
+    private static final String MTX_MOVE_N = "[INTEGER MATRIX] >> MOVE N°%d";
+    private static final String CHARSET = "UTF-8";
     private static final String NEW_LINE = "\n";
     private final String[] text_representation;
     private final int[] linear_static;
@@ -110,20 +114,20 @@ public class Intmap {
         
         try {
             final ArrayList<String> lines = new ArrayList<>();
-            lines.add("[DATE STAMP] >> " + dtStamp);
-            lines.add("[STRING DISPLAY] >> MOVE N°" + m);
+            lines.add(String.format(DT_STAMP, dtStamp));
+            lines.add(String.format(MOVE_N, m));
             lines.addAll(Arrays.asList(this.text_representation));
-            lines.add(Intmap.NEW_LINE + "[INTEGER MATRIX] >> MOVE N°" + m + Intmap.NEW_LINE + this.printmtx());
+            lines.add(Intmap.NEW_LINE + String.format(MTX_MOVE_N, m) + Intmap.NEW_LINE + this.printmtx());
             final File dir = new File(String.format(Intmap.DIRECTORY_FORMAT, dtStamp));
-            if(!dir.exists()) dir.mkdir();
+            if (!dir.exists()) dir.mkdir();
             
             final File f = new File(Paths.get(String.format(Intmap.FILE_FORMAT, dtStamp, dtStamp)).toUri());
             if (f.exists()) {
                 Files.write(Paths.get(String.format(Intmap.FILE_FORMAT, dtStamp, dtStamp)),
-                        lines, Charset.forName("UTF-8"), StandardOpenOption.APPEND);
+                        lines, Charset.forName(CHARSET), StandardOpenOption.APPEND);
             } else {
                 Files.write(Paths.get(String.format(Intmap.FILE_FORMAT, dtStamp, dtStamp)),
-                    lines, Charset.forName("UTF-8"));
+                    lines, Charset.forName(CHARSET));
             }
             
         } catch (final IOException ioex) {

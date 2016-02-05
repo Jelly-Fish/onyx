@@ -29,56 +29,30 @@
  * POSSIBILITY OF SUCH DAMAGE. 
  ******************************************************************************
  */
-package com.jellyfish.jfgonyx.onyx;
+package com.jellyfish.jfgonyx.onyx.search;
 
-import com.jellyfish.jfgonyx.constants.OnyxConst;
-import com.jellyfish.jfgonyx.onyx.entities.OnyxPiece;
-import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
-import java.util.List;
-import org.apache.commons.lang3.StringUtils;
+import com.jellyfish.jfgonyx.constants.GraphicsConst;
+import com.jellyfish.jfgonyx.onyx.abstractions.AbstractOnyxSearch;
+import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
+import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
+import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
+import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException;
+import com.jellyfish.jfgonyx.onyx.interfaces.OnyxRandomSeachable;
+import com.jellyfish.jfgonyx.ui.OnyxBoard;
 
 /**
+ *
  * @author thw
  */
-public class OnyxMove {
-    
-    private final OnyxPos pos;
-    private final OnyxPiece piece;
-    private final List<OnyxPos> captured;
-    private final boolean win;
+public class ConnectionSearch extends AbstractOnyxSearch implements OnyxRandomSeachable {
 
-    public OnyxMove(final OnyxPos pos, final OnyxPiece piece, final List<OnyxPos> captured, 
-            final boolean win) {
-        this.pos = pos;
-        this.piece = piece;
-        this.win = win;
-        this.captured = captured;
-    }
-    
-    public boolean isCapture() {
-        return this.captured != null;
-    }
-    
     @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(OnyxConst.POS_MAP.get(this.pos.getKey()));
-        if (this.captured != null && this.captured.size() > 0) {
-            sb.append(this.captured.size() == 2 ? "*" : this.captured.size() == 4 ? "**" : StringUtils.EMPTY);
-        }
-        return sb.toString();
-    }
-    
-    public List<OnyxPos> getCaptured() {
-        return captured;
-    }
-
-    public OnyxPos getPos() {
-        return pos;
-    }
-
-    public OnyxPiece getPiece() {
-        return piece;
+    public OnyxMove search(final OnyxPosCollection c, final OnyxBoard board, final GraphicsConst.COLOR color) 
+            throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
+        /**
+         * FIXME gl&hf
+         */
+        return null;
     }
     
 }

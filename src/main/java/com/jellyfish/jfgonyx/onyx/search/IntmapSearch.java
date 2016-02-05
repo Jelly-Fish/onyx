@@ -33,7 +33,7 @@ package com.jellyfish.jfgonyx.onyx.search;
 
 import com.jellyfish.jfgonyx.onyx.search.searchutils.Intmap;
 import com.jellyfish.jfgonyx.constants.GraphicsConst;
-import com.jellyfish.jfgonyx.onyx.OnyxMove;
+import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.abstractions.AbstractOnyxSearch;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
@@ -48,7 +48,7 @@ import java.util.List;
  *
  * @author thw
  */
-public class IntmapSearchWin extends AbstractOnyxSearch implements OnyxRandomSeachable {
+public class IntmapSearch extends AbstractOnyxSearch implements OnyxRandomSeachable {
 
     @Override
     public OnyxMove search(final OnyxPosCollection c, final OnyxBoard board, 
