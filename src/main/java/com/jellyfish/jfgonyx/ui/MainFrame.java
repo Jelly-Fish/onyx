@@ -168,7 +168,7 @@ public class MainFrame extends javax.swing.JFrame implements OnyxObserver {
         this.mainSplitPane.setOneTouchExpandable(true);
         this.mainSplitPane.getLeftComponent().setMinimumSize(new Dimension());
         this.mainSplitPane.setDividerLocation(0d);
-        this.mainSplitPane.setBackground(GraphicsConst.COMPONENTS_BACKGROUND_COLOR);
+        this.mainSplitPane.setBackground(GraphicsConst.COMPONENTS_BACKGROUND_COLOR1);
         this.mainSplitPane.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseExited(MouseEvent e) {
@@ -184,7 +184,7 @@ public class MainFrame extends javax.swing.JFrame implements OnyxObserver {
         this.dataTextPane.setContentType("text/html");
         final HTMLEditorKit html = new HTMLEditorKit();
         this.dataTextPane.setEditorKit(html);
-        this.dataTextPane.setBackground(GraphicsConst.COMPONENTS_BACKGROUND_COLOR2);
+        this.dataTextPane.setBackground(GraphicsConst.COMPONENTS_BACKGROUND_COLOR1);
         this.htmlEditorKit = (HTMLEditorKit) this.dataTextPane.getEditorKit();
         this.htmlEditorKit.setLinkCursor(new Cursor(Cursor.HAND_CURSOR));
         this.doc = this.dataTextPane.getDocument();       

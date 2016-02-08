@@ -41,7 +41,7 @@ public class HTMLDisplayHelper {
     
     private static final String TR = "<tr>%s</tr>";
     private static final String TD = 
-            "<td style=\"align: center; background-color: rgb(164,164,164);\">%s</td>";
+            "<td style=\"align: center; background-color: rgb(172,172,162);\">%s</td>";
     private static final String TABLE = 
         "<table style=\"border-collapse: collapse;\">%s</table>";
     private static final String FONT_STYLE = "font-family: consolas; font-size: 14px;"; 

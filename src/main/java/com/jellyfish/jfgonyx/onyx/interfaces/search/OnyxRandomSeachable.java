@@ -29,59 +29,37 @@
  * POSSIBILITY OF SUCH DAMAGE. 
  ******************************************************************************
  */
-package com.jellyfish.jfgonyx.onyx;
+package com.jellyfish.jfgonyx.onyx.interfaces.search;
 
 import com.jellyfish.jfgonyx.constants.GraphicsConst;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
+import com.jellyfish.jfgonyx.onyx.entities.OnyxDiamond;
+import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException;
-import com.jellyfish.jfgonyx.onyx.interfaces.search.OnyxAbstractSearchable;
-import com.jellyfish.jfgonyx.onyx.interfaces.search.OnyxConnectionSearchable;
-import com.jellyfish.jfgonyx.onyx.search.*;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
-import java.util.HashMap;
 
 /**
+ *
  * @author thw
  */
-class Onyx {
+public interface OnyxRandomSeachable extends OnyxAbstractSearchable {
     
-    private final static HashMap<SEARCH_TYPE, OnyxAbstractSearchable> SEARCH = new HashMap<>();
-    static {
-        SEARCH.put(SEARCH_TYPE.ONYXPOSCOL, new PositionSearch());
-        SEARCH.put(SEARCH_TYPE.RANDOM, new RandomSearch());
-        SEARCH.put(SEARCH_TYPE.INTMAP, new IntmapSearch());
-        SEARCH.put(SEARCH_TYPE.CNX, new ConnectionSearch());
-    }
+    /**
+     * Get the first dumb move found by looping through OnyxPos collection - all diamond center
+     * positions are discarded which is stupid too.
+     * @param color the color awsking for random dumb move, all equal colors will be discarded.
+     * @param board Onyx board instance.
+     * @throws com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException
+     * @see OnyxPos position definition.
+     * @see OnyxDiamond Onyx diamond definition.
+     * @param c collection of unique Onyx positions - positions are independent from OnyxDiamond instances.
+     * @return the key of any stupid unoccupied Onyx position, infact the first one found.
+     * @throws NoValidOnyxPositionsFoundException if no position if found, seems like all the board is occupied ???
+     */
+    @Override
+    OnyxMove search(final OnyxPosCollection c, final OnyxBoard board, final GraphicsConst.COLOR color) 
+            throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException;
     
-    static enum SEARCH_TYPE {
-        
-        RANDOM("Random dumb search :X"), 
-        ONYXPOSCOL("Use onyx position collection for take or counter position searches."),
-        INTMAP("Integer map search."), 
-        CNX("Connection search style building & taking advantage of position trees.");
-        
-        private final String desc;
-        
-        SEARCH_TYPE(final String desc) {
-            this.desc = desc;
-        }   
-    }
-       
-    public static OnyxMove search(final OnyxPosCollection c, final OnyxBoard board, final GraphicsConst.COLOR color) 
-            throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
-        
-        /**
-         * Here, choose how and with what utility to search with.
-         * So far use as below.
-         */
-        final OnyxMove m = SEARCH.get(SEARCH_TYPE.ONYXPOSCOL).search(c, board, color);
-        if (((OnyxConnectionSearchable) SEARCH.get(SEARCH_TYPE.CNX)).isWin(c, color)) {
-            // Game is ended.
-        }
-        
-        return m;
-    }
-        
 }

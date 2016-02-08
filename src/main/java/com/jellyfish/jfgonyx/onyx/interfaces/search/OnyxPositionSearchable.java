@@ -29,7 +29,7 @@
  * POSSIBILITY OF SUCH DAMAGE. 
  ******************************************************************************
  */
-package com.jellyfish.jfgonyx.onyx.interfaces;
+package com.jellyfish.jfgonyx.onyx.interfaces.search;
 
 import com.jellyfish.jfgonyx.constants.GraphicsConst;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
@@ -45,7 +45,7 @@ import com.jellyfish.jfgonyx.ui.OnyxBoard;
 public interface OnyxPositionSearchable extends OnyxAbstractSearchable {
     
     /**
-     * @param color the color awsking for move, all equal colors will be discarded.
+     * @param color the color for move, all equal colors will be discarded.
      * @param board the Onyx board with all diamonds.
      * @see OnyxPos position definition.
      * @see OnyxDiamond Onyx diamond definition.

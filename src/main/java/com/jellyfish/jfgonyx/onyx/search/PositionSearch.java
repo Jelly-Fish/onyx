@@ -38,7 +38,7 @@ import com.jellyfish.jfgonyx.constants.GraphicsConst;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.abstractions.AbstractOnyxSearch;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
-import com.jellyfish.jfgonyx.onyx.interfaces.OnyxPositionSearchable;
+import com.jellyfish.jfgonyx.onyx.interfaces.search.OnyxPositionSearchable;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException;

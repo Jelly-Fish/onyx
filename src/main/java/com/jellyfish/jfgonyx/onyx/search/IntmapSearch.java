@@ -38,7 +38,7 @@ import com.jellyfish.jfgonyx.onyx.abstractions.AbstractOnyxSearch;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException;
-import com.jellyfish.jfgonyx.onyx.interfaces.OnyxRandomSeachable;
+import com.jellyfish.jfgonyx.onyx.interfaces.search.OnyxRandomSeachable;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
 import java.awt.Point;
 import java.util.ArrayList;

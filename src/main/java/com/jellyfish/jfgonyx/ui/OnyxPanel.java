@@ -52,7 +52,7 @@ public class OnyxPanel extends JPanel implements OnyxObserver {
     public OnyxPanel() {
         super();
         this.setDoubleBuffered(true);
-        this.setBackground(GraphicsConst.COMPONENTS_BACKGROUND_COLOR);
+        this.setBackground(GraphicsConst.COMPONENTS_BACKGROUND_COLOR1);
     }
     
     @Override

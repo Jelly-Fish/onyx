@@ -92,6 +92,7 @@ public class OnyxBoard extends javax.swing.JPanel implements OnyxBoardI {
     public void initStartLayout() {
         
         for (OnyxPos p : this.positions.getPositions().values()) p.setPiece(null);
+        
         this.positions.getPosition("1,0-6,0").addPiece(new OnyxPiece(GraphicsConst.COLOR.BLACK));
         OnyxGame.getInstance().appendMove(new OnyxMove(this.positions.getPosition("1,0-6,0"), 
                 this.positions.getPosition("1,0-6,0").getPiece(), null, false));

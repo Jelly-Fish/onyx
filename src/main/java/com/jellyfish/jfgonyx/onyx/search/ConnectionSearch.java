@@ -37,14 +37,15 @@ import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException;
-import com.jellyfish.jfgonyx.onyx.interfaces.OnyxRandomSeachable;
+import com.jellyfish.jfgonyx.onyx.interfaces.search.OnyxConnectionSearchable;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
 
 /**
- *
+ * Connection search taking advantage of OnyxPos connections :
+ * @see OnyxPosCollection
  * @author thw
  */
-public class ConnectionSearch extends AbstractOnyxSearch implements OnyxRandomSeachable {
+public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnectionSearchable {
 
     @Override
     public OnyxMove search(final OnyxPosCollection c, final OnyxBoard board, final GraphicsConst.COLOR color) 
@@ -53,6 +54,21 @@ public class ConnectionSearch extends AbstractOnyxSearch implements OnyxRandomSe
          * FIXME gl&hf
          */
         return null;
+    }
+    
+    @Override
+    public boolean isWin(final OnyxPosCollection c, final GraphicsConst.COLOR color) 
+            throws NoValidOnyxPositionsFoundException {
+        /**
+         * Black borders are on x1.0 & x12.0 (Y from 1 to 12)
+         * White borders are on y1.0 & y12.0 (x from 1 to 10)
+         * 
+         * Get all occupied positions by color (x 1.0 > 12.00 for black y for whites)
+         *     recursively go through all position P for opposite border position
+         *       IF no break THEN win true
+         *       ELSE false.
+         */
+        return false;
     }
     
 }
