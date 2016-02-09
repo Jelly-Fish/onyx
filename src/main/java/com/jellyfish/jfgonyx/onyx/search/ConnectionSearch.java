@@ -32,13 +32,17 @@
 package com.jellyfish.jfgonyx.onyx.search;
 
 import com.jellyfish.jfgonyx.constants.GraphicsConst;
+import com.jellyfish.jfgonyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.abstractions.AbstractOnyxSearch;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
+import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException;
 import com.jellyfish.jfgonyx.onyx.interfaces.search.OnyxConnectionSearchable;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Connection search taking advantage of OnyxPos connections :
@@ -65,10 +69,55 @@ public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnecti
          * 
          * Get all occupied positions by color (x 1.0 > 12.00 for black y for whites)
          *     recursively go through all position P for opposite border position
+         *     @see ConnectionWinSearch
          *       IF no break THEN win true
          *       ELSE false.
          */
+        final List<OnyxPos> borders = trimByColor(getBorders(c, color), color);
+        
+        for (OnyxPos p : borders) {
+            if (new ConnectionWinSearch(c, color, p).hasFullConnection(p)) {
+                return true;
+            }
+        }
         return false;
+    }
+    
+    private List<OnyxPos> getBorders(final OnyxPosCollection c, final GraphicsConst.COLOR color) {
+        
+        final List<OnyxPos> borders = new ArrayList<>();
+        if (color.boolColor) {
+            for (int i = 0; i <= OnyxConst.BOARD_SIDE_SQUARE_COUNT; ++i) {
+                borders.add(c.getPosition(
+                    String.format(OnyxPosCollection.KEY_FORMAT, (float) 1, (float) i + 1)));
+                borders.add(c.getPosition(
+                    String.format(OnyxPosCollection.KEY_FORMAT, (float) 12, (float) i + 1)));
+            }
+        } else if (!color.boolColor) {
+            for (int i = 0; i <= OnyxConst.BOARD_SIDE_SQUARE_COUNT; ++i) {
+                borders.add(c.getPosition(
+                    String.format(OnyxPosCollection.KEY_FORMAT, (float) 1 + 1, (float) 1)));
+                borders.add(c.getPosition(
+                    String.format(OnyxPosCollection.KEY_FORMAT, (float) i + 1, (float) 12)));
+            }
+        }
+        return borders;
+    }
+
+    private List<OnyxPos> trimByColor(final List<OnyxPos> pos, final GraphicsConst.COLOR color) {
+        
+        final List<OnyxPos> positions = new ArrayList<>();
+        for (OnyxPos p : pos) {
+            if (p.isOccupied() && p.getPiece().color.bitColor == color.bitColor) {
+                if (color.boolColor && ((int) p.x) == 1) {
+                    positions.add(p);
+                } else if (!color.boolColor && ((int) p.y) == 1) {
+                    positions.add(p);
+                }
+            }
+        }
+        
+        return positions;
     }
     
 }

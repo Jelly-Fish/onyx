@@ -29,54 +29,70 @@
  * POSSIBILITY OF SUCH DAMAGE. 
  ******************************************************************************
  */
-package com.jellyfish.jfgonyx.onyx;
+package com.jellyfish.jfgonyx.onyx.search;
 
 import com.jellyfish.jfgonyx.constants.GraphicsConst;
-import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
+import com.jellyfish.jfgonyx.constants.OnyxConst;
+import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
-import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
-import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException;
-import com.jellyfish.jfgonyx.onyx.interfaces.search.OnyxAbstractSearchable;
-import com.jellyfish.jfgonyx.onyx.interfaces.search.OnyxConnectionSearchable;
-import com.jellyfish.jfgonyx.onyx.search.*;
-import com.jellyfish.jfgonyx.ui.OnyxBoard;
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
+ *
  * @author thw
  */
-class Onyx {
+class ConnectionWinSearch {
     
-    private final static HashMap<SEARCH_TYPE, OnyxAbstractSearchable> SEARCH = new HashMap<>();
-    static {
-        SEARCH.put(SEARCH_TYPE.ONYXPOSCOL, new PositionSearch());
-        SEARCH.put(SEARCH_TYPE.RANDOM, new RandomSearch());
-        SEARCH.put(SEARCH_TYPE.INTMAP, new IntmapSearch());
-        SEARCH.put(SEARCH_TYPE.CNX, new ConnectionSearch());
+    private final OnyxPosCollection c;
+    private final GraphicsConst.COLOR color;
+    private final OnyxPos startPos;
+    private final int max = OnyxConst.BOARD_SIDE_SQUARE_COUNT + 1;
+    private final List<String> checkedKeys = new ArrayList<>();
+
+    ConnectionWinSearch(final OnyxPosCollection c, final GraphicsConst.COLOR color, 
+            final OnyxPos startPos) {
+        this.c = c;
+        this.color = color;
+        this.startPos = startPos;
     }
     
-    static enum SEARCH_TYPE {
+    boolean hasFullConnection(final OnyxPos p) {
         
-        RANDOM("Random dumb search :X"), 
-        ONYXPOSCOL("Use onyx position collection for take or counter position searches."),
-        INTMAP("Integer map search."), 
-        CNX("Connection search style building & taking advantage of position trees.");
+        if (!p.isOccupied() || p.getPiece().color.bitColor != this.color.bitColor) return false;
         
-        private final String desc;
+        /**
+         * FIXME : to tired to finish. 
+         *       
+        for (String k : p.connections) {
+            if (c.getPosition(k).isOccupied() || c.getPosition(k).getPiece().color.bitColor != this.color.bitColor) {
+                this.checkedKeys.add(k);
+                continue;
+            }
+            if (!this.checkedKeys.contains(k) && c.getPosition(k).isOccupied() && 
+                c.getPosition(k).getPiece().color.bitColor == this.color.bitColor) {
+                if (hasFullConnection(c.getPosition(k))) {
+                    
+                } else {
+                    this.checkedKeys.add(k);
+                }
+            }
+        }
+         */
         
-        SEARCH_TYPE(final String desc) {
-            this.desc = desc;
-        }   
+        return false;
     }
-       
-    public static OnyxMove search(final OnyxPosCollection c, final OnyxBoard board, final GraphicsConst.COLOR color) 
-            throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
+    
+    private String hasConnection(final OnyxPos p) {
         
-        final OnyxMove m = SEARCH.get(SEARCH_TYPE.ONYXPOSCOL).search(c, board, color);
-        System.out.println(
-            ((OnyxConnectionSearchable) SEARCH.get(SEARCH_TYPE.CNX)).isWin(c, GraphicsConst.COLOR.getOposite(color.boolColor)) ? 
-            "WIN ! WuHu !!!" : "Not a win yet :C ...");
-        return m;
+        for (String k : p.connections) {
+            if (c.getPosition(k).isOccupied() || c.getPosition(k).getPiece().color.bitColor == this.color.bitColor) {
+                this.checkedKeys.add(k);
+                return k;
+            }
+        }
+        
+        return null;
     }
-        
+    
 }
