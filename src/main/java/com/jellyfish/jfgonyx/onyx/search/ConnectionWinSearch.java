@@ -57,42 +57,29 @@ class ConnectionWinSearch {
         this.startPos = startPos;
     }
     
-    boolean hasFullConnection(final OnyxPos p) {
+    boolean hasConnection(final OnyxPos p) {
         
         if (!p.isOccupied() || p.getPiece().color.bitColor != this.color.bitColor) return false;
-        
+       
         /**
-         * FIXME : to tired to finish. 
-         *       
+         * FIXME : exhausted after work...
+         */
+        
         for (String k : p.connections) {
-            if (c.getPosition(k).isOccupied() || c.getPosition(k).getPiece().color.bitColor != this.color.bitColor) {
+            if (!this.checkedKeys.contains(k) && !this.checkedKeys.contains(p.getKey()) && 
+                c.getPosition(k).isOccupied() && !c.getPosition(k).equals(p) &&
+                c.getPosition(k).getPiece().color.bitColor != this.color.bitColor) {
                 this.checkedKeys.add(k);
-                continue;
-            }
-            if (!this.checkedKeys.contains(k) && c.getPosition(k).isOccupied() && 
-                c.getPosition(k).getPiece().color.bitColor == this.color.bitColor) {
-                if (hasFullConnection(c.getPosition(k))) {
-                    
-                } else {
-                    this.checkedKeys.add(k);
+                if (hasConnection(c.getPosition(k))) {
+                    if ((this.color.boolColor && ((int) c.getPosition(k).x) == this.max) ||
+                        (!this.color.boolColor && ((int) c.getPosition(k).y) == this.max)) {
+                        return true;
+                    }
                 }
             }
         }
-         */
         
         return false;
-    }
-    
-    private String hasConnection(final OnyxPos p) {
-        
-        for (String k : p.connections) {
-            if (c.getPosition(k).isOccupied() || c.getPosition(k).getPiece().color.bitColor == this.color.bitColor) {
-                this.checkedKeys.add(k);
-                return k;
-            }
-        }
-        
-        return null;
     }
     
 }
