@@ -29,57 +29,44 @@
  * POSSIBILITY OF SUCH DAMAGE. 
  ******************************************************************************
  */
-package com.jellyfish.jfgonyx.onyx.search;
+package com.jellyfish.jfgonyx.onyx.search.subroutines;
 
-import com.jellyfish.jfgonyx.constants.GraphicsConst;
-import com.jellyfish.jfgonyx.constants.OnyxConst;
+import com.jellyfish.jfgonyx.onyx.entities.OnyxDiamond;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
-import java.util.ArrayList;
-import java.util.List;
+import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException;
+import com.jellyfish.jfgonyx.ui.OnyxBoard;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  *
  * @author thw
  */
-class ConnectionWinSearch {
+public class SearchNeighbourPosition {
     
-    private final OnyxPosCollection c;
-    private final GraphicsConst.COLOR color;
-    private final OnyxPos startPos;
-    private final int max = OnyxConst.BOARD_SIDE_SQUARE_COUNT + 1;
-    private final List<String> checkedKeys = new ArrayList<>();
-
-    ConnectionWinSearch(final OnyxPosCollection c, final GraphicsConst.COLOR color, 
-            final OnyxPos startPos) {
-        this.c = c;
-        this.color = color;
-        this.startPos = startPos;
-    }
-    
-    boolean hasConnection(final OnyxPos p) {
+    /**
+     * @param c Onyx position collection.
+     * @param b Onyx board instance.
+     * @param bitColor the color to play's bit value (0=white, 1=black).
+     * @return Neighbor move found or NULL if no such position has been found.
+     * @throws com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException
+     */
+    public static String getNeighbourPos(final OnyxPosCollection c, final OnyxBoard b, final int bitColor) throws NoValidOnyxPositionsFoundException {
         
-        if (!p.isOccupied() || p.getPiece().color.bitColor != this.color.bitColor) return false;
-       
-        /**
-         * FIXME : exhausted after work...
-         */
-        
-        for (String k : p.connections) {
-            if (!this.checkedKeys.contains(k) && !this.checkedKeys.contains(p.getKey()) && 
-                c.getPosition(k).isOccupied() && !c.getPosition(k).equals(p) &&
-                c.getPosition(k).getPiece().color.bitColor != this.color.bitColor) {
-                this.checkedKeys.add(k);
-                if (hasConnection(c.getPosition(k))) {
-                    if ((this.color.boolColor && ((int) c.getPosition(k).x) == this.max) ||
-                        (!this.color.boolColor && ((int) c.getPosition(k).y) == this.max)) {
-                        return true;
-                    }
-                }
+        int count;
+        OnyxPos pos = null;
+        String key = StringUtils.EMPTY;
+        for (OnyxDiamond d : b.getDiamondCollection().getDiamonds().values()) {
+            count = 0;
+            for (String k : d.getCornerKeys()) {
+                pos = c.getPosition(k);
+                if (pos.isOccupied() && pos.getPiece().color.bitColor == bitColor) ++count;
+                else key = k;
             }
+            if (count > 1  && !c.getPosition(key).isOccupied()) return key;
         }
         
-        return false;
+        return null;
     }
     
 }

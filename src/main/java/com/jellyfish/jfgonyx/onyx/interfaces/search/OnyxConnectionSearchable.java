@@ -47,24 +47,16 @@ public interface OnyxConnectionSearchable extends OnyxAbstractSearchable {
     /**
      * @param color the color for move, all equal colors will be discarded.
      * @param board the Onyx board with all diamonds.
+     * @throws com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException
+     * @throws com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException
      * @see OnyxPos position definition.
      * @see OnyxDiamond Onyx diamond definition.
      * @param c collection of unique Onyx positions - positions are independent from OnyxDiamond instances.
      * @return Best OnyxMove instance.
      * @see OnyxPosCollection OnyxPos instaces mapped to string key coordinates.
-     * @throws NoValidOnyxPositionsFoundException if no position if found.
      */
     @Override
     OnyxMove search(final OnyxPosCollection c, final OnyxBoard board, final GraphicsConst.COLOR color) 
             throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException;
-    
-    /**
-     * Is current layout defined by OnyxPosCollection a win position for the color.
-     * @param c collection of unique Onyx positions - positions are independent from OnyxDiamond instances.
-     * @param color the color to check for win position.
-     * @return true if win else false.
-     * @throws NoValidOnyxPositionsFoundException if no valid position if=s found during search.
-     */
-    boolean isWin(final OnyxPosCollection c, final GraphicsConst.COLOR color) throws NoValidOnyxPositionsFoundException;
     
 }

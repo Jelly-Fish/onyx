@@ -31,9 +31,9 @@
  */
 package com.jellyfish.jfgonyx.onyx.search;
 
-import com.jellyfish.jfgonyx.onyx.search.searchutils.SearchNeighbourPosition;
-import com.jellyfish.jfgonyx.onyx.search.searchutils.SearchCounterPosition;
-import com.jellyfish.jfgonyx.onyx.search.searchutils.SearchTakePosition;
+import com.jellyfish.jfgonyx.onyx.search.subroutines.SearchNeighbourPosition;
+import com.jellyfish.jfgonyx.onyx.search.subroutines.SearchCounterPosition;
+import com.jellyfish.jfgonyx.onyx.search.subroutines.SearchTakePosition;
 import com.jellyfish.jfgonyx.constants.GraphicsConst;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.abstractions.AbstractOnyxSearch;

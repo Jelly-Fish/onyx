@@ -31,15 +31,73 @@
  */
 package com.jellyfish.jfgonyx.onyx.search.searchutils;
 
+import com.jellyfish.jfgonyx.constants.GraphicsConst;
+import com.jellyfish.jfgonyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- *
  * @author thw
  */
 public class OnyxPositionUtils {
+    
+    public static List<OnyxPos> getBorders(final OnyxPosCollection c, final GraphicsConst.COLOR color) {
+        
+        final List<OnyxPos> borders = new ArrayList<>();
+        if (color.boolColor) {
+            for (int i = 0; i <= OnyxConst.BOARD_SIDE_SQUARE_COUNT; ++i) {
+                borders.add(c.getPosition(
+                    String.format(OnyxPosCollection.KEY_FORMAT, (float) 1, (float) i + 1)));
+                borders.add(c.getPosition(
+                    String.format(OnyxPosCollection.KEY_FORMAT, (float) 12, (float) i + 1)));
+            }
+        } else if (!color.boolColor) {
+            for (int i = 0; i <= OnyxConst.BOARD_SIDE_SQUARE_COUNT; ++i) {
+                borders.add(c.getPosition(
+                    String.format(OnyxPosCollection.KEY_FORMAT, (float) 1 + 1, (float) 1)));
+                borders.add(c.getPosition(
+                    String.format(OnyxPosCollection.KEY_FORMAT, (float) i + 1, (float) 12)));
+            }
+        }
+        return borders;
+    }
+
+    public static List<OnyxPos> trimByStartPositionAndColor(final List<OnyxPos> pos, final GraphicsConst.COLOR color) {
+        
+        final List<OnyxPos> positions = new ArrayList<>();
+        for (OnyxPos p : pos) {
+            if (p.isOccupied() && p.getPiece().color.bitColor == color.bitColor) {
+                if (color.boolColor && ((int) p.x) == 1) { // Black position.
+                    positions.add(p);
+                } else if (!color.boolColor && ((int) p.y) == 1) { // Else white position.
+                    positions.add(p);
+                }
+            }
+        }
+        
+        return positions;
+    }
+    
+    public static List<OnyxPos> trimByPositionAndColor(final List<OnyxPos> pos, final GraphicsConst.COLOR color) {
+        
+        final List<OnyxPos> positions = new ArrayList<>();
+        for (OnyxPos p : pos) {
+            if (p.isOccupied() && p.getPiece().color.bitColor == color.bitColor) {
+                if (color.boolColor && 
+                   (((int) p.x) == 1 || ((int) p.x) == OnyxConst.BOARD_SIDE_SQUARE_COUNT + 1)) {
+                    positions.add(p);
+                } else if (!color.boolColor && 
+                          (((int) p.y) == 1 || ((int) p.y) == OnyxConst.BOARD_SIDE_SQUARE_COUNT + 1)) {
+                    positions.add(p);
+                }
+            }
+        }
+        
+        return positions;
+    }
     
     public static final String[] getConnectionCandidates(final OnyxPos p) {
         

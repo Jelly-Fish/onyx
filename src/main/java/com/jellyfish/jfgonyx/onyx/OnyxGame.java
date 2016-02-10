@@ -61,7 +61,7 @@ public class OnyxGame {
     public OnyxBoardI boardInterface = null;
     public String dtStamp;
     private int moveCount = 0;
-    
+
     private OnyxGame() { }
     
     public void init(final OnyxBoardI boardInterface) {
@@ -158,6 +158,10 @@ public class OnyxGame {
     
     public HashMap<Integer, OnyxMove> getMoves() {
         return moves;
+    }
+    
+    public int getMoveCount() {
+        return this.moveCount;
     }
     
     public static OnyxGame getInstance() {

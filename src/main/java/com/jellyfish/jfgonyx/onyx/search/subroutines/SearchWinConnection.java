@@ -29,44 +29,46 @@
  * POSSIBILITY OF SUCH DAMAGE. 
  ******************************************************************************
  */
-package com.jellyfish.jfgonyx.onyx.search.searchutils;
+package com.jellyfish.jfgonyx.onyx.search.subroutines;
 
-import com.jellyfish.jfgonyx.onyx.entities.OnyxDiamond;
+import com.jellyfish.jfgonyx.constants.GraphicsConst;
+import com.jellyfish.jfgonyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
-import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException;
-import com.jellyfish.jfgonyx.ui.OnyxBoard;
-import org.apache.commons.lang3.StringUtils;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- *
  * @author thw
  */
-public class SearchCounterPosition {
+public class SearchWinConnection {
     
-    /**
-     * @param c Onyx position collection.
-     * @param b Onyx board instance.
-     * @param bitColor the color to play's bit value (0=white, 1=black).
-     * @return Strongest counter attack move found (to prevent sealing positions) 
-     * or NULL if no such position has been found.
-     */
-    public static String getCounterPos(final OnyxPosCollection c, final OnyxBoard b, final int bitColor) throws NoValidOnyxPositionsFoundException {
+    private final OnyxPosCollection c;
+    private final GraphicsConst.COLOR color;
+    private final float max = OnyxConst.BOARD_SIDE_SQUARE_COUNT + 1;
+    private final List<String> checked = new ArrayList<>();
+    
+    public SearchWinConnection(final OnyxPosCollection c, final GraphicsConst.COLOR color) {
+        this.c = c;
+        this.color = color;
+    }
+    
+    public boolean hasConnection(final OnyxPos p, final String kEx) {       
 
-        int count;
-        OnyxPos pos = null;
-        String key = StringUtils.EMPTY;
-        for (OnyxDiamond d : b.getDiamondCollection().getDiamonds().values()) {
-            count = 0;
-            for (String k : d.getCornerKeys()) {
-                pos = c.getPosition(k);
-                if (pos.isOccupied() && pos.getPiece().color.bitColor != bitColor) ++count;
-                else key = k;
+        /** FIXME : optimize - the heavy part is adding to this.checked List. */
+        
+        OnyxPos tmp = null;
+        for (String k : p.connections) {
+            tmp = c.getPosition(k);
+            if (tmp == null || this.checked.contains(k) || k.equals(kEx)) continue;
+            if (tmp.isOccupied() && tmp.getPiece().color.bitColor == this.color.bitColor) {
+                if (tmp.x > this.max - .1f) return true;
+                else this.checked.add(k);
+                return this.hasConnection(tmp, k);
             }
-            if (count == 3 && !c.getPosition(key).isOccupied()) return key;
         }
         
-        return null;
+        return false;
     }
     
 }

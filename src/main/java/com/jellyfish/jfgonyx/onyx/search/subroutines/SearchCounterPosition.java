@@ -29,7 +29,7 @@
  * POSSIBILITY OF SUCH DAMAGE. 
  ******************************************************************************
  */
-package com.jellyfish.jfgonyx.onyx.search.searchutils;
+package com.jellyfish.jfgonyx.onyx.search.subroutines;
 
 import com.jellyfish.jfgonyx.onyx.entities.OnyxDiamond;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
@@ -42,17 +42,17 @@ import org.apache.commons.lang3.StringUtils;
  *
  * @author thw
  */
-public class SearchNeighbourPosition {
+public class SearchCounterPosition {
     
     /**
      * @param c Onyx position collection.
      * @param b Onyx board instance.
      * @param bitColor the color to play's bit value (0=white, 1=black).
-     * @return Neighbor move found or NULL if no such position has been found.
-     * @throws com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException
+     * @return Strongest counter attack move found (to prevent sealing positions) 
+     * or NULL if no such position has been found.
      */
-    public static String getNeighbourPos(final OnyxPosCollection c, final OnyxBoard b, final int bitColor) throws NoValidOnyxPositionsFoundException {
-        
+    public static String getCounterPos(final OnyxPosCollection c, final OnyxBoard b, final int bitColor) throws NoValidOnyxPositionsFoundException {
+
         int count;
         OnyxPos pos = null;
         String key = StringUtils.EMPTY;
@@ -60,10 +60,10 @@ public class SearchNeighbourPosition {
             count = 0;
             for (String k : d.getCornerKeys()) {
                 pos = c.getPosition(k);
-                if (pos.isOccupied() && pos.getPiece().color.bitColor == bitColor) ++count;
+                if (pos.isOccupied() && pos.getPiece().color.bitColor != bitColor) ++count;
                 else key = k;
             }
-            if (count > 1  && !c.getPosition(key).isOccupied()) return key;
+            if (count == 3 && !c.getPosition(key).isOccupied()) return key;
         }
         
         return null;
