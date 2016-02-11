@@ -45,5 +45,8 @@ public abstract interface OnyxAbstractSearchable {
     
     OnyxMove search(final OnyxPosCollection c, final OnyxBoard board, final GraphicsConst.COLOR color) 
             throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException;
+ 
+    boolean isWin(final OnyxPosCollection c, final GraphicsConst.COLOR color) 
+            throws NoValidOnyxPositionsFoundException;
     
 }

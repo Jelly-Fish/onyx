@@ -58,11 +58,7 @@ public class OnyxConnectionHelper {
     private static final String FILE_PATH = "src/main/resources/onyxcnx";
     
     public static final void buildPosConnections(final OnyxPosCollection c) {
-        
-        /**
-         * FIXME : test
-         */
-        
+
         float fX = 0f, fY = 0f;
         String kF = StringUtils.EMPTY;
         OnyxPos[] pos = null;

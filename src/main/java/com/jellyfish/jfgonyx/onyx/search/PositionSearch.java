@@ -93,4 +93,10 @@ public class PositionSearch extends AbstractOnyxSearch implements OnyxPositionSe
         throw new NoValidOnyxPositionsFoundException();
     }
     
+    @Override
+    public boolean isWin(final OnyxPosCollection c, final GraphicsConst.COLOR color) 
+            throws NoValidOnyxPositionsFoundException {
+        throw new UnsupportedOperationException();
+    }
+    
 }

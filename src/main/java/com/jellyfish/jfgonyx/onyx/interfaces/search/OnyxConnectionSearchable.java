@@ -59,4 +59,25 @@ public interface OnyxConnectionSearchable extends OnyxAbstractSearchable {
     OnyxMove search(final OnyxPosCollection c, final OnyxBoard board, final GraphicsConst.COLOR color) 
             throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException;
     
+    /**
+     * Iterate through connections depending on color, if a border to border
+     * connection is found return true, else return false.
+     * <p>
+     * Black borders are on x1.0 & x12.0 (Y from 1 to 12)
+     * White borders are on y1.0 & y12.0 (x from 1 to 10)
+     * <p>
+     * Get all occupied positions by color (x 1.0 > 12.00 for black y for whites)
+     * recursively go through all position P for opposite border position
+     * IF no break THEN win true
+     * ELSE false.
+     * @see ConnectionWinSearch
+     * @param c position collection containing position's connections key positions.
+     * @param color the color to search win for.
+     * @return true if win.
+     * @throws NoValidOnyxPositionsFoundException is it get's messy...
+     */
+    @Override
+    boolean isWin(final OnyxPosCollection c, final GraphicsConst.COLOR color) 
+            throws NoValidOnyxPositionsFoundException;
+    
 }

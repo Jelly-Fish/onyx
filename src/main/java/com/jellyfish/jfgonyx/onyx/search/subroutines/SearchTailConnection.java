@@ -29,68 +29,50 @@
  * POSSIBILITY OF SUCH DAMAGE. 
  ******************************************************************************
  */
-package com.jellyfish.jfgonyx.onyx.entities;
+package com.jellyfish.jfgonyx.onyx.search.subroutines;
 
-import com.jellyfish.jfgonyx.constants.OnyxConst;
-import com.jellyfish.jfgonyx.onyx.entities.OnyxPiece;
+import com.jellyfish.jfgonyx.constants.GraphicsConst;
+import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
+import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
+import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException;
+import java.util.ArrayList;
 import java.util.List;
-import org.apache.commons.lang3.StringUtils;
 
 /**
+ *
  * @author thw
  */
-public class OnyxMove {
+public class SearchTailConnection {
     
-    private final OnyxPos pos;
-    private final OnyxPiece piece;
-    private final List<OnyxPos> captured;
-    private final boolean win;
+    private final OnyxPosCollection c;
+    private final GraphicsConst.COLOR color;
+    private final List<String> found = new ArrayList<>();
+        
+    public SearchTailConnection(final OnyxPosCollection c, final GraphicsConst.COLOR color) {
+        this.c = c;
+        this.color = color;
+    }    
     
-    public OnyxMove(final OnyxPos pos, final OnyxPiece piece, final List<OnyxPos> captured, 
-            final boolean win) {
-        this.pos = pos;
-        this.piece = piece;
-        this.win = win;
-        this.captured = captured;
-    }
-    
-    public OnyxMove(final boolean win) {
-        this(null, null, null, win);
-    }
-    
-    public OnyxMove(final OnyxPos p) {
-        this(p, null, null, false);
-    }
-    
-    public boolean isCapture() {
-        return this.captured != null;
-    }
-    
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(OnyxConst.POS_MAP.get(this.pos.getKey()));
-        if (this.captured != null && this.captured.size() > 0) {
-            sb.append(this.captured.size() == 2 ? "*" : this.captured.size() == 4 ? "**" : StringUtils.EMPTY);
+    public OnyxMove getTail(final OnyxPos p, final String kEx) throws NoValidOnyxPositionsFoundException {       
+
+        /**
+         * FIXME : finish writing this.
+         */
+        
+        OnyxPos tmp = null;
+        for (String k : p.connections) {
+            tmp = c.getPosition(k);
+            if (tmp == null || this.found.contains(k) || k.equals(kEx)) continue;
+            if (tmp.isOccupied() && tmp.getPiece().color.bitColor == this.color.bitColor) {
+                this.found.add(k);
+                this.getTail(tmp, tmp.getKey());
+            } else {
+                return new OnyxMove(tmp);
+            }
         }
-        return sb.toString();
-    }
-    
-    public List<OnyxPos> getCaptured() {
-        return captured;
-    }
-
-    public OnyxPos getPos() {
-        return pos;
-    }
-
-    public OnyxPiece getPiece() {
-        return piece;
-    }
-    
-    public boolean isWin() {
-        return win;
+        
+        throw new NoValidOnyxPositionsFoundException();
     }
     
 }

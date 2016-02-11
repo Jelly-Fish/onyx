@@ -60,4 +60,10 @@ public class RandomSearch extends AbstractOnyxSearch implements OnyxRandomSeacha
         throw new NoValidOnyxPositionsFoundException();
     }
     
+    @Override
+    public boolean isWin(final OnyxPosCollection c, final GraphicsConst.COLOR color) 
+            throws NoValidOnyxPositionsFoundException {
+        throw new UnsupportedOperationException();
+    }
+    
 }

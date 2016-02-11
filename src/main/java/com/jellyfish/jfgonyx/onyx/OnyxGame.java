@@ -135,7 +135,7 @@ public class OnyxGame {
     private void appendNewVirtual(final OnyxPosCollection c, final OnyxBoard board) 
             throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
         
-        final OnyxMove m = Onyx.search(c, board, this.colorToPlay);
+        final OnyxMove m = Onyx.getNewVirtual(c, board, this.colorToPlay);
         c.getPosition(m.getPos().getKey()).setVirtualPiece(
             new OnyxVirtualPiece(GraphicsConst.COLOR.getVirtualOposite(this.colorToPlay.boolColor))
         );

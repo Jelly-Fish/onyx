@@ -32,7 +32,6 @@
 package com.jellyfish.jfgonyx.onyx.search;
 
 import com.jellyfish.jfgonyx.constants.GraphicsConst;
-import com.jellyfish.jfgonyx.onyx.OnyxGame;
 import com.jellyfish.jfgonyx.onyx.abstractions.AbstractOnyxSearch;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
@@ -41,6 +40,7 @@ import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException;
 import com.jellyfish.jfgonyx.onyx.interfaces.search.OnyxConnectionSearchable;
 import com.jellyfish.jfgonyx.onyx.search.searchutils.OnyxPositionUtils;
+import com.jellyfish.jfgonyx.onyx.search.subroutines.SearchTailConnection;
 import com.jellyfish.jfgonyx.onyx.search.subroutines.SearchWinConnection;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
 import java.util.List;
@@ -56,31 +56,14 @@ public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnecti
     @Override
     public OnyxMove search(final OnyxPosCollection c, final OnyxBoard board, final GraphicsConst.COLOR color) 
             throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
-        final boolean win = this.isWin(c, color);
-        if (win) return new OnyxMove(win);
-        else return getTailMove(c, board, color);
+        return getTailMove(c, board, color);
     }
     
-    /**
-     * Is current layout defined by OnyxPosCollection a win position for the color.
-     * @param c collection of unique Onyx positions - positions are independent from OnyxDiamond instances.
-     * @param color the color to check for win position.
-     * @return true if win else false.
-     * @throws NoValidOnyxPositionsFoundException if no valid position if=s found during search.
-     */
-    private boolean isWin(final OnyxPosCollection c, final GraphicsConst.COLOR color) 
+    @Override
+    public boolean isWin(final OnyxPosCollection c, final GraphicsConst.COLOR color) 
             throws NoValidOnyxPositionsFoundException {
-        /**
-         * Black borders are on x1.0 & x12.0 (Y from 1 to 12)
-         * White borders are on y1.0 & y12.0 (x from 1 to 10)
-         * 
-         * Get all occupied positions by color (x 1.0 > 12.00 for black y for whites)
-         *     recursively go through all position P for opposite border position
-         *     @see ConnectionWinSearch
-         *       IF no break THEN win true
-         *       ELSE false.
-         */
-        final List<OnyxPos> borders = OnyxPositionUtils.trimByStartPositionAndColor(
+        
+        final List<OnyxPos> borders = OnyxPositionUtils.trimByBorderStartPositionsAndColor(
                 OnyxPositionUtils.getBorders(c, color), color);
         for (OnyxPos p : borders) {
             if (new SearchWinConnection(c, color).hasConnection(p, p.getKey())) {
@@ -97,12 +80,14 @@ public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnecti
      * @param board onyx board instance.
      * @return best onyx connection search move as a non win end of tail position move.
      */
-    private OnyxMove getTailMove(final OnyxPosCollection c, final OnyxBoard board, final GraphicsConst.COLOR color) {
+    private OnyxMove getTailMove(final OnyxPosCollection c, final OnyxBoard board, 
+            final GraphicsConst.COLOR color) throws NoValidOnyxPositionsFoundException {
         
-        final List<OnyxPos> borders = OnyxPositionUtils.trimByPositionAndColor(
-                OnyxPositionUtils.getBorders(c, color), color);
-        
-        /** FIXME : CODE. */
+        for (OnyxPos p : OnyxPositionUtils.trimByAllBorderPositionsAndColor(
+                OnyxPositionUtils.getBorders(c, color), color)) {
+            return new SearchTailConnection(c, color).getTail(p, p.getKey());
+        }
+
         return new OnyxMove(false);
     }
     

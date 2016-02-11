@@ -66,11 +66,18 @@ public class IntmapSearch extends AbstractOnyxSearch implements OnyxRandomSeacha
      *     ELSE return false
      *   ELSE return false
      */
-    private boolean isWin(final Intmap imap, final GraphicsConst.COLOR c) {
+    @Deprecated
+    public boolean isWin(final Intmap imap, final GraphicsConst.COLOR c) {
         
         final int[][] mtx = imap.getMtx_intmap();
         final List<Point> bounds = this.getStartIndexes(mtx, c.bitColor);
         return false;
+    }
+    
+    @Override
+    public boolean isWin(final OnyxPosCollection c, final GraphicsConst.COLOR color) 
+            throws NoValidOnyxPositionsFoundException {
+        throw new UnsupportedOperationException();
     }
     
     private List<Point> getStartIndexes(final int[][] mtx, final int bitColor) {
