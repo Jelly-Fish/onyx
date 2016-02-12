@@ -126,7 +126,7 @@ public class OnyxBoard extends javax.swing.JPanel implements OnyxBoardI {
     }
     
     @Override
-    public boolean isCenterPosPlayable(final String k, final int bitColor) {
+    public boolean isCenterPosPlayable(final String k) {
         
         OnyxDiamond tmpDiamond = null;
         if (k == null || !this.positions.getPositions().containsKey(k)) return false;

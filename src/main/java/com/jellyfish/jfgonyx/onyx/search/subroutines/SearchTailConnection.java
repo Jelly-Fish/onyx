@@ -68,7 +68,7 @@ public class SearchTailConnection {
                 this.found.add(k);
                 this.getTail(tmp, tmp.getKey());
             } else {
-                return new OnyxMove(tmp);
+                return new OnyxMove(tmp, this.found.size());
             }
         }
         

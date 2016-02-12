@@ -33,6 +33,7 @@ package com.jellyfish.jfgonyx.onyx.entities.collections;
 
 import com.jellyfish.jfgonyx.constants.GraphicsConst;
 import com.jellyfish.jfgonyx.helpers.OnyxConnectionHelper;
+import com.jellyfish.jfgonyx.onyx.OnyxGame;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxDiamond;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxVirtualPiece;
@@ -54,7 +55,7 @@ public class OnyxPosCollection {
     public static final int MTX_WH = 24;
     public static final String KEY_FORMAT = "%.1f-%.1f";
     private final HashMap<String, OnyxPos> positions = new HashMap<>();
-    
+
     public void init(final OnyxDiamondCollection c) {
         this.initPositionCollection(c);
         OnyxConnectionHelper.buildPosConnections(this);
@@ -88,6 +89,11 @@ public class OnyxPosCollection {
         return this.getPosition(k) != null;
     }
     
+    public boolean isValidMove(final OnyxPos pos, final OnyxBoard board, final GraphicsConst.COLOR color) {
+        return (pos.isOccupied() || 
+            (board.isDiamondCenter(pos.getKey()) && !board.isCenterPosPlayable(pos.getKey())));
+    }
+    
     public HashMap<String, OnyxPos> getPositions() {
         return positions;
     }
@@ -109,7 +115,7 @@ public class OnyxPosCollection {
     public boolean hasVirtualPiece() {
         return this.getVirtualPiece() != null;
     }
-
+    
     public List<OnyxPos> performTake(final String key, final int bitColor, final OnyxBoard board) throws InvalidOnyxPositionException {
         
         if (StringUtils.isBlank(key)) throw new InvalidOnyxPositionException();

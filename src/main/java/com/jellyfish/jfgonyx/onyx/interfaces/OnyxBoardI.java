@@ -47,7 +47,7 @@ public interface OnyxBoardI {
     
     void initStartLayout();
     
-    boolean isCenterPosPlayable(final String k, final int bitColor);
+    boolean isCenterPosPlayable(final String k);
 
     boolean isDiamondCenter(final String k);
     

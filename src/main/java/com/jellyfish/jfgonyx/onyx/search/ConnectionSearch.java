@@ -82,13 +82,24 @@ public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnecti
      */
     private OnyxMove getTailMove(final OnyxPosCollection c, final OnyxBoard board, 
             final GraphicsConst.COLOR color) throws NoValidOnyxPositionsFoundException {
-        
+
+        /**
+         * FIXME please.
+         */
+        OnyxMove tmp = null, res = null;
+        SearchTailConnection search = null;
         for (OnyxPos p : OnyxPositionUtils.trimByAllBorderPositionsAndColor(
                 OnyxPositionUtils.getBorders(c, color), color)) {
-            return new SearchTailConnection(c, color).getTail(p, p.getKey());
+            search = new SearchTailConnection(c, color);
+            res = search.getTail(p, p.getKey());
+            if (tmp == null || (res.getConnections() > tmp.getConnections())) {
+                tmp = res;
+            }
         }
 
-        return new OnyxMove(false);
+        if (tmp == null) throw new NoValidOnyxPositionsFoundException();
+        
+        return new OnyxMove(tmp.getPos());
     }
     
 }

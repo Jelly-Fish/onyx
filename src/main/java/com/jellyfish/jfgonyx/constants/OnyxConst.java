@@ -202,39 +202,39 @@ public class OnyxConst {
 
         OnyxConst.POS_MAP.put("2,5-11,5", "B-C-1-2");
         OnyxConst.POS_MAP.put("4,5-11,5", "D-E-1-2");
-        OnyxConst.POS_MAP.put("6,5-11,5", "G-G-1-2");
+        OnyxConst.POS_MAP.put("6,5-11,5", "F-G-1-2");
         OnyxConst.POS_MAP.put("8,5-11,5", "H-I-1-2");
-        OnyxConst.POS_MAP.put("10,5-11,5", "J-J-1-2");
+        OnyxConst.POS_MAP.put("10,5-11,5", "J-K-1-2");
 
         OnyxConst.POS_MAP.put("2,5-9,5", "B-C-3-4");
         OnyxConst.POS_MAP.put("4,5-9,5", "D-E-3-4");
-        OnyxConst.POS_MAP.put("6,5-9,5", "G-G-3-4");
+        OnyxConst.POS_MAP.put("6,5-9,5", "F-G-3-4");
         OnyxConst.POS_MAP.put("8,5-9,5", "H-I-3-4");
-        OnyxConst.POS_MAP.put("10,5-9,5", "J-J-3-4");
+        OnyxConst.POS_MAP.put("10,5-9,5", "J-K-3-4");
 
         OnyxConst.POS_MAP.put("2,5-7,5", "B-C-5-6");
         OnyxConst.POS_MAP.put("4,5-7,5", "D-E-5-6");
-        OnyxConst.POS_MAP.put("6,5-7,5", "G-G-5-6");
+        OnyxConst.POS_MAP.put("6,5-7,5", "F-G-5-6");
         OnyxConst.POS_MAP.put("8,5-7,5", "H-I-5-6");
-        OnyxConst.POS_MAP.put("10,5-7,5", "J-J-5-6");
+        OnyxConst.POS_MAP.put("10,5-7,5", "J-K-5-6");
 
         OnyxConst.POS_MAP.put("2,5-5,5", "B-C-7-8");
         OnyxConst.POS_MAP.put("4,5-5,5", "D-E-7-8");
-        OnyxConst.POS_MAP.put("6,5-5,5", "G-G-7-8");
+        OnyxConst.POS_MAP.put("6,5-5,5", "F-G-7-8");
         OnyxConst.POS_MAP.put("8,5-5,5", "H-I-7-8");
-        OnyxConst.POS_MAP.put("10,5-5,5", "J-J-7-8");
+        OnyxConst.POS_MAP.put("10,5-5,5", "J-K-7-8");
 
         OnyxConst.POS_MAP.put("2,5-3,5", "B-C-9-10");
         OnyxConst.POS_MAP.put("4,5-3,5", "D-E-9-10");
-        OnyxConst.POS_MAP.put("6,5-3,5", "G-G-9-10");
+        OnyxConst.POS_MAP.put("6,5-3,5", "F-G-9-10");
         OnyxConst.POS_MAP.put("8,5-3,5", "H-I-9-10");
-        OnyxConst.POS_MAP.put("10,5-3,5", "J-J-9-10");
+        OnyxConst.POS_MAP.put("10,5-3,5", "J-K-9-10");
 
         OnyxConst.POS_MAP.put("2,5-1,5", "B-C-11-12");
         OnyxConst.POS_MAP.put("4,5-1,5", "D-E-11-12");
-        OnyxConst.POS_MAP.put("6,5-1,5", "G-G-11-12");
+        OnyxConst.POS_MAP.put("6,5-1,5", "F-G-11-12");
         OnyxConst.POS_MAP.put("8,5-1,5", "H-I-11-12");
-        OnyxConst.POS_MAP.put("10,5-1,5", "J-J-11-12");
+        OnyxConst.POS_MAP.put("10,5-1,5", "J-K-11-12");
 
         OnyxConst.POS_MAP.put("1,5-10,5", "A-B-2-3");
         OnyxConst.POS_MAP.put("3,5-10,5", "C-D-2-3");
