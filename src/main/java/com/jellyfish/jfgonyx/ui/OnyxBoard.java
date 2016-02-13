@@ -143,7 +143,7 @@ public class OnyxBoard extends javax.swing.JPanel implements OnyxBoardI {
         int c = 0;
         if (tmpDiamond == null || !tmpDiamond.isFivePosDiamond()) return false;
         for (String dK : tmpDiamond.getAllKeys()) {
-            c = this.positions.getPosition(dK).isOccupied() ? c + 1 : c;
+            c = this.positions.getPosition(dK).isOccupied() ? ++c : c;
         }
         
         return c == 0;

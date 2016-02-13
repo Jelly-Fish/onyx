@@ -41,6 +41,8 @@ import com.jellyfish.jfgonyx.onyx.interfaces.search.OnyxAbstractSearchable;
 import com.jellyfish.jfgonyx.onyx.search.*;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -70,29 +72,35 @@ class Onyx {
         }   
     }
        
-    static OnyxMove search(final OnyxPosCollection c, final OnyxBoard board, final GraphicsConst.COLOR color) 
-            throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
+    static OnyxMove search(final OnyxPosCollection c, final OnyxBoard board, final GraphicsConst.COLOR color) {
         
-        /**
-         * Search routines and sub routines.
-         */
+        try {
+            
+            final OnyxMove mPOSCOL = SEARCH.get(SEARCH_TYPE.POSCOL).search(c, board, color);
+            final boolean win = ((ConnectionSearch) SEARCH.get(SEARCH_TYPE.CNX)).isWin(
+                    c, GraphicsConst.COLOR.getOposite(color.boolColor));
+            final boolean loose = ((ConnectionSearch) SEARCH.get(SEARCH_TYPE.CNX)).isWin(
+                    c, color);
+            final OnyxMove mCNX = SEARCH.get(SEARCH_TYPE.CNX).search(c, board, color);
+            
+            // Do printing dev stuff...
+            print(OnyxGame.getInstance().getMoveCount() % 2 != 0 ?
+                    "Engine's best with dumb SEARCH_TYPE.ONYXPOSCOL... " + OnyxConst.POS_MAP.get(mPOSCOL.getPos().getKey()) :
+                    StringUtils.EMPTY);
+            print("Tail cnx pos : " + OnyxConst.POS_MAP.get(mCNX.getPos().getKey()));
+            print(win ? "WIN ! WuHu !!!" : StringUtils.EMPTY);
+            print(loose ? "You l00S3 : X" : StringUtils.EMPTY);
+            
+            return mPOSCOL;
+            
+        } catch (final NoValidOnyxPositionsFoundException nVOPFEx) {
+            Logger.getLogger(Onyx.class.getName()).log(Level.SEVERE, null, nVOPFEx);
+        } catch (final InvalidOnyxPositionException iOPEx) {
+            Logger.getLogger(Onyx.class.getName()).log(Level.SEVERE, null, iOPEx + 
+                    String.format(InvalidOnyxPositionException.DEFAULT_MSG, color.strColor));
+        }
         
-        final OnyxMove mPOSCOL = SEARCH.get(SEARCH_TYPE.POSCOL).search(c, board, color);
-        final boolean win = ((ConnectionSearch) SEARCH.get(SEARCH_TYPE.CNX)).isWin(
-                c, GraphicsConst.COLOR.getOposite(color.boolColor));
-        final boolean loose = ((ConnectionSearch) SEARCH.get(SEARCH_TYPE.CNX)).isWin(
-                c, color);
-        final OnyxMove mCNX = SEARCH.get(SEARCH_TYPE.CNX).search(c, board, color);
-        
-        // Do printing dev stuff...
-        print(OnyxGame.getInstance().getMoveCount() % 2 != 0 ?
-            "Engine's best with dumb SEARCH_TYPE.ONYXPOSCOL... " + OnyxConst.POS_MAP.get(mPOSCOL.getPos().getKey()) : 
-            StringUtils.EMPTY);
-        print("Tail cnx pos : " + OnyxConst.POS_MAP.get(mCNX.getPos().getKey()));
-        print(win ? "WIN ! WuHu !!!" : StringUtils.EMPTY);
-        print(loose ? "You l00S3 : X" : StringUtils.EMPTY);
-        
-        return mPOSCOL;
+        return null;
     }
     
     static OnyxMove getNewVirtual(final OnyxPosCollection c, final OnyxBoard board, final GraphicsConst.COLOR color) 

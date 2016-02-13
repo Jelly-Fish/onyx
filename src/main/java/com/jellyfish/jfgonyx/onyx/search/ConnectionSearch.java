@@ -43,6 +43,7 @@ import com.jellyfish.jfgonyx.onyx.search.searchutils.OnyxPositionUtils;
 import com.jellyfish.jfgonyx.onyx.search.subroutines.SearchTailConnection;
 import com.jellyfish.jfgonyx.onyx.search.subroutines.SearchWinConnection;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -84,20 +85,22 @@ public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnecti
             final GraphicsConst.COLOR color) throws NoValidOnyxPositionsFoundException {
 
         /**
-         * FIXME please.
+         * FIXME
          */
-        OnyxMove tmp = null, res = null;
-        SearchTailConnection search = null;
-        for (OnyxPos p : OnyxPositionUtils.trimByAllBorderPositionsAndColor(
-                OnyxPositionUtils.getBorders(c, color), color)) {
-            search = new SearchTailConnection(c, color);
-            res = search.getTail(p, p.getKey());
-            if (tmp == null || (res.getConnections() > tmp.getConnections())) {
-                tmp = res;
+        final List<OnyxPos> pos = OnyxPositionUtils.trimByAllBorderPositionsAndColor(
+                OnyxPositionUtils.getBorders(c, color), color);
+        final List<OnyxMove> candidates = new ArrayList<>();
+        
+        for (OnyxPos p : pos) {
+            candidates.addAll(new SearchTailConnection(c, color).getTails(p, p.getKey()));
+        }
+        
+        OnyxMove tmp = new OnyxMove(pos.get(0), -1);
+        for (OnyxMove m : candidates) {
+            if (m.getConnections() > tmp.getConnections() && c.isValidMove(tmp.getPos(), board, color)) { 
+                tmp = new OnyxMove(m.getPos(), m.getConnections());
             }
         }
-
-        if (tmp == null) throw new NoValidOnyxPositionsFoundException();
         
         return new OnyxMove(tmp.getPos());
     }

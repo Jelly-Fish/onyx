@@ -54,10 +54,6 @@ public class SearchWinConnection {
     }
     
     public boolean hasConnection(final OnyxPos p, final String kEx) {       
-
-        /** 
-         * FIXME : optimize - the heavy part is adding to this.checked List. 
-         */
         
         OnyxPos tmp = null;
         for (String k : p.connections) {

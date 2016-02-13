@@ -40,39 +40,38 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
  * @author thw
  */
 public class SearchTailConnection {
     
     private final OnyxPosCollection c;
     private final GraphicsConst.COLOR color;
-    private final List<String> found = new ArrayList<>();
-        
+    private final List<String> checked = new ArrayList<>(); 
+    private final List<OnyxMove> candidates = new ArrayList<>();
+    
     public SearchTailConnection(final OnyxPosCollection c, final GraphicsConst.COLOR color) {
         this.c = c;
         this.color = color;
     }    
     
-    public OnyxMove getTail(final OnyxPos p, final String kEx) throws NoValidOnyxPositionsFoundException {       
-
-        /**
-         * FIXME : finish writing this.
-         */
+    public List<OnyxMove> getTails(final OnyxPos p, final String kEx) throws NoValidOnyxPositionsFoundException {       
         
+        /**
+         * FIXME
+         */
         OnyxPos tmp = null;
         for (String k : p.connections) {
             tmp = c.getPosition(k);
-            if (tmp == null || this.found.contains(k) || k.equals(kEx)) continue;
+            if (tmp == null || this.checked.contains(k) || k.equals(kEx)) continue;
             if (tmp.isOccupied() && tmp.getPiece().color.bitColor == this.color.bitColor) {
-                this.found.add(k);
-                this.getTail(tmp, tmp.getKey());
+                this.checked.add(k);
+                this.getTails(tmp, k);
             } else {
-                return new OnyxMove(tmp, this.found.size());
+                this.candidates.add(new OnyxMove(tmp, this.checked.size()));
             }
         }
         
-        throw new NoValidOnyxPositionsFoundException();
+        return this.candidates;
     }
     
 }
