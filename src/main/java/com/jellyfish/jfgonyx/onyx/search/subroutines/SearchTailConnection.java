@@ -32,12 +32,15 @@
 package com.jellyfish.jfgonyx.onyx.search.subroutines;
 
 import com.jellyfish.jfgonyx.constants.GraphicsConst;
+import com.jellyfish.jfgonyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
-import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException;
+import com.jellyfish.jfgonyx.ui.OnyxBoard;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @author thw
@@ -45,33 +48,64 @@ import java.util.List;
 public class SearchTailConnection {
     
     private final OnyxPosCollection c;
+    private final OnyxBoard board;
     private final GraphicsConst.COLOR color;
-    private final List<String> checked = new ArrayList<>(); 
     private final List<OnyxMove> candidates = new ArrayList<>();
+    private final Set<String> keyCandidates = new HashSet();
+    private final Set<String> checked = new HashSet();
     
-    public SearchTailConnection(final OnyxPosCollection c, final GraphicsConst.COLOR color) {
+    public SearchTailConnection(final OnyxPosCollection c, final GraphicsConst.COLOR color, final OnyxBoard board) {
         this.c = c;
         this.color = color;
-    }    
+        this.board = board;
+    }
     
-    public List<OnyxMove> getTails(final OnyxPos p, final String kEx) throws NoValidOnyxPositionsFoundException {       
+    public List<OnyxMove> getTails(final OnyxPos p, final String kEx) {
         
-        /**
-         * FIXME
-         */
-        OnyxPos tmp = null;
-        for (String k : p.connections) {
-            tmp = c.getPosition(k);
-            if (tmp == null || this.checked.contains(k) || k.equals(kEx)) continue;
-            if (tmp.isOccupied() && tmp.getPiece().color.bitColor == this.color.bitColor) {
-                this.checked.add(k);
-                this.getTails(tmp, k);
-            } else {
-                this.candidates.add(new OnyxMove(tmp, this.checked.size()));
-            }
+        this.findTailPos(p, kEx);
+        
+        for (String k : this.keyCandidates) {
+            this.candidates.add(new OnyxMove(c.getPosition(k)));
         }
+
+        //this.print(p.getKey(), candidates);
         
         return this.candidates;
+    }
+
+    private void findTailPos(final OnyxPos p, final String kEx) {       
+        
+        /**
+         * FIXME : fix, debug, test.
+         */
+        
+        this.checked.add(p.getKey());
+        OnyxPos tmp = null;
+        for (String k : p.connections) {
+            if (!k.equals(kEx)) {
+                tmp = c.getPosition(k);
+                if (!tmp.isOccupied() && c.isValidMove(tmp, board, color)) {
+                    this.keyCandidates.add(k);
+                }
+            } 
+        }
+        
+        for (String k : p.connections) {
+            if (!k.equals(kEx)) {
+                tmp = c.getPosition(k);
+                if (tmp.isOccupied() && tmp.getPiece().color.bitColor == this.color.bitColor 
+                        && !this.checked.contains(tmp.getKey())) {
+                    this.findTailPos(c.getPosition(k), k);
+                }
+            }
+        }
+    }
+    
+    private void print(final String sK, final List<OnyxMove> candidates) {
+        for (OnyxMove m : candidates) {
+            System.out.println(String.format(">> Candidate for start @ %s : [%s]",
+                    OnyxConst.POS_MAP.get(sK), OnyxConst.POS_MAP.get(m.getPos().getKey())));
+        }
     }
     
 }

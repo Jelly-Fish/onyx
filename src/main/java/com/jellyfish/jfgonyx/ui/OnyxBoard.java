@@ -129,7 +129,7 @@ public class OnyxBoard extends javax.swing.JPanel implements OnyxBoardI {
     public boolean isCenterPosPlayable(final String k) {
         
         OnyxDiamond tmpDiamond = null;
-        if (k == null || !this.positions.getPositions().containsKey(k)) return false;
+        if (k == null || !this.positions.containsPosition(k)) return false;
         
         for (OnyxDiamond d : this.diamonds.getDiamonds().values()) {
             try {

@@ -90,8 +90,9 @@ public class OnyxPosCollection {
     }
     
     public boolean isValidMove(final OnyxPos pos, final OnyxBoard board, final GraphicsConst.COLOR color) {
-        return (!pos.isOccupied() || 
-            (board.isDiamondCenter(pos.getKey()) && board.isCenterPosPlayable(pos.getKey())));
+        final boolean isCenter = board.isDiamondCenter(pos.getKey());
+        return ((!pos.isOccupied() && !isCenter)) || 
+            (isCenter && board.isCenterPosPlayable(pos.getKey()));
     }
     
     public HashMap<String, OnyxPos> getPositions() {
