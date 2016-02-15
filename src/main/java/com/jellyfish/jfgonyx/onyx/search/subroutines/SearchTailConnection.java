@@ -36,6 +36,7 @@ import com.jellyfish.jfgonyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
+import com.jellyfish.jfgonyx.ui.MainFrame;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -68,16 +69,12 @@ public class SearchTailConnection {
             this.candidates.add(new OnyxMove(c.getPosition(k)));
         }
 
-        //this.print(p.getKey(), candidates);
+        this.print(p.getKey(), candidates);
         
         return this.candidates;
     }
 
     private void findTailPos(final OnyxPos p, final String kEx) {       
-        
-        /**
-         * FIXME : fix, debug, test.
-         */
         
         this.checked.add(p.getKey());
         OnyxPos tmp = null;
@@ -103,7 +100,7 @@ public class SearchTailConnection {
     
     private void print(final String sK, final List<OnyxMove> candidates) {
         for (OnyxMove m : candidates) {
-            System.out.println(String.format(">> Candidate for start @ %s : [%s]",
+            MainFrame.print(String.format(">> Candidate for start @ %s : [%s]",
                     OnyxConst.POS_MAP.get(sK), OnyxConst.POS_MAP.get(m.getPos().getKey())));
         }
     }

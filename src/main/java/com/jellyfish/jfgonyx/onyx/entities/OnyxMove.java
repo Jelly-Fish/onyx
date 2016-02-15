@@ -46,32 +46,21 @@ public class OnyxMove {
     private final OnyxPiece piece;
     private final List<OnyxPos> captured;
     private final boolean win;
-    private final int connections;
 
     public OnyxMove(final OnyxPos pos, final OnyxPiece piece, final List<OnyxPos> captured, 
-            final boolean win, final int connections) {
+            final boolean win) {
         this.pos = pos;
         this.piece = piece;
         this.win = win;
         this.captured = captured;
-        this.connections = connections;
-    }
-    
-    public OnyxMove(final OnyxPos pos, final OnyxPiece piece, final List<OnyxPos> captured, 
-            final boolean win) {
-        this(pos, piece, captured, win, -1);
     }
     
     public OnyxMove(final boolean win) {
-        this(null, null, null, win, -1);
+        this(null, null, null, win);
     }
     
     public OnyxMove(final OnyxPos p) {
-        this(p, null, null, false, -1);
-    }
-    
-    public OnyxMove(final OnyxPos p, final int connections) {
-        this(p, null, null, false, connections);
+        this(p, null, null, false);
     }
     
     public boolean isCapture() {
@@ -98,10 +87,6 @@ public class OnyxMove {
 
     public OnyxPiece getPiece() {
         return piece;
-    }
-    
-    public int getConnections() {
-        return connections;
     }
     
     public boolean isWin() {

@@ -39,6 +39,7 @@ import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException;
 import com.jellyfish.jfgonyx.onyx.interfaces.search.OnyxAbstractSearchable;
 import com.jellyfish.jfgonyx.onyx.search.*;
+import com.jellyfish.jfgonyx.ui.MainFrame;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
 import java.util.HashMap;
 import java.util.logging.Level;
@@ -109,7 +110,9 @@ class Onyx {
     }
     
     private static void print(final String s) {
-        if (!StringUtils.isBlank(s)) System.out.println(s);
+        if (!StringUtils.isBlank(s)) {
+            MainFrame.print(s);
+        }
     }
         
 }

@@ -40,9 +40,9 @@ import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.LinkedList;
+import javax.swing.text.DefaultCaret;
 import javax.swing.text.Document;
 import javax.swing.text.html.HTMLEditorKit;
-import org.apache.commons.lang3.StringUtils;
 
 /**
  *
@@ -56,8 +56,8 @@ public class MainFrame extends javax.swing.JFrame implements OnyxObserver {
     private final int initialHeight;
     private final LinkedList<String> move_labels = new LinkedList<>();
     private final String label_format = "%d: %s\n";
-    private HTMLEditorKit htmlEditorKit = null;
-    private Document doc = null;
+    private static HTMLEditorKit htmlEditorKit = null;
+    private static Document doc = null;
     
     /**
      * Creates new form MainFrame
@@ -113,7 +113,7 @@ public class MainFrame extends javax.swing.JFrame implements OnyxObserver {
 
         textScrollPane.setBorder(null);
 
-        dataTextPane.setBackground(new java.awt.Color(245, 245, 240));
+        dataTextPane.setBackground(new java.awt.Color(250, 250, 250));
         dataTextPane.setBorder(javax.swing.BorderFactory.createEmptyBorder(4, 8, 4, 4));
         dataTextPane.setFont(new java.awt.Font("Consolas", 0, 14)); // NOI18N
         textScrollPane.setViewportView(dataTextPane);
@@ -184,10 +184,11 @@ public class MainFrame extends javax.swing.JFrame implements OnyxObserver {
         this.dataTextPane.setContentType("text/html");
         final HTMLEditorKit html = new HTMLEditorKit();
         this.dataTextPane.setEditorKit(html);
-        this.dataTextPane.setBackground(GraphicsConst.COMPONENTS_BACKGROUND_COLOR1);
-        this.htmlEditorKit = (HTMLEditorKit) this.dataTextPane.getEditorKit();
-        this.htmlEditorKit.setLinkCursor(new Cursor(Cursor.HAND_CURSOR));
-        this.doc = this.dataTextPane.getDocument();       
+        htmlEditorKit = (HTMLEditorKit) this.dataTextPane.getEditorKit();
+        htmlEditorKit.setLinkCursor(new Cursor(Cursor.HAND_CURSOR));
+        doc = this.dataTextPane.getDocument();
+        final DefaultCaret caret = (DefaultCaret) this.dataTextPane.getCaret();
+        caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
         board.focus();
         this.pack();
         this.setSize(GraphicsConst.BOARD_WIDTH + 36, GraphicsConst.BOARD_WIDTH + 68);
@@ -204,10 +205,20 @@ public class MainFrame extends javax.swing.JFrame implements OnyxObserver {
 
     @Override
     public final void notifyMove(final OnyxMove m) {
+        
         this.move_labels.add(m.toString());
+        /**
+         * FIXME : UI must have control on full raw or HTML output.
+         *
         this.dataTextPane.setText(StringUtils.EMPTY); 
-        MainFrameGHelper.appendData(this.move_labels, this.board.getPosCollection(), 
+        MainFrameGHelper.appendHTMLData(this.move_labels, this.board.getPosCollection(), 
                 this.htmlEditorKit, this.doc);
+         */
+        MainFrameGHelper.appendRawData(m.toString(), htmlEditorKit, doc);
+    }
+    
+    public static final void print(final String data) {
+        MainFrameGHelper.appendRawData(data, htmlEditorKit, doc);
     }
     
 }

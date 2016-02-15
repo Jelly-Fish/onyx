@@ -39,6 +39,7 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class HTMLDisplayHelper {
     
+    private static final String SPAN = "<span style=\"%s\">%s</span>";
     private static final String TR = "<tr>%s</tr>";
     private static final String TD = 
             "<td style=\"align: center; background-color: rgb(172,172,162);\">%s</td>";
@@ -56,11 +57,15 @@ public class HTMLDisplayHelper {
     private static final String WHITE_BOLD_TEXT = "<b style=\"color: white;" + 
             HTMLDisplayHelper.FONT_STYLE + "\">%s</b>";
     
-    public static final String buildHTML(final String[] m, final int b, final int w) {
+    static final String buildHTML(final String[] m, final int b, final int w) {
         final StringBuilder html = new StringBuilder();
         html.append(buildPieceCountTable(b, w));
         html.append(buildMoveDataTable(m));
         return html.toString();
+    }
+    
+    static String buildHTML(String data) {
+        return String.format(SPAN, FONT_STYLE, data);
     }
     
     public static final String getMoveText(final int n) {

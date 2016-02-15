@@ -48,7 +48,7 @@ import javax.swing.text.html.HTMLEditorKit;
  */
 public class MainFrameGHelper {
     
-    public static final void appendData(final LinkedList<String> moveLabels, final OnyxPosCollection posC,
+    public static final void appendHTMLData(final LinkedList<String> moveLabels, final OnyxPosCollection posC,
             final HTMLEditorKit htmlEditorKit, final Document doc) {
         
         final String[] moves = new String[moveLabels.size()];
@@ -59,6 +59,18 @@ public class MainFrameGHelper {
         try {
             htmlEditorKit.insertHTML((HTMLDocument) doc, doc.getLength(), 
                 HTMLDisplayHelper.buildHTML(moves, blacks, whites), 0, 0, null);
+        } catch (BadLocationException | IOException ex) {
+            Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public static final void appendRawData(final String data, final HTMLEditorKit htmlEditorKit, final Document doc) {
+        
+        if (htmlEditorKit == null || doc == null || data == null) return;
+        
+        try {
+            htmlEditorKit.insertHTML((HTMLDocument) doc, doc.getLength(), 
+                HTMLDisplayHelper.buildHTML(data), 0, 0, null);
         } catch (BadLocationException | IOException ex) {
             Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
         }

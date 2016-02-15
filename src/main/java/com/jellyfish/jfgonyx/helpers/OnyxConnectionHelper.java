@@ -35,6 +35,7 @@ import com.jellyfish.jfgonyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
 import static com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection.KEY_FORMAT;
+import com.jellyfish.jfgonyx.ui.MainFrame;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -190,9 +191,14 @@ public class OnyxConnectionHelper {
             FileWriter f = new FileWriter(FILE_PATH, false);
             f.write(sb.toString());
             f.close();
+            MainFrame.print(sb.toString());
         } catch (final IOException iOex) {
             Logger.getLogger(OnyxConnectionHelper.class.getName()).log(Level.SEVERE, null, iOex);
+        } catch (final Exception ex) {
+            Logger.getLogger(OnyxConnectionHelper.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        
     }
     
 }

@@ -140,7 +140,7 @@ public class OnyxConst {
         OnyxConst.POS_MAP.put("3,0-8,0", "C-5");
         OnyxConst.POS_MAP.put("4,0-8,0", "D-5");
         OnyxConst.POS_MAP.put("5,0-8,0", "E-5");
-        OnyxConst.POS_MAP.put("6,0-8,0", "F-5-");
+        OnyxConst.POS_MAP.put("6,0-8,0", "F-5");
         OnyxConst.POS_MAP.put("7,0-8,0", "G-5");
         OnyxConst.POS_MAP.put("8,0-8,0", "H-5");
         OnyxConst.POS_MAP.put("9,0-8,0", "I-5");

@@ -85,9 +85,10 @@ public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnecti
             final GraphicsConst.COLOR color) throws NoValidOnyxPositionsFoundException {
 
         /**
-         * FIXME
+         * FIXME : must work with trimByAllBorderPositionsAndColor
          */
-        final List<OnyxPos> pos = OnyxPositionUtils.trimByAllBorderPositionsAndColor(
+        
+        final List<OnyxPos> pos = OnyxPositionUtils.trimByBorderStartPositionsAndColor(
                 OnyxPositionUtils.getBorders(c, color), color);
         final List<OnyxMove> candidates = new ArrayList<>();
         
@@ -95,14 +96,18 @@ public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnecti
             candidates.addAll(new SearchTailConnection(c, color, board).getTails(p, p.getKey()));
         }
         
-        OnyxMove tmp = new OnyxMove(pos.get(0), -1);
+        OnyxPos tmp = null;
         for (OnyxMove m : candidates) {
-            if (m.getConnections() > tmp.getConnections()) { 
-                tmp = new OnyxMove(m.getPos(), m.getConnections());
+            if (tmp == null) tmp = m.getPos();
+            if (color.boolColor && m.getPos().x >= tmp.x) {
+                tmp = m.getPos();
+            }
+            if (!color.boolColor && m.getPos().y >= tmp.y) { 
+                tmp = m.getPos();
             }
         }
         
-        return new OnyxMove(tmp.getPos());
+        return new OnyxMove(tmp);
     }
     
 }
