@@ -81,14 +81,11 @@ public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnecti
      * @param board onyx board instance.
      * @return best onyx connection search move as a non win end of tail position move.
      */
+    @SuppressWarnings("null")
     private OnyxMove getTailMove(final OnyxPosCollection c, final OnyxBoard board, 
             final GraphicsConst.COLOR color) throws NoValidOnyxPositionsFoundException {
-
-        /**
-         * FIXME : must work with trimByAllBorderPositionsAndColor
-         */
         
-        final List<OnyxPos> pos = OnyxPositionUtils.trimByBorderStartPositionsAndColor(
+        final List<OnyxPos> pos = OnyxPositionUtils.trimByAllBorderPositionsAndColor(
                 OnyxPositionUtils.getBorders(c, color), color);
         final List<OnyxMove> candidates = new ArrayList<>();
         
@@ -96,18 +93,15 @@ public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnecti
             candidates.addAll(new SearchTailConnection(c, color, board).getTails(p, p.getKey()));
         }
         
-        OnyxPos tmp = null;
+        OnyxMove tmp = null;
         for (OnyxMove m : candidates) {
-            if (tmp == null) tmp = m.getPos();
-            if (color.boolColor && m.getPos().x >= tmp.x) {
-                tmp = m.getPos();
-            }
-            if (!color.boolColor && m.getPos().y >= tmp.y) { 
-                tmp = m.getPos();
+            if (tmp == null) tmp = m;
+            if (!m.isLambda() && m.getScore() >= tmp.getScore()) {
+                tmp = m;
             }
         }
         
-        return new OnyxMove(tmp);
+        return new OnyxMove(tmp.getPos());
     }
     
 }

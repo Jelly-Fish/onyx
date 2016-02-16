@@ -33,6 +33,7 @@ package com.jellyfish.jfgonyx.onyx.entities;
 
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
 import com.jellyfish.jfgonyx.constants.GraphicsConst;
+import com.jellyfish.jfgonyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import java.util.List;
 
@@ -79,6 +80,22 @@ public class OnyxPos {
         }
     }
         
+    public boolean isLowXBorder() {
+        return this.isOccupied() && !(this.x > 1f);
+    }
+
+    public boolean isHighXBorder() {
+        return this.isOccupied() && !(this.x < (float) (OnyxConst.BOARD_SIDE_SQUARE_COUNT + 1));
+    }
+    
+    public boolean isLowYBorder() {
+        return this.isOccupied() && !(this.y > 1f);
+    }
+    
+    public boolean isHighYBorder() {
+        return this.isOccupied() && !(this.y < (float) (OnyxConst.BOARD_SIDE_SQUARE_COUNT + 1));
+    }
+
     public int occursCount(final OnyxPos p, final List<OnyxPos> posSet) {
         
         int count = 0;

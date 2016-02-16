@@ -51,6 +51,11 @@ import org.apache.commons.lang3.StringUtils;
  */
 class Onyx {
     
+    private static final String POSCOL_SEARCH_FORMAT = ">> Engine's best with dumb SEARCH_TYPE.ONYXPOSCOL... --> [%s]";
+    private static final String CNX_SEARCH_FORMAT = ">> Tail cnx search : --> [%s]";
+    private static final String WIN = ">> WIN ! WuHu !!!";
+    private static final String LOOSE = ">> You l00S3 : X"; 
+            
     private final static HashMap<SEARCH_TYPE, OnyxAbstractSearchable> SEARCH = new HashMap<>();
     static {
         SEARCH.put(SEARCH_TYPE.POSCOL, new PositionSearch());
@@ -84,13 +89,13 @@ class Onyx {
                     c, color);
             final OnyxMove mCNX = SEARCH.get(SEARCH_TYPE.CNX).search(c, board, color);
             
-            // Do printing dev stuff...
-            print(OnyxGame.getInstance().getMoveCount() % 2 != 0 ?
-                    "Engine's best with dumb SEARCH_TYPE.ONYXPOSCOL... " + OnyxConst.POS_MAP.get(mPOSCOL.getPos().getKey()) :
+            // Do printing debug stuff...
+            print(OnyxGame.getInstance().getMoveCount() % 2 != 0 ? 
+                    String.format(POSCOL_SEARCH_FORMAT,  OnyxConst.POS_MAP.get(mPOSCOL.getPos().getKey())) :
                     StringUtils.EMPTY);
-            print("Tail cnx pos : " + OnyxConst.POS_MAP.get(mCNX.getPos().getKey()));
-            print(win ? "WIN ! WuHu !!!" : StringUtils.EMPTY);
-            print(loose ? "You l00S3 : X" : StringUtils.EMPTY);
+            print(String.format(CNX_SEARCH_FORMAT, OnyxConst.POS_MAP.get(mCNX.getPos().getKey())));
+            print(win ? WIN : StringUtils.EMPTY);
+            print(loose ? LOOSE : StringUtils.EMPTY);
             
             return mPOSCOL;
             

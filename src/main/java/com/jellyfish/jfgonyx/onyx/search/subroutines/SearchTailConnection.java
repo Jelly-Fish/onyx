@@ -38,8 +38,8 @@ import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
 import com.jellyfish.jfgonyx.ui.MainFrame;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
-import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -48,12 +48,16 @@ import java.util.Set;
  */
 public class SearchTailConnection {
     
+    private final static String LAMBDA_CANDIDATE = ">> Lambda candidate for start @ %s : [%s]";
+    private final static String BEST_CANDIDATE = ">> Candidate for start @ %s : [%s]";
     private final OnyxPosCollection c;
     private final OnyxBoard board;
     private final GraphicsConst.COLOR color;
-    private final List<OnyxMove> candidates = new ArrayList<>();
+    private final LinkedList<OnyxMove> candidates = new LinkedList<>();
     private final Set<String> keyCandidates = new HashSet();
     private final Set<String> checked = new HashSet();
+    private OnyxPos startPos;
+    private OnyxMove candidate;
     
     public SearchTailConnection(final OnyxPosCollection c, final GraphicsConst.COLOR color, final OnyxBoard board) {
         this.c = c;
@@ -63,13 +67,11 @@ public class SearchTailConnection {
     
     public List<OnyxMove> getTails(final OnyxPos p, final String kEx) {
         
+        this.startPos = p;
         this.findTailPos(p, kEx);
-        
-        for (String k : this.keyCandidates) {
-            this.candidates.add(new OnyxMove(c.getPosition(k)));
-        }
-
-        this.print(p.getKey(), candidates);
+        this.trim();
+        this.print(p.getKey(), candidates, LAMBDA_CANDIDATE);
+        this.print(p.getKey(), this.candidate, BEST_CANDIDATE);
         
         return this.candidates;
     }
@@ -98,11 +100,49 @@ public class SearchTailConnection {
         }
     }
     
-    private void print(final String sK, final List<OnyxMove> candidates) {
+    private void trim() {
+        
+        /**
+         * FIXME : refactor this mess.
+         */
+        
+        float score = -1f;
+        OnyxPos tmp = null, pos = null;
+        for (String k : this.keyCandidates) {
+            
+            this.candidates.add(new OnyxMove(c.getPosition(k), true));
+            if (tmp == null) tmp = c.getPosition(k);            
+            pos = c.getPosition(k);
+            
+            if (this.color.boolColor && ((this.startPos.isLowXBorder() && pos.x >= tmp.x) ||
+                    (this.startPos.isHighXBorder() && pos.x <= tmp.x))) {
+                tmp = pos;
+                score = this.startPos.isLowXBorder() ? pos.x :
+                        +(pos.x - OnyxConst.BOARD_SIDE_SQUARE_COUNT + 1);
+            }
+            
+            if (!this.color.boolColor && ((this.startPos.isLowYBorder() && pos.y >= tmp.y) ||
+                    (this.startPos.isHighYBorder() && pos.y <= tmp.y))) {
+                tmp = pos;
+                score = this.startPos.isLowYBorder() ? pos.y :
+                        +(pos.y - OnyxConst.BOARD_SIDE_SQUARE_COUNT + 1);
+            }
+        }
+
+        this.candidate = new OnyxMove(tmp, false, score);
+        this.candidates.add(candidate);
+    }
+    
+    private void print(final String sK, final List<OnyxMove> candidates, final String f) {
         for (OnyxMove m : candidates) {
-            MainFrame.print(String.format(">> Candidate for start @ %s : [%s]",
+            MainFrame.print(String.format(f,
                     OnyxConst.POS_MAP.get(sK), OnyxConst.POS_MAP.get(m.getPos().getKey())));
         }
+    }
+    
+    private void print(final String sK, final OnyxMove candidate, final String f) {
+        MainFrame.print(String.format(f,
+                OnyxConst.POS_MAP.get(sK), OnyxConst.POS_MAP.get(candidate.getPos().getKey())));
     }
     
 }

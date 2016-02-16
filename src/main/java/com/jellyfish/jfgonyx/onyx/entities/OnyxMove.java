@@ -32,8 +32,6 @@
 package com.jellyfish.jfgonyx.onyx.entities;
 
 import com.jellyfish.jfgonyx.constants.OnyxConst;
-import com.jellyfish.jfgonyx.onyx.entities.OnyxPiece;
-import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 
@@ -46,6 +44,8 @@ public class OnyxMove {
     private final OnyxPiece piece;
     private final List<OnyxPos> captured;
     private final boolean win;
+    private boolean lambda;
+    private float score = -1f;
 
     public OnyxMove(final OnyxPos pos, final OnyxPiece piece, final List<OnyxPos> captured, 
             final boolean win) {
@@ -61,6 +61,18 @@ public class OnyxMove {
     
     public OnyxMove(final OnyxPos p) {
         this(p, null, null, false);
+        this.lambda = false;
+    }
+    
+    public OnyxMove(final OnyxPos p, final boolean lambda) {
+        this(p, null, null, false);
+        this.lambda = lambda;
+    }
+    
+    public OnyxMove(final OnyxPos p, final boolean lambda, final float score) {
+        this(p, null, null, false);
+        this.lambda = lambda;
+        this.score = score;
     }
     
     public boolean isCapture() {
@@ -93,4 +105,12 @@ public class OnyxMove {
         return win;
     }
     
+    public boolean isLambda() {
+        return lambda;
+    }
+    
+    public float getScore() {
+        return score;
+    }
+        
 }
