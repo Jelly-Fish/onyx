@@ -1,5 +1,10 @@
+--------------------------------------------------------------------------------
 8-feb-2016 :
 FIX : Doble take is working but history display prints * (and not **) when double take
 is found and executed.
+--------------------------------------------------------------------------------
 8-feb-2016 :
 TODO : connection search for win moves.
+--------------------------------------------------------------------------------
+17-feb-2016 :
+Takes & double takes show bugs : test & FIX.
