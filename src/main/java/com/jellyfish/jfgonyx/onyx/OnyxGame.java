@@ -35,6 +35,7 @@ import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.search.searchutils.Intmap;
 import com.jellyfish.jfgonyx.constants.DTStampConst;
 import com.jellyfish.jfgonyx.constants.GraphicsConst;
+import com.jellyfish.jfgonyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPiece;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
@@ -107,7 +108,7 @@ public class OnyxGame {
     
     public void appendMove(final OnyxPos pos, final OnyxPiece piece, final List<OnyxPos> captured) {
         this.moves.put(this.moves.size() + 1, 
-            new OnyxMove(pos, piece, captured, false)
+            new OnyxMove(pos, piece,  captured.size() * OnyxConst.SCORE.TAKE.getValue())
         );
     }
     

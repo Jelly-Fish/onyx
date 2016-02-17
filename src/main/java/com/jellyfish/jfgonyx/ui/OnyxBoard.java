@@ -95,28 +95,28 @@ public class OnyxBoard extends javax.swing.JPanel implements OnyxBoardI {
         
         this.positions.getPosition("1,0-6,0").addPiece(new OnyxPiece(GraphicsConst.COLOR.BLACK));
         OnyxGame.getInstance().appendMove(new OnyxMove(this.positions.getPosition("1,0-6,0"), 
-                this.positions.getPosition("1,0-6,0").getPiece(), null, false));
+                this.positions.getPosition("1,0-6,0").getPiece()));
         this.positions.getPosition("6,0-1,0").addPiece(new OnyxPiece(GraphicsConst.COLOR.WHITE));
         OnyxGame.getInstance().appendMove(new OnyxMove(this.positions.getPosition("6,0-1,0"), 
-                this.positions.getPosition("6,0-1,0").getPiece(), null, false));
+                this.positions.getPosition("6,0-1,0").getPiece()));
         this.positions.getPosition("12,0-7,0").addPiece(new OnyxPiece(GraphicsConst.COLOR.BLACK));
         OnyxGame.getInstance().appendMove(new OnyxMove(this.positions.getPosition("12,0-7,0"), 
-                this.positions.getPosition("12,0-7,0").getPiece(), null, false));
+                this.positions.getPosition("12,0-7,0").getPiece()));
         this.positions.getPosition("7,0-12,0").addPiece(new OnyxPiece(GraphicsConst.COLOR.WHITE));
         OnyxGame.getInstance().appendMove(new OnyxMove(this.positions.getPosition("7,0-12,0"), 
-                this.positions.getPosition("7,0-12,0").getPiece(), null, false));
+                this.positions.getPosition("7,0-12,0").getPiece()));
         this.positions.getPosition("1,0-7,0").addPiece(new OnyxPiece(GraphicsConst.COLOR.BLACK));
         OnyxGame.getInstance().appendMove(new OnyxMove(this.positions.getPosition("1,0-7,0"), 
-                this.positions.getPosition("1,0-7,0").getPiece(), null, false));
+                this.positions.getPosition("1,0-7,0").getPiece()));
         this.positions.getPosition("7,0-1,0").addPiece(new OnyxPiece(GraphicsConst.COLOR.WHITE));
         OnyxGame.getInstance().appendMove(new OnyxMove(this.positions.getPosition("7,0-1,0"), 
-                this.positions.getPosition("7,0-1,0").getPiece(), null, false));
+                this.positions.getPosition("7,0-1,0").getPiece()));
         this.positions.getPosition("12,0-6,0").addPiece(new OnyxPiece(GraphicsConst.COLOR.BLACK));
         OnyxGame.getInstance().appendMove(new OnyxMove(this.positions.getPosition("12,0-6,0"), 
-                this.positions.getPosition("12,0-6,0").getPiece(), null, false));
+                this.positions.getPosition("12,0-6,0").getPiece()));
         this.positions.getPosition("6,0-12,0").addPiece(new OnyxPiece(GraphicsConst.COLOR.WHITE));
         OnyxGame.getInstance().appendMove(new OnyxMove(this.positions.getPosition("6,0-12,0"), 
-                this.positions.getPosition("6,0-12,0").getPiece(), null, false));
+                this.positions.getPosition("6,0-12,0").getPiece()));
     }
     
     @Override

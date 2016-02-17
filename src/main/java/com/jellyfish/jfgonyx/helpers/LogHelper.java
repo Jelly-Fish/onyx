@@ -29,41 +29,21 @@
  * POSSIBILITY OF SUCH DAMAGE. 
  ******************************************************************************
  */
-package com.jellyfish.jfgonyx.onyx.search;
+package com.jellyfish.jfgonyx.helpers;
 
-import com.jellyfish.jfgonyx.onyx.interfaces.search.OnyxRandomSeachable;
-import com.jellyfish.jfgonyx.constants.GraphicsConst;
-import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
-import com.jellyfish.jfgonyx.onyx.abstractions.AbstractOnyxSearch;
-import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
-import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
-import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
-import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException;
-import com.jellyfish.jfgonyx.ui.OnyxBoard;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  *
  * @author thw
  */
-public class RandomSearch extends AbstractOnyxSearch implements OnyxRandomSeachable {
+public class LogHelper {
     
-    @Override
-    public OnyxMove search(final OnyxPosCollection c, final OnyxBoard board, final GraphicsConst.COLOR color)
-            throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
-        
-        for (OnyxPos p : c.getPositions().values()) {
-            if (!p.isOccupied() && !p.isDiamondCenter()) {
-                return new OnyxMove(p);
-            }
-        }
-        
-        throw new NoValidOnyxPositionsFoundException();
-    }
+    private final static SimpleDateFormat FORMAT_DATE_TIME = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss a");
     
-    @Override
-    public boolean isWin(final OnyxPosCollection c, final GraphicsConst.COLOR color) 
-            throws NoValidOnyxPositionsFoundException {
-        throw new UnsupportedOperationException();
+    public static String getDTFullStamp() {
+        return String.format("[%s]", FORMAT_DATE_TIME.format(new Date()));
     }
     
 }

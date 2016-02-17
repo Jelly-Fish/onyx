@@ -31,6 +31,7 @@
 package com.jellyfish.jfgonyx.ui;
 
 import com.jellyfish.jfgonyx.constants.GraphicsConst;
+import com.jellyfish.jfgonyx.helpers.LogHelper;
 import com.jellyfish.jfgonyx.helpers.MainFrameGHelper;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.interfaces.OnyxObserver;
@@ -43,6 +44,7 @@ import java.util.LinkedList;
 import javax.swing.text.DefaultCaret;
 import javax.swing.text.Document;
 import javax.swing.text.html.HTMLEditorKit;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  *
@@ -214,11 +216,13 @@ public class MainFrame extends javax.swing.JFrame implements OnyxObserver {
         MainFrameGHelper.appendHTMLData(this.move_labels, this.board.getPosCollection(), 
                 this.htmlEditorKit, this.doc);
          */
-        MainFrameGHelper.appendRawData(m.toString(), htmlEditorKit, doc);
+        MainFrameGHelper.appendRawData(LogHelper.getDTFullStamp() + 
+                StringUtils.SPACE + m.toString(), htmlEditorKit, doc);
     }
     
     public static final void print(final String data) {
-        MainFrameGHelper.appendRawData(data, htmlEditorKit, doc);
+        MainFrameGHelper.appendRawData(LogHelper.getDTFullStamp() + 
+                StringUtils.SPACE + data, htmlEditorKit, doc);
     }
     
 }

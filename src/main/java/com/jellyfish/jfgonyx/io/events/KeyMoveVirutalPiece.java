@@ -32,6 +32,7 @@
 package com.jellyfish.jfgonyx.io.events;
 
 import com.jellyfish.jfgonyx.constants.GraphicsConst;
+import com.jellyfish.jfgonyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.OnyxGame;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPiece;
@@ -120,14 +121,19 @@ public class KeyMoveVirutalPiece implements OnyxExecutable {
         );
         
         board.getPosCollection().getPosition(k).setVirtualPiece(null);
-        final OnyxMove m = new OnyxMove(board.getPosCollection().getPosition(k), 
-                board.getPosCollection().getPosition(k).getPiece(), captured, false);
+        OnyxMove m = null;
+        if (captured != null) {
+            m = new OnyxMove(board.getPosCollection().getPosition(k), 
+                board.getPosCollection().getPosition(k).getPiece(), captured, 
+                captured.size() * OnyxConst.SCORE.TAKE.getValue());
+        } else {
+            m = new OnyxMove(board.getPosCollection().getPosition(k), 
+                board.getPosCollection().getPosition(k).getPiece());
+        }
+      
+        board.getPosCollection().performTake(k, v.color.bitColor, board);
         OnyxGame.getInstance().appendMove(m);
         board.notifyMove(m);
-        
-        if (captured != null) {
-            board.getPosCollection().performTake(k, v.color.bitColor, board);
-        }
         
         return true;
     }

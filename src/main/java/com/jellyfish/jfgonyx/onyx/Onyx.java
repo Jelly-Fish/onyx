@@ -33,6 +33,7 @@ package com.jellyfish.jfgonyx.onyx;
 
 import com.jellyfish.jfgonyx.constants.GraphicsConst;
 import com.jellyfish.jfgonyx.constants.OnyxConst;
+import com.jellyfish.jfgonyx.helpers.LogHelper;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
@@ -51,10 +52,10 @@ import org.apache.commons.lang3.StringUtils;
  */
 class Onyx {
     
-    private static final String POSCOL_SEARCH_FORMAT = ">> Engine's best with dumb SEARCH_TYPE.ONYXPOSCOL... --> [%s]";
-    private static final String CNX_SEARCH_FORMAT = ">> Tail cnx search : --> [%s]";
-    private static final String WIN = ">> WIN ! WuHu !!!";
-    private static final String LOOSE = ">> You l00S3 : X"; 
+    private static final String POSCOL_SEARCH_FORMAT = "%s SEARCH.ONYXPOSCOL -> [%s] score -> [%.1f]";
+    private static final String CNX_SEARCH_FORMAT = "%s SEARCH.CNX -> [%s] score -> [%.3f]";
+    private static final String WIN = "%s WIN ! WuHu !!!";
+    private static final String LOOSE = "%s You l00S3 : X"; 
             
     private final static HashMap<SEARCH_TYPE, OnyxAbstractSearchable> SEARCH = new HashMap<>();
     static {
@@ -76,6 +77,10 @@ class Onyx {
         SEARCH_TYPE(final String desc) {
             this.desc = desc;
         }   
+        
+        public String getDesc() {
+            return this.desc;
+        }
     }
        
     static OnyxMove search(final OnyxPosCollection c, final OnyxBoard board, final GraphicsConst.COLOR color) {
@@ -91,9 +96,11 @@ class Onyx {
             
             // Do printing debug stuff...
             print(OnyxGame.getInstance().getMoveCount() % 2 != 0 ? 
-                    String.format(POSCOL_SEARCH_FORMAT,  OnyxConst.POS_MAP.get(mPOSCOL.getPos().getKey())) :
-                    StringUtils.EMPTY);
-            print(String.format(CNX_SEARCH_FORMAT, OnyxConst.POS_MAP.get(mCNX.getPos().getKey())));
+                String.format(POSCOL_SEARCH_FORMAT, LogHelper.getDTFullStamp(),
+                        OnyxConst.POS_MAP.get(mPOSCOL.getPos().getKey()), mPOSCOL.getScore()) :
+                StringUtils.EMPTY);
+            print(String.format(CNX_SEARCH_FORMAT, LogHelper.getDTFullStamp(),
+                OnyxConst.POS_MAP.get(mCNX.getPos().getKey()), mCNX.getScore()));
             print(win ? WIN : StringUtils.EMPTY);
             print(loose ? LOOSE : StringUtils.EMPTY);
             

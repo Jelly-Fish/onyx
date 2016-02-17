@@ -101,7 +101,7 @@ public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnecti
             }
         }
         
-        return new OnyxMove(tmp.getPos());
+        return new OnyxMove(tmp.getPos(), tmp.getPiece(), tmp.getScore());
     }
     
 }

@@ -35,6 +35,7 @@ import com.jellyfish.jfgonyx.onyx.search.subroutines.SearchNeighbourPosition;
 import com.jellyfish.jfgonyx.onyx.search.subroutines.SearchCounterPosition;
 import com.jellyfish.jfgonyx.onyx.search.subroutines.SearchTakePosition;
 import com.jellyfish.jfgonyx.constants.GraphicsConst;
+import com.jellyfish.jfgonyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.abstractions.AbstractOnyxSearch;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
@@ -82,9 +83,12 @@ public class PositionSearch extends AbstractOnyxSearch implements OnyxPositionSe
             return StringUtils.isBlank(take) ? 
                     (StringUtils.isBlank(counter) ? 
                         (StringUtils.isBlank(neighbour) ? null : 
-                    new OnyxMove(c.getPosition(neighbour), c.getPosition(neighbour).getPiece(), null, false)) : 
-                    new OnyxMove(c.getPosition(counter), c.getPosition(counter).getPiece(), null, false)) : 
-                    new OnyxMove(c.getPosition(take), c.getPosition(take).getPiece(), posSet, false);
+                    new OnyxMove(c.getPosition(neighbour), c.getPosition(neighbour).getPiece(), 
+                        OnyxConst.SCORE.NEIGHBOUR.getValue())) : 
+                    new OnyxMove(c.getPosition(counter), c.getPosition(counter).getPiece(),
+                        OnyxConst.SCORE.COUNTERPOS.getValue())) : 
+                    new OnyxMove(c.getPosition(take), c.getPosition(take).getPiece(), posSet, 
+                         posSet.size() * OnyxConst.SCORE.TAKE.getValue());
         
         } catch (final InvalidOnyxPositionException Iopex) {
             Logger.getLogger(PositionSearch.class.getName()).log(Level.SEVERE, null, Iopex);

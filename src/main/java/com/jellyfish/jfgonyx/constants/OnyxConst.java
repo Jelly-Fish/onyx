@@ -41,6 +41,7 @@ public class OnyxConst {
     
     public static final String KEY_SEPARATOR = "/";
     public static final int BOARD_SIDE_SQUARE_COUNT = 11;
+    
     public static final HashMap<String, String> POS_MAP = new HashMap<>();
     static {
         
@@ -270,6 +271,23 @@ public class OnyxConst {
         OnyxConst.POS_MAP.put("7,5-2,5", "G-H-10-11");
         OnyxConst.POS_MAP.put("9,5-2,5", "I-J-10-11");
         OnyxConst.POS_MAP.put("11,5-2,5", "K-L-10-11");
+        
+    }
+    
+    public static enum SCORE {
+    
+        WIN(100f), TAKE(12.5f), NEIGHBOUR(1f), TAIL(3.2f),
+        RANDOM(.0f), COUNTERPOS(3.6f);
+        
+        private final float score;
+        
+        SCORE(final float score) {
+            this.score = score;
+        }
+        
+        public float getValue() {
+            return this.score;
+        }
         
     }
     
