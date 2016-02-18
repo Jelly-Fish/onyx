@@ -191,7 +191,7 @@ public class OnyxConnectionHelper {
             FileWriter f = new FileWriter(FILE_PATH, false);
             f.write(sb.toString());
             f.close();
-            MainFrame.print(sb.toString());
+            MainFrame.print(LogHelper.getDTFullStamp() + StringUtils.SPACE + sb.toString());
         } catch (final IOException iOex) {
             Logger.getLogger(OnyxConnectionHelper.class.getName()).log(Level.SEVERE, null, iOex);
         } catch (final Exception ex) {

@@ -97,12 +97,12 @@ class Onyx {
             // Do printing debug stuff...
             print(OnyxGame.getInstance().getMoveCount() % 2 != 0 ? 
                 String.format(POSCOL_SEARCH_FORMAT, LogHelper.getDTFullStamp(),
-                        OnyxConst.POS_MAP.get(mPOSCOL.getPos().getKey()), mPOSCOL.getScore()) :
-                StringUtils.EMPTY);
+                    OnyxConst.POS_MAP.get(mPOSCOL.getPos().getKey()), mPOSCOL.getScore()) :
+                    StringUtils.EMPTY);
             print(String.format(CNX_SEARCH_FORMAT, LogHelper.getDTFullStamp(),
                 OnyxConst.POS_MAP.get(mCNX.getPos().getKey()), mCNX.getScore()));
-            print(win ? WIN : StringUtils.EMPTY);
-            print(loose ? LOOSE : StringUtils.EMPTY);
+            print(win ? String.format(WIN, LogHelper.getDTFullStamp()) : StringUtils.EMPTY);
+            print(loose ? String.format(LOOSE, LogHelper.getDTFullStamp()) : StringUtils.EMPTY);
             
             return mPOSCOL;
             
@@ -118,7 +118,7 @@ class Onyx {
     
     static OnyxMove getNewVirtual(final OnyxPosCollection c, final OnyxBoard board, final GraphicsConst.COLOR color) 
             throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
-        return SEARCH.get(SEARCH_TYPE.POSCOL).search(c, board, color);
+        return SEARCH.get(SEARCH_TYPE.RANDOM).search(c, board, color);
     }
     
     private static void print(final String s) {

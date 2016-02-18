@@ -221,8 +221,7 @@ public class MainFrame extends javax.swing.JFrame implements OnyxObserver {
     }
     
     public static final void print(final String data) {
-        MainFrameGHelper.appendRawData(LogHelper.getDTFullStamp() + 
-                StringUtils.SPACE + data, htmlEditorKit, doc);
+        MainFrameGHelper.appendRawData(data, htmlEditorKit, doc);
     }
     
 }

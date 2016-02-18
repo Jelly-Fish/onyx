@@ -40,7 +40,8 @@ import java.util.Date;
  */
 public class LogHelper {
     
-    private final static SimpleDateFormat FORMAT_DATE_TIME = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss a");
+    private final static SimpleDateFormat FORMAT_DATE_TIME = 
+            new SimpleDateFormat("yyyyMMdd|HH:mm:ss");
     
     public static String getDTFullStamp() {
         return String.format("[%s]", FORMAT_DATE_TIME.format(new Date()));

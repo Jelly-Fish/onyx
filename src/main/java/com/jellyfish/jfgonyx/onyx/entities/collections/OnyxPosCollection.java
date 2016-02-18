@@ -33,7 +33,6 @@ package com.jellyfish.jfgonyx.onyx.entities.collections;
 
 import com.jellyfish.jfgonyx.constants.GraphicsConst;
 import com.jellyfish.jfgonyx.helpers.OnyxConnectionHelper;
-import com.jellyfish.jfgonyx.onyx.OnyxGame;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxDiamond;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxVirtualPiece;
@@ -185,6 +184,12 @@ public class OnyxPosCollection {
                 board.getPosCollection().getPosition(d.getCenterPos().getKey()).isOccupied()) {
                 continue;
             }
+            
+            /**
+             * FIXME : document this...
+             * works clockwise around keys = d.getCornerKeys();
+             * @see OnyxDiamond getCornerKeys() method.
+             */
             
             lI = 0; i = 0; j = 0;
             keys = d.getCornerKeys();
