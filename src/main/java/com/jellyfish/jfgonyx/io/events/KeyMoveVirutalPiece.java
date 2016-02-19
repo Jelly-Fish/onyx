@@ -109,24 +109,25 @@ public class KeyMoveVirutalPiece implements OnyxExecutable {
     
     private boolean validateMove(final OnyxBoard board, final OnyxVirtualPiece v) throws InvalidOnyxPositionException {
 
+        List<OnyxPos> posSet = null;
         final String k = v.getTmpOnyxPosition().getKey();
         final OnyxPos tmpPos = board.getPosCollection().getPosition(k);
         if (board.isDiamondCenter(k) && !board.isCenterPosPlayable(k)) return false;
         if (tmpPos.isOccupied()) return false;
         
-        final List<OnyxPos> captured = board.getPosCollection().getTakePositions(k, v.color.bitColor, board);
-        
         board.getPosCollection().getPosition(k).setPiece(
             new OnyxPiece(v.color.boolColor ? GraphicsConst.COLOR.BLACK : GraphicsConst.COLOR.WHITE)
         );
         
+        posSet = board.getPosCollection().getTakePositions(k, v.color.bitColor, board);
+                
         board.getPosCollection().getPosition(k).setVirtualPiece(null);
         OnyxMove m = null;
-        if (captured != null) {
+        if (posSet != null) {
+            posSet = board.getPosCollection().performTake(k, v.color.bitColor, board);
             m = new OnyxMove(board.getPosCollection().getPosition(k), 
-                board.getPosCollection().getPosition(k).getPiece(), captured, 
-                captured.size() * OnyxConst.SCORE.TAKE.getValue());
-            board.getPosCollection().performTake(k, v.color.bitColor, board);
+                board.getPosCollection().getPosition(k).getPiece(), posSet, 
+                posSet.size() * OnyxConst.SCORE.TAKE.getValue());
         } else {
             m = new OnyxMove(board.getPosCollection().getPosition(k), 
                 board.getPosCollection().getPosition(k).getPiece());

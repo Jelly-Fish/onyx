@@ -102,7 +102,7 @@ public class MainFrame extends javax.swing.JFrame implements OnyxObserver {
         });
 
         mainSplitPane.setBorder(null);
-        mainSplitPane.setDividerLocation(230);
+        mainSplitPane.setDividerLocation(100);
         mainSplitPane.setDividerSize(14);
         mainSplitPane.setDoubleBuffered(true);
         mainSplitPane.setOneTouchExpandable(true);
@@ -114,6 +114,7 @@ public class MainFrame extends javax.swing.JFrame implements OnyxObserver {
         mainSplitPane.setRightComponent(mainScrollPane);
 
         textScrollPane.setBorder(null);
+        textScrollPane.setToolTipText("");
 
         dataTextPane.setBackground(new java.awt.Color(250, 250, 250));
         dataTextPane.setBorder(javax.swing.BorderFactory.createEmptyBorder(4, 8, 4, 4));
@@ -136,11 +137,11 @@ public class MainFrame extends javax.swing.JFrame implements OnyxObserver {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(mainSplitPane, javax.swing.GroupLayout.DEFAULT_SIZE, 445, Short.MAX_VALUE)
+            .addComponent(mainSplitPane, javax.swing.GroupLayout.DEFAULT_SIZE, 267, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(mainSplitPane, javax.swing.GroupLayout.DEFAULT_SIZE, 426, Short.MAX_VALUE)
+            .addComponent(mainSplitPane, javax.swing.GroupLayout.DEFAULT_SIZE, 473, Short.MAX_VALUE)
         );
 
         pack();
@@ -169,14 +170,14 @@ public class MainFrame extends javax.swing.JFrame implements OnyxObserver {
         this.mainScrollPane.setViewportView(mainPanel);
         this.mainSplitPane.setOneTouchExpandable(true);
         this.mainSplitPane.getLeftComponent().setMinimumSize(new Dimension());
-        this.mainSplitPane.setDividerLocation(0d);
+        this.mainSplitPane.setDividerLocation(300);
         this.mainSplitPane.setBackground(GraphicsConst.COMPONENTS_BACKGROUND_COLOR1);
         this.mainSplitPane.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseExited(MouseEvent e) {
                 board.focus();
             }
-        });
+        });                
         this.dataTextPane.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseExited(MouseEvent e) {
@@ -193,8 +194,8 @@ public class MainFrame extends javax.swing.JFrame implements OnyxObserver {
         caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
         board.focus();
         this.pack();
-        this.setSize(GraphicsConst.BOARD_WIDTH + 36, GraphicsConst.BOARD_WIDTH + 68);
-        this.setLocation(((int)(Toolkit.getDefaultToolkit().getScreenSize().getWidth() / 2)) - 
+        this.setSize(GraphicsConst.BOARD_WIDTH + 36 + 300, GraphicsConst.BOARD_WIDTH + 68);
+        this.setLocation(((int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth() / 2)) - 
                 (this.getWidth() / 2), 20);
         this.setTitle("Onyx");
         this.setVisible(true);

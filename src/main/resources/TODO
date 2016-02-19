@@ -8,3 +8,8 @@ TODO : connection search for win moves.
 --------------------------------------------------------------------------------
 17-feb-2016 :
 Takes & double takes show bugs : test & FIX.
+DONE
+--------------------------------------------------------------------------------
+19-feb-2016 :
+Connection win double check and test complexe layouts (x2 + paths misleads with
+1 win path).
