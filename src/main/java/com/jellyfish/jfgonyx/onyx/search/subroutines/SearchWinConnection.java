@@ -35,8 +35,8 @@ import com.jellyfish.jfgonyx.constants.GraphicsConst;
 import com.jellyfish.jfgonyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author thw
@@ -46,27 +46,43 @@ public class SearchWinConnection {
     private final OnyxPosCollection c;
     private final GraphicsConst.COLOR color;
     private final float max = OnyxConst.BOARD_SIDE_SQUARE_COUNT + 1;
-    private final List<String> checked = new ArrayList<>();
+    private final Set<String> checked = new HashSet<>();
+    private boolean win = false;
     
     public SearchWinConnection(final OnyxPosCollection c, final GraphicsConst.COLOR color) {
         this.c = c;
         this.color = color;
     }
     
-    public boolean hasConnection(final OnyxPos p, final String kEx) {       
+    public void connection(final OnyxPos p, final String kEx) {       
+        
+        if (this.win) return;
         
         OnyxPos tmp = null;
         for (String k : p.connections) {
             tmp = c.getPosition(k);
-            if (tmp == null || this.checked.contains(k) || k.equals(kEx)) continue;
-            if (tmp.isOccupied() && tmp.getPiece().color.bitColor == this.color.bitColor) {
-                if (tmp.x > this.max - .1f) return true;
-                else this.checked.add(k);
-                return this.hasConnection(tmp, k);
+            if (this.persue(tmp, kEx)) {
+                if (tmp.x > this.max - .1f) this.win = true;
+                this.checked.add(kEx);
+                this.connection(tmp, k); 
             }
         }
-        
-        return false;
+    }
+    
+    private boolean persue(final OnyxPos p, final String kEx) {
+        return p != null && !this.checked.contains(p.getKey()) && !p.getKey().equals(kEx) &&
+                p.isOccupied() && p.getPiece().color.bitColor == this.color.bitColor;
+    }
+    
+    @SuppressWarnings("empty-statement")
+    private int keyArraySize(final String[] keys) {
+        int i = -1;
+        while (keys[++i] != null);
+        return i;
+    }
+   
+    public boolean isWin() {
+        return win;
     }
     
 }

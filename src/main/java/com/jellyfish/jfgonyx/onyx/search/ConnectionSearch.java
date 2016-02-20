@@ -66,8 +66,12 @@ public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnecti
         
         final List<OnyxPos> borders = OnyxPositionUtils.trimByBorderStartPositionsAndColor(
                 OnyxPositionUtils.getBorders(c, color), color);
+        
+        SearchWinConnection search = null;
         for (OnyxPos p : borders) {
-            if (new SearchWinConnection(c, color).hasConnection(p, p.getKey())) {
+            search = new SearchWinConnection(c, color);
+            search.connection(p, p.getKey());
+            if (search.isWin()) {
                 return true;
             }
         }
