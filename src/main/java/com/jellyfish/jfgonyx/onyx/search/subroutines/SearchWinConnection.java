@@ -41,13 +41,16 @@ import java.util.Set;
 /**
  * @author thw
  */
-public class SearchWinConnection {
+public class SearchWinConnection extends AbstractSubroutine {
     
+    private final static String WIN = " :: %s wins the game !";
+    private final static String WIN_CANDIDATE = " :: Win search %s @ %s | iteration %s";
     private final OnyxPosCollection c;
     private final GraphicsConst.COLOR color;
     private final float max = OnyxConst.BOARD_SIDE_SQUARE_COUNT + 1;
     private final Set<String> checked = new HashSet<>();
     private boolean win = false;
+    private int i = -1;
     
     public SearchWinConnection(final OnyxPosCollection c, final GraphicsConst.COLOR color) {
         this.c = c;
@@ -58,11 +61,16 @@ public class SearchWinConnection {
         
         if (this.win) return;
         
+        print(this.color.strColor, p.getKey(), String.valueOf(++i), WIN_CANDIDATE);
+        
         OnyxPos tmp = null;
         for (String k : p.connections) {
             tmp = c.getPosition(k);
             if (this.persue(tmp, kEx)) {
-                if (tmp.x > this.max - .1f) this.win = true;
+                if ((this.color.boolColor && tmp.x > this.max - .1f) ||
+                    (!this.color.boolColor && tmp.y > this.max - .1f)) {
+                    this.win = true;
+                }
                 this.checked.add(kEx);
                 this.connection(tmp, k); 
             }
@@ -82,7 +90,8 @@ public class SearchWinConnection {
     }
    
     public boolean isWin() {
-        return win;
+        if (this.win) print(this.color.strColor.toUpperCase(), WIN);
+        return this.win;
     }
     
 }

@@ -29,50 +29,30 @@
  * POSSIBILITY OF SUCH DAMAGE. 
  ******************************************************************************
  */
-package com.jellyfish.jfgonyx.onyx.search.subroutines;
+package com.jellyfish.jfgonyx.onyx.search.searchutils;
 
-import com.jellyfish.jfgonyx.constants.OnyxConst;
-import com.jellyfish.jfgonyx.onyx.entities.OnyxDiamond;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
-import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
-import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
 import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException;
-import com.jellyfish.jfgonyx.ui.OnyxBoard;
-import org.apache.commons.lang3.StringUtils;
 
 /**
- *
  * @author thw
  */
-public class SearchCounterPosition {
+public class SearchUtils {
     
-    /**
-     * @param c Onyx position collection.
-     * @param b Onyx board instance.
-     * @param bitColor the color to play's bit value (0=white, 1=black).
-     * @return Strongest counter attack move found (to prevent sealing positions) 
-     * or NULL if no such position has been found.
-     */
-    public static OnyxMove getCounterPos(final OnyxPosCollection c, final OnyxBoard b, final int bitColor) throws NoValidOnyxPositionsFoundException {
-
-        int count;
-        OnyxPos pos = null;
-        String key = StringUtils.EMPTY;
-        for (OnyxDiamond d : b.getDiamondCollection().getDiamonds().values()) {
-            
-            count = 0;
-            for (String k : d.getCornerKeys()) {
-                pos = c.getPosition(k);
-                if (pos.isOccupied() && pos.getPiece().color.bitColor != bitColor) ++count;
-                else key = k;
-            }
-            
-            if (count == 3 && !c.getPosition(key).isOccupied()) {
-                return new OnyxMove(pos, OnyxConst.SCORE.COUNTERPOS.getValue());
+    public static OnyxMove assertByScore(final OnyxMove ... moves) throws NoValidOnyxPositionsFoundException {
+        
+        int r = -1;
+        float score = -1f;
+        for (int i = 0; i < moves.length; i++) {
+            if (r < 0 || moves[i].getScore() > score) {
+                r = i;
+                score = moves[i].getScore();
             }
         }
         
-        return null;
+        if (r >= 0 && score > 0) return moves[r];
+        
+        throw new NoValidOnyxPositionsFoundException();
     }
     
 }

@@ -32,47 +32,37 @@
 package com.jellyfish.jfgonyx.onyx.search.subroutines;
 
 import com.jellyfish.jfgonyx.constants.OnyxConst;
-import com.jellyfish.jfgonyx.onyx.entities.OnyxDiamond;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
-import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
-import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
-import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException;
-import com.jellyfish.jfgonyx.ui.OnyxBoard;
-import org.apache.commons.lang3.StringUtils;
+import com.jellyfish.jfgonyx.ui.MainFrame;
+import java.util.List;
 
 /**
  *
  * @author thw
  */
-public class SearchCounterPosition {
+public abstract class AbstractSubroutine {
     
-    /**
-     * @param c Onyx position collection.
-     * @param b Onyx board instance.
-     * @param bitColor the color to play's bit value (0=white, 1=black).
-     * @return Strongest counter attack move found (to prevent sealing positions) 
-     * or NULL if no such position has been found.
-     */
-    public static OnyxMove getCounterPos(final OnyxPosCollection c, final OnyxBoard b, final int bitColor) throws NoValidOnyxPositionsFoundException {
-
-        int count;
-        OnyxPos pos = null;
-        String key = StringUtils.EMPTY;
-        for (OnyxDiamond d : b.getDiamondCollection().getDiamonds().values()) {
-            
-            count = 0;
-            for (String k : d.getCornerKeys()) {
-                pos = c.getPosition(k);
-                if (pos.isOccupied() && pos.getPiece().color.bitColor != bitColor) ++count;
-                else key = k;
-            }
-            
-            if (count == 3 && !c.getPosition(key).isOccupied()) {
-                return new OnyxMove(pos, OnyxConst.SCORE.COUNTERPOS.getValue());
-            }
+    protected final void print(final String sK, final List<OnyxMove> candidates, final String f) {
+        for (OnyxMove m : candidates) {
+            MainFrame.print(String.format(f, OnyxConst.POS_MAP.get(sK), OnyxConst.POS_MAP.get(m.getPos().getKey())));
         }
-        
-        return null;
+    }
+    
+    protected final void print(final String sK, final OnyxMove candidate, final String f) {
+        MainFrame.print(String.format(f, 
+                OnyxConst.POS_MAP.get(sK), OnyxConst.POS_MAP.get(candidate.getPos().getKey())));
+    }
+    
+    protected final void print(final String k, final String n, final String f) {
+        MainFrame.print(String.format(f, OnyxConst.POS_MAP.get(k), n));
+    }
+    
+    protected final void print(final String color, final String k, final String n, final String f) {
+        MainFrame.print(String.format(f, color, OnyxConst.POS_MAP.get(k), n));
+    }
+    
+    protected final void print(final String k, final String f) {
+        MainFrame.print(String.format(f, k));
     }
     
 }

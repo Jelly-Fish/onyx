@@ -69,6 +69,10 @@ public class OnyxMove {
         this(pos, piece, null, false, true, 0);
     }
     
+    public OnyxMove(final OnyxPos pos, final float score) {
+        this(pos, null, null, false, true, score);
+    }
+    
     public OnyxMove(final OnyxPos pos, final OnyxPiece piece, final float score) {
         this(pos, piece, null, false, true, score);
     }

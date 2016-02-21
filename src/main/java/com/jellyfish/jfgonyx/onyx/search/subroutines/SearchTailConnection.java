@@ -33,11 +33,9 @@ package com.jellyfish.jfgonyx.onyx.search.subroutines;
 
 import com.jellyfish.jfgonyx.constants.GraphicsConst;
 import com.jellyfish.jfgonyx.constants.OnyxConst;
-import com.jellyfish.jfgonyx.helpers.LogHelper;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
-import com.jellyfish.jfgonyx.ui.MainFrame;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -47,10 +45,10 @@ import java.util.Set;
 /**
  * @author thw
  */
-public class SearchTailConnection {
+public class SearchTailConnection extends AbstractSubroutine {
     
-    private final static String LAMBDA_CANDIDATE = "%s Lambda candidate for start @ %s : [%s]";
-    private final static String BEST_CANDIDATE = "%s Candidate for start @ %s : [%s]";
+    private final static String LAMBDA_CANDIDATE = " :: Lambda candidate for start @ %s : [%s]";
+    private final static String BEST_CANDIDATE = " :: Candidate for start @ %s : [%s]";
     private final OnyxPosCollection c;
     private final OnyxBoard board;
     private final GraphicsConst.COLOR color;
@@ -71,8 +69,8 @@ public class SearchTailConnection {
         this.startPos = p;
         this.findTailPos(p, kEx);
         this.trim();
-        this.print(p.getKey(), candidates, LAMBDA_CANDIDATE);
-        this.print(p.getKey(), this.candidate, BEST_CANDIDATE);
+        print(p.getKey(), candidates, LAMBDA_CANDIDATE);
+        print(p.getKey(), this.candidate, BEST_CANDIDATE);
         
         return this.candidates;
     }
@@ -128,18 +126,6 @@ public class SearchTailConnection {
 
         this.candidate = new OnyxMove(tmp, false, score * OnyxConst.SCORE.TAIL.getValue());
         this.candidates.add(candidate);
-    }
-    
-    private void print(final String sK, final List<OnyxMove> candidates, final String f) {
-        for (OnyxMove m : candidates) {
-            MainFrame.print(String.format(f, LogHelper.getDTFullStamp(),
-                    OnyxConst.POS_MAP.get(sK), OnyxConst.POS_MAP.get(m.getPos().getKey())));
-        }
-    }
-    
-    private void print(final String sK, final OnyxMove candidate, final String f) {
-        MainFrame.print(String.format(f, LogHelper.getDTFullStamp(),
-                OnyxConst.POS_MAP.get(sK), OnyxConst.POS_MAP.get(candidate.getPos().getKey())));
     }
     
 }

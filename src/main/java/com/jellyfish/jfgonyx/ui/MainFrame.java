@@ -35,6 +35,7 @@ import com.jellyfish.jfgonyx.helpers.LogHelper;
 import com.jellyfish.jfgonyx.helpers.MainFrameGHelper;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.interfaces.OnyxObserver;
+import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -185,6 +186,7 @@ public class MainFrame extends javax.swing.JFrame implements OnyxObserver {
             }
         });
         this.dataTextPane.setContentType("text/html");
+        this.dataTextPane.setBackground(Color.BLACK);
         final HTMLEditorKit html = new HTMLEditorKit();
         this.dataTextPane.setEditorKit(html);
         htmlEditorKit = (HTMLEditorKit) this.dataTextPane.getEditorKit();
@@ -217,7 +219,7 @@ public class MainFrame extends javax.swing.JFrame implements OnyxObserver {
         MainFrameGHelper.appendHTMLData(this.move_labels, this.board.getPosCollection(), 
                 this.htmlEditorKit, this.doc);
          */
-        MainFrameGHelper.appendRawData(LogHelper.getDTFullStamp() + 
+        MainFrameGHelper.appendRawData(" :: " + LogHelper.getDTFullStamp() + 
                 StringUtils.SPACE + m.toString(), htmlEditorKit, doc);
     }
     

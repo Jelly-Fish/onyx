@@ -31,7 +31,9 @@
  */
 package com.jellyfish.jfgonyx.onyx.search.subroutines;
 
+import com.jellyfish.jfgonyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxDiamond;
+import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
@@ -51,7 +53,7 @@ public class SearchTakePosition {
      * @return Strongest take move key found or NULL if no such position has been found.
      * @throws com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException
      */
-    public static String getTakePos(final OnyxPosCollection c, final OnyxBoard b, final int bitColor) throws InvalidOnyxPositionException {
+    public static OnyxMove getTakePos(final OnyxPosCollection c, final OnyxBoard b, final int bitColor) throws InvalidOnyxPositionException {
         
         int count, i;
         OnyxPos[] positions = new OnyxPos[4];
@@ -103,7 +105,7 @@ public class SearchTakePosition {
         }
         
         if (posSet.size() <= 0) return null;
-        if (posSet.size() == 1) return posSet.get(0).getKey();
+        if (posSet.size() == 1) return new OnyxMove(posSet.get(0), OnyxConst.SCORE.TAKE.getValue());
         
         count = 0;
         i = -1;
@@ -116,7 +118,7 @@ public class SearchTakePosition {
             }            
         }
         
-        if (i > -1) return posSet.get(i).getKey();
+        if (i > -1) return new OnyxMove(posSet.get(i), OnyxConst.SCORE.TAKE.getValue());
         
         return null;
     }

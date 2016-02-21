@@ -31,7 +31,9 @@
  */
 package com.jellyfish.jfgonyx.onyx.search.subroutines;
 
+import com.jellyfish.jfgonyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxDiamond;
+import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
 import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException;
@@ -51,7 +53,7 @@ public class SearchNeighbourPosition {
      * @return Neighbor move found or NULL if no such position has been found.
      * @throws com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException
      */
-    public static String getNeighbourPos(final OnyxPosCollection c, final OnyxBoard b, final int bitColor) throws NoValidOnyxPositionsFoundException {
+    public static OnyxMove getNeighbourPos(final OnyxPosCollection c, final OnyxBoard b, final int bitColor) throws NoValidOnyxPositionsFoundException {
         
         int count;
         OnyxPos pos = null;
@@ -63,7 +65,10 @@ public class SearchNeighbourPosition {
                 if (pos.isOccupied() && pos.getPiece().color.bitColor == bitColor) ++count;
                 else key = k;
             }
-            if (count > 1  && !c.getPosition(key).isOccupied()) return key;
+            
+            if (count > 1  && !c.getPosition(key).isOccupied()) {
+                return new OnyxMove(c.getPosition(key), OnyxConst.SCORE.NEIGHBOUR.getValue());
+            }
         }
         
         return null;

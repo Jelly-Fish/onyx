@@ -46,6 +46,7 @@ public class HTMLDisplayHelper {
     private static final String TABLE = 
         "<table style=\"border-collapse: collapse;\">%s</table>";
     private static final String FONT_STYLE = "font-family: consolas; font-size: 14px;"; 
+    private static final String FONT_STYLE_WHITE = "font-family: consolas; font-size: 12px; color: rgb(245,245,245)"; 
     public static final String GRAY_BOLD_TEXT = "<b style=\"color: rgb(124,124,124);" + 
             HTMLDisplayHelper.FONT_STYLE + "\">%s</b>"; 
     public static final String LIGHTGRAY_BOLD_TEXT = "<b style=\"color: rgb(216,216,216);" + 
@@ -64,8 +65,8 @@ public class HTMLDisplayHelper {
         return html.toString();
     }
     
-    static String buildHTML(String data) {
-        return String.format(SPAN, FONT_STYLE, data);
+    static String buildHTML(final String data) {
+        return String.format(SPAN, FONT_STYLE_WHITE, data);
     }
     
     public static final String getMoveText(final int n) {
