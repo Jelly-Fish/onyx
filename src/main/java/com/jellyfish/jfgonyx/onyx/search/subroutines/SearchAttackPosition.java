@@ -37,49 +37,41 @@ import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
-import org.apache.commons.lang3.StringUtils;
 
 /**
  *
  * @author thw
  */
-public class SearchCounterPosition extends AbstractSubroutine {
+public class SearchAttackPosition extends AbstractSubroutine {
     
     /**
      * @param c Onyx position collection.
      * @param b Onyx board instance.
      * @param bitColor the color to play's bit value (0=white, 1=black).
-     * @return Strongest counter move found to prevent sealing & take positions
+     * @return Strongest counter attack move found (to allow take on next move) 
      * or NULL if no such position has been found.
      */
-    public static OnyxMove getCounterPos(final OnyxPosCollection c, final OnyxBoard b, final int bitColor) {
+    public static OnyxMove getAttackPos(final OnyxPosCollection c, final OnyxBoard b, final int bitColor) {
 
-        /**
-         * FIXME : improve this, re-evaluate score value.
-         * counter pos must also block tail progressions.
-         */
         
-        int i, j;
-        OnyxPos pos = null;
-        String key = StringUtils.EMPTY;
+        int[] iPos = null; 
+        OnyxPos tmp = null;
+        String[] keys = null;
         for (OnyxDiamond d : b.getDiamondCollection().getDiamonds().values()) {
-            
-            i = 0; j = 0;
-            for (String k : d.getCornerKeys()) {
-                pos = c.getPosition(k);
-                if (pos.isOccupied()) {
-                    if (pos.getPiece().color.bitColor == bitColor) {
-                        ++i;
-                    } else if (pos.getPiece().color.bitColor != bitColor) {
-                        ++j;
-                    }
-                } else {
-                    key = k;
-                }
+            iPos = new int[] { 0, 0, 0, 0 };
+            keys = d.getCornerKeys();
+            for (int i = 0; i < keys.length; ++i) {
+                tmp = c.getPosition(keys[i]);
+                iPos[i] = tmp.isOccupied() && tmp.getPiece().color.bitColor != bitColor ? 
+                        1 : 0;
             }
             
-            if (i == 2 && j == 1 && !c.getPosition(key).isOccupied()) {
-                return new OnyxMove(c.getPosition(key), OnyxConst.SCORE.COUNTERPOS.getValue());
+            if (iPos[0] + iPos[2] == 2 && iPos[1] + iPos[3] == 0) {
+                return new OnyxMove(c.getPosition(keys[1]), OnyxConst.SCORE.ATTACK.getValue());
+            }
+            
+            if (iPos[1] + iPos[3] == 2 && iPos[0] + iPos[2] == 0) {
+                return new OnyxMove(c.getPosition(keys[0]), OnyxConst.SCORE.ATTACK.getValue());
             }
         }
         

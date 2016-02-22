@@ -44,7 +44,7 @@ import java.util.List;
 /**
  * @author thw
  */
-public class SearchTakePosition {
+public class SearchTakePosition extends AbstractSubroutine {
     
     /**
      * @param c Onyx position collection.

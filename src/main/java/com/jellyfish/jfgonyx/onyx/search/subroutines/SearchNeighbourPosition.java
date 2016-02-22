@@ -44,7 +44,7 @@ import org.apache.commons.lang3.StringUtils;
  *
  * @author thw
  */
-public class SearchNeighbourPosition {
+public class SearchNeighbourPosition extends AbstractSubroutine {
     
     /**
      * @param c Onyx position collection.
