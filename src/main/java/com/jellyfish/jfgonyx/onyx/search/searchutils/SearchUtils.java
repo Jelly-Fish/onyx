@@ -40,7 +40,7 @@ import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException;
 public class SearchUtils {
     
     public static OnyxMove assertByScore(final OnyxMove ... moves) throws NoValidOnyxPositionsFoundException {
-        
+
         int r = -1;
         float score = -1f;
         for (int i = 0; i < moves.length; i++) {

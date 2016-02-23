@@ -43,6 +43,7 @@ import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException;
 import com.jellyfish.jfgonyx.onyx.search.subroutines.SearchAttackPosition;
+import com.jellyfish.jfgonyx.onyx.search.subroutines.SearchCenterPosition;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
 import java.util.HashSet;
 import java.util.List;
@@ -79,7 +80,8 @@ public class PositionSearch extends AbstractOnyxSearch implements OnyxPositionSe
             moves.add(SearchCounterPosition.getCounterPos(c, board, color.bitColor));
             moves.add(SearchNeighbourPosition.getNeighbourPos(c, board, color.bitColor));
             moves.add(SearchAttackPosition.getAttackPos(c, board, color.bitColor));
-
+            moves.add(SearchCenterPosition.getCenterPos(c, board));
+            
             if (capture != null) {
                 posSet = c.getTakePositions(capture.getPos().getKey(), color.bitColor, board);
                 posSet = c.performTake(capture.getPos().getKey(), color.bitColor, board);
@@ -93,6 +95,9 @@ public class PositionSearch extends AbstractOnyxSearch implements OnyxPositionSe
             }
             
             if (tmp == null) throw new NoValidOnyxPositionsFoundException();
+            if (c.getPosition(tmp.getPos().getKey()).isOccupied()) {
+                throw new NoValidOnyxPositionsFoundException();
+            }
             
             return tmp;
         

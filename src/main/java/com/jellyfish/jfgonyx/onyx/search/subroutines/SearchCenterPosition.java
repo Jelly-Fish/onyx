@@ -34,47 +34,62 @@ package com.jellyfish.jfgonyx.onyx.search.subroutines;
 import com.jellyfish.jfgonyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxDiamond;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
-import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
+import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  *
  * @author thw
  */
-public class SearchAttackPosition extends AbstractSubroutine {
+public class SearchCenterPosition {
     
     /**
-     * @param c Onyx position collection.
-     * @param b Onyx board instance.
-     * @param bitColor the color to play's bit value (0=white, 1=black).
-     * @return Strongest counter attack move found (to allow take on next move) 
-     * or NULL if no such position has been found.
+     * Get playable diamond center position nearest to board center.
+     * @param c position collection.
+     * @param b onyx board.
+     * @return Best OnyxMove instance or null.
+     * @throws com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException if a position is invalid.
      */
-    public static OnyxMove getAttackPos(final OnyxPosCollection c, final OnyxBoard b, final int bitColor) {
+    public static OnyxMove getCenterPos(final OnyxPosCollection c, final OnyxBoard b) throws InvalidOnyxPositionException {
 
+        final float center = (OnyxConst.BOARD_SIDE_SQUARE_COUNT + 1) / 2f;
+        OnyxDiamond tmp = null;
+        final Set<OnyxDiamond> d = new HashSet<>();
+        int i = 0;
         
-        int[] iPos = null; 
-        OnyxPos tmp = null;
-        String[] keys = null;
-        for (OnyxDiamond d : b.getDiamondCollection().getDiamonds().values()) {
-            iPos = new int[] { 0, 0, 0, 0 };
-            keys = d.getCornerKeys();
-            for (int i = 0; i < keys.length; ++i) {
-                tmp = c.getPosition(keys[i]);
-                iPos[i] = tmp.isOccupied() && tmp.getPiece().color.bitColor != bitColor ? 
-                        1 : 0;
-            }
+        for (OnyxDiamond dmd : b.getDiamondCollection().getDiamonds().values()) {
             
-            if (iPos[0] + iPos[2] == 2 && iPos[1] + iPos[3] == 0 && !c.getPosition(keys[1]).isOccupied()) {
-                return new OnyxMove(c.getPosition(keys[1]), OnyxConst.SCORE.ATTACK.getValue());
-            }
-            
-            if (iPos[1] + iPos[3] == 2 && iPos[0] + iPos[2] == 0 && !c.getPosition(keys[0]).isOccupied()) {
-                return new OnyxMove(c.getPosition(keys[0]), OnyxConst.SCORE.ATTACK.getValue());
+            if (dmd.isFivePosDiamond()) {
+                
+                i = 0;
+                for (String k : dmd.getAllKeys()) {
+                    if (!c.getPosition(k).isOccupied()) ++i;
+                }
+                
+                if (i == 5) d.add(dmd);
             }
         }
         
+        /**
+         * FIXME : fix this, tired after work...
+         */
+        
+        float x, y;
+        for (OnyxDiamond dmd : d) {
+            if (tmp == null) tmp = dmd;
+            x = +(dmd.getCenterPos().x - center);
+            y = +(dmd.getCenterPos().y - center);
+            if (x > center && x < tmp.getCenterPos().x || y > center && y < tmp.getCenterPos().y) {
+                tmp = dmd;
+            }
+        }
+        
+        if (tmp == null) return null;
+        
+        //return new OnyxMove(tmp.getCenterPos(), OnyxConst.SCORE.CENTER.getValue());
         return null;
     }
     

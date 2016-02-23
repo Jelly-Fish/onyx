@@ -36,10 +36,10 @@ package com.jellyfish.jfgonyx.onyx.exceptions;
  */
 public class NoValidOnyxPositionsFoundException extends OnyxException {
 
-    public static final String DEFAULT_MSG = "Sorry, but no valid Onyx position has been found on the current board... :S";
+    private static final String DEFAULT_MSG = "Sorry, but no valid Onyx position has been found on the current board... :S";
     
     public NoValidOnyxPositionsFoundException() {
-        super(NoValidOnyxPositionsFoundException.DEFAULT_MSG);
+        super(DEFAULT_MSG);
     }
     
 }
