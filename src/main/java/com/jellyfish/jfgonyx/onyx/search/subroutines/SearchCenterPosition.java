@@ -44,7 +44,7 @@ import java.util.Set;
  *
  * @author thw
  */
-public class SearchCenterPosition {
+public class SearchCenterPosition extends AbstractSubroutine {
     
     /**
      * Get playable diamond center position nearest to board center.
@@ -55,42 +55,59 @@ public class SearchCenterPosition {
      */
     public static OnyxMove getCenterPos(final OnyxPosCollection c, final OnyxBoard b) throws InvalidOnyxPositionException {
 
-        final float center = (OnyxConst.BOARD_SIDE_SQUARE_COUNT + 1) / 2f;
-        OnyxDiamond tmp = null;
         final Set<OnyxDiamond> d = new HashSet<>();
         int i = 0;
         
         for (OnyxDiamond dmd : b.getDiamondCollection().getDiamonds().values()) {
             
             if (dmd.isFivePosDiamond()) {
-                
                 i = 0;
                 for (String k : dmd.getAllKeys()) {
                     if (!c.getPosition(k).isOccupied()) ++i;
                 }
-                
                 if (i == 5) d.add(dmd);
             }
         }
+
+        final OnyxDiamond[] r = SearchCenterPosition.sortByCenterPosValue(d);
         
-        /**
-         * FIXME : fix this, tired after work...
-         */
+        if (r == null || r.length == 0) return null;
+        i = r.length / 2;
         
-        float x, y;
-        for (OnyxDiamond dmd : d) {
-            if (tmp == null) tmp = dmd;
-            x = +(dmd.getCenterPos().x - center);
-            y = +(dmd.getCenterPos().y - center);
-            if (x > center && x < tmp.getCenterPos().x || y > center && y < tmp.getCenterPos().y) {
-                tmp = dmd;
+        return new OnyxMove(r[i].getCenterPos(), OnyxConst.SCORE.CENTER.getValue());
+    }
+    
+    public final static OnyxDiamond[] sortByCenterPosValue(final Set<OnyxDiamond> set) throws InvalidOnyxPositionException {
+       
+        int i = -1, j = 0;
+        OnyxDiamond tmp = null;
+        final OnyxDiamond[] r = new OnyxDiamond[set.size()];
+        for (OnyxDiamond d : set) r[++i] = d;
+        
+        for (i = 0; i < r.length; ++i) {
+            j = SearchCenterPosition.getLowValue(r, i);
+            tmp = r[i];
+            r[i] = r[j];
+            r[j] = tmp;
+        }
+        
+        return r;
+    }
+    
+    private static int getLowValue(final OnyxDiamond[] a, final int sI) throws InvalidOnyxPositionException {
+        
+        int index = sI;
+        float f = -1f;
+        float v = (float) ((OnyxConst.BOARD_SIDE_SQUARE_COUNT + 1) * 2);
+        for (int i = sI; i < a.length; ++i) {
+            f = a[i].getCenterPos().x + a[i].getCenterPos().y;
+            if (f < v) {
+                index = i;
+                v = f;
             }
         }
         
-        if (tmp == null) return null;
-        
-        //return new OnyxMove(tmp.getCenterPos(), OnyxConst.SCORE.CENTER.getValue());
-        return null;
+        return index;
     }
     
 }
