@@ -31,9 +31,9 @@
  */
 package com.jellyfish.jfgonyx.onyx.search;
 
-import com.jellyfish.jfgonyx.onyx.search.subroutines.SearchNeighbourPosition;
-import com.jellyfish.jfgonyx.onyx.search.subroutines.SearchCounterPosition;
-import com.jellyfish.jfgonyx.onyx.search.subroutines.SearchTakePosition;
+import com.jellyfish.jfgonyx.onyx.search.subroutines.positionsearch.SearchNeighbourPosition;
+import com.jellyfish.jfgonyx.onyx.search.subroutines.positionsearch.SearchCounterPosition;
+import com.jellyfish.jfgonyx.onyx.search.subroutines.positionsearch.SearchTakePosition;
 import com.jellyfish.jfgonyx.constants.GraphicsConst;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.abstractions.AbstractOnyxSearch;
@@ -42,8 +42,8 @@ import com.jellyfish.jfgonyx.onyx.interfaces.search.OnyxPositionSearchable;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException;
-import com.jellyfish.jfgonyx.onyx.search.subroutines.SearchAttackPosition;
-import com.jellyfish.jfgonyx.onyx.search.subroutines.SearchCenterPosition;
+import com.jellyfish.jfgonyx.onyx.search.subroutines.positionsearch.SearchAttackPosition;
+import com.jellyfish.jfgonyx.onyx.search.subroutines.positionsearch.SearchCenterPosition;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
 import java.util.HashSet;
 import java.util.List;
@@ -71,16 +71,20 @@ public class PositionSearch extends AbstractOnyxSearch implements OnyxPositionSe
             throws NoValidOnyxPositionsFoundException {
     
         List<OnyxPos> posSet = null;
+        final Set<OnyxMove> moves = new HashSet<>();
         
         try {
             
-            final Set<OnyxMove> moves = new HashSet<>();
-            final OnyxMove capture = SearchTakePosition.getTakePos(c, board, color.bitColor);
+            final OnyxMove capture = new SearchTakePosition().getTakePos(c, board, color.bitColor);
             moves.add(capture);
-            moves.add(SearchCounterPosition.getCounterPos(c, board, color.bitColor));
-            moves.add(SearchNeighbourPosition.getNeighbourPos(c, board, color.bitColor));
-            moves.add(SearchAttackPosition.getAttackPos(c, board, color.bitColor));
-            moves.add(SearchCenterPosition.getCenterPos(c, board));
+            final OnyxMove counter = new SearchCounterPosition().getCounterPos(c, board, color.bitColor);
+            moves.add(counter);
+            final OnyxMove neighbour = new SearchNeighbourPosition().getNeighbourPos(c, board, color.bitColor);
+            moves.add(neighbour);
+            final OnyxMove attack = new SearchAttackPosition().getAttackPos(c, board, color.bitColor);
+            moves.add(attack);
+            final OnyxMove center = new SearchCenterPosition().getCenterPos(c, board);
+            moves.add(center);
             
             if (capture != null) {
                 posSet = c.getTakePositions(capture.getPos().getKey(), color.bitColor, board);

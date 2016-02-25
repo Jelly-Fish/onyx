@@ -29,13 +29,14 @@
  * POSSIBILITY OF SUCH DAMAGE. 
  ******************************************************************************
  */
-package com.jellyfish.jfgonyx.onyx.search.subroutines;
+package com.jellyfish.jfgonyx.onyx.search.subroutines.positionsearch;
 
 import com.jellyfish.jfgonyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxDiamond;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
+import com.jellyfish.jfgonyx.onyx.search.subroutines.abstractions.AbstractSubroutine;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
 
 /**
@@ -44,6 +45,8 @@ import com.jellyfish.jfgonyx.ui.OnyxBoard;
  */
 public class SearchAttackPosition extends AbstractSubroutine {
     
+    private final static String BEST_CANDIDATE = " :: Attack position [%s]";
+    
     /**
      * @param c Onyx position collection.
      * @param b Onyx board instance.
@@ -51,9 +54,8 @@ public class SearchAttackPosition extends AbstractSubroutine {
      * @return Strongest counter attack move found (to allow take on next move) 
      * or NULL if no such position has been found.
      */
-    public static OnyxMove getAttackPos(final OnyxPosCollection c, final OnyxBoard b, final int bitColor) {
+    public final OnyxMove getAttackPos(final OnyxPosCollection c, final OnyxBoard b, final int bitColor) {
 
-        
         int[] iPos = null; 
         OnyxPos tmp = null;
         String[] keys = null;
@@ -67,15 +69,19 @@ public class SearchAttackPosition extends AbstractSubroutine {
             }
             
             if (iPos[0] + iPos[2] == 2 && iPos[1] + iPos[3] == 0 && !c.getPosition(keys[1]).isOccupied()) {
-                return new OnyxMove(c.getPosition(keys[1]), OnyxConst.SCORE.ATTACK.getValue());
+                move = new OnyxMove(c.getPosition(keys[1]), OnyxConst.SCORE.ATTACK.getValue());
+                break;
             }
             
             if (iPos[1] + iPos[3] == 2 && iPos[0] + iPos[2] == 0 && !c.getPosition(keys[0]).isOccupied()) {
-                return new OnyxMove(c.getPosition(keys[0]), OnyxConst.SCORE.ATTACK.getValue());
+                move = new OnyxMove(c.getPosition(keys[0]), OnyxConst.SCORE.ATTACK.getValue());
+                break;
             }
         }
         
-        return null;
+        if (move != null) print(OnyxConst.POS_MAP.get(move.getPos().getKey()), BEST_CANDIDATE);
+        
+        return move;
     }
     
 }

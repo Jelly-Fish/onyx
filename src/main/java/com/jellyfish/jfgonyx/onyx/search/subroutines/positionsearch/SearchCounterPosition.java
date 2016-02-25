@@ -29,69 +29,65 @@
  * POSSIBILITY OF SUCH DAMAGE. 
  ******************************************************************************
  */
-package com.jellyfish.jfgonyx.onyx.search.subroutines;
+package com.jellyfish.jfgonyx.onyx.search.subroutines.positionsearch;
 
-import com.jellyfish.jfgonyx.constants.GraphicsConst;
 import com.jellyfish.jfgonyx.constants.OnyxConst;
+import com.jellyfish.jfgonyx.onyx.entities.OnyxDiamond;
+import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
-import java.util.HashSet;
-import java.util.Set;
+import com.jellyfish.jfgonyx.onyx.search.subroutines.abstractions.AbstractSubroutine;
+import com.jellyfish.jfgonyx.ui.OnyxBoard;
+import org.apache.commons.lang3.StringUtils;
 
 /**
+ *
  * @author thw
  */
-public class SearchWinConnection extends AbstractSubroutine {
+public class SearchCounterPosition extends AbstractSubroutine {
     
-    private final static String WIN = " :: %s wins the game !";
-    private final static String WIN_CANDIDATE = " :: Win search %s @ %s | iteration %s";
-    private final OnyxPosCollection c;
-    private final GraphicsConst.COLOR color;
-    private final float max = OnyxConst.BOARD_SIDE_SQUARE_COUNT + 1;
-    private final Set<String> checked = new HashSet<>();
-    private boolean win = false;
-    private int i = -1;
+    private final static String BEST_CANDIDATE = " :: Counter position [%s]";
     
-    public SearchWinConnection(final OnyxPosCollection c, final GraphicsConst.COLOR color) {
-        this.c = c;
-        this.color = color;
-    }
-    
-    public void connection(final OnyxPos p, final String kEx) {       
-        
-        if (this.win) return;
-        
-        print(this.color.strColor, p.getKey(), String.valueOf(++i), WIN_CANDIDATE);
-        
-        OnyxPos tmp = null;
-        for (String k : p.connections) {
-            tmp = c.getPosition(k);
-            if (this.persue(tmp, kEx)) {
-                if ((this.color.boolColor && tmp.x > this.max - .1f) ||
-                    (!this.color.boolColor && tmp.y > this.max - .1f)) {
-                    this.win = true;
+    /**
+     * @param c Onyx position collection.
+     * @param b Onyx board instance.
+     * @param bitColor the color to play's bit value (0=white, 1=black).
+     * @return Strongest counter move found to prevent sealing & take positions
+     * or NULL if no such position has been found.
+     */
+    public final OnyxMove getCounterPos(final OnyxPosCollection c, final OnyxBoard b, final int bitColor) {
+
+        /**
+         * FIXME : improve this, re-evaluate score value.
+         * counter pos must also block tail progressions.
+         */
+        int i, j;
+        OnyxPos pos = null;
+        String key = StringUtils.EMPTY;
+        for (OnyxDiamond d : b.getDiamondCollection().getDiamonds().values()) {
+            
+            i = 0; j = 0;
+            for (String k : d.getCornerKeys()) {
+                pos = c.getPosition(k);
+                if (pos.isOccupied()) {
+                    if (pos.getPiece().color.bitColor == bitColor) {
+                        ++i;
+                    } else if (pos.getPiece().color.bitColor != bitColor) {
+                        ++j;
+                    }
+                } else {
+                    key = k;
                 }
-                this.checked.add(kEx);
-                this.connection(tmp, k); 
+            }
+            
+            if (i == 2 && j == 1 && !c.getPosition(key).isOccupied()) {
+                move = new OnyxMove(c.getPosition(key), OnyxConst.SCORE.COUNTERPOS.getValue());
             }
         }
-    }
-    
-    private boolean persue(final OnyxPos p, final String kEx) {
-        return p != null && !this.checked.contains(p.getKey()) && !p.getKey().equals(kEx) &&
-                p.isOccupied() && p.getPiece().color.bitColor == this.color.bitColor;
-    }
-    
-    @SuppressWarnings("empty-statement")
-    private int keyArraySize(final String[] keys) {
-        int i = -1;
-        while (keys[++i] != null);
-        return i;
-    }
-   
-    public boolean isWin() {
-        if (this.win) print(this.color.strColor.toUpperCase(), WIN);
-        return this.win;
+        
+        if (move != null) print(OnyxConst.POS_MAP.get(move.getPos().getKey()), BEST_CANDIDATE);
+        
+        return move;
     }
     
 }

@@ -29,7 +29,7 @@
  * POSSIBILITY OF SUCH DAMAGE. 
  ******************************************************************************
  */
-package com.jellyfish.jfgonyx.onyx.search.subroutines;
+package com.jellyfish.jfgonyx.onyx.search.subroutines.abstractions;
 
 import com.jellyfish.jfgonyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
@@ -42,26 +42,32 @@ import java.util.List;
  */
 public abstract class AbstractSubroutine {
     
-    protected final void print(final String sK, final List<OnyxMove> candidates, final String f) {
+    /**
+     * Search resulat as Onyx move istance.
+     * @see OnyxMove
+     */
+    protected OnyxMove move = null;
+    
+    public final void print(final String sK, final List<OnyxMove> candidates, final String f) {
         for (OnyxMove m : candidates) {
             MainFrame.print(String.format(f, OnyxConst.POS_MAP.get(sK), OnyxConst.POS_MAP.get(m.getPos().getKey())));
         }
     }
     
-    protected final void print(final String sK, final OnyxMove candidate, final String f) {
+    public final void print(final String sK, final OnyxMove candidate, final String f) {
         MainFrame.print(String.format(f, 
                 OnyxConst.POS_MAP.get(sK), OnyxConst.POS_MAP.get(candidate.getPos().getKey())));
     }
     
-    protected final void print(final String k, final String n, final String f) {
+    public final void print(final String k, final String n, final String f) {
         MainFrame.print(String.format(f, OnyxConst.POS_MAP.get(k), n));
     }
     
-    protected final void print(final String color, final String k, final String n, final String f) {
+    public final void print(final String color, final String k, final String n, final String f) {
         MainFrame.print(String.format(f, color, OnyxConst.POS_MAP.get(k), n));
     }
     
-    protected final void print(final String k, final String f) {
+    public final void print(final String k, final String f) {
         MainFrame.print(String.format(f, k));
     }
     

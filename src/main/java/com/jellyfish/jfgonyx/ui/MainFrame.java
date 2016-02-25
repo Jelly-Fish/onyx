@@ -223,7 +223,7 @@ public class MainFrame extends javax.swing.JFrame implements OnyxObserver {
                 StringUtils.SPACE + m.toString(), htmlEditorKit, doc);
     }
     
-    public static final void print(final String data) {
+    public static final void print(final String data) {       
         MainFrameGHelper.appendRawData(data, htmlEditorKit, doc);
     }
     

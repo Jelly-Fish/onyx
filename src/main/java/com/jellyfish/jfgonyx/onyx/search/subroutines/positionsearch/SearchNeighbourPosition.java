@@ -29,13 +29,15 @@
  * POSSIBILITY OF SUCH DAMAGE. 
  ******************************************************************************
  */
-package com.jellyfish.jfgonyx.onyx.search.subroutines;
+package com.jellyfish.jfgonyx.onyx.search.subroutines.positionsearch;
 
 import com.jellyfish.jfgonyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxDiamond;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
+import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException;
+import com.jellyfish.jfgonyx.onyx.search.subroutines.abstractions.AbstractSubroutine;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
 import org.apache.commons.lang3.StringUtils;
 
@@ -43,47 +45,38 @@ import org.apache.commons.lang3.StringUtils;
  *
  * @author thw
  */
-public class SearchCounterPosition extends AbstractSubroutine {
+public class SearchNeighbourPosition extends AbstractSubroutine {
+    
+    private final static String BEST_CANDIDATE = " :: Neighbour position [%s]";
     
     /**
      * @param c Onyx position collection.
      * @param b Onyx board instance.
      * @param bitColor the color to play's bit value (0=white, 1=black).
-     * @return Strongest counter move found to prevent sealing & take positions
-     * or NULL if no such position has been found.
+     * @return Neighbor move found or NULL if no such position has been found.
+     * @throws com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException
      */
-    public static OnyxMove getCounterPos(final OnyxPosCollection c, final OnyxBoard b, final int bitColor) {
-
-        /**
-         * FIXME : improve this, re-evaluate score value.
-         * counter pos must also block tail progressions.
-         */
+    public final OnyxMove getNeighbourPos(final OnyxPosCollection c, final OnyxBoard b, final int bitColor) throws NoValidOnyxPositionsFoundException {
         
-        int i, j;
+        int count;
         OnyxPos pos = null;
         String key = StringUtils.EMPTY;
         for (OnyxDiamond d : b.getDiamondCollection().getDiamonds().values()) {
-            
-            i = 0; j = 0;
+            count = 0;
             for (String k : d.getCornerKeys()) {
                 pos = c.getPosition(k);
-                if (pos.isOccupied()) {
-                    if (pos.getPiece().color.bitColor == bitColor) {
-                        ++i;
-                    } else if (pos.getPiece().color.bitColor != bitColor) {
-                        ++j;
-                    }
-                } else {
-                    key = k;
-                }
+                if (pos.isOccupied() && pos.getPiece().color.bitColor == bitColor) ++count;
+                else key = k;
             }
             
-            if (i == 2 && j == 1 && !c.getPosition(key).isOccupied()) {
-                return new OnyxMove(c.getPosition(key), OnyxConst.SCORE.COUNTERPOS.getValue());
+            if (count > 1  && !c.getPosition(key).isOccupied()) {
+                return new OnyxMove(c.getPosition(key), OnyxConst.SCORE.NEIGHBOUR.getValue());
             }
         }
         
-        return null;
+        if (move != null) print(OnyxConst.POS_MAP.get(move.getPos().getKey()), BEST_CANDIDATE);
+        
+        return move;
     }
     
 }

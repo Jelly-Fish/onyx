@@ -29,13 +29,14 @@
  * POSSIBILITY OF SUCH DAMAGE. 
  ******************************************************************************
  */
-package com.jellyfish.jfgonyx.onyx.search.subroutines;
+package com.jellyfish.jfgonyx.onyx.search.subroutines.positionsearch;
 
 import com.jellyfish.jfgonyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxDiamond;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
+import com.jellyfish.jfgonyx.onyx.search.subroutines.abstractions.AbstractSubroutine;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
 import java.util.HashSet;
 import java.util.Set;
@@ -46,6 +47,8 @@ import java.util.Set;
  */
 public class SearchCenterPosition extends AbstractSubroutine {
     
+    private final static String BEST_CANDIDATE = " :: Center position [%s]";
+    
     /**
      * Get playable diamond center position nearest to board center.
      * @param c position collection.
@@ -53,7 +56,7 @@ public class SearchCenterPosition extends AbstractSubroutine {
      * @return Best OnyxMove instance or null.
      * @throws com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException if a position is invalid.
      */
-    public static OnyxMove getCenterPos(final OnyxPosCollection c, final OnyxBoard b) throws InvalidOnyxPositionException {
+    public final OnyxMove getCenterPos(final OnyxPosCollection c, final OnyxBoard b) throws InvalidOnyxPositionException {
 
         final Set<OnyxDiamond> d = new HashSet<>();
         int i = 0;
@@ -69,15 +72,18 @@ public class SearchCenterPosition extends AbstractSubroutine {
             }
         }
 
-        final OnyxDiamond[] r = SearchCenterPosition.sortByCenterPosValue(d);
+        final OnyxDiamond[] r = this.sortByCenterPosValue(d);
         
         if (r == null || r.length == 0) return null;
         i = r.length / 2;
         
-        return new OnyxMove(r[i].getCenterPos(), OnyxConst.SCORE.CENTER.getValue());
+        move = new OnyxMove(r[i].getCenterPos(), OnyxConst.SCORE.CENTER.getValue());
+        if (move != null) print(OnyxConst.POS_MAP.get(move.getPos().getKey()), BEST_CANDIDATE);
+        
+        return move;
     }
     
-    public final static OnyxDiamond[] sortByCenterPosValue(final Set<OnyxDiamond> set) throws InvalidOnyxPositionException {
+    public final OnyxDiamond[] sortByCenterPosValue(final Set<OnyxDiamond> set) throws InvalidOnyxPositionException {
        
         int i = -1, j = 0;
         OnyxDiamond tmp = null;
@@ -85,7 +91,7 @@ public class SearchCenterPosition extends AbstractSubroutine {
         for (OnyxDiamond d : set) r[++i] = d;
         
         for (i = 0; i < r.length; ++i) {
-            j = SearchCenterPosition.getLowValue(r, i);
+            j = this.getLowValue(r, i);
             tmp = r[i];
             r[i] = r[j];
             r[j] = tmp;
@@ -94,7 +100,7 @@ public class SearchCenterPosition extends AbstractSubroutine {
         return r;
     }
     
-    private static int getLowValue(final OnyxDiamond[] a, final int sI) throws InvalidOnyxPositionException {
+    private int getLowValue(final OnyxDiamond[] a, final int sI) throws InvalidOnyxPositionException {
         
         int index = sI;
         float f = -1f;
