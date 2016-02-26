@@ -77,14 +77,11 @@ public class PositionSearch extends AbstractOnyxSearch implements OnyxPositionSe
             
             final OnyxMove capture = new SearchTakePosition().getTakePos(c, board, color.bitColor);
             moves.add(capture);
-            final OnyxMove counter = new SearchCounterPosition().getCounterPos(c, board, color.bitColor);
-            moves.add(counter);
-            final OnyxMove neighbour = new SearchNeighbourPosition().getNeighbourPos(c, board, color.bitColor);
-            moves.add(neighbour);
-            final OnyxMove attack = new SearchAttackPosition().getAttackPos(c, board, color.bitColor);
-            moves.add(attack);
-            final OnyxMove center = new SearchCenterPosition().getCenterPos(c, board);
-            moves.add(center);
+            moves.add(new SearchTakePosition().getTakePos(c, board, color.bitColor));
+            moves.add(new SearchCounterPosition().getCounterPos(c, board, color.bitColor));
+            moves.add(new SearchNeighbourPosition().getNeighbourPos(c, board, color.bitColor));
+            moves.add(new SearchAttackPosition().getAttackPos(c, board, color.bitColor));
+            moves.add(new SearchCenterPosition().getCenterPos(c, board.getDiamondCollection()));
             
             if (capture != null) {
                 posSet = c.getTakePositions(capture.getPos().getKey(), color.bitColor, board);
