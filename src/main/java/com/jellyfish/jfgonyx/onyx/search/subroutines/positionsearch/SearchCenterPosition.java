@@ -64,17 +64,30 @@ public class SearchCenterPosition extends AbstractSubroutine {
 
         boolean found = false;
         float side = 3f;
+        int counter = 0;
         final float minS = 1.5f -.01f;
         float s = ((OnyxConst.BOARD_SIDE_SQUARE_COUNT + 1) / 2) - .5f;
         final List<OnyxPos> pos = new ArrayList<>();
+        OnyxPos tmp = null;
         
         while (!found || s > minS) { 
             
             for (String k : this.getKeys(c, s, side)) {
-                if (c.containsPosition(k) && !c.getPosition(k).isOccupied() &&
-                        c.getPosition(k).isDiamondCenter()) {
-                    found = true;
-                    pos.add(c.getPosition(k));
+                
+                tmp = c.getPosition(k);
+                if (tmp != null && !tmp.isOccupied() && tmp.isDiamondCenter()) {
+                    
+                    for (String nK : tmp.connections) {
+                        if (c.getPosition(nK) != null && !c.getPosition(nK).isOccupied()) {
+                            ++counter;
+                        }
+                    }
+                    
+                    if (counter == 4) { 
+                        found = true;
+                        pos.add(c.getPosition(k));
+                    }
+                    counter = 0;
                 }
             }
             

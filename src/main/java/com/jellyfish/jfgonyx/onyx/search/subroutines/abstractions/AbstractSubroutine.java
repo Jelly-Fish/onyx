@@ -35,6 +35,7 @@ import com.jellyfish.jfgonyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
 import com.jellyfish.jfgonyx.ui.MainFrame;
 import java.util.List;
+import java.util.Set;
 
 /**
  *
@@ -49,6 +50,12 @@ public abstract class AbstractSubroutine {
     protected OnyxMove move = null;
     
     public final void print(final String sK, final List<OnyxMove> candidates, final String f) {
+        for (OnyxMove m : candidates) {
+            MainFrame.print(String.format(f, OnyxConst.POS_MAP.get(sK), OnyxConst.POS_MAP.get(m.getPos().getKey())));
+        }
+    }
+    
+    public final void print(final String sK, final Set<OnyxMove> candidates, final String f) {
         for (OnyxMove m : candidates) {
             MainFrame.print(String.format(f, OnyxConst.POS_MAP.get(sK), OnyxConst.POS_MAP.get(m.getPos().getKey())));
         }

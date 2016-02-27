@@ -128,25 +128,18 @@ public class OnyxBoard extends javax.swing.JPanel implements OnyxBoardI {
     @Override
     public boolean isCenterPosPlayable(final String k) {
         
+        int counter = 0;
         OnyxDiamond tmpDiamond = null;
-        if (k == null || !this.positions.containsPosition(k)) return false;
-        
-        for (OnyxDiamond d : this.diamonds.getDiamonds().values()) {
-            try {
-                if (d.getCenterPos().getKey().equals(k)) {
-                    tmpDiamond = d;
-                    break;
-                }
-            } catch (final InvalidOnyxPositionException Iopex) { }
+        if (k == null || !this.positions.containsPosition(k) || 
+                !this.isDiamondCenter(k)) {
+            return false;
         }
         
-        int c = 0;
-        if (tmpDiamond == null || !tmpDiamond.isFivePosDiamond()) return false;
-        for (String dK : tmpDiamond.getAllKeys()) {
-            c = this.positions.getPosition(dK).isOccupied() ? ++c : c;
+        for (String cK : this.positions.getPosition(k).connections) {
+            counter = this.positions.getPosition(cK).isOccupied() ? ++counter : counter;
         }
         
-        return c == 0;
+        return counter == 0;
     }
 
     @Override

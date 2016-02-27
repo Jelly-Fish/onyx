@@ -94,7 +94,7 @@ public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnecti
         final List<OnyxMove> candidates = new ArrayList<>();
         
         for (OnyxPos p : pos) {
-            candidates.addAll(new SearchTailConnection(c, color, board).getTails(p, p.getKey()));
+            candidates.add(new SearchTailConnection(c, color, board).getTail(p, p.getKey()));
         }
         
         OnyxMove tmp = null;

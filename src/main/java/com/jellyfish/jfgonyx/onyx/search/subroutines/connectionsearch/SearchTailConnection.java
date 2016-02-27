@@ -39,8 +39,6 @@ import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
 import com.jellyfish.jfgonyx.onyx.search.subroutines.abstractions.AbstractSubroutine;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
 import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -53,7 +51,7 @@ public class SearchTailConnection extends AbstractSubroutine {
     private final OnyxPosCollection c;
     private final OnyxBoard board;
     private final GraphicsConst.COLOR color;
-    private final LinkedList<OnyxMove> candidates = new LinkedList<>();
+    private final Set<OnyxMove> candidates = new HashSet<>();
     private final Set<String> keyCandidates = new HashSet();
     private final Set<String> checked = new HashSet();
     private OnyxPos startPos;
@@ -65,15 +63,16 @@ public class SearchTailConnection extends AbstractSubroutine {
         this.board = board;
     }
     
-    public List<OnyxMove> getTails(final OnyxPos p, final String kEx) {
+    public OnyxMove getTail(final OnyxPos p, final String kEx) {
         
         this.startPos = p;
         this.findTailPos(p, kEx);
+        this.score();
         this.trim();
         print(p.getKey(), candidates, LAMBDA_CANDIDATE);
         print(p.getKey(), this.candidate, BEST_CANDIDATE);
         
-        return this.candidates;
+        return this.candidate;
     }
 
     private void findTailPos(final OnyxPos p, final String kEx) {       
@@ -100,8 +99,9 @@ public class SearchTailConnection extends AbstractSubroutine {
         }
     }
     
-    private void trim() {
+    private void score() {
 
+        final float boardLength = ((float) OnyxConst.BOARD_SIDE_SQUARE_COUNT) + 1f;
         float score = -1f;
         OnyxPos tmp = null, pos = null;
         for (String k : this.keyCandidates) {
@@ -110,23 +110,37 @@ public class SearchTailConnection extends AbstractSubroutine {
             if (tmp == null) tmp = c.getPosition(k);            
             pos = c.getPosition(k);
             
-            if (this.color.boolColor && ((this.startPos.isLowXBorder() && pos.x >= tmp.x) ||
-                    (this.startPos.isHighXBorder() && pos.x <= tmp.x))) {
+            if (this.color.boolColor && ((this.startPos.isLowXBorder() && pos.x > tmp.x) ||
+                    (this.startPos.isHighXBorder() && pos.x < tmp.x))) {
                 tmp = pos;
-                score = this.startPos.isLowXBorder() ? pos.x :
-                        Math.abs((pos.x - OnyxConst.BOARD_SIDE_SQUARE_COUNT + 1));
+                score = this.startPos.isLowXBorder() ? pos.x : Math.abs(pos.x - boardLength);
             }
             
-            if (!this.color.boolColor && ((this.startPos.isLowYBorder() && pos.y >= tmp.y) ||
-                    (this.startPos.isHighYBorder() && pos.y <= tmp.y))) {
+            if (!this.color.boolColor && ((this.startPos.isLowYBorder() && pos.y > tmp.y) ||
+                    (this.startPos.isHighYBorder() && pos.y < tmp.y))) {
                 tmp = pos;
-                score = this.startPos.isLowYBorder() ? pos.y :
-                        Math.abs((pos.y - OnyxConst.BOARD_SIDE_SQUARE_COUNT + 1));
+                score = this.startPos.isLowYBorder() ? pos.y : Math.abs(pos.y - boardLength);
             }
         }
 
         this.candidate = new OnyxMove(tmp, false, score * OnyxConst.SCORE.TAIL.getValue());
         this.candidates.add(candidate);
+    }
+    
+    private void trim() {
+        
+        OnyxMove tmp = null;
+        for (OnyxMove m : this.candidates) {
+            if (tmp == null) tmp = m;
+            if (!m.isLambda() && m.getScore() >= tmp.getScore()) {
+                tmp = m;
+            }
+        }
+        this.candidate = tmp;
+    }
+    
+    public OnyxMove getCandidate() {
+        return candidate;
     }
     
 }
