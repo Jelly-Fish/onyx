@@ -32,37 +32,22 @@
 package com.jellyfish.jfgonyx.onyx.search.subroutines.connectionsearch;
 
 import com.jellyfish.jfgonyx.constants.GraphicsConst;
-import com.jellyfish.jfgonyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
-import com.jellyfish.jfgonyx.onyx.search.subroutines.abstractions.AbstractSubroutine;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
+ *
  * @author thw
  */
-public class SearchWinConnection extends AbstractSubroutine {
+public class SearchWinConnectionLink extends SearchWinConnection {
     
-    private final static String WIN = " :: %s wins the game !";
-    private final static String WIN_CANDIDATE = " :: Win search %s @ %s | iteration %s";
-    protected final OnyxPosCollection c;
-    protected final GraphicsConst.COLOR color;
-    protected final float max = OnyxConst.BOARD_SIDE_SQUARE_COUNT + 1;
-    protected final Set<String> checked = new HashSet<>();
-    protected boolean win = false;
-    protected int iteration = -1;
-    
-    public SearchWinConnection(final OnyxPosCollection c, final GraphicsConst.COLOR color) {
-        this.c = c;
-        this.color = color;
+    public SearchWinConnectionLink(final OnyxPosCollection c, final GraphicsConst.COLOR color) {
+        super(c, color);
     }
     
-    public void connection(final OnyxPos p, final String kEx) {       
+    private void connectionLink(final OnyxPos p, final String kEx) {       
         
         if (this.win) return;
-        
-        print(this.color.strColor, p.getKey(), String.valueOf(++this.iteration), WIN_CANDIDATE);
         
         OnyxPos tmp = null;
         for (String k : p.connections) {
@@ -76,23 +61,6 @@ public class SearchWinConnection extends AbstractSubroutine {
                 this.connection(tmp, k); 
             }
         }
-    }
-    
-    boolean persue(final OnyxPos p, final String kEx) {
-        return p != null && !this.checked.contains(p.getKey()) && !p.getKey().equals(kEx) &&
-                p.isOccupied() && p.getPiece().color.bitColor == this.color.bitColor;
-    }
-    
-    @SuppressWarnings("empty-statement")
-    private int keyArraySize(final String[] keys) {
-        int i = -1;
-        while (keys[++i] != null);
-        return i;
-    }
-   
-    public boolean isWin() {
-        if (this.win) print(this.color.strColor.toUpperCase(), WIN);
-        return this.win;
     }
     
 }

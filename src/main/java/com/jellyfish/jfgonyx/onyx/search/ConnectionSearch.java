@@ -44,7 +44,9 @@ import com.jellyfish.jfgonyx.onyx.search.subroutines.connectionsearch.SearchTail
 import com.jellyfish.jfgonyx.onyx.search.subroutines.connectionsearch.SearchWinConnection;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Connection search taking advantage of OnyxPosCollection connection tree :
@@ -57,7 +59,18 @@ public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnecti
     @Override
     public OnyxMove search(final OnyxPosCollection c, final OnyxBoard board, final GraphicsConst.COLOR color) 
             throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
-        return getTailMove(c, board, color);
+        
+        final Set<OnyxMove> cnxMoves = new HashSet<>();
+        cnxMoves.add(getTailMove(c, board, color));
+        cnxMoves.add(getWinMove(c, board, color));
+        
+        OnyxMove tmp = null;
+        for (OnyxMove m : cnxMoves) {
+            if (tmp == null) tmp = m;
+            else if (m.getScore() > tmp.getScore()) tmp = m;
+        }
+        
+        return tmp;
     }
     
     @Override
@@ -106,6 +119,22 @@ public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnecti
         }
         
         return new OnyxMove(tmp.getPos(), tmp.getPiece(), tmp.getScore());
+    }
+    
+    /**
+     * @param c collection of unique Onyx positions - positions are independent from OnyxDiamond instances.
+     * @param color the color to check for win position.
+     * @param board onyx board instance.
+     * @return winning onyx connection or null.
+     */
+    private OnyxMove getWinMove(final OnyxPosCollection c, final OnyxBoard board, 
+            final GraphicsConst.COLOR color) throws NoValidOnyxPositionsFoundException {
+        
+        /**
+         * FIXME : figure this out for the best...
+         */
+        
+        return null;
     }
     
 }
