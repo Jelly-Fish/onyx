@@ -32,8 +32,13 @@
 package com.jellyfish.jfgonyx.onyx.search.subroutines.connectionsearch;
 
 import com.jellyfish.jfgonyx.constants.GraphicsConst;
+import com.jellyfish.jfgonyx.constants.OnyxConst;
+import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
+import com.jellyfish.jfgonyx.onyx.entities.OnyxPiece;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
+import com.jellyfish.jfgonyx.onyx.search.searchutils.OnyxPositionUtils;
+import java.util.List;
 
 /**
  *
@@ -41,26 +46,38 @@ import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
  */
 public class SearchWinConnectionLink extends SearchWinConnection {
     
+    private final static String WIN_MOVE = " :: [!] Win link position found @ %s";
+    
     public SearchWinConnectionLink(final OnyxPosCollection c, final GraphicsConst.COLOR color) {
         super(c, color);
     }
     
-    private void connectionLink(final OnyxPos p, final String kEx) {       
+    public OnyxMove connectionLink(final List<OnyxMove> tails) {       
         
-        if (this.win) return;
+        final List<OnyxPos> borders = OnyxPositionUtils.trimByBorderStartPositionsAndColor(
+                OnyxPositionUtils.getBorders(this.c, this.color), this.color);
         
-        OnyxPos tmp = null;
-        for (String k : p.connections) {
-            tmp = c.getPosition(k);
-            if (this.persue(tmp, kEx)) {
-                if ((this.color.boolColor && tmp.x > this.max - .1f) ||
-                    (!this.color.boolColor && tmp.y > this.max - .1f)) {
-                    this.win = true;
+        OnyxPiece tmp = null;
+        SearchWinConnection search = null;
+        for (OnyxMove m : tails) {
+            
+            tmp = new OnyxPiece(this.color);
+            this.c.getPositions().get(m.getPos().getKey()).setPiece(tmp);
+
+            for (OnyxPos p : borders) {
+                search = new SearchWinConnection(this.c, this.color);
+                search.connection(p, p.getKey());
+                if (search.isWin()) {
+                    print(OnyxConst.POS_MAP.get(m.getPos().getKey()), WIN_MOVE);
+                    this.c.getPositions().get(m.getPos().getKey()).setPiece(null);
+                    return new OnyxMove(m.getPos(), OnyxConst.SCORE.WIN_LINK.getValue());
                 }
-                this.checked.add(kEx);
-                this.connection(tmp, k); 
             }
+            
+            this.c.getPositions().get(m.getPos().getKey()).setPiece(null);
         }
+        
+        return null;
     }
     
 }

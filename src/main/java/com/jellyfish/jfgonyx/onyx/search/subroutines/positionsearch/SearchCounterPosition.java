@@ -81,7 +81,7 @@ public class SearchCounterPosition extends AbstractSubroutine {
             }
             
             if (i == 2 && j == 1 && !c.getPosition(key).isOccupied()) {
-                move = new OnyxMove(c.getPosition(key), OnyxConst.SCORE.COUNTERPOS.getValue());
+                move = new OnyxMove(c.getPosition(key), OnyxConst.SCORE.COUNTER_POS.getValue());
             }
         }
         
