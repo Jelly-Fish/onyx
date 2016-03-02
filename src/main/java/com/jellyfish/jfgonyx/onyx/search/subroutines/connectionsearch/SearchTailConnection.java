@@ -38,7 +38,9 @@ import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
 import com.jellyfish.jfgonyx.onyx.search.subroutines.abstractions.AbstractSubroutine;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -46,12 +48,12 @@ import java.util.Set;
  */
 public class SearchTailConnection extends AbstractSubroutine {
     
-    private final static String LAMBDA_CANDIDATE = " :: Lambda candidate for start @ %s : [%s]";
-    private final static String BEST_CANDIDATE = " :: Candidate for start @ %s : [%s]";
+    private final static String LAMBDA_CANDIDATE = " :: Tail search candidate for start @ %s : [%s] score: %f";
+    private final static String BEST_CANDIDATE = " :: Candidate for start @ %s : [%s] score: %f";
     private final OnyxPosCollection c;
     private final OnyxBoard board;
     private final GraphicsConst.COLOR color;
-    private final Set<OnyxMove> candidates = new HashSet<>();
+    private final List<OnyxMove> candidates = new ArrayList<>();
     private final Set<String> keyCandidates = new HashSet();
     private final Set<String> checked = new HashSet();
     private OnyxPos startPos;
@@ -69,7 +71,7 @@ public class SearchTailConnection extends AbstractSubroutine {
         this.findTailPos(p, kEx);
         this.score();
         this.trim();
-        print(p.getKey(), candidates, LAMBDA_CANDIDATE);
+        print(p.getKey(), this.candidates, LAMBDA_CANDIDATE);
         print(p.getKey(), this.candidate, BEST_CANDIDATE);
         
         return this.candidate;
@@ -98,7 +100,7 @@ public class SearchTailConnection extends AbstractSubroutine {
             }
         }
     }
-    
+
     private void score() {
 
         final float boardLength = ((float) OnyxConst.BOARD_SIDE_SQUARE_COUNT) + 1f;
@@ -107,19 +109,40 @@ public class SearchTailConnection extends AbstractSubroutine {
         for (String k : this.keyCandidates) {
             
             this.candidates.add(new OnyxMove(c.getPosition(k), true));
-            if (tmp == null) tmp = c.getPosition(k);            
-            pos = c.getPosition(k);
             
-            if (this.color.boolColor && ((this.startPos.isLowXBorder() && pos.x > tmp.x) ||
-                    (this.startPos.isHighXBorder() && pos.x < tmp.x))) {
+            pos = c.getPosition(k);
+            if (tmp == null || score < 0f) {
+                //If first blood, then init score & tmp.
                 tmp = pos;
-                score = this.startPos.isLowXBorder() ? pos.x : Math.abs(pos.x - boardLength);
+                if (this.color.boolColor) {
+                    if (this.startPos.isLowXBorder()) score = pos.x;
+                    else if (this.startPos.isHighXBorder()) score = Math.abs(pos.x - boardLength);
+                }
+
+                if (!this.color.boolColor) {
+                    if (this.startPos.isLowYBorder()) score = pos.y;
+                    else if (this.startPos.isHighYBorder()) score = Math.abs(pos.y - boardLength);
+                }
+            }            
+            
+            if (this.color.boolColor) {
+                if (this.startPos.isLowXBorder() && pos.x > tmp.x) {
+                    score = pos.x;
+                    tmp = pos;
+                } else if (this.startPos.isHighXBorder() && pos.x < tmp.x) {
+                    score = Math.abs(pos.x - boardLength);
+                    tmp = pos;
+                }
             }
             
-            if (!this.color.boolColor && ((this.startPos.isLowYBorder() && pos.y > tmp.y) ||
-                    (this.startPos.isHighYBorder() && pos.y < tmp.y))) {
-                tmp = pos;
-                score = this.startPos.isLowYBorder() ? pos.y : Math.abs(pos.y - boardLength);
+            if (!this.color.boolColor) {
+                if (this.startPos.isLowYBorder() && pos.y > tmp.y) {
+                    score = pos.y;
+                    tmp = pos;
+                } else if (this.startPos.isHighYBorder() && pos.y < tmp.y) {
+                    tmp = pos;
+                    score = Math.abs(pos.y - boardLength);
+                }
             }
         }
 

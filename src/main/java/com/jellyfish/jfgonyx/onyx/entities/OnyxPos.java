@@ -81,19 +81,19 @@ public class OnyxPos {
     }
         
     public boolean isLowXBorder() {
-        return this.isOccupied() && !(this.x > 1f);
+        return !(this.x > 1.1f);
     }
 
     public boolean isHighXBorder() {
-        return this.isOccupied() && !(this.x < (float) (OnyxConst.BOARD_SIDE_SQUARE_COUNT + 1));
+        return !(this.x < ((float) (OnyxConst.BOARD_SIDE_SQUARE_COUNT + 1)) +.1f);
     }
     
     public boolean isLowYBorder() {
-        return this.isOccupied() && !(this.y > 1f);
+        return !(this.y > 1f);
     }
     
     public boolean isHighYBorder() {
-        return this.isOccupied() && !(this.y < (float) (OnyxConst.BOARD_SIDE_SQUARE_COUNT + 1));
+        return !(this.y < ((float) (OnyxConst.BOARD_SIDE_SQUARE_COUNT + 1)) + .1f);
     }
 
     public int occursCount(final OnyxPos p, final List<OnyxPos> posSet) {

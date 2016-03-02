@@ -51,19 +51,22 @@ public abstract class AbstractSubroutine {
     
     public final void print(final String sK, final List<OnyxMove> candidates, final String f) {
         for (OnyxMove m : candidates) {
-            MainFrame.print(String.format(f, OnyxConst.POS_MAP.get(sK), OnyxConst.POS_MAP.get(m.getPos().getKey())));
+            MainFrame.print(String.format(f, OnyxConst.POS_MAP.get(sK), 
+                    OnyxConst.POS_MAP.get(m.getPos().getKey()), m.getScore()));
         }
     }
     
     public final void print(final String sK, final Set<OnyxMove> candidates, final String f) {
         for (OnyxMove m : candidates) {
-            MainFrame.print(String.format(f, OnyxConst.POS_MAP.get(sK), OnyxConst.POS_MAP.get(m.getPos().getKey())));
+            MainFrame.print(String.format(f, OnyxConst.POS_MAP.get(sK), 
+                    OnyxConst.POS_MAP.get(m.getPos().getKey()), m.getScore()));
         }
     }
     
     public final void print(final String sK, final OnyxMove candidate, final String f) {
         MainFrame.print(String.format(f, 
-                OnyxConst.POS_MAP.get(sK), OnyxConst.POS_MAP.get(candidate.getPos().getKey())));
+                OnyxConst.POS_MAP.get(sK), 
+                OnyxConst.POS_MAP.get(candidate.getPos().getKey()), candidate.getScore()));
     }
     
     public final void print(final String k, final String n, final String f) {

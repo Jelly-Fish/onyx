@@ -13,3 +13,6 @@ DONE
 19-feb-2016 :
 Connection win double check and test complexe layouts (x2 + paths misleads with
 1 win path).
+--------------------------------------------------------------------------------
+02-03-2016 :
+Take move output not working (no * OR **).
