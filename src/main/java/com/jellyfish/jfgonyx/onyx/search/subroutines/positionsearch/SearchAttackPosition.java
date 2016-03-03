@@ -59,7 +59,9 @@ public class SearchAttackPosition extends AbstractSubroutine {
         int[] iPos = null; 
         OnyxPos tmp = null;
         String[] keys = null;
+        
         for (OnyxDiamond d : b.getDiamondCollection().getDiamonds().values()) {
+            
             iPos = new int[] { 0, 0, 0, 0 };
             keys = d.getCornerKeys();
             for (int i = 0; i < keys.length; ++i) {

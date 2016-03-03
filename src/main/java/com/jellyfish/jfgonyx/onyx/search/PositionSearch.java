@@ -78,7 +78,7 @@ public class PositionSearch extends AbstractOnyxSearch implements OnyxPositionSe
             final OnyxMove capture = new SearchTakePosition().getTakePos(c, board, color.bitColor);
             moves.add(capture);
             moves.add(new SearchTakePosition().getTakePos(c, board, color.bitColor));
-            moves.add(new SearchCounterPosition().getCounterPos(c, board, color.bitColor));
+            moves.add(new SearchCounterPosition().getCounterPos(c, board, color));
             moves.add(new SearchNeighbourPosition().getNeighbourPos(c, board, color.bitColor));
             moves.add(new SearchAttackPosition().getAttackPos(c, board, color.bitColor));
             moves.add(new SearchCenterPosition().getCenterPos(c, board.getDiamondCollection()));
@@ -91,8 +91,9 @@ public class PositionSearch extends AbstractOnyxSearch implements OnyxPositionSe
             
             OnyxMove tmp = null;
             for (OnyxMove m : moves) {
+                if (m == null) continue;
                 if (tmp == null) tmp = m;
-                else if (m != null && m.getScore() > tmp.getScore()) tmp = m;
+                else tmp = m.getScore() > tmp.getScore() ? m : tmp;
             }
             
             if (tmp == null) throw new NoValidOnyxPositionsFoundException();

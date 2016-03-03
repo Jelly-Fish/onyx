@@ -31,13 +31,20 @@
  */
 package com.jellyfish.jfgonyx.onyx.search.subroutines.positionsearch;
 
+import com.jellyfish.jfgonyx.constants.GraphicsConst;
 import com.jellyfish.jfgonyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxDiamond;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
+import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException;
+import com.jellyfish.jfgonyx.onyx.search.ConnectionSearch;
 import com.jellyfish.jfgonyx.onyx.search.subroutines.abstractions.AbstractSubroutine;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -46,24 +53,50 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class SearchCounterPosition extends AbstractSubroutine {
     
-    private final static String BEST_CANDIDATE = " :: Counter position [%s]";
+    private final static String BEST_CANDIDATE = " :: Counter position for %s [%s] score: %s";
+    private final List<OnyxMove> candidates = new ArrayList<>();
     
     /**
      * @param c Onyx position collection.
      * @param b Onyx board instance.
-     * @param bitColor the color to play's bit value (0=white, 1=black).
-     * @return Strongest counter move found to prevent sealing & take positions
-     * or NULL if no such position has been found.
+     * @param color COLOR.
+     * @return Strongest counter move found to prevent sealing, take positions &
+     * tail counter positions else NULL if no such position has been found.
      */
-    public final OnyxMove getCounterPos(final OnyxPosCollection c, final OnyxBoard b, final int bitColor) {
-
+    public final OnyxMove getCounterPos(final OnyxPosCollection c, final OnyxBoard b, final GraphicsConst.COLOR color) {
+        
+        try {
+            this.weakCounterPos(c, b, color.bitColor);
+            this.strongCounterPos(c, b, color);
+        } catch (final NoValidOnyxPositionsFoundException nVOPEx) {
+            Logger.getLogger(SearchCounterPosition.class.getName()).log(Level.SEVERE, null, nVOPEx);
+        }
+        
+        for (OnyxMove m : this.candidates) {
+            this.move = (this.move == null || m.getScore() > this.move.getScore()) ? m : this.move;
+        }
+        
+        print(color.strColor, move.getPos().getKey(), String.valueOf(this.move.getScore()), BEST_CANDIDATE);
+        
+        return this.move;
+    }
+    
+    private void strongCounterPos(final OnyxPosCollection c, final OnyxBoard b, final GraphicsConst.COLOR color) 
+            throws NoValidOnyxPositionsFoundException {
+        
         /**
-         * FIXME : improve this, re-evaluate score value.
-         * counter pos must also block tail progressions.
-         */
+         * FIXME : here zigzaging can avoid counter positions.
+         */        
+        this.candidates.add(new ConnectionSearch().getTailMove(
+                c, b, GraphicsConst.COLOR.getOposite(color.boolColor)));
+    }
+    
+    private void weakCounterPos(final OnyxPosCollection c, final OnyxBoard b, final int bitColor) {
+        
         int i, j;
         OnyxPos pos = null;
         String key = StringUtils.EMPTY;
+        
         for (OnyxDiamond d : b.getDiamondCollection().getDiamonds().values()) {
             
             i = 0; j = 0;
@@ -81,13 +114,9 @@ public class SearchCounterPosition extends AbstractSubroutine {
             }
             
             if (i == 2 && j == 1 && !c.getPosition(key).isOccupied()) {
-                move = new OnyxMove(c.getPosition(key), OnyxConst.SCORE.COUNTER_POS.getValue());
+                this.candidates.add(new OnyxMove(c.getPosition(key), OnyxConst.SCORE.ATTACK.getValue() + 1f));
             }
-        }
-        
-        if (move != null) print(OnyxConst.POS_MAP.get(move.getPos().getKey()), BEST_CANDIDATE);
-        
-        return move;
+        }        
     }
     
 }
