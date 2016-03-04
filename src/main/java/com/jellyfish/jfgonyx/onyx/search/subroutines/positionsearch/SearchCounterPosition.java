@@ -62,33 +62,29 @@ public class SearchCounterPosition extends AbstractSubroutine {
      * @param color COLOR.
      * @return Strongest counter move found to prevent sealing, take positions &
      * tail counter positions else NULL if no such position has been found.
+     * @throws com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException
      */
-    public final OnyxMove getCounterPos(final OnyxPosCollection c, final OnyxBoard b, final GraphicsConst.COLOR color) {
+    public final OnyxMove getCounterPos(final OnyxPosCollection c, final OnyxBoard b, final GraphicsConst.COLOR color) 
+            throws NoValidOnyxPositionsFoundException {
         
-        try {
-            this.weakCounterPos(c, b, color.bitColor);
-            this.strongCounterPos(c, b, color);
-        } catch (final NoValidOnyxPositionsFoundException nVOPEx) {
-            Logger.getLogger(SearchCounterPosition.class.getName()).log(Level.SEVERE, null, nVOPEx);
-        }
+        this.weakCounterPos(c, b, color.bitColor);
+        final OnyxMove tailCounter = this.strongCounterPos(c, b, color);
+        this.candidates.add(tailCounter);
         
         for (OnyxMove m : this.candidates) {
             this.move = (this.move == null || m.getScore() > this.move.getScore()) ? m : this.move;
         }
         
-        print(color.strColor, move.getPos().getKey(), String.valueOf(this.move.getScore()), BEST_CANDIDATE);
+        if (this.move != null) print(color.strColor, this.move.getPos().getKey(), 
+                String.valueOf(this.move.getScore()), BEST_CANDIDATE);
         
         return this.move;
     }
     
-    private void strongCounterPos(final OnyxPosCollection c, final OnyxBoard b, final GraphicsConst.COLOR color) 
+    private OnyxMove strongCounterPos(final OnyxPosCollection c, final OnyxBoard b, final GraphicsConst.COLOR color) 
             throws NoValidOnyxPositionsFoundException {
-        
-        /**
-         * FIXME : here zigzaging can avoid counter positions.
-         */        
-        this.candidates.add(new ConnectionSearch().getTailMove(
-                c, b, GraphicsConst.COLOR.getOposite(color.boolColor)));
+        return new ConnectionSearch().getTailMove(
+                c, b, GraphicsConst.COLOR.getOposite(color.boolColor));
     }
     
     private void weakCounterPos(final OnyxPosCollection c, final OnyxBoard b, final int bitColor) {
