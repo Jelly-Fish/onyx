@@ -54,10 +54,11 @@ import javax.swing.UnsupportedLookAndFeelException;
  */
 public class Starter {
     
+    private static MainFrame mainFrame = null;
+    
     /**
      * @param args the command line arguments
      */
-    @SuppressWarnings("ResultOfObjectAllocationIgnored")
     public static void main(String[] args) {
         
         // <editor-fold defaultstate="collapsed" desc="UI Manager">    
@@ -70,6 +71,46 @@ public class Starter {
         }
         //</editor-fold>
         
+        start(GraphicsConst.COLOR.BLACK);
+    }
+    
+    private static void start(final GraphicsConst.COLOR color) {
+        
+        if (color.boolColor) {
+            startBlack();
+        } else {
+            startWhite();
+        }
+    }
+    
+    private static void startWhite() {
+        
+        final OnyxPanel panel = new OnyxPanel();
+        final OnyxDiamondCollection diamonds = new OnyxDiamondCollection().build();
+        OnyxBoardGHelper.buildPolygons(diamonds);
+        final OnyxPosCollection positions = new OnyxPosCollection();
+        positions.init(diamonds);
+        final OnyxBoard board = new OnyxBoard(diamonds, positions);
+        board.initStartLayout();
+        board.initInput();
+        board.setObserver(panel);
+        panel.init();
+        mainFrame = new MainFrame(panel, board);
+        board.setObserver(mainFrame);
+        OnyxGame.getInstance().init((OnyxBoardI) board);
+        OnyxGame.getInstance().initMove(GraphicsConst.COLOR.BLACK);
+        try {
+            OnyxGame.getInstance().performMove(positions, board);
+        } catch (OnyxGameSyncException | NoValidOnyxPositionsFoundException | InvalidOnyxPositionException ex) {
+            Logger.getLogger(Starter.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        new Intmap(positions).print(0, OnyxGame.getInstance().dtStamp);
+        board.notifyMoves(OnyxGame.getInstance().moves);
+        OnyxGame.getInstance().initialized = true;
+    }
+    
+    private static void startBlack() {
+        
         final OnyxPanel panel = new OnyxPanel();
         final OnyxDiamondCollection diamonds = new OnyxDiamondCollection().build();
         OnyxBoardGHelper.buildPolygons(diamonds);
@@ -81,56 +122,16 @@ public class Starter {
         board.initInput();
         board.setObserver(panel);
         panel.init();
-        final MainFrame mf = new MainFrame(panel, board);
-        board.setObserver(mf);
+        mainFrame = new MainFrame(panel, board);
+        board.setObserver(mainFrame);
         OnyxGame.getInstance().init((OnyxBoardI) board);
         new Intmap(positions).print(0, OnyxGame.getInstance().dtStamp);
         board.notifyMoves(OnyxGame.getInstance().moves);
         OnyxGame.getInstance().initialized = true;
-        
     }
     
-    // <editor-fold defaultstate="collapsed" desc="UI playing whites example"> 
-    /**
-     * EXMAPLE OF GAME, HUMAN PLAYING WHITES
-     * Use for implementing color swap or new Games playing different colors.
-     * 
-    public static void main(String[] args) {
-        
-        try {
-            // Set System L&F
-            UIManager.setLookAndFeel(
-                    UIManager.getSystemLookAndFeelClassName());
-        } catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
-            System.err.println("Look & feel setup failed.");
-        }
-        
-        final OnyxPanel panel = new OnyxPanel();
-        final OnyxDiamondCollection diamonds = new OnyxDiamondCollection().build();
-        OnyxBoardGHelper.buildPolygons(diamonds);
-        final OnyxPosCollection positions = new OnyxPosCollection();
-        positions.init(diamonds);
-        //positions.spawnVirtualPiece(GraphicsConst.COLOR.VIRTUAL_BLACK);
-        final OnyxBoard board = new OnyxBoard(diamonds, positions);
-        board.initStartLayout();
-        board.initInput();
-        board.setObserver(panel);
-        panel.init();
-        final MainFrame mf = new MainFrame(panel, board);
-        board.setObserver(mf);
-        OnyxGame.getInstance().init((OnyxBoardI) board);
-        OnyxGame.getInstance().initMove(GraphicsConst.COLOR.BLACK);
-        try {
-            OnyxGame.getInstance().performMove(positions, board);
-        } catch (OnyxGameSyncException | NoValidOnyxPositionsFoundException | InvalidOnyxPositionException ex) {
-            Logger.getLogger(Starter.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        new Intmap(positions).print(0, OnyxGame.getInstance().dtStamp);
-        board.notifyMoves(OnyxGame.getInstance().moves);
-        OnyxGame.getInstance().initialized = true;
-        
-    }
-    */
-    // </editor-fold>
+    public static void restartWhite() { }
+    
+    public static void restartBlack() { }
     
 }

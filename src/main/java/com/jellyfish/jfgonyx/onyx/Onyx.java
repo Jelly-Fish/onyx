@@ -52,6 +52,8 @@ import org.apache.commons.lang3.StringUtils;
  */
 class Onyx {
     
+    public static boolean gameEnd = false;
+    
     private static final String ERR = " :: Something got messy :X >> %s";
     private static final String POSCOL_SEARCH_FORMAT = " :: SEARCH.ONYXPOSCOL -> [%s] score -> [%.1f]";
     private static final String CNX_SEARCH_FORMAT = " :: SEARCH.CNX -> [%s] score -> [%.3f]";
@@ -95,6 +97,9 @@ class Onyx {
                     c, color);
             final OnyxMove mCNX = SEARCH.get(SEARCH_TYPE.CNX).search(c, board, color);
             
+            // Assert game ended :
+            Onyx.gameEnd = win || lose;
+            
             // Do printing debug stuff...
             print(OnyxGame.getInstance().getMoveCount() % 2 != 0 ? 
                 String.format(POSCOL_SEARCH_FORMAT,
@@ -123,7 +128,6 @@ class Onyx {
     
     static OnyxMove getNewVirtual(final OnyxPosCollection c, final OnyxBoard board, final GraphicsConst.COLOR color) 
             throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
-        Onyx.isLose(c, color);
         return SEARCH.get(SEARCH_TYPE.RANDOM).search(c, board, color);
     }
     
@@ -132,6 +136,7 @@ class Onyx {
                     c, color);
         print(lose ? 
             String.format(LOSE, GraphicsConst.COLOR.getOposite(color.boolColor).strColor) : StringUtils.EMPTY);
+        Onyx.gameEnd = lose;
         return lose;
     }
     

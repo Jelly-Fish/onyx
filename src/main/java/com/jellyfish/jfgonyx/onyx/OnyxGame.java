@@ -53,14 +53,15 @@ import java.util.List;
  */
 public class OnyxGame {
     
-    private static OnyxGame instance = null;
     public boolean initialized = false;
-    public final HashMap<Integer, OnyxMove> moves = new HashMap<>();
-    private GraphicsConst.COLOR colorToPlay = null;
-    private boolean requestInitialized = false;
+    public HashMap<Integer, OnyxMove> moves = new HashMap<>(); 
     public boolean wait = false;
     public OnyxBoardI boardInterface = null;
     public String dtStamp;
+    
+    private static OnyxGame instance = null;
+    private GraphicsConst.COLOR colorToPlay = null;
+    private boolean requestInitialized = false;
     private int moveCount = 0;
 
     private OnyxGame() { }
@@ -136,6 +137,7 @@ public class OnyxGame {
     private void appendNewVirtual(final OnyxPosCollection c, final OnyxBoard board) 
             throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
         
+        if (Onyx.isLose(c, this.colorToPlay)) return;
         final OnyxMove m = Onyx.getNewVirtual(c, board, this.colorToPlay);
         c.getPosition(m.getPos().getKey()).setVirtualPiece(
             new OnyxVirtualPiece(GraphicsConst.COLOR.getVirtualOposite(this.colorToPlay.boolColor))
@@ -157,6 +159,10 @@ public class OnyxGame {
                 String.format(OnyxGameSyncException.WRONG_TURN_MSG, this.colorToPlay.strColor));
     }
     
+    public boolean isGameEnd() {
+        return Onyx.gameEnd;
+    }
+    
     public HashMap<Integer, OnyxMove> getMoves() {
         return moves;
     }
@@ -171,6 +177,11 @@ public class OnyxGame {
             OnyxGame.instance = new OnyxGame();
         }
         
+        return OnyxGame.instance;
+    }
+    
+    public static OnyxGame newInstance() {
+        OnyxGame.instance = new OnyxGame();
         return OnyxGame.instance;
     }
     

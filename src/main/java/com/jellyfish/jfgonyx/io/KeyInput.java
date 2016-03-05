@@ -65,6 +65,8 @@ public class KeyInput implements KeyListener {
     @Override
     public void keyReleased(KeyEvent e) {
         
+        if (OnyxGame.getInstance().isGameEnd()) return;
+        
         final GraphicsConst.COLOR c = this.board.getPosCollection().getVirtualPiece().color;
         OnyxGame.getInstance().initMove(GraphicsConst.COLOR.getOposite(c.boolColor));
 

@@ -35,6 +35,7 @@ import com.jellyfish.jfgonyx.helpers.LogHelper;
 import com.jellyfish.jfgonyx.helpers.MainFrameGHelper;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.interfaces.OnyxObserver;
+import com.jellyfish.jfgonyx.starter.Starter;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -53,8 +54,8 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class MainFrame extends javax.swing.JFrame implements OnyxObserver {
 
-    private final OnyxPanel mainPanel;
-    private final OnyxBoard board;
+    private OnyxPanel mainPanel;
+    private OnyxBoard board;
     private final int initialWidth;
     private final int initialHeight;
     private final LinkedList<String> move_labels = new LinkedList<>();
@@ -93,6 +94,8 @@ public class MainFrame extends javax.swing.JFrame implements OnyxObserver {
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         editMenu = new javax.swing.JMenu();
+        gameMenu = new javax.swing.JMenu();
+        restartGameMenuItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setName("mainFrame"); // NOI18N
@@ -132,6 +135,18 @@ public class MainFrame extends javax.swing.JFrame implements OnyxObserver {
         editMenu.setText("Edit");
         menuBar.add(editMenu);
 
+        gameMenu.setText("Game");
+
+        restartGameMenuItem.setText("Start a new game");
+        restartGameMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                restartGameMenuItemActionPerformed(evt);
+            }
+        });
+        gameMenu.add(restartGameMenuItem);
+
+        menuBar.add(gameMenu);
+
         setJMenuBar(menuBar);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -154,13 +169,23 @@ public class MainFrame extends javax.swing.JFrame implements OnyxObserver {
         }
     }//GEN-LAST:event_formComponentResized
 
+    private void restartGameMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_restartGameMenuItemActionPerformed
+        // Start a new game playing identical color.
+        /**
+         * FIXME : code restartsin Starter...
+         */
+        Starter.restartBlack();
+    }//GEN-LAST:event_restartGameMenuItemActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextPane dataTextPane;
     private javax.swing.JMenu editMenu;
     private javax.swing.JMenu fileMenu;
+    private javax.swing.JMenu gameMenu;
     private javax.swing.JScrollPane mainScrollPane;
     private javax.swing.JSplitPane mainSplitPane;
     private javax.swing.JMenuBar menuBar;
+    private javax.swing.JMenuItem restartGameMenuItem;
     private javax.swing.JScrollPane textScrollPane;
     // End of variables declaration//GEN-END:variables
 
@@ -194,7 +219,7 @@ public class MainFrame extends javax.swing.JFrame implements OnyxObserver {
         doc = this.dataTextPane.getDocument();
         final DefaultCaret caret = (DefaultCaret) this.dataTextPane.getCaret();
         caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
-        board.focus();
+        this.board.focus();
         this.pack();
         this.setSize(GraphicsConst.BOARD_WIDTH + 36 + 300, GraphicsConst.BOARD_WIDTH + 68);
         this.setLocation(((int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth() / 2)) - 
@@ -207,7 +232,18 @@ public class MainFrame extends javax.swing.JFrame implements OnyxObserver {
         mainScrollPane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         mainScrollPane.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
     }
-
+       
+    public void reset(final OnyxPanel panel, final OnyxBoard board) {
+        
+        this.board = board;
+        this.mainPanel = panel;
+        this.mainPanel.add(this.board);
+        this.mainScrollPane.removeAll();
+        this.mainScrollPane.add(mainPanel);
+        this.mainScrollPane.setViewportView(mainPanel);
+        this.board.focus();
+    }
+    
     @Override
     public final void notifyMove(final OnyxMove m) {
         
