@@ -163,6 +163,10 @@ public class OnyxGame {
         return Onyx.gameEnd;
     }
     
+    public void setGameEnd(final boolean b) {
+        Onyx.gameEnd = b;
+    }
+    
     public HashMap<Integer, OnyxMove> getMoves() {
         return moves;
     }

@@ -35,6 +35,7 @@ import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxDiamondCollection;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
 import com.jellyfish.jfgonyx.helpers.OnyxBoardGHelper;
 import com.jellyfish.jfgonyx.onyx.OnyxGame;
+import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException;
 import com.jellyfish.jfgonyx.onyx.exceptions.OnyxGameSyncException;
@@ -130,8 +131,58 @@ public class Starter {
         OnyxGame.getInstance().initialized = true;
     }
     
-    public static void restartWhite() { }
+    public static void restartWhite() { 
+        
+        /**
+         * FIXME : decoment & test - Works for Black's restart.
+         *
+        for (OnyxPos p : OnyxGame.getInstance().boardInterface.getPosCollection().getPositions().values()) {
+            p.setPiece(null);
+        }
+        
+        OnyxGame.getInstance().moves.clear();
+        OnyxGame.getInstance().init(OnyxGame.getInstance().boardInterface);
+        OnyxGame.getInstance().boardInterface.initStartLayout();
+        new Intmap(OnyxGame.getInstance().boardInterface.getPosCollection()
+            ).print(0, OnyxGame.getInstance().dtStamp);
+        OnyxGame.getInstance().boardInterface.notifyMoves(OnyxGame.getInstance().moves);
+        OnyxGame.getInstance().initialized = true;
+        
+        if (OnyxGame.getInstance().isGameEnd()) {
+            OnyxGame.getInstance().initMove(GraphicsConst.COLOR.BLACK);
+            try {
+                OnyxGame.getInstance().performMove(
+                        OnyxGame.getInstance().boardInterface.getPosCollection(),
+                        (OnyxBoard) OnyxGame.getInstance().boardInterface);
+            } catch (OnyxGameSyncException | NoValidOnyxPositionsFoundException | InvalidOnyxPositionException ex) {
+                Logger.getLogger(Starter.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            OnyxGame.getInstance().boardInterface.getPosCollection().spawnVirtualPiece(
+                    GraphicsConst.COLOR.VIRTUAL_BLACK);
+            OnyxGame.getInstance().setGameEnd(false);
+        }
+        */
+    }
     
-    public static void restartBlack() { }
+    public static void restartBlack() { 
+        
+        for (OnyxPos p : OnyxGame.getInstance().boardInterface.getPosCollection().getPositions().values()) {
+            p.setPiece(null);
+        }
+        
+        OnyxGame.getInstance().moves.clear();
+        OnyxGame.getInstance().init(OnyxGame.getInstance().boardInterface);
+        OnyxGame.getInstance().boardInterface.initStartLayout();
+        new Intmap(OnyxGame.getInstance().boardInterface.getPosCollection()
+            ).print(0, OnyxGame.getInstance().dtStamp);
+        OnyxGame.getInstance().boardInterface.notifyMoves(OnyxGame.getInstance().moves);
+        OnyxGame.getInstance().initialized = true;
+        
+        if (OnyxGame.getInstance().isGameEnd()) {
+            OnyxGame.getInstance().boardInterface.getPosCollection().spawnVirtualPiece(
+                    GraphicsConst.COLOR.VIRTUAL_BLACK);
+            OnyxGame.getInstance().setGameEnd(false);
+        }
+    }
     
 }

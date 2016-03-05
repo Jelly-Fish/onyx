@@ -232,17 +232,6 @@ public class MainFrame extends javax.swing.JFrame implements OnyxObserver {
         mainScrollPane.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         mainScrollPane.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
     }
-       
-    public void reset(final OnyxPanel panel, final OnyxBoard board) {
-        
-        this.board = board;
-        this.mainPanel = panel;
-        this.mainPanel.add(this.board);
-        this.mainScrollPane.removeAll();
-        this.mainScrollPane.add(mainPanel);
-        this.mainScrollPane.setViewportView(mainPanel);
-        this.board.focus();
-    }
     
     @Override
     public final void notifyMove(final OnyxMove m) {
