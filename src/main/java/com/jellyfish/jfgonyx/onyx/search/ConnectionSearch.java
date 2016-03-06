@@ -128,6 +128,36 @@ public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnecti
     /**
      * @param c collection of unique Onyx positions - positions are independent from OnyxDiamond instances.
      * @param color the color to check for win position.
+     * @param board onyx board instance.
+     * @return best onyx connection search move as a non win end of tail position move.
+     * @throws com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException
+     */
+    @SuppressWarnings("null")
+    public OnyxMove getCounterTailMove(final OnyxPosCollection c, final OnyxBoard board, 
+            final GraphicsConst.COLOR color) throws NoValidOnyxPositionsFoundException {
+        
+        final List<OnyxPos> pos = OnyxPositionUtils.trimByAllBorderPositionsAndColor(
+                OnyxPositionUtils.getBorders(c, color), color);
+        
+        for (OnyxPos p : pos) {
+            this.tails.add(new SearchTailConnection(c, color, board).getTail(p, p.getKey()));
+        }
+        
+        OnyxMove tmp = null;
+        for (OnyxMove m : this.tails) {
+            if (tmp == null) tmp = m;
+            if (!m.isLambda() && !m.getPos().isSubjectToTake(board, c, color) && 
+                    m.getScore() >= tmp.getScore()) {
+                tmp = m;
+            }
+        }
+        
+        return new OnyxMove(tmp.getPos(), tmp.getPiece(), tmp.getScore());
+    }
+    
+    /**
+     * @param c collection of unique Onyx positions - positions are independent from OnyxDiamond instances.
+     * @param color the color to check for win position.
      * @return winning onyx connection or null.
      */
     private OnyxMove searchWinMove(final OnyxPosCollection c, final GraphicsConst.COLOR color) 

@@ -35,6 +35,7 @@ import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
 import com.jellyfish.jfgonyx.constants.GraphicsConst;
 import com.jellyfish.jfgonyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
+import com.jellyfish.jfgonyx.ui.OnyxBoard;
 import java.util.List;
 
 /**
@@ -64,6 +65,32 @@ public class OnyxPos {
     
     boolean isOccupied(final int bitColor) {
         return this.isOccupied() && this.piece.color.bitColor == bitColor;
+    }
+    
+    public boolean isSubjectToTake(final OnyxBoard board, final OnyxPosCollection c, 
+            final GraphicsConst.COLOR color) {
+        
+        if (this.isDiamondCenter()) return false;
+        final GraphicsConst.COLOR oC = GraphicsConst.COLOR.getOposite(color.boolColor);
+        String[] keys = null;
+        int k = 0, j = 0; 
+        
+        /**
+         * FIXME : finish.
+         */
+        
+        for (OnyxDiamond d : board.getDiamondCollection().getDiamondsByPosKey(this.getKey())) {
+            keys = d.getCornerKeys();
+            for (int i = 0; i < keys.length; ++i) {
+                if (c.getPosition(keys[i]).isOccupied(color.bitColor)) ++k;
+                if (c.getPosition(keys[i]).isOccupied(oC.bitColor)) ++j;
+                if (k + j == 2) {
+                    
+                }
+            }
+        }
+        
+        return false;
     }
     
     public boolean isVirtuallyOccupied() {

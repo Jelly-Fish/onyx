@@ -43,8 +43,6 @@ import com.jellyfish.jfgonyx.onyx.search.subroutines.abstractions.AbstractSubrou
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -83,7 +81,7 @@ public class SearchCounterPosition extends AbstractSubroutine {
     
     private OnyxMove strongCounterPos(final OnyxPosCollection c, final OnyxBoard b, final GraphicsConst.COLOR color) 
             throws NoValidOnyxPositionsFoundException {
-        return new ConnectionSearch().getTailMove(
+        return new ConnectionSearch().getCounterTailMove(
                 c, b, GraphicsConst.COLOR.getOposite(color.boolColor));
     }
     

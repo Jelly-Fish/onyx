@@ -99,7 +99,7 @@ class Onyx {
             
             // Assert game ended :
             Onyx.gameEnd = win || lose;
-            
+                        
             // Do printing debug stuff...
             print(OnyxGame.getInstance().getMoveCount() % 2 != 0 ? 
                 String.format(POSCOL_SEARCH_FORMAT,
@@ -112,6 +112,7 @@ class Onyx {
                 StringUtils.EMPTY);
             print(lose ? String.format(LOSE, color.strColor) : StringUtils.EMPTY);
             
+            if (Onyx.gameEnd) return null;
             return SearchUtils.assertByScore(mPOSCOL, mCNX);
             
         } catch (final NoValidOnyxPositionsFoundException nVOPFEx) {

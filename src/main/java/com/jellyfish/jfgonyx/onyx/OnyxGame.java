@@ -58,6 +58,7 @@ public class OnyxGame {
     public boolean wait = false;
     public OnyxBoardI boardInterface = null;
     public String dtStamp;
+    public GraphicsConst.COLOR engineColor = null;
     
     private static OnyxGame instance = null;
     private GraphicsConst.COLOR colorToPlay = null;
@@ -66,12 +67,13 @@ public class OnyxGame {
 
     private OnyxGame() { }
     
-    public void init(final OnyxBoardI boardInterface) {
+    public void init(final OnyxBoardI boardInterface, final GraphicsConst.COLOR engineColor) {
         this.wait = false;
         this.requestInitialized = false;
         this.colorToPlay = null;
         this.boardInterface = boardInterface;
         this.dtStamp = DTStampConst.sdf.format(new java.util.Date());
+        this.engineColor = engineColor;
     }
     
     /**
@@ -88,10 +90,12 @@ public class OnyxGame {
         
         this.checkInit();
         final OnyxMove m = this.requestMove(c, board);
-        this.appendMove(m);
-        this.appendNewVirtual(c, board);
+        if (m != null && !Onyx.gameEnd) {
+            this.appendMove(m);
+            this.appendNewVirtual(c, board);
+            board.notifyMove(m);
+        }
         this.closeMove();
-        board.notifyMove(m);
     }
     
     public void closeMove() {
@@ -128,6 +132,7 @@ public class OnyxGame {
             throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
         
         final OnyxMove m = Onyx.search(c, board, this.colorToPlay);
+        if (Onyx.gameEnd) return null;
         if (m == null) throw new NoValidOnyxPositionsFoundException();
         else board.getPosCollection().clearOutlines();
         c.getPosition(m.getPos().getKey()).setPiece(new OnyxPiece(this.colorToPlay, true));
@@ -137,7 +142,7 @@ public class OnyxGame {
     private void appendNewVirtual(final OnyxPosCollection c, final OnyxBoard board) 
             throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
         
-        if (Onyx.isLose(c, this.colorToPlay)) return;
+        if (this.isGameEnd() || Onyx.isLose(c, this.colorToPlay)) return;
         final OnyxMove m = Onyx.getNewVirtual(c, board, this.colorToPlay);
         c.getPosition(m.getPos().getKey()).setVirtualPiece(
             new OnyxVirtualPiece(GraphicsConst.COLOR.getVirtualOposite(this.colorToPlay.boolColor))
