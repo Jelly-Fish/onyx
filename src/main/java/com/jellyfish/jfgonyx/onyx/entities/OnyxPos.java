@@ -71,26 +71,39 @@ public class OnyxPos {
             final GraphicsConst.COLOR color) {
         
         if (this.isDiamondCenter()) return false;
+        boolean r = false;
         final GraphicsConst.COLOR oC = GraphicsConst.COLOR.getOposite(color.boolColor);
         String[] keys = null;
-        int k = 0, j = 0; 
-        
-        /**
-         * FIXME : finish.
-         */
-        
+        int k = -1, l = 0, j = 0, m = -1; 
+
         for (OnyxDiamond d : board.getDiamondCollection().getDiamondsByPosKey(this.getKey())) {
+
             keys = d.getCornerKeys();
             for (int i = 0; i < keys.length; ++i) {
-                if (c.getPosition(keys[i]).isOccupied(color.bitColor)) ++k;
-                if (c.getPosition(keys[i]).isOccupied(oC.bitColor)) ++j;
-                if (k + j == 2) {
-                    
+                if (c.getPosition(keys[i]).isOccupied() && 
+                        c.getPosition(keys[i]).getPiece().color.bitColor == oC.bitColor &&
+                        !this.getKey().equals(c.getPosition(keys[i]).getKey())) {
+                    k = i;
+                    ++l;
+                } 
+                if (c.getPosition(keys[i]).isOccupied(color.bitColor)&& 
+                        c.getPosition(keys[i]).getPiece().color.bitColor == color.bitColor) {
+                    ++j;
+                }
+                if (this.getKey().equals(c.getPosition(keys[i]).getKey())) m = i;
+            }
+
+            if (l == 1 && j == 1 && k > -1 && m > -1) {
+                if ((k == 0 && m == 2) || (k == 1 && m == 3) || (k == 2 && m == 0) ||
+                        (k == 3 && m == 1)) {
+                    r = true;
                 }
             }
+
+            k = -1; l = 0; j = 0; m = -1;
         }
-        
-        return false;
+
+        return r;
     }
     
     public boolean isVirtuallyOccupied() {

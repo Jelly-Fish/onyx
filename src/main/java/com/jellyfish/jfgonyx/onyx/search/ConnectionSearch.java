@@ -32,6 +32,7 @@
 package com.jellyfish.jfgonyx.onyx.search;
 
 import com.jellyfish.jfgonyx.constants.GraphicsConst;
+import com.jellyfish.jfgonyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.abstractions.AbstractOnyxSearch;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
@@ -40,14 +41,12 @@ import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException;
 import com.jellyfish.jfgonyx.onyx.interfaces.search.OnyxConnectionSearchable;
 import com.jellyfish.jfgonyx.onyx.search.searchutils.OnyxPositionUtils;
-import com.jellyfish.jfgonyx.onyx.search.subroutines.connectionsearch.SearchTailConnection;
-import com.jellyfish.jfgonyx.onyx.search.subroutines.connectionsearch.SearchWinConnection;
-import com.jellyfish.jfgonyx.onyx.search.subroutines.connectionsearch.SearchWinConnectionLink;
+import com.jellyfish.jfgonyx.onyx.search.subroutines.connectionsearch.TailConnectionSubroutine;
+import com.jellyfish.jfgonyx.onyx.search.subroutines.connectionsearch.WinConnectionSubroutine;
+import com.jellyfish.jfgonyx.onyx.search.subroutines.connectionsearch.WinConnectionLinkSubroutine;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Connection search taking advantage of OnyxPosCollection connection tree :
@@ -57,17 +56,17 @@ import java.util.Set;
  */
 public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnectionSearchable {
 
-    private final List<OnyxMove> tails = new ArrayList<>();
+    private List<OnyxMove> cnxPos = null;
     
     @Override
     public OnyxMove search(final OnyxPosCollection c, final OnyxBoard board, final GraphicsConst.COLOR color) 
             throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
         
-        this.tails.clear();
-        final Set<OnyxMove> cnxMoves = new HashSet<>();
-        cnxMoves.add(getTailMove(c, board, color));
-        cnxMoves.add(searchWinMove(c, color));
-        
+        final OnyxMove[] cnxMoves = new OnyxMove[3];
+        cnxMoves[0] = getTailMove(c, board, color);
+        cnxMoves[1] = searchWinMove(c, color);
+        cnxMoves[2] = getCounterTailMove(c, board, GraphicsConst.COLOR.getOposite(color.boolColor));
+
         OnyxMove tmp = null;
         for (OnyxMove m : cnxMoves) {
             if (tmp == null) tmp = m;
@@ -84,9 +83,9 @@ public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnecti
         final List<OnyxPos> borders = OnyxPositionUtils.trimByBorderStartPositionsAndColor(
                 OnyxPositionUtils.getBorders(c, color), color);
         
-        SearchWinConnection search = null;
+        WinConnectionSubroutine search = null;
         for (OnyxPos p : borders) {
-            search = new SearchWinConnection(c, color);
+            search = new WinConnectionSubroutine(c, color);
             search.connection(p, p.getKey());
             if (search.isWin()) {
                 return true;
@@ -109,15 +108,16 @@ public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnecti
         
         final List<OnyxPos> pos = OnyxPositionUtils.trimByAllBorderPositionsAndColor(
                 OnyxPositionUtils.getBorders(c, color), color);
+        this.cnxPos = new ArrayList<>();
         
         for (OnyxPos p : pos) {
-            this.tails.add(new SearchTailConnection(c, color, board).getTail(p, p.getKey()));
+            this.cnxPos.add(new TailConnectionSubroutine(c, color, board).getTail(p, p.getKey()));
         }
         
         OnyxMove tmp = null;
-        for (OnyxMove m : this.tails) {
+        for (OnyxMove m : this.cnxPos) {
             if (tmp == null) tmp = m;
-            if (!m.isLambda() && m.getScore() >= tmp.getScore()) {
+            if (tmp == null || (!m.isLambda() && m.getScore() >= tmp.getScore())) {
                 tmp = m;
             }
         }
@@ -133,26 +133,31 @@ public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnecti
      * @throws com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException
      */
     @SuppressWarnings("null")
+    @Deprecated
     public OnyxMove getCounterTailMove(final OnyxPosCollection c, final OnyxBoard board, 
             final GraphicsConst.COLOR color) throws NoValidOnyxPositionsFoundException {
         
         final List<OnyxPos> pos = OnyxPositionUtils.trimByAllBorderPositionsAndColor(
                 OnyxPositionUtils.getBorders(c, color), color);
+        this.cnxPos = new ArrayList<>();
         
         for (OnyxPos p : pos) {
-            this.tails.add(new SearchTailConnection(c, color, board).getTail(p, p.getKey()));
+            this.cnxPos.add(new TailConnectionSubroutine(c, color, board).getTail(p, p.getKey()));
         }
         
+        /**
+         * FIXME : subject to take move is still returned (n Diamonds have same pos ?).
+         */
+        
         OnyxMove tmp = null;
-        for (OnyxMove m : this.tails) {
-            if (tmp == null) tmp = m;
-            if (!m.isLambda() && !m.getPos().isSubjectToTake(board, c, color) && 
-                    m.getScore() >= tmp.getScore()) {
+        for (OnyxMove m : this.cnxPos) {
+            if (tmp == null || (!m.isLambda() && !m.getPos().isSubjectToTake(board, c, color) && 
+                    m.getScore() >= tmp.getScore())) {
                 tmp = m;
             }
         }
         
-        return new OnyxMove(tmp.getPos(), tmp.getPiece(), tmp.getScore());
+        return new OnyxMove(tmp.getPos(), tmp.getPiece(), .0f);
     }
     
     /**
@@ -162,7 +167,7 @@ public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnecti
      */
     private OnyxMove searchWinMove(final OnyxPosCollection c, final GraphicsConst.COLOR color) 
             throws NoValidOnyxPositionsFoundException {      
-        return new SearchWinConnectionLink(c, color).connectionLink(this.tails);
+        return new WinConnectionLinkSubroutine(c, color).connectionLink(this.cnxPos);
     }
     
 }

@@ -49,7 +49,7 @@ import java.util.Set;
 /**
  * @author thw
  */
-public class SearchCenterPosition extends AbstractSubroutine {
+public class CenterPositionSubroutine extends AbstractSubroutine {
     
     private final static String BEST_CANDIDATE = " :: Center position [%s]";
 

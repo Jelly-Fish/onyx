@@ -45,7 +45,7 @@ import java.util.List;
 /**
  * @author thw
  */
-public class SearchTakePosition extends AbstractSubroutine {
+public class TakePositionSubroutine extends AbstractSubroutine {
     
     private final static String BEST_CANDIDATE = " :: Take/Capture position [%s]";
     

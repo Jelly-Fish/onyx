@@ -46,7 +46,7 @@ import java.util.Set;
 /**
  * @author thw
  */
-public class SearchTailConnection extends AbstractSubroutine {
+public class TailConnectionSubroutine extends AbstractSubroutine {
     
     private final static String LAMBDA_CANDIDATE = " :: Tail search candidate for start @ %s : [%s] score: %f";
     private final static String BEST_CANDIDATE = " :: Candidate for start @ %s : [%s] score: %f";
@@ -59,7 +59,7 @@ public class SearchTailConnection extends AbstractSubroutine {
     private OnyxPos startPos;
     private OnyxMove candidate;
     
-    public SearchTailConnection(final OnyxPosCollection c, final GraphicsConst.COLOR color, final OnyxBoard board) {
+    public TailConnectionSubroutine(final OnyxPosCollection c, final GraphicsConst.COLOR color, final OnyxBoard board) {
         this.c = c;
         this.color = color;
         this.board = board;

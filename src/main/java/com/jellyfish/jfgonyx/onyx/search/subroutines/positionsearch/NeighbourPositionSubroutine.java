@@ -29,55 +29,54 @@
  * POSSIBILITY OF SUCH DAMAGE. 
  ******************************************************************************
  */
-package com.jellyfish.jfgonyx.onyx.search.subroutines.connectionsearch;
+package com.jellyfish.jfgonyx.onyx.search.subroutines.positionsearch;
 
-import com.jellyfish.jfgonyx.constants.GraphicsConst;
 import com.jellyfish.jfgonyx.constants.OnyxConst;
+import com.jellyfish.jfgonyx.onyx.entities.OnyxDiamond;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
-import com.jellyfish.jfgonyx.onyx.entities.OnyxPiece;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
-import com.jellyfish.jfgonyx.onyx.search.searchutils.OnyxPositionUtils;
-import java.util.List;
+import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException;
+import com.jellyfish.jfgonyx.onyx.search.subroutines.abstractions.AbstractSubroutine;
+import com.jellyfish.jfgonyx.ui.OnyxBoard;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  *
  * @author thw
  */
-public class SearchWinConnectionLink extends SearchWinConnection {
+public class NeighbourPositionSubroutine extends AbstractSubroutine {
     
-    private final static String WIN_MOVE = " :: [!] Win link position found @ %s";
+    private final static String BEST_CANDIDATE = " :: Neighbour position [%s]";
     
-    public SearchWinConnectionLink(final OnyxPosCollection c, final GraphicsConst.COLOR color) {
-        super(c, color);
-    }
-    
-    public OnyxMove connectionLink(final List<OnyxMove> tails) {       
+    /**
+     * @param c Onyx position collection.
+     * @param b Onyx board instance.
+     * @param bitColor the color to play's bit value (0=white, 1=black).
+     * @return Neighbor move found or NULL if no such position has been found.
+     * @throws com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException
+     */
+    public final OnyxMove getNeighbourPos(final OnyxPosCollection c, final OnyxBoard b, final int bitColor) throws NoValidOnyxPositionsFoundException {
         
-        final List<OnyxPos> borders = OnyxPositionUtils.trimByBorderStartPositionsAndColor(
-                OnyxPositionUtils.getBorders(this.c, this.color), this.color);
-        
-        OnyxPiece tmp = null;
-        SearchWinConnection search = null;
-        for (OnyxMove m : tails) {
-            
-            tmp = new OnyxPiece(this.color);
-            this.c.getPositions().get(m.getPos().getKey()).setPiece(tmp);
-
-            for (OnyxPos p : borders) {
-                search = new SearchWinConnection(this.c, this.color);
-                search.connection(p, p.getKey());
-                if (search.isWin()) {
-                    print(OnyxConst.POS_MAP.get(m.getPos().getKey()), WIN_MOVE);
-                    this.c.getPositions().get(m.getPos().getKey()).setPiece(null);
-                    return new OnyxMove(m.getPos(), OnyxConst.SCORE.WIN_LINK.getValue());
-                }
+        int count;
+        OnyxPos pos = null;
+        String key = StringUtils.EMPTY;
+        for (OnyxDiamond d : b.getDiamondCollection().getDiamonds().values()) {
+            count = 0;
+            for (String k : d.getCornerKeys()) {
+                pos = c.getPosition(k);
+                if (pos.isOccupied() && pos.getPiece().color.bitColor == bitColor) ++count;
+                else key = k;
             }
             
-            this.c.getPositions().get(m.getPos().getKey()).setPiece(null);
+            if (count > 1  && !c.getPosition(key).isOccupied()) {
+                return new OnyxMove(c.getPosition(key), OnyxConst.SCORE.NEIGHBOUR.getValue());
+            }
         }
         
-        return null;
+        if (move != null) print(OnyxConst.POS_MAP.get(move.getPos().getKey()), BEST_CANDIDATE);
+        
+        return move;
     }
     
 }

@@ -29,61 +29,70 @@
  * POSSIBILITY OF SUCH DAMAGE. 
  ******************************************************************************
  */
-package com.jellyfish.jfgonyx.onyx.search.subroutines.positionsearch;
+package com.jellyfish.jfgonyx.onyx.search.subroutines.connectionsearch;
 
+import com.jellyfish.jfgonyx.constants.GraphicsConst;
 import com.jellyfish.jfgonyx.constants.OnyxConst;
-import com.jellyfish.jfgonyx.onyx.entities.OnyxDiamond;
-import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
 import com.jellyfish.jfgonyx.onyx.search.subroutines.abstractions.AbstractSubroutine;
-import com.jellyfish.jfgonyx.ui.OnyxBoard;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
- *
  * @author thw
  */
-public class SearchAttackPosition extends AbstractSubroutine {
+public class WinConnectionSubroutine extends AbstractSubroutine {
     
-    private final static String BEST_CANDIDATE = " :: Attack position [%s]";
+    private final static String WIN = " :: %s wins the game !";
+    private final static String WIN_CANDIDATE = " :: Win search %s @ %s | iteration %s";
+    protected final OnyxPosCollection c;
+    protected final GraphicsConst.COLOR color;
+    protected final float max = OnyxConst.BOARD_SIDE_SQUARE_COUNT + 1;
+    protected final Set<String> checked = new HashSet<>();
+    protected boolean win = false;
+    protected int iteration = -1;
     
-    /**
-     * @param c Onyx position collection.
-     * @param b Onyx board instance.
-     * @param bitColor the color to play's bit value (0=white, 1=black).
-     * @return Strongest counter attack move found (to allow take on next move) 
-     * or NULL if no such position has been found.
-     */
-    public final OnyxMove getAttackPos(final OnyxPosCollection c, final OnyxBoard b, final int bitColor) {
-
-        int[] iPos = null; 
-        OnyxPos tmp = null;
-        String[] keys = null;
+    public WinConnectionSubroutine(final OnyxPosCollection c, final GraphicsConst.COLOR color) {
+        this.c = c;
+        this.color = color;
+    }
+    
+    public void connection(final OnyxPos p, final String kEx) {       
         
-        for (OnyxDiamond d : b.getDiamondCollection().getDiamonds().values()) {
-            
-            iPos = new int[] { 0, 0, 0, 0 };
-            keys = d.getCornerKeys();
-            for (int i = 0; i < keys.length; ++i) {
-                tmp = c.getPosition(keys[i]);
-                iPos[i] = tmp.isOccupied() && tmp.getPiece().color.bitColor != bitColor ? 
-                        1 : 0;
-            }
-            
-            if (iPos[0] + iPos[2] == 2 && iPos[1] + iPos[3] == 0 && !c.getPosition(keys[1]).isOccupied()) {
-                move = new OnyxMove(c.getPosition(keys[1]), OnyxConst.SCORE.ATTACK.getValue());
-                break;
-            }
-            
-            if (iPos[1] + iPos[3] == 2 && iPos[0] + iPos[2] == 0 && !c.getPosition(keys[0]).isOccupied()) {
-                move = new OnyxMove(c.getPosition(keys[0]), OnyxConst.SCORE.ATTACK.getValue());
-                break;
+        if (this.win) return;
+        
+        print(this.color.strColor, p.getKey(), String.valueOf(++this.iteration), WIN_CANDIDATE);
+        
+        OnyxPos tmp = null;
+        for (String k : p.connections) {
+            tmp = c.getPosition(k);
+            if (this.persue(tmp, kEx)) {
+                if ((this.color.boolColor && tmp.x > this.max - .1f) ||
+                    (!this.color.boolColor && tmp.y > this.max - .1f)) {
+                    this.win = true;
+                }
+                this.checked.add(kEx);
+                this.connection(tmp, k); 
             }
         }
-        
-        if (move != null) print(OnyxConst.POS_MAP.get(move.getPos().getKey()), BEST_CANDIDATE);
-        
-        return move;
+    }
+    
+    boolean persue(final OnyxPos p, final String kEx) {
+        return p != null && !this.checked.contains(p.getKey()) && !p.getKey().equals(kEx) &&
+                p.isOccupied() && p.getPiece().color.bitColor == this.color.bitColor;
+    }
+    
+    @SuppressWarnings("empty-statement")
+    private int keyArraySize(final String[] keys) {
+        int i = -1;
+        while (keys[++i] != null);
+        return i;
+    }
+   
+    public boolean isWin() {
+        if (this.win) print(this.color.strColor.toUpperCase(), WIN);
+        return this.win;
     }
     
 }
