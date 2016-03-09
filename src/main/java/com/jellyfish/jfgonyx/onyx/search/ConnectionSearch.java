@@ -32,7 +32,6 @@
 package com.jellyfish.jfgonyx.onyx.search;
 
 import com.jellyfish.jfgonyx.constants.GraphicsConst;
-import com.jellyfish.jfgonyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.abstractions.AbstractOnyxSearch;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
@@ -56,17 +55,17 @@ import java.util.List;
  */
 public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnectionSearchable {
 
-    private List<OnyxMove> cnxPos = null;
+    private final List<OnyxMove> cnxPos = new ArrayList<>();
     
     @Override
     public OnyxMove search(final OnyxPosCollection c, final OnyxBoard board, final GraphicsConst.COLOR color) 
             throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
         
-        final OnyxMove[] cnxMoves = new OnyxMove[3];
+        this.cnxPos.clear();
+        final OnyxMove[] cnxMoves = new OnyxMove[2];
         cnxMoves[0] = getTailMove(c, board, color);
         cnxMoves[1] = searchWinMove(c, color);
-        cnxMoves[2] = getCounterTailMove(c, board, GraphicsConst.COLOR.getOposite(color.boolColor));
-
+        
         OnyxMove tmp = null;
         for (OnyxMove m : cnxMoves) {
             if (tmp == null) tmp = m;
@@ -102,13 +101,11 @@ public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnecti
      * @return best onyx connection search move as a non win end of tail position move.
      * @throws com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException
      */
-    @SuppressWarnings("null")
-    public OnyxMove getTailMove(final OnyxPosCollection c, final OnyxBoard board, 
+    private OnyxMove getTailMove(final OnyxPosCollection c, final OnyxBoard board, 
             final GraphicsConst.COLOR color) throws NoValidOnyxPositionsFoundException {
         
         final List<OnyxPos> pos = OnyxPositionUtils.trimByAllBorderPositionsAndColor(
                 OnyxPositionUtils.getBorders(c, color), color);
-        this.cnxPos = new ArrayList<>();
         
         for (OnyxPos p : pos) {
             this.cnxPos.add(new TailConnectionSubroutine(c, color, board).getTail(p, p.getKey()));
@@ -122,42 +119,9 @@ public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnecti
             }
         }
         
-        return new OnyxMove(tmp.getPos(), tmp.getPiece(), tmp.getScore());
-    }
-    
-    /**
-     * @param c collection of unique Onyx positions - positions are independent from OnyxDiamond instances.
-     * @param color the color to check for win position.
-     * @param board onyx board instance.
-     * @return best onyx connection search move as a non win end of tail position move.
-     * @throws com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException
-     */
-    @SuppressWarnings("null")
-    @Deprecated
-    public OnyxMove getCounterTailMove(final OnyxPosCollection c, final OnyxBoard board, 
-            final GraphicsConst.COLOR color) throws NoValidOnyxPositionsFoundException {
+        if (tmp != null) return new OnyxMove(tmp.getPos(), tmp.getPiece(), tmp.getScore());
         
-        final List<OnyxPos> pos = OnyxPositionUtils.trimByAllBorderPositionsAndColor(
-                OnyxPositionUtils.getBorders(c, color), color);
-        this.cnxPos = new ArrayList<>();
-        
-        for (OnyxPos p : pos) {
-            this.cnxPos.add(new TailConnectionSubroutine(c, color, board).getTail(p, p.getKey()));
-        }
-        
-        /**
-         * FIXME : subject to take move is still returned (n Diamonds have same pos ?).
-         */
-        
-        OnyxMove tmp = null;
-        for (OnyxMove m : this.cnxPos) {
-            if (tmp == null || (!m.isLambda() && !m.getPos().isSubjectToTake(board, c, color) && 
-                    m.getScore() >= tmp.getScore())) {
-                tmp = m;
-            }
-        }
-        
-        return new OnyxMove(tmp.getPos(), tmp.getPiece(), .0f);
+        return null;
     }
     
     /**

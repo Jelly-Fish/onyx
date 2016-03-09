@@ -38,11 +38,14 @@ import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
 import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException;
-import com.jellyfish.jfgonyx.onyx.search.ConnectionSearch;
+import com.jellyfish.jfgonyx.onyx.search.searchutils.OnyxPositionUtils;
 import com.jellyfish.jfgonyx.onyx.search.subroutines.abstractions.AbstractSubroutine;
+import com.jellyfish.jfgonyx.onyx.search.subroutines.connectionsearch.TailConnectionSubroutine;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -52,7 +55,6 @@ import org.apache.commons.lang3.StringUtils;
 public class CounterPositionSubroutine extends AbstractSubroutine {
     
     private final static String BEST_CANDIDATE = " :: Counter position for %s [%s] score: %s";
-    private final List<OnyxMove> candidates = new ArrayList<>();
     
     /**
      * @param c Onyx position collection.
@@ -65,11 +67,11 @@ public class CounterPositionSubroutine extends AbstractSubroutine {
     public final OnyxMove getCounterPos(final OnyxPosCollection c, final OnyxBoard b, final GraphicsConst.COLOR color) 
             throws NoValidOnyxPositionsFoundException {
         
-        this.weakCounterPos(c, b, color.bitColor);
-        final OnyxMove tailCounter = this.strongCounterPos(c, b, color);
-        this.candidates.add(tailCounter);
+        final List<OnyxMove> candidates = new ArrayList<>();
+        candidates.add(this.weakCounterPos(c, b, color.bitColor));
+        candidates.add(this.strongCounterPos(c, b, GraphicsConst.COLOR.getOposite(color.boolColor)));
         
-        for (OnyxMove m : this.candidates) {
+        for (OnyxMove m : candidates) {
             this.move = (this.move == null || m.getScore() > this.move.getScore()) ? m : this.move;
         }
         
@@ -81,11 +83,29 @@ public class CounterPositionSubroutine extends AbstractSubroutine {
     
     private OnyxMove strongCounterPos(final OnyxPosCollection c, final OnyxBoard b, final GraphicsConst.COLOR color) 
             throws NoValidOnyxPositionsFoundException {
-        return new ConnectionSearch().getCounterTailMove(
-                c, b, GraphicsConst.COLOR.getOposite(color.boolColor));
+        
+        final List<OnyxPos> pos = OnyxPositionUtils.trimByAllBorderPositionsAndColor(
+                OnyxPositionUtils.getBorders(c, color), color);
+        final Set<OnyxMove> cnxPos = new HashSet<>();
+        
+        for (OnyxPos p : pos) {
+            cnxPos.add(new TailConnectionSubroutine(c, color, b).getTail(p, p.getKey()));
+        }
+        
+        OnyxMove tmp = null;
+        for (OnyxMove m : cnxPos) {
+            if (tmp == null || (!m.isLambda() && !m.getPos().isSubjectToTake(b, c, color) && 
+                    m.getScore() >= tmp.getScore())) {
+                tmp = m;
+            }
+        }
+        
+        if (tmp != null) return new OnyxMove(tmp.getPos(), tmp.getPiece(), OnyxConst.SCORE.COUNTER_POS.getValue());
+        
+        return null;
     }
     
-    private void weakCounterPos(final OnyxPosCollection c, final OnyxBoard b, final int bitColor) {
+    private OnyxMove weakCounterPos(final OnyxPosCollection c, final OnyxBoard b, final int bitColor) {
         
         int i, j;
         OnyxPos pos = null;
@@ -108,9 +128,11 @@ public class CounterPositionSubroutine extends AbstractSubroutine {
             }
             
             if (i == 2 && j == 1 && !c.getPosition(key).isOccupied()) {
-                this.candidates.add(new OnyxMove(c.getPosition(key), OnyxConst.SCORE.ATTACK.getValue() + 1f));
+                return new OnyxMove(c.getPosition(key), OnyxConst.SCORE.ATTACK.getValue() + 1f);
             }
         }        
+        
+        return null;
     }
     
 }
