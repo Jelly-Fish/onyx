@@ -62,8 +62,6 @@ public class WinConnectionSubroutine extends AbstractSubroutine {
         
         if (this.win) return;
         
-        print(this.color.strColor, p.getKey(), String.valueOf(++this.iteration), WIN_CANDIDATE);
-        
         OnyxPos tmp = null;
         for (String k : p.connections) {
             tmp = c.getPosition(k);

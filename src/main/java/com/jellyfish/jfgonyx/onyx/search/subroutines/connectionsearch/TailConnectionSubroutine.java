@@ -71,9 +71,7 @@ public class TailConnectionSubroutine extends AbstractSubroutine {
         this.findTailPos(p, kEx);
         this.score();
         this.trim();
-        print(p.getKey(), this.candidates, LAMBDA_CANDIDATE);
-        print(p.getKey(), this.candidate, BEST_CANDIDATE);
-        
+        if (this.candidate != null) print(p.getKey(), this.candidate, BEST_CANDIDATE);
         return this.candidate;
     }
 
