@@ -77,17 +77,10 @@ public class PositionSearch extends AbstractOnyxSearch implements OnyxPositionSe
             
             final OnyxMove capture = new TakePositionSubroutine().getTakePos(c, board, color.bitColor);
             moves.add(capture);
-            moves.add(new TakePositionSubroutine().getTakePos(c, board, color.bitColor));
             moves.add(new CounterPositionSubroutine().getCounterPos(c, board, color));
             moves.add(new NeighbourPositionSubroutine().getNeighbourPos(c, board, color.bitColor));
             moves.add(new AttackPositionSubroutine().getAttackPos(c, board, color.bitColor));
             moves.add(new CenterPositionSubroutine().getCenterPos(c, board.getDiamondCollection()));
-            
-            if (capture != null) {
-                posSet = c.getTakePositions(capture.getPos().getKey(), color.bitColor, board);
-                posSet = c.performTake(capture.getPos().getKey(), color.bitColor, board);
-                return capture;
-            }
             
             OnyxMove tmp = null;
             for (OnyxMove m : moves) {
@@ -97,11 +90,11 @@ public class PositionSearch extends AbstractOnyxSearch implements OnyxPositionSe
             }
             
             if (tmp == null) throw new NoValidOnyxPositionsFoundException();
-            if (c.getPosition(tmp.getPos().getKey()).isOccupied()) {
-                throw new NoValidOnyxPositionsFoundException();
-            }
+            if (capture != null) posSet = c.getTakePositions(capture.getPos().getKey(), color.bitColor, board);
+            if (c.getPosition(tmp.getPos().getKey()).isOccupied()) throw new NoValidOnyxPositionsFoundException();
             
-            return tmp;
+            if (tmp.isCapture()) return new OnyxMove(tmp.getPos(), tmp.getPiece(), posSet, tmp.getScore());
+            else return tmp;
         
         } catch (final InvalidOnyxPositionException Iopex) {
             Logger.getLogger(PositionSearch.class.getName()).log(Level.SEVERE, null, Iopex);

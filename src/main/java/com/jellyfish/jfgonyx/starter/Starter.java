@@ -157,12 +157,9 @@ public class Starter {
             Logger.getLogger(Starter.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        /*
-        if (OnyxGame.getInstance().isGameEnd()) {
-            OnyxGame.getInstance().boardInterface.getPosCollection().spawnVirtualPiece(
-                    GraphicsConst.COLOR.VIRTUAL_BLACK);
-            OnyxGame.getInstance().setGameEnd(false);
-        }*/
+        OnyxGame.getInstance().boardInterface.getPosCollection().spawnVirtualPiece(
+            GraphicsConst.COLOR.VIRTUAL_WHITE);
+        OnyxGame.getInstance().setGameEnd(false);
     }
     
     public static void restartBlack() { 
@@ -180,11 +177,9 @@ public class Starter {
         OnyxGame.getInstance().boardInterface.notifyMoves(OnyxGame.getInstance().moves);
         OnyxGame.getInstance().initialized = true;
         
-        if (OnyxGame.getInstance().isGameEnd()) {
-            OnyxGame.getInstance().boardInterface.getPosCollection().spawnVirtualPiece(
-                    GraphicsConst.COLOR.VIRTUAL_BLACK);
-            OnyxGame.getInstance().setGameEnd(false);
-        }
+        OnyxGame.getInstance().boardInterface.getPosCollection().spawnVirtualPiece(
+            GraphicsConst.COLOR.VIRTUAL_BLACK);
+        OnyxGame.getInstance().setGameEnd(false);
     }
     
 }

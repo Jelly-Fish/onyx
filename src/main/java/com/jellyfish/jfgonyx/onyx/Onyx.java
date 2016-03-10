@@ -113,7 +113,10 @@ class Onyx {
             print(lose ? String.format(LOSE, color.strColor) : StringUtils.EMPTY);
             
             if (Onyx.gameEnd) return null;
-            return SearchUtils.assertByScore(mPOSCOL, mCNX);
+            final OnyxMove m = SearchUtils.assertByScore(mPOSCOL, mCNX);
+            if (m.isCapture()) c.performTake(m.getPos().getKey(), color.bitColor, board);
+            
+            return m;
             
         } catch (final NoValidOnyxPositionsFoundException nVOPFEx) {
             Logger.getLogger(Onyx.class.getName()).log(Level.SEVERE, null, nVOPFEx);

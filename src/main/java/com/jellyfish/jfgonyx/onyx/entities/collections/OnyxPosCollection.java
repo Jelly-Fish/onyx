@@ -185,12 +185,6 @@ public class OnyxPosCollection {
                 continue;
             }
             
-            /**
-             * FIXME : document this...
-             * works clockwise around keys = d.getCornerKeys();
-             * @see OnyxDiamond getCornerKeys() method.
-             */
-            
             lI = 0; i = 0; j = 0;
             keys = d.getCornerKeys();
             for (int index = 0; index < keys.length; ++index) {

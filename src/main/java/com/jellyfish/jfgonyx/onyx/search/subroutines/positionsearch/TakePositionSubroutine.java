@@ -108,7 +108,8 @@ public class TakePositionSubroutine extends AbstractSubroutine {
         }
         
         if (posSet.size() <= 0) return null;
-        if (posSet.size() == 1) move = new OnyxMove(posSet.get(0), OnyxConst.SCORE.TAKE.getValue());
+        if (posSet.size() == 1) move = new OnyxMove(posSet.get(0), 
+                posSet.get(0).getPiece(), posSet, OnyxConst.SCORE.TAKE.getValue());
         
         count = 0;
         i = -1;
@@ -121,7 +122,8 @@ public class TakePositionSubroutine extends AbstractSubroutine {
             }            
         }
         
-        if (i > -1) move = new OnyxMove(posSet.get(i), OnyxConst.SCORE.TAKE.getValue());
+        if (i > -1) move = new OnyxMove(posSet.get(i), posSet.get(i).getPiece(), 
+                posSet, OnyxConst.SCORE.TAKE.getValue());
         if (move != null) print(OnyxConst.POS_MAP.get(move.getPos().getKey()), BEST_CANDIDATE);
         
         return move;
