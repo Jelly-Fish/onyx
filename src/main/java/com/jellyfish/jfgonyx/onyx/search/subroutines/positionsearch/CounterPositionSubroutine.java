@@ -72,7 +72,8 @@ public class CounterPositionSubroutine extends AbstractSubroutine {
         candidates.add(this.strongCounterPos(c, b, GraphicsConst.COLOR.getOposite(color.boolColor)));
         
         for (OnyxMove m : candidates) {
-            this.move = (this.move == null || m.getScore() > this.move.getScore()) ? m : this.move;
+            if (m != null) this.move = 
+                (this.move == null || m.getScore() > this.move.getScore()) ? m : this.move;
         }
         
         if (this.move != null) print(color.strColor, this.move.getPos().getKey(), 
@@ -86,23 +87,26 @@ public class CounterPositionSubroutine extends AbstractSubroutine {
         
         final List<OnyxPos> pos = OnyxPositionUtils.trimByAllBorderPositionsAndColor(
                 OnyxPositionUtils.getBorders(c, color), color);
-        final Set<OnyxMove> cnxPos = new HashSet<>();
+        final List<OnyxMove> cnx = new ArrayList<>();
+        final Set<String> sTt = new HashSet<>();
+        OnyxMove tmp = null;
         
-        for (OnyxPos p : pos) {
-            cnxPos.add(new TailConnectionSubroutine(c, color, b).getTail(p, p.getKey()));
+        for (OnyxPos p : pos) cnx.addAll(new TailConnectionSubroutine(c, color, b).getTails(p, p.getKey()));
+        for (OnyxMove m : cnx) {
+            if (m != null && m.getPos() != null && 
+                    m.getPos().isSubjectToTake(b, c, color)) sTt.add(m.getPos().getKey());
+            else tmp = m;
         }
         
-        OnyxMove tmp = null;
-        for (OnyxMove m : cnxPos) {
-            if (tmp == null || (!m.isLambda() && !m.getPos().isSubjectToTake(b, c, color) && 
-                    m.getScore() >= tmp.getScore())) {
+        if (tmp == null) return null;
+        
+        for (OnyxMove m : cnx) {
+            if (!sTt.contains(m.getPos().getKey()) && !m.isLambda() && m.getScore() >= tmp.getScore()) {
                 tmp = m;
             }
         }
         
-        if (tmp != null) return new OnyxMove(tmp.getPos(), tmp.getPiece(), OnyxConst.SCORE.COUNTER_POS.getValue());
-        
-        return null;
+        return new OnyxMove(tmp.getPos(), tmp.getPiece(), OnyxConst.SCORE.COUNTER_POS.getValue() * 1.1f);
     }
     
     private OnyxMove weakCounterPos(final OnyxPosCollection c, final OnyxBoard b, final int bitColor) {

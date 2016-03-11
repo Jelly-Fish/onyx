@@ -74,6 +74,14 @@ public class TailConnectionSubroutine extends AbstractSubroutine {
         if (this.candidate != null) print(p.getKey(), this.candidate, BEST_CANDIDATE);
         return this.candidate;
     }
+    
+    public List<OnyxMove> getTails(final OnyxPos p, final String kEx) {
+        
+        this.startPos = p;
+        this.findTailPos(p, kEx);
+        this.score();
+        return this.candidates;
+    }
 
     private void findTailPos(final OnyxPos p, final String kEx) {       
         
@@ -110,7 +118,7 @@ public class TailConnectionSubroutine extends AbstractSubroutine {
             
             pos = c.getPosition(k);
             if (tmp == null || score < 0f) {
-                //If first blood, then init score & tmp.
+                // If first blood, then init score & tmp.
                 tmp = pos;
                 if (this.color.boolColor) {
                     if (this.startPos.isLowXBorder()) score = pos.x;
