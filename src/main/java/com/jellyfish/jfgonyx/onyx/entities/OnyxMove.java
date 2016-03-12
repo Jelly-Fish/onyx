@@ -45,7 +45,7 @@ public class OnyxMove {
     private final List<OnyxPos> captured;
     private final boolean win;
     private final boolean lambda;
-    private final float score;
+    private float score;
 
     public OnyxMove(final OnyxPos pos, final OnyxPiece piece, final List<OnyxPos> captured, 
             final boolean win, final boolean lambda, final float score) {
@@ -125,6 +125,10 @@ public class OnyxMove {
     
     public float getScore() {
         return score;
+    }
+    
+    public void setScore(final float s) {
+        this.score = s;
     }
         
 }

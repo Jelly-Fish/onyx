@@ -276,8 +276,8 @@ public class OnyxConst {
     
     public static enum SCORE {
     
-        WIN(1000f), WIN_LINK(999.999f), TAKE(99.8f), NEIGHBOUR(1f), TAIL(13.37f),
-        RANDOM(0f), COUNTER_POS(34.3f), ATTACK(34.4f), CENTER(19.7f);
+        WIN(1000f), WIN_LINK(999.999f), TAKE(999f), NEIGHBOUR(1f), TAIL(13.37f),
+        RANDOM(0f), COUNTER_POS(133.7f), ATTACK(34.4f), CENTER(19.7f), OVERRIDE(999.998f);
         
         private final float score;
         

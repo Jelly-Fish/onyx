@@ -68,7 +68,7 @@ public class CounterPositionSubroutine extends AbstractSubroutine {
             throws NoValidOnyxPositionsFoundException {
         
         final List<OnyxMove> candidates = new ArrayList<>();
-        candidates.add(this.weakCounterPos(c, b, color.bitColor));
+        candidates.add(this.lockCounterPos(c, b, color.bitColor));
         candidates.add(this.strongCounterPos(c, b, GraphicsConst.COLOR.getOposite(color.boolColor)));
         
         for (OnyxMove m : candidates) {
@@ -109,7 +109,7 @@ public class CounterPositionSubroutine extends AbstractSubroutine {
         return new OnyxMove(tmp.getPos(), tmp.getPiece(), OnyxConst.SCORE.COUNTER_POS.getValue() * 1.1f);
     }
     
-    private OnyxMove weakCounterPos(final OnyxPosCollection c, final OnyxBoard b, final int bitColor) {
+    private OnyxMove lockCounterPos(final OnyxPosCollection c, final OnyxBoard b, final int bitColor) {
         
         int i, j;
         OnyxPos pos = null;
@@ -132,7 +132,7 @@ public class CounterPositionSubroutine extends AbstractSubroutine {
             }
             
             if (i == 2 && j == 1 && !c.getPosition(key).isOccupied()) {
-                return new OnyxMove(c.getPosition(key), OnyxConst.SCORE.ATTACK.getValue() + 1f);
+                return new OnyxMove(c.getPosition(key), OnyxConst.SCORE.ATTACK.getValue() * 1.2f);
             }
         }        
         

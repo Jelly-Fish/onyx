@@ -31,8 +31,15 @@
  */
 package com.jellyfish.jfgonyx.onyx.search.searchutils;
 
+import com.jellyfish.jfgonyx.constants.GraphicsConst;
+import com.jellyfish.jfgonyx.constants.OnyxConst;
+import com.jellyfish.jfgonyx.onyx.OnyxGame;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
+import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
+import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException;
+import com.jellyfish.jfgonyx.onyx.search.subroutines.positionsearch.CenterPositionSubroutine;
+import com.jellyfish.jfgonyx.ui.OnyxBoard;
 
 /**
  * @author thw
@@ -54,6 +61,27 @@ public class SearchUtils {
         if (r >= 0 && score > 0) return moves[r];
         
         throw new NoValidOnyxPositionsFoundException();
+    }
+    
+    public static OnyxMove calibrateCenterMoves(final OnyxGame game, final OnyxPosCollection c, 
+        final OnyxBoard board, final GraphicsConst.COLOR color, OnyxMove move) throws InvalidOnyxPositionException {
+
+        if (game.getMoveCount() < 12) {
+            move = new CenterPositionSubroutine().getCenterPos(c, board.getDiamondCollection());
+            move.setScore(OnyxConst.SCORE.OVERRIDE.getValue());
+        }
+        
+        return move;
+    }
+    
+    public static OnyxMove calibrateTailMoves(final OnyxGame game, final OnyxPosCollection c, 
+        final OnyxBoard board, final GraphicsConst.COLOR color, OnyxMove move) {
+
+        if (game.getMoveCount() > 12 && game.getMoveCount() < 18) {
+            move.setScore(OnyxConst.SCORE.OVERRIDE.getValue());
+        }
+        
+        return move;
     }
     
 }

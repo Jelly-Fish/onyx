@@ -141,7 +141,7 @@ public class Starter {
             p.setVirtualPiece(null);
         }
         
-        OnyxGame.getInstance().moves.clear();
+        OnyxGame.newInstance().moves.clear();
         OnyxGame.getInstance().init(OnyxGame.getInstance().boardInterface, GraphicsConst.COLOR.BLACK);
         OnyxGame.getInstance().initMove(GraphicsConst.COLOR.BLACK);
         OnyxGame.getInstance().boardInterface.initStartLayout();
@@ -169,7 +169,7 @@ public class Starter {
             p.setVirtualPiece(null);
         }
         
-        OnyxGame.getInstance().moves.clear();
+        OnyxGame.newInstance().moves.clear();
         OnyxGame.getInstance().init(OnyxGame.getInstance().boardInterface, GraphicsConst.COLOR.WHITE);
         OnyxGame.getInstance().boardInterface.initStartLayout();
         new Intmap(OnyxGame.getInstance().boardInterface.getPosCollection()
