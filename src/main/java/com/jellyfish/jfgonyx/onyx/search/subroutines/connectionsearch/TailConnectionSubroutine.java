@@ -112,47 +112,34 @@ public class TailConnectionSubroutine extends AbstractSubroutine {
         final float boardLength = ((float) OnyxConst.BOARD_SIDE_SQUARE_COUNT) + 1f;
         float score = -1f;
         OnyxPos tmp = null, pos = null;
-        for (String k : this.keyCandidates) {
-            
-            this.candidates.add(new OnyxMove(c.getPosition(k), true));
-            
-            pos = c.getPosition(k);
-            if (tmp == null || score < 0f) {
-                // If first blood, then init score & tmp.
-                tmp = pos;
-                if (this.color.boolColor) {
-                    if (this.startPos.isLowXBorder()) score = pos.x;
-                    else if (this.startPos.isHighXBorder()) score = Math.abs(pos.x - boardLength);
-                }
 
-                if (!this.color.boolColor) {
-                    if (this.startPos.isLowYBorder()) score = pos.y;
-                    else if (this.startPos.isHighYBorder()) score = Math.abs(pos.y - boardLength);
-                }
-            }            
-            
+        for (String k : this.keyCandidates) {
+        
+            pos = c.getPosition(k);    
+            if (tmp == null) tmp = pos; // If first blood, then init tmp.         
+
             if (this.color.boolColor) {
                 if (this.startPos.isLowXBorder() && pos.x > tmp.x) {
                     score = pos.x;
                     tmp = pos;
                 } else if (this.startPos.isHighXBorder() && pos.x < tmp.x) {
-                    score = Math.abs(pos.x - boardLength);
+                    score = boardLength - pos.x;
                     tmp = pos;
                 }
             }
-            
+
             if (!this.color.boolColor) {
                 if (this.startPos.isLowYBorder() && pos.y > tmp.y) {
                     score = pos.y;
                     tmp = pos;
                 } else if (this.startPos.isHighYBorder() && pos.y < tmp.y) {
+                    score = boardLength - pos.y;
                     tmp = pos;
-                    score = Math.abs(pos.y - boardLength);
                 }
             }
         }
-
-        this.candidate = new OnyxMove(tmp, false, score * OnyxConst.SCORE.TAIL.getValue());
+        
+        this.candidate = new OnyxMove(tmp, score * OnyxConst.SCORE.TAIL.getValue());
         this.candidates.add(candidate);
     }
     
@@ -161,9 +148,7 @@ public class TailConnectionSubroutine extends AbstractSubroutine {
         OnyxMove tmp = null;
         for (OnyxMove m : this.candidates) {
             if (tmp == null) tmp = m;
-            if (!m.isLambda() && m.getScore() >= tmp.getScore()) {
-                tmp = m;
-            }
+            if (m.getScore() > tmp.getScore()) tmp = m;
         }
         this.candidate = tmp;
     }

@@ -79,7 +79,7 @@ public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnecti
     public boolean isWin(final OnyxPosCollection c, final GraphicsConst.COLOR color) 
             throws NoValidOnyxPositionsFoundException {
         
-        final List<OnyxPos> borders = OnyxPositionUtils.trimByBorderStartPositionsAndColor(
+        final List<OnyxPos> borders = OnyxPositionUtils.trimByBorderStartPositionsByColor(
                 OnyxPositionUtils.getBorders(c, color), color);
         
         WinConnectionSubroutine search = null;
@@ -104,7 +104,7 @@ public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnecti
     private OnyxMove getTailMove(final OnyxPosCollection c, final OnyxBoard board, 
             final GraphicsConst.COLOR color) throws NoValidOnyxPositionsFoundException {
         
-        final List<OnyxPos> pos = OnyxPositionUtils.trimByAllBorderPositionsAndColor(
+        final List<OnyxPos> pos = OnyxPositionUtils.trimByAllBorderPositionsByColor(
                 OnyxPositionUtils.getBorders(c, color), color);
         
         for (OnyxPos p : pos) {
@@ -114,7 +114,7 @@ public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnecti
         OnyxMove tmp = null;
         for (OnyxMove m : this.cnxPos) {
             if (tmp == null) tmp = m;
-            if (tmp == null || (!m.isLambda() && m.getScore() >= tmp.getScore())) {
+            if (m.getScore() >= tmp.getScore()) {
                 tmp = m;
             }
         }

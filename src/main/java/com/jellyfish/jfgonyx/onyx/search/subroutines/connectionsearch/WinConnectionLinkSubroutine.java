@@ -54,7 +54,7 @@ public class WinConnectionLinkSubroutine extends WinConnectionSubroutine {
     
     public OnyxMove connectionLink(final List<OnyxMove> tails) {       
         
-        final List<OnyxPos> borders = OnyxPositionUtils.trimByBorderStartPositionsAndColor(
+        final List<OnyxPos> borders = OnyxPositionUtils.trimByBorderStartPositionsByColor(
                 OnyxPositionUtils.getBorders(this.c, this.color), this.color);
         
         OnyxPiece tmp = null;

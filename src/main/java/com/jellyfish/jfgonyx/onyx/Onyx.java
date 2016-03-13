@@ -113,11 +113,15 @@ class Onyx {
             print(lose ? String.format(LOSE, color.strColor) : StringUtils.EMPTY);
             
             if (Onyx.gameEnd) return null;
-            
+
+            final OnyxMove m = SearchUtils.assertByScore(mPOSCOL, mCNX);
+            /**
+             * FIXME : plz
             final OnyxMove m = SearchUtils.assertByScore(
                 SearchUtils.calibrateCenterMoves(OnyxGame.getInstance(), c, board, color, mPOSCOL),
                 SearchUtils.calibrateTailMoves(OnyxGame.getInstance(), c, board, color, mCNX)
             );
+             */
             
             if (m.isCapture()) c.performTake(m.getPos().getKey(), color.bitColor, board);
             

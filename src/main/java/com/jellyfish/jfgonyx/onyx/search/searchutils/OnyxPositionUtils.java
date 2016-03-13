@@ -65,7 +65,7 @@ public class OnyxPositionUtils {
         return borders;
     }
 
-    public static List<OnyxPos> trimByBorderStartPositionsAndColor(final List<OnyxPos> pos, final GraphicsConst.COLOR color) {
+    public static List<OnyxPos> trimByBorderStartPositionsByColor(final List<OnyxPos> pos, final GraphicsConst.COLOR color) {
         
         final List<OnyxPos> positions = new ArrayList<>();
         for (OnyxPos p : pos) {
@@ -81,7 +81,7 @@ public class OnyxPositionUtils {
         return positions;
     }
     
-    public static List<OnyxPos> trimByAllBorderPositionsAndColor(final List<OnyxPos> pos, final GraphicsConst.COLOR color) {
+    public static List<OnyxPos> trimByAllBorderPositionsByColor(final List<OnyxPos> pos, final GraphicsConst.COLOR color) {
         
         final List<OnyxPos> positions = new ArrayList<>();
         for (OnyxPos p : pos) {

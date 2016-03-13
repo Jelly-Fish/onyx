@@ -85,7 +85,7 @@ public class CounterPositionSubroutine extends AbstractSubroutine {
     private OnyxMove strongCounterPos(final OnyxPosCollection c, final OnyxBoard b, final GraphicsConst.COLOR color) 
             throws NoValidOnyxPositionsFoundException {
         
-        final List<OnyxPos> pos = OnyxPositionUtils.trimByAllBorderPositionsAndColor(
+        final List<OnyxPos> pos = OnyxPositionUtils.trimByAllBorderPositionsByColor(
                 OnyxPositionUtils.getBorders(c, color), color);
         final List<OnyxMove> cnx = new ArrayList<>();
         final Set<String> sTt = new HashSet<>();
@@ -101,7 +101,7 @@ public class CounterPositionSubroutine extends AbstractSubroutine {
         if (tmp == null) return null;
         
         for (OnyxMove m : cnx) {
-            if (!sTt.contains(m.getPos().getKey()) && !m.isLambda() && m.getScore() >= tmp.getScore()) {
+            if (!sTt.contains(m.getPos().getKey()) && m.getScore() >= tmp.getScore()) {
                 tmp = m;
             }
         }

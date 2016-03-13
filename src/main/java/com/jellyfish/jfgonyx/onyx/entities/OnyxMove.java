@@ -44,49 +44,39 @@ public class OnyxMove {
     private final OnyxPiece piece;
     private final List<OnyxPos> captured;
     private final boolean win;
-    private final boolean lambda;
     private float score;
 
     public OnyxMove(final OnyxPos pos, final OnyxPiece piece, final List<OnyxPos> captured, 
-            final boolean win, final boolean lambda, final float score) {
+            final boolean win, final float score) {
         this.pos = pos;
         this.piece = piece;
         this.win = win;
         this.captured = captured;
-        this.lambda = lambda;
         this.score = score;
     }
     
     public OnyxMove(final boolean win) {
-        this(null, null, null, win, true, win ? OnyxConst.SCORE.WIN.getValue() : 0f);
+        this(null, null, null, win, win ? OnyxConst.SCORE.WIN.getValue() : 0f);
     }
     
     public OnyxMove(final OnyxPos pos) {
-        this(pos, null, null, false, true, 0);
+        this(pos, null, null, false, 0);
     }
     
     public OnyxMove(final OnyxPos pos, final OnyxPiece piece) {
-        this(pos, piece, null, false, true, 0);
+        this(pos, piece, null, false, 0);
     }
     
     public OnyxMove(final OnyxPos pos, final float score) {
-        this(pos, null, null, false, true, score);
+        this(pos, null, null, false, score);
     }
     
     public OnyxMove(final OnyxPos pos, final OnyxPiece piece, final float score) {
-        this(pos, piece, null, false, true, score);
-    }
-    
-    public OnyxMove(final OnyxPos pos, final boolean lambda) {
-        this(pos, null, null, false, lambda, 0);
-    }
-    
-    public OnyxMove(final OnyxPos pos, final boolean lambda, final float score) {
-        this(pos, null, null, false, lambda, score);
+        this(pos, piece, null, false, score);
     }
     
     public OnyxMove(final OnyxPos pos, final OnyxPiece piece, final List<OnyxPos> captured, final float score) {
-        this(pos, piece, captured, false, true, score);
+        this(pos, piece, captured, false, score);
     }
     
     public boolean isCapture() {
@@ -117,10 +107,6 @@ public class OnyxMove {
     
     public boolean isWin() {
         return win;
-    }
-    
-    public boolean isLambda() {
-        return lambda;
     }
     
     public float getScore() {

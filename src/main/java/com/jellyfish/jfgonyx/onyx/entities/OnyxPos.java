@@ -121,11 +121,11 @@ public class OnyxPos {
     }
         
     public boolean isLowXBorder() {
-        return !(this.x > 1.1f);
+        return this.x < 1.1f;
     }
 
     public boolean isHighXBorder() {
-        return !(this.x < ((float) (OnyxConst.BOARD_SIDE_SQUARE_COUNT + 1)) +.1f);
+        return this.x > ((float) (OnyxConst.BOARD_SIDE_SQUARE_COUNT + 1)) -.1f;
     }
     
     public boolean isLowYBorder() {
