@@ -63,26 +63,13 @@ public class SearchUtils {
         throw new NoValidOnyxPositionsFoundException();
     }
     
-    public static OnyxMove calibrateCenterMoves(final OnyxGame game, final OnyxPosCollection c, 
-        final OnyxBoard board, final GraphicsConst.COLOR color, final OnyxMove move) throws InvalidOnyxPositionException {
-
-        if (game.getMoveCount() < 12 && move.getScore() > 0) {
-            final OnyxMove m = new CenterPositionSubroutine().getCenterPos(c, board.getDiamondCollection());
-            m.setScore(OnyxConst.SCORE.OVERRIDE.getValue());
-            return m;
-        }
-        
-        return move;
+    public static float calibrateCenterMoves(final OnyxGame game, final float score) {
+        return game.getMoveCount() < 12 ? OnyxConst.SCORE.OVERRIDE.getValue() + score : score;
     }
     
-    public static OnyxMove calibrateTailMoves(final OnyxGame game, final OnyxPosCollection c, 
-        final OnyxBoard board, final GraphicsConst.COLOR color, final OnyxMove move) {
-
-        if (game.getMoveCount() > 11 && game.getMoveCount() < 16 && move.getScore() > 0) {
-            return new OnyxMove(move.getPos(), OnyxConst.SCORE.OVERRIDE.getValue());
-        }
-        
-        return move;
+    public static float calibrateTailMoves(final OnyxGame game, final float score) {
+        return (game.getMoveCount() > 12 && game.getMoveCount() < 18) ?
+            OnyxConst.SCORE.OVERRIDE.getValue() + score : score;              
     }
     
 }

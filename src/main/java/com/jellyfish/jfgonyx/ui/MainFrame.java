@@ -40,10 +40,13 @@ import com.jellyfish.jfgonyx.starter.Starter;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
+import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
 import java.util.LinkedList;
+import javax.swing.ImageIcon;
 import javax.swing.text.DefaultCaret;
 import javax.swing.text.Document;
 import javax.swing.text.html.HTMLEditorKit;
@@ -258,6 +261,10 @@ public class MainFrame extends javax.swing.JFrame implements OnyxObserver {
         this.setSize(GraphicsConst.BOARD_WIDTH + 36 + 300, GraphicsConst.BOARD_WIDTH + 68);
         this.setLocation(((int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth() / 2)) - 
                 (this.getWidth() / 2), 20);
+        
+        final ImageIcon icn = new ImageIcon(getClass().getClassLoader().getResource("icons/icn.png"));
+        this.setIconImage(icn.getImage());
+        
         this.setTitle("Onyx");
         this.setVisible(true);
     }

@@ -33,9 +33,11 @@ package com.jellyfish.jfgonyx.onyx.search.subroutines.connectionsearch;
 
 import com.jellyfish.jfgonyx.constants.GraphicsConst;
 import com.jellyfish.jfgonyx.constants.OnyxConst;
+import com.jellyfish.jfgonyx.onyx.OnyxGame;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
+import com.jellyfish.jfgonyx.onyx.search.searchutils.SearchUtils;
 import com.jellyfish.jfgonyx.onyx.search.subroutines.abstractions.AbstractSubroutine;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
 import java.util.ArrayList;
@@ -59,7 +61,8 @@ public class TailConnectionSubroutine extends AbstractSubroutine {
     private OnyxPos startPos;
     private OnyxMove candidate;
     
-    public TailConnectionSubroutine(final OnyxPosCollection c, final GraphicsConst.COLOR color, final OnyxBoard board) {
+    public TailConnectionSubroutine(final OnyxPosCollection c, final GraphicsConst.COLOR color, 
+            final OnyxBoard board) {
         this.c = c;
         this.color = color;
         this.board = board;
@@ -114,9 +117,26 @@ public class TailConnectionSubroutine extends AbstractSubroutine {
         OnyxPos tmp = null, pos = null;
 
         for (String k : this.keyCandidates) {
-        
+
             pos = c.getPosition(k);    
-            if (tmp == null) tmp = pos; // If first blood, then init tmp.         
+            if (tmp == null) {
+                
+                /**
+                 * If first blood, then init tmp & score : /!\ must be done /!\ :
+                 * If score stay's at -1f and 1st iteration is best move then it
+                 * will be overrided by weaker move.
+                 */
+                tmp = pos;
+                if (this.color.boolColor) {
+                    if (this.startPos.isLowXBorder()) score = tmp.x;
+                    else if (this.startPos.isHighXBorder()) score = boardLength - tmp.x;
+                }
+                
+                if (!this.color.boolColor) {
+                    if (this.startPos.isLowYBorder()) score = tmp.y;
+                    else if (this.startPos.isHighYBorder()) score = boardLength - tmp.y;
+                }
+            } 
 
             if (this.color.boolColor) {
                 if (this.startPos.isLowXBorder() && pos.x > tmp.x) {

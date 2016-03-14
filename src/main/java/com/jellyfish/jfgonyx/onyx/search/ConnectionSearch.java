@@ -32,6 +32,7 @@
 package com.jellyfish.jfgonyx.onyx.search;
 
 import com.jellyfish.jfgonyx.constants.GraphicsConst;
+import com.jellyfish.jfgonyx.onyx.OnyxGame;
 import com.jellyfish.jfgonyx.onyx.abstractions.AbstractOnyxSearch;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
@@ -40,6 +41,7 @@ import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException;
 import com.jellyfish.jfgonyx.onyx.interfaces.search.OnyxConnectionSearchable;
 import com.jellyfish.jfgonyx.onyx.search.searchutils.OnyxPositionUtils;
+import com.jellyfish.jfgonyx.onyx.search.searchutils.SearchUtils;
 import com.jellyfish.jfgonyx.onyx.search.subroutines.connectionsearch.TailConnectionSubroutine;
 import com.jellyfish.jfgonyx.onyx.search.subroutines.connectionsearch.WinConnectionSubroutine;
 import com.jellyfish.jfgonyx.onyx.search.subroutines.connectionsearch.WinConnectionLinkSubroutine;
@@ -119,7 +121,8 @@ public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnecti
             }
         }
         
-        if (tmp != null) return new OnyxMove(tmp.getPos(), tmp.getPiece(), tmp.getScore());
+        if (tmp != null) return new OnyxMove(tmp.getPos(), tmp.getPiece(),
+            SearchUtils.calibrateTailMoves(OnyxGame.getInstance(), tmp.getScore()));
         
         return null;
     }

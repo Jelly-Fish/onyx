@@ -129,7 +129,7 @@ public class OnyxPos {
     }
     
     public boolean isLowYBorder() {
-        return !(this.y > 1f);
+        return this.y > 0f && this.y < 2f;
     }
     
     public boolean isHighYBorder() {
