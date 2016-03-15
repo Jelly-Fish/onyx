@@ -33,6 +33,7 @@ package com.jellyfish.jfgonyx.onyx;
 
 import com.jellyfish.jfgonyx.constants.GraphicsConst;
 import com.jellyfish.jfgonyx.constants.OnyxConst;
+import com.jellyfish.jfgonyx.helpers.HTMLDisplayHelper;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
@@ -52,13 +53,13 @@ import org.apache.commons.lang3.StringUtils;
  */
 class Onyx {
     
-    public static boolean gameEnd = false;
+    public static boolean gameEnd = false; 
     
-    private static final String ERR = " :: Something got messy :X >> %s";
-    private static final String POSCOL_SEARCH_FORMAT = " :: SEARCH.ONYXPOSCOL -> [%s] score -> [%.1f]";
-    private static final String CNX_SEARCH_FORMAT = " :: SEARCH.CNX -> [%s] score -> [%.3f]";
-    private static final String WIN = " :: %s's WIN ! WuHu !!!";
-    private static final String LOSE = " :: %s's l00S3..."; 
+    private static final String ERR = "Something got messy :X >> %s";
+    private static final String POSCOL_SEARCH_FORMAT = "SEARCH.ONYXPOSCOL -> [%s] score -> [%.1f]";
+    private static final String CNX_SEARCH_FORMAT = "SEARCH.CNX -> [%s] score -> [%.3f]";
+    private static final String WIN = "%s's WIN ! WuHu !!!";
+    private static final String LOSE = "%s's l00S3..."; 
             
     private final static HashMap<SEARCH_TYPE, OnyxAbstractSearchable> SEARCH = new HashMap<>();
     static {
@@ -113,16 +114,7 @@ class Onyx {
             print(lose ? String.format(LOSE, color.strColor) : StringUtils.EMPTY);
             
             if (Onyx.gameEnd) return null;
-
             final OnyxMove m = SearchUtils.assertByScore(mPOSCOL, mCNX);
-            /**
-             * FIXME : plz
-            final OnyxMove m = SearchUtils.assertByScore(
-                SearchUtils.calibrateCenterMoves(OnyxGame.getInstance(), c, board, color, mPOSCOL),
-                SearchUtils.calibrateTailMoves(OnyxGame.getInstance(), c, board, color, mCNX)
-            );
-             */
-            
             if (m.isCapture()) c.performTake(m.getPos().getKey(), color.bitColor, board);
             
             return m;
@@ -155,7 +147,7 @@ class Onyx {
     
     private static void print(final String s) {
         if (!StringUtils.isBlank(s)) {
-            MainFrame.print(s);
+            MainFrame.print(s, HTMLDisplayHelper.LIME_GREEN);
         }
     }
         

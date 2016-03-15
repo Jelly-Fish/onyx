@@ -36,6 +36,7 @@ import com.jellyfish.jfgonyx.onyx.search.searchutils.Intmap;
 import com.jellyfish.jfgonyx.constants.DTStampConst;
 import com.jellyfish.jfgonyx.constants.GraphicsConst;
 import com.jellyfish.jfgonyx.constants.OnyxConst;
+import com.jellyfish.jfgonyx.helpers.HTMLDisplayHelper;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPiece;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
@@ -93,7 +94,7 @@ public class OnyxGame {
         if (m != null && !Onyx.gameEnd) {
             this.appendMove(m);
             this.appendNewVirtual(c, board);
-            board.notifyMove(m);
+            board.notifyMove(m, HTMLDisplayHelper.HOT_PINK);
         }
         this.closeMove();
     }

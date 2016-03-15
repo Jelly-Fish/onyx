@@ -31,81 +31,29 @@
  */
 package com.jellyfish.jfgonyx.helpers;
 
-import org.apache.commons.lang3.StringUtils;
-
 /**
  *
  * @author thw
  */
 public class HTMLDisplayHelper {
     
+    private static final String FONT_SIZE = "12";
+    private static final String FONT_FAMILY = "consolas";
     private static final String SPAN = "<span style=\"%s\">%s</span>";
-    private static final String TR = "<tr>%s</tr>";
-    private static final String TD = 
-            "<td style=\"align: center; background-color: rgb(172,172,162);\">%s</td>";
-    private static final String TABLE = 
-        "<table style=\"border-collapse: collapse;\">%s</table>";
-    private static final String FONT_STYLE = "font-family: consolas; font-size: 14px;"; 
-    private static final String FONT_STYLE_WHITE = "font-family: consolas; font-size: 12px; color: rgb(245,245,245)"; 
-    public static final String GRAY_BOLD_TEXT = "<b style=\"color: rgb(124,124,124);" + 
-            HTMLDisplayHelper.FONT_STYLE + "\">%s</b>"; 
-    public static final String LIGHTGRAY_BOLD_TEXT = "<b style=\"color: rgb(216,216,216);" + 
-            HTMLDisplayHelper.FONT_STYLE + "\">%s</b>"; 
-    public static final String DARKGRAY_BOLD_TEXT = "<b style=\"color: rgb(60,60,60);" + 
-            HTMLDisplayHelper.FONT_STYLE + "\">%s</b>"; 
-    private static final String BLACK_BOLD_TEXT = "<b style=\"color: black;" + 
-            HTMLDisplayHelper.FONT_STYLE + "\">%s</b>";
-    private static final String WHITE_BOLD_TEXT = "<b style=\"color: white;" + 
-            HTMLDisplayHelper.FONT_STYLE + "\">%s</b>";
+    private static final String FONT_STYLE = "font-family: %s; font-size: %spx; color: %s"; 
     
-    static final String buildHTML(final String[] m, final int b, final int w) {
-        final StringBuilder html = new StringBuilder();
-        html.append(buildPieceCountTable(b, w));
-        html.append(buildMoveDataTable(m));
-        return html.toString();
-    }
+    public static final String WHITE = "rgb(245,245,245)";
+    public static final String LIME = "rgb(0,255,0)";
+    public static final String MEDIUM_TURQUOISE = "rgb(72,209,204)";
+    public static final String DARK_TURQUOISE = "rgb(0,206,209)";
+    public static final String AQUA_TURQUOISE = "rgb(0,255,255)";
+    public static final String HOT_PINK = "rgb(255,105,180)";
+    public static final String GAINSBORO = "rgb(220,220,220)";
+    public static final String LIME_GREEN = "rgb(50,205,50)";
+    public static final String GOLD = "rgb(255,215,0)";
     
-    static String buildHTML(final String data) {
-        return String.format(SPAN, FONT_STYLE_WHITE, data);
-    }
-    
-    public static final String getMoveText(final int n) {
-        return ((n & 1) == 0) & n > 0 ? HTMLDisplayHelper.WHITE_BOLD_TEXT :
-            HTMLDisplayHelper.BLACK_BOLD_TEXT;
-    }
-    
-    private static String buildMoveDataTable(final String[] m) {
-        
-        final StringBuilder innerTableHTML = new StringBuilder();
-        String row = StringUtils.EMPTY;
-        
-        for (int i = 1; i <= m.length; ++i) {
-            if ((i & 1) == 0) {
-                row += String.format(HTMLDisplayHelper.TD, String.format(DARKGRAY_BOLD_TEXT, i + "."));
-                row += String.format(HTMLDisplayHelper.TD, String.format(WHITE_BOLD_TEXT, m[i - 1]));
-                innerTableHTML.append(String.format(HTMLDisplayHelper.TR, row));
-                row = StringUtils.EMPTY;
-            } else {
-                row += String.format(HTMLDisplayHelper.TD, String.format(DARKGRAY_BOLD_TEXT, i + "."));
-                row += String.format(HTMLDisplayHelper.TD, String.format(BLACK_BOLD_TEXT, m[i - 1]));
-            }
-        }
-        
-        return String.format(HTMLDisplayHelper.TABLE, innerTableHTML.toString());
-    }
-
-    private static String buildPieceCountTable(final int blacks, final int whites) {
-        
-        final StringBuilder data = new StringBuilder();
-        data.append("<p>");
-        data.append(String.format(String.format(LIGHTGRAY_BOLD_TEXT, "WHITE PIECE COUNT: "))); 
-        data.append(String.format(WHITE_BOLD_TEXT, String.valueOf(whites)));
-        data.append("<br>");
-        data.append(String.format(String.format(LIGHTGRAY_BOLD_TEXT, "BLACK PIECE COUNT: "))); 
-        data.append(String.format(BLACK_BOLD_TEXT, String.valueOf(blacks)));
-        data.append("</p><br>");
-        
-        return data.toString();
+    static String buildHTML(final String data, final String color) {
+        return String.format(SPAN, String.format(FONT_STYLE, FONT_FAMILY, FONT_SIZE, color), data);
     }
     
 }

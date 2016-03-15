@@ -32,6 +32,7 @@
 package com.jellyfish.jfgonyx.onyx.search.subroutines.abstractions;
 
 import com.jellyfish.jfgonyx.constants.OnyxConst;
+import com.jellyfish.jfgonyx.helpers.HTMLDisplayHelper;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
 import com.jellyfish.jfgonyx.ui.MainFrame;
 import java.util.List;
@@ -52,33 +53,39 @@ public abstract class AbstractSubroutine {
     public final void print(final String sK, final List<OnyxMove> candidates, final String f) {
         for (OnyxMove m : candidates) {
             MainFrame.print(String.format(f, OnyxConst.POS_MAP.get(sK), 
-                    OnyxConst.POS_MAP.get(m.getPos().getKey()), m.getScore()));
+                    OnyxConst.POS_MAP.get(m.getPos().getKey()), m.getScore()), 
+                    HTMLDisplayHelper.WHITE);
         }
     }
     
     public final void print(final String sK, final Set<OnyxMove> candidates, final String f) {
         for (OnyxMove m : candidates) {
             MainFrame.print(String.format(f, OnyxConst.POS_MAP.get(sK), 
-                    OnyxConst.POS_MAP.get(m.getPos().getKey()), m.getScore()));
+                    OnyxConst.POS_MAP.get(m.getPos().getKey()), m.getScore()),
+                    HTMLDisplayHelper.WHITE);
         }
     }
     
     public final void print(final String sK, final OnyxMove candidate, final String f) {
         MainFrame.print(String.format(f, 
                 OnyxConst.POS_MAP.get(sK), 
-                OnyxConst.POS_MAP.get(candidate.getPos().getKey()), candidate.getScore()));
+                OnyxConst.POS_MAP.get(candidate.getPos().getKey()), candidate.getScore()),
+                HTMLDisplayHelper.WHITE);
     }
     
     public final void print(final String k, final String n, final String f) {
-        MainFrame.print(String.format(f, OnyxConst.POS_MAP.get(k), n));
+        MainFrame.print(String.format(f, OnyxConst.POS_MAP.get(k), n),
+                HTMLDisplayHelper.WHITE);
     }
     
     public final void print(final String color, final String k, final String n, final String f) {
-        MainFrame.print(String.format(f, color, OnyxConst.POS_MAP.get(k), n));
+        MainFrame.print(String.format(f, color, OnyxConst.POS_MAP.get(k), n),
+                HTMLDisplayHelper.WHITE);
     }
     
     public final void print(final String k, final String f) {
-        MainFrame.print(String.format(f, k));
+        MainFrame.print(String.format(f, k),
+                HTMLDisplayHelper.WHITE);
     }
     
 }

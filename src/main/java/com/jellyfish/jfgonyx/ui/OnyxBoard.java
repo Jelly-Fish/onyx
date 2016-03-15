@@ -166,9 +166,9 @@ public class OnyxBoard extends javax.swing.JPanel implements OnyxBoardI {
     }
     
     @Override
-    public void notifyMove(final OnyxMove m) {
+    public void notifyMove(final OnyxMove m, final String color) {
         for (OnyxObserver obs : this.observers) {
-            obs.notifyMove(m);
+            obs.notifyMove(m, color);
         }
     }
 
@@ -188,9 +188,9 @@ public class OnyxBoard extends javax.swing.JPanel implements OnyxBoardI {
     }
     
     @Override
-    public void notifyMoves(final HashMap<Integer, OnyxMove> moves) {
+    public void notifyMoves(final HashMap<Integer, OnyxMove> moves, final String color) {
         for (OnyxObserver obs : this.observers) {
-            for (OnyxMove m : moves.values()) obs.notifyMove(m);
+            for (OnyxMove m : moves.values()) obs.notifyMove(m, color);
         }
     }
 

@@ -54,7 +54,7 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class CounterPositionSubroutine extends AbstractSubroutine {
     
-    private final static String BEST_CANDIDATE = " :: Counter position for %s [%s] score: %s";
+    private final static String BEST_CANDIDATE = "Counter position for %s [%s] score: %s";
     
     /**
      * @param c Onyx position collection.
@@ -101,7 +101,7 @@ public class CounterPositionSubroutine extends AbstractSubroutine {
         if (tmp == null) return null;
         
         for (OnyxMove m : cnx) {
-            if (!sTt.contains(m.getPos().getKey()) && m.getScore() >= tmp.getScore()) {
+            if (m != null && !sTt.contains(m.getPos().getKey()) && m.getScore() >= tmp.getScore()) {
                 tmp = m;
             }
         }

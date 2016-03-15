@@ -59,50 +59,50 @@ public class OnyxBoardGHelper {
             if (d.onPairLine) {
                 if (d.isFivePosDiamond()) {
                     d.setPolygon(new Polygon(
-                            new int[]{
-                                d.positions[0].gX, d.positions[1].gX + GraphicsConst.ZIGZAG,
-                                d.positions[2].gX + GraphicsConst.ZIGZAG, d.positions[3].gX
-                            },
-                            new int[]{
-                                d.positions[0].gY + GraphicsConst.ZIGZAG,
-                                d.positions[1].gY + GraphicsConst.ZIGZAG,
-                                d.positions[2].gY, d.positions[3].gY
-                            }, 4));
+                        new int[]{
+                            d.positions[0].gX, d.positions[1].gX + GraphicsConst.ZIGZAG,
+                            d.positions[2].gX + GraphicsConst.ZIGZAG, d.positions[3].gX
+                        },
+                        new int[]{
+                            d.positions[0].gY + GraphicsConst.ZIGZAG,
+                            d.positions[1].gY + GraphicsConst.ZIGZAG,
+                            d.positions[2].gY, d.positions[3].gY
+                        }, 4));
                 } else {
                     d.setPolygon(new Polygon(
-                            new int[]{
-                                d.positions[0].gX, d.positions[1].gX + GraphicsConst.ZIGZAG,
-                                d.positions[2].gX + GraphicsConst.ZIGZAG, d.positions[3].gX
-                            },
-                            new int[]{
-                                d.positions[0].gY, d.positions[1].gY,
-                                d.positions[2].gY + GraphicsConst.ZIGZAG,
-                                d.positions[3].gY + GraphicsConst.ZIGZAG
-                            }, 4));
+                        new int[]{
+                            d.positions[0].gX, d.positions[1].gX + GraphicsConst.ZIGZAG,
+                            d.positions[2].gX + GraphicsConst.ZIGZAG, d.positions[3].gX
+                        },
+                        new int[]{
+                            d.positions[0].gY, d.positions[1].gY,
+                            d.positions[2].gY + GraphicsConst.ZIGZAG,
+                            d.positions[3].gY + GraphicsConst.ZIGZAG
+                        }, 4));
                 }
             } else {
                 if (d.isFivePosDiamond()) {
                     d.setPolygon(new Polygon(
-                            new int[]{
-                                d.positions[0].gX + GraphicsConst.ZIGZAG, d.positions[1].gX,
-                                d.positions[2].gX, d.positions[3].gX + GraphicsConst.ZIGZAG
-                            },
-                            new int[]{
-                                d.positions[0].gY, d.positions[1].gY,
-                                d.positions[2].gY + GraphicsConst.ZIGZAG,
-                                d.positions[3].gY + GraphicsConst.ZIGZAG
-                            }, 4));
+                        new int[]{
+                            d.positions[0].gX + GraphicsConst.ZIGZAG, d.positions[1].gX,
+                            d.positions[2].gX, d.positions[3].gX + GraphicsConst.ZIGZAG
+                        },
+                        new int[]{
+                            d.positions[0].gY, d.positions[1].gY,
+                            d.positions[2].gY + GraphicsConst.ZIGZAG,
+                            d.positions[3].gY + GraphicsConst.ZIGZAG
+                        }, 4));
                 } else {
                     d.setPolygon(new Polygon(
-                            new int[]{
-                                d.positions[0].gX + GraphicsConst.ZIGZAG, d.positions[1].gX,
-                                d.positions[2].gX, d.positions[3].gX + GraphicsConst.ZIGZAG
-                            },
-                            new int[]{
-                                d.positions[0].gY + GraphicsConst.ZIGZAG,
-                                d.positions[1].gY + GraphicsConst.ZIGZAG,
-                                d.positions[2].gY, d.positions[3].gY
-                            }, 4));
+                        new int[]{
+                            d.positions[0].gX + GraphicsConst.ZIGZAG, d.positions[1].gX,
+                            d.positions[2].gX, d.positions[3].gX + GraphicsConst.ZIGZAG
+                        },
+                        new int[]{
+                            d.positions[0].gY + GraphicsConst.ZIGZAG,
+                            d.positions[1].gY + GraphicsConst.ZIGZAG,
+                            d.positions[2].gY, d.positions[3].gY
+                        }, 4));
                 }
             }
         }

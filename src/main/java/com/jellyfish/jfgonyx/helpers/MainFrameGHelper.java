@@ -34,7 +34,6 @@ package com.jellyfish.jfgonyx.helpers;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
 import com.jellyfish.jfgonyx.ui.MainFrame;
 import java.io.IOException;
-import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.text.BadLocationException;
@@ -43,34 +42,31 @@ import javax.swing.text.html.HTMLDocument;
 import javax.swing.text.html.HTMLEditorKit;
 
 /**
- *
  * @author thw
  */
 public class MainFrameGHelper {
     
-    public static final void appendHTMLData(final LinkedList<String> moveLabels, final OnyxPosCollection posC,
+    public static final void appendHTML(final String html, final OnyxPosCollection posC,
             final HTMLEditorKit htmlEditorKit, final Document doc) {
         
-        final String[] moves = new String[moveLabels.size()];
-        moveLabels.toArray(moves);
-        final int blacks = posC.getBlackPieceCount();
-        final int whites = posC.getWhitePieceCount();
+        if (htmlEditorKit == null || doc == null || html == null) return;
         
         try {
             htmlEditorKit.insertHTML((HTMLDocument) doc, doc.getLength(), 
-                HTMLDisplayHelper.buildHTML(moves, blacks, whites), 0, 0, null);
+                html, 0, 0, null);
         } catch (BadLocationException | IOException ex) {
             Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
-    public static final void appendRawData(final String data, final HTMLEditorKit htmlEditorKit, final Document doc) {
+    public static final void appendRawData(final String data, 
+            final HTMLEditorKit htmlEditorKit, final Document doc, final String color) {
         
         if (htmlEditorKit == null || doc == null || data == null) return;
         
         try {
             htmlEditorKit.insertHTML((HTMLDocument) doc, doc.getLength(), 
-                HTMLDisplayHelper.buildHTML(data), 0, 0, null);
+                HTMLDisplayHelper.buildHTML(data, color), 0, 0, null);
         } catch (BadLocationException | IOException ex) {
             Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, null, ex);
         }

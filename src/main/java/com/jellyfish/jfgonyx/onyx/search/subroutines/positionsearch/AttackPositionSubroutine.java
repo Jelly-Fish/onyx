@@ -45,7 +45,7 @@ import com.jellyfish.jfgonyx.ui.OnyxBoard;
  */
 public class AttackPositionSubroutine extends AbstractSubroutine {
     
-    private final static String BEST_CANDIDATE = " :: Attack position [%s]";
+    private final static String BEST_CANDIDATE = "Attack position [%s]";
     
     /**
      * @param c Onyx position collection.

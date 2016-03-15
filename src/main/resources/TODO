@@ -16,3 +16,9 @@ Connection win double check and test complexe layouts (x2 + paths misleads with
 --------------------------------------------------------------------------------
 02-03-2016 :
 Take move output not working (no * OR **).
+--------------------------------------------------------------------------------
+15-03-2016 :
+1- TEST playing whites.
+2- improve color display.
+3- improve CNX searching.
+4- !!! search win link position and OVERRIDE !important

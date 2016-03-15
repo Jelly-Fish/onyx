@@ -50,8 +50,7 @@ import java.util.Set;
  */
 public class TailConnectionSubroutine extends AbstractSubroutine {
     
-    private final static String LAMBDA_CANDIDATE = " :: Tail search candidate for start @ %s : [%s] score: %f";
-    private final static String BEST_CANDIDATE = " :: Candidate for start @ %s : [%s] score: %f";
+    private final static String BEST_CANDIDATE = "Candidate for start @ %s : [%s] score: %f";
     private final OnyxPosCollection c;
     private final OnyxBoard board;
     private final GraphicsConst.COLOR color;

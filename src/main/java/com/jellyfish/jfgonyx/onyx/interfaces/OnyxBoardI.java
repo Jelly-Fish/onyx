@@ -38,7 +38,6 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- *
  * @author thw
  */
 public interface OnyxBoardI {
@@ -59,9 +58,9 @@ public interface OnyxBoardI {
     
     List<OnyxObserver> getObservers();
             
-    void notifyMove(final OnyxMove m);
+    void notifyMove(final OnyxMove m, final String color);
     
-    void notifyMoves(final HashMap<Integer, OnyxMove> moves);
+    void notifyMoves(final HashMap<Integer, OnyxMove> moves, final String color);
     
     void focus();
     

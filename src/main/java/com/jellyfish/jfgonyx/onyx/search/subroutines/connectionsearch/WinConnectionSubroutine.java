@@ -44,8 +44,8 @@ import java.util.Set;
  */
 public class WinConnectionSubroutine extends AbstractSubroutine {
     
-    private final static String WIN = " :: %s wins the game !";
-    private final static String WIN_CANDIDATE = " :: Win search %s @ %s | iteration %s";
+    private final static String WIN = "%s wins the game !";
+    private final static String WIN_CANDIDATE = "Win search %s @ %s | iteration %s";
     protected final OnyxPosCollection c;
     protected final GraphicsConst.COLOR color;
     protected final float max = OnyxConst.BOARD_SIDE_SQUARE_COUNT + 1;

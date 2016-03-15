@@ -47,7 +47,7 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class NeighbourPositionSubroutine extends AbstractSubroutine {
     
-    private final static String BEST_CANDIDATE = " :: Neighbour position [%s]";
+    private final static String BEST_CANDIDATE = "Neighbour position [%s]";
     
     /**
      * @param c Onyx position collection.

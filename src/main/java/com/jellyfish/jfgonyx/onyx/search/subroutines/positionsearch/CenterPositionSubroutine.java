@@ -53,7 +53,7 @@ import java.util.Set;
  */
 public class CenterPositionSubroutine extends AbstractSubroutine {
     
-    private final static String BEST_CANDIDATE = " :: Center position [%s]";
+    private final static String BEST_CANDIDATE = "Center position [%s]";
 
     /**
      * Get playable diamond center position nearest to board center.

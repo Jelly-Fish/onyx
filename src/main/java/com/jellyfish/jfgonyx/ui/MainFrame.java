@@ -31,6 +31,7 @@
 package com.jellyfish.jfgonyx.ui;
 
 import com.jellyfish.jfgonyx.constants.GraphicsConst;
+import com.jellyfish.jfgonyx.helpers.HTMLDisplayHelper;
 import com.jellyfish.jfgonyx.helpers.LogHelper;
 import com.jellyfish.jfgonyx.helpers.MainFrameGHelper;
 import com.jellyfish.jfgonyx.onyx.OnyxGame;
@@ -40,11 +41,9 @@ import com.jellyfish.jfgonyx.starter.Starter;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
-import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
 import java.util.LinkedList;
 import javax.swing.ImageIcon;
 import javax.swing.text.DefaultCaret;
@@ -261,10 +260,8 @@ public class MainFrame extends javax.swing.JFrame implements OnyxObserver {
         this.setSize(GraphicsConst.BOARD_WIDTH + 36 + 300, GraphicsConst.BOARD_WIDTH + 68);
         this.setLocation(((int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth() / 2)) - 
                 (this.getWidth() / 2), 20);
-        
         final ImageIcon icn = new ImageIcon(getClass().getClassLoader().getResource("icons/icn.png"));
         this.setIconImage(icn.getImage());
-        
         this.setTitle("Onyx");
         this.setVisible(true);
     }
@@ -275,7 +272,7 @@ public class MainFrame extends javax.swing.JFrame implements OnyxObserver {
     }
     
     @Override
-    public final void notifyMove(final OnyxMove m) {
+    public final void notifyMove(final OnyxMove m, final String color) {
         
         this.move_labels.add(m.toString());
         /**
@@ -285,12 +282,12 @@ public class MainFrame extends javax.swing.JFrame implements OnyxObserver {
         MainFrameGHelper.appendHTMLData(this.move_labels, this.board.getPosCollection(), 
                 this.htmlEditorKit, this.doc);
          */
-        MainFrameGHelper.appendRawData(" :: " + LogHelper.getDTFullStamp() + 
-                StringUtils.SPACE + m.toString(), htmlEditorKit, doc);
+        MainFrameGHelper.appendRawData(LogHelper.getDTFullStamp() + 
+                StringUtils.SPACE + m.toString(), htmlEditorKit, doc, color);
     }
     
-    public static final void print(final String data) {       
-        MainFrameGHelper.appendRawData(data, htmlEditorKit, doc);
+    public static final void print(final String data, final String color) {       
+        MainFrameGHelper.appendRawData(data, htmlEditorKit, doc, color);
     }
     
 }

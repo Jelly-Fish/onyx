@@ -47,7 +47,7 @@ import java.util.List;
  */
 public class TakePositionSubroutine extends AbstractSubroutine {
     
-    private final static String BEST_CANDIDATE = " :: Take/Capture position [%s]";
+    private final static String BEST_CANDIDATE = "Take/Capture position [%s]";
     
     /**
      * @param c Onyx position collection.

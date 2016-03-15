@@ -46,7 +46,7 @@ import java.util.List;
  */
 public class WinConnectionLinkSubroutine extends WinConnectionSubroutine {
     
-    private final static String WIN_MOVE = " :: [!] Win link position found @ %s";
+    private final static String WIN_MOVE = "[!] Win link position found @ %s";
     
     public WinConnectionLinkSubroutine(final OnyxPosCollection c, final GraphicsConst.COLOR color) {
         super(c, color);

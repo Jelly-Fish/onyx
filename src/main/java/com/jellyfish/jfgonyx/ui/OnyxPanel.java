@@ -62,7 +62,7 @@ public class OnyxPanel extends JPanel implements OnyxObserver {
     }
     
     @Override
-    public void notifyMove(final OnyxMove m) {
+    public void notifyMove(final OnyxMove m, final String color) {
         this.move_labels.add(m.toString());
         this.repaint();
     }

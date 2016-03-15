@@ -33,6 +33,7 @@ package com.jellyfish.jfgonyx.io.events;
 
 import com.jellyfish.jfgonyx.constants.GraphicsConst;
 import com.jellyfish.jfgonyx.constants.OnyxConst;
+import com.jellyfish.jfgonyx.helpers.HTMLDisplayHelper;
 import com.jellyfish.jfgonyx.onyx.OnyxGame;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPiece;
@@ -134,7 +135,7 @@ public class KeyMoveVirutalPiece implements OnyxExecutable {
         }
         
         OnyxGame.getInstance().appendMove(m);
-        board.notifyMove(m);
+        board.notifyMove(m, HTMLDisplayHelper.AQUA_TURQUOISE);
         
         return true;
     }
