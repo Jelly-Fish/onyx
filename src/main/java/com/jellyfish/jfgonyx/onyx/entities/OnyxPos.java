@@ -64,7 +64,7 @@ public class OnyxPos {
     }
     
     public boolean isOccupied(final int bitColor) {
-        return this.isOccupied() && this.piece.color.bitColor == bitColor;
+        return this.isOccupied() && this.piece.color.bit == bitColor;
     }
     
     public boolean isSubjectToTake(final OnyxBoard board, final OnyxPosCollection c, 
@@ -72,7 +72,7 @@ public class OnyxPos {
         
         if (this.isDiamondCenter()) return false;
         boolean r = false;
-        final GraphicsConst.COLOR oC = GraphicsConst.COLOR.getOposite(color.boolColor);
+        final GraphicsConst.COLOR oC = GraphicsConst.COLOR.getOposite(color.bool);
         String[] keys = null;
         int k = -1, l = 0, j = 0, m = -1; 
 
@@ -81,13 +81,13 @@ public class OnyxPos {
             keys = d.getCornerKeys();
             for (int i = 0; i < keys.length; ++i) {
                 if (c.getPosition(keys[i]).isOccupied() && 
-                        c.getPosition(keys[i]).getPiece().color.bitColor == oC.bitColor &&
+                        c.getPosition(keys[i]).getPiece().color.bit == oC.bit &&
                         !this.getKey().equals(c.getPosition(keys[i]).getKey())) {
                     k = i;
                     ++l;
                 } 
-                if (c.getPosition(keys[i]).isOccupied(color.bitColor)&& 
-                        c.getPosition(keys[i]).getPiece().color.bitColor == color.bitColor) {
+                if (c.getPosition(keys[i]).isOccupied(color.bit)&& 
+                        c.getPosition(keys[i]).getPiece().color.bit == color.bit) {
                     ++j;
                 }
                 if (this.getKey().equals(c.getPosition(keys[i]).getKey())) m = i;

@@ -91,7 +91,7 @@ public class Intmap {
             l += y < 10 ? StringUtils.SPACE : StringUtils.EMPTY;
             for (float x = 1.0f; x <= OnyxConst.BOARD_SIDE_SQUARE_COUNT + 1; x += .5f) {
                 tmp = c.getPosition(String.format(OnyxPosCollection.KEY_FORMAT, x, y));
-                bmap[i] = tmp == null ? 3 : (tmp.isOccupied() ? tmp.getPiece().color.bitColor : 2);
+                bmap[i] = tmp == null ? 3 : (tmp.isOccupied() ? tmp.getPiece().color.bit : 2);
                 l += bmap[i] > 1 ? StringUtils.SPACE + StringUtils.SPACE :
                         StringUtils.SPACE + bmap[i];
                 this.mtx_intmap[j][k] = bmap[i];

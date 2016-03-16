@@ -93,7 +93,7 @@ class Onyx {
             
             final OnyxMove mPOSCOL = SEARCH.get(SEARCH_TYPE.POSCOL).search(c, board, color);
             final boolean win = ((ConnectionSearch) SEARCH.get(SEARCH_TYPE.CNX)).isWin(
-                    c, GraphicsConst.COLOR.getOposite(color.boolColor));
+                    c, GraphicsConst.COLOR.getOposite(color.bool));
             final boolean lose = ((ConnectionSearch) SEARCH.get(SEARCH_TYPE.CNX)).isWin(
                     c, color);
             final OnyxMove mCNX = SEARCH.get(SEARCH_TYPE.CNX).search(c, board, color);
@@ -109,13 +109,13 @@ class Onyx {
             print(String.format(CNX_SEARCH_FORMAT,
                 OnyxConst.POS_MAP.get(mCNX.getPos().getKey()), mCNX.getScore()));
             print(win ? 
-                String.format(WIN, GraphicsConst.COLOR.getOposite(color.boolColor).strColor) : 
+                String.format(WIN, GraphicsConst.COLOR.getOposite(color.bool).str) : 
                 StringUtils.EMPTY);
-            print(lose ? String.format(LOSE, color.strColor) : StringUtils.EMPTY);
+            print(lose ? String.format(LOSE, color.str) : StringUtils.EMPTY);
             
             if (Onyx.gameEnd) return null;
             final OnyxMove m = SearchUtils.assertByScore(mPOSCOL, mCNX);
-            if (m.isCapture()) c.performTake(m.getPos().getKey(), color.bitColor, board);
+            if (m.isCapture()) c.performTake(m.getPos().getKey(), color.bit, board);
             
             return m;
             
@@ -124,7 +124,7 @@ class Onyx {
             print(String.format(ERR, nVOPFEx.getMessage()));
         } catch (final InvalidOnyxPositionException iOPEx) {
             Logger.getLogger(Onyx.class.getName()).log(Level.SEVERE, null, iOPEx + 
-                    String.format(InvalidOnyxPositionException.DEFAULT_MSG, color.strColor));
+                    String.format(InvalidOnyxPositionException.DEFAULT_MSG, color.str));
             print(String.format(ERR, iOPEx.getMessage()));
         }
         
@@ -140,7 +140,7 @@ class Onyx {
         final boolean lose = ((ConnectionSearch) SEARCH.get(SEARCH_TYPE.CNX)).isWin(
                     c, color);
         print(lose ? 
-            String.format(LOSE, GraphicsConst.COLOR.getOposite(color.boolColor).strColor) : StringUtils.EMPTY);
+            String.format(LOSE, GraphicsConst.COLOR.getOposite(color.bool).str) : StringUtils.EMPTY);
         Onyx.gameEnd = lose;
         return lose;
     }

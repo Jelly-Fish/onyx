@@ -38,6 +38,7 @@ import com.jellyfish.jfgonyx.onyx.entities.OnyxPiece;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
 import com.jellyfish.jfgonyx.onyx.search.searchutils.OnyxPositionUtils;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -70,7 +71,8 @@ public class WinConnectionLinkSubroutine extends WinConnectionSubroutine {
                 if (search.isWin()) {
                     print(OnyxConst.POS_MAP.get(m.getPos().getKey()), WIN_MOVE);
                     this.c.getPositions().get(m.getPos().getKey()).setPiece(null);
-                    return new OnyxMove(m.getPos(), OnyxConst.SCORE.WIN_LINK.getValue());
+                    return new OnyxMove(m.getPos(), true, new ArrayList<OnyxPos>(), 
+                            OnyxConst.SCORE.WIN_LINK.getValue());
                 }
             }
             

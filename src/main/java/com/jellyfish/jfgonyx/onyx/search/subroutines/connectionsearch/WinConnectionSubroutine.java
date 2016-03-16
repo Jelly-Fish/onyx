@@ -66,8 +66,8 @@ public class WinConnectionSubroutine extends AbstractSubroutine {
         for (String k : p.connections) {
             tmp = c.getPosition(k);
             if (this.persue(tmp, kEx)) {
-                if ((this.color.boolColor && tmp.x > this.max - .1f) ||
-                    (!this.color.boolColor && tmp.y > this.max - .1f)) {
+                if ((this.color.bool && tmp.x > this.max - .1f) ||
+                    (!this.color.bool && tmp.y > this.max - .1f)) {
                     this.win = true;
                 }
                 this.checked.add(kEx);
@@ -78,7 +78,7 @@ public class WinConnectionSubroutine extends AbstractSubroutine {
     
     boolean persue(final OnyxPos p, final String kEx) {
         return p != null && !this.checked.contains(p.getKey()) && !p.getKey().equals(kEx) &&
-                p.isOccupied() && p.getPiece().color.bitColor == this.color.bitColor;
+                p.isOccupied() && p.getPiece().color.bit == this.color.bit;
     }
     
     @SuppressWarnings("empty-statement")
@@ -89,7 +89,7 @@ public class WinConnectionSubroutine extends AbstractSubroutine {
     }
    
     public boolean isWin() {
-        if (this.win) print(this.color.strColor.toUpperCase(), WIN);
+        if (this.win) print(this.color.str.toUpperCase(), WIN);
         return this.win;
     }
     

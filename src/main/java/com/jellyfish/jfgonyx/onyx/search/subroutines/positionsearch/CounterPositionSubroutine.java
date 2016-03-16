@@ -64,26 +64,29 @@ public class CounterPositionSubroutine extends AbstractSubroutine {
      * tail counter positions else NULL if no such position has been found.
      * @throws com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException
      */
-    public final OnyxMove getCounterPos(final OnyxPosCollection c, final OnyxBoard b, final GraphicsConst.COLOR color) 
+    public final OnyxMove getCounterPos(final OnyxPosCollection c, final OnyxBoard b, 
+            final GraphicsConst.COLOR color) 
             throws NoValidOnyxPositionsFoundException {
         
         final List<OnyxMove> candidates = new ArrayList<>();
-        candidates.add(this.lockCounterPos(c, b, color.bitColor));
-        candidates.add(this.strongCounterPos(c, b, GraphicsConst.COLOR.getOposite(color.boolColor)));
+        candidates.add(this.lockCounterPos(c, b, color.bit));
+        candidates.add(this.strongCounterPos(c, b, GraphicsConst.COLOR.getOposite(color.bool)));
         
         for (OnyxMove m : candidates) {
             if (m != null) this.move = 
                 (this.move == null || m.getScore() > this.move.getScore()) ? m : this.move;
         }
         
-        if (this.move != null) print(color.strColor, this.move.getPos().getKey(), 
-                String.valueOf(this.move.getScore()), BEST_CANDIDATE);
+        if (this.move != null && this.move.getPos() != null) {
+            print(color.str, this.move.getPos().getKey(), 
+                    String.valueOf(this.move.getScore()),BEST_CANDIDATE);
+        }
         
         return this.move;
     }
     
-    private OnyxMove strongCounterPos(final OnyxPosCollection c, final OnyxBoard b, final GraphicsConst.COLOR color) 
-            throws NoValidOnyxPositionsFoundException {
+    private OnyxMove strongCounterPos(final OnyxPosCollection c, final OnyxBoard b, 
+            final GraphicsConst.COLOR color) throws NoValidOnyxPositionsFoundException {
         
         final List<OnyxPos> pos = OnyxPositionUtils.trimByAllBorderPositionsByColor(
                 OnyxPositionUtils.getBorders(c, color), color);
@@ -101,7 +104,8 @@ public class CounterPositionSubroutine extends AbstractSubroutine {
         if (tmp == null) return null;
         
         for (OnyxMove m : cnx) {
-            if (m != null && !sTt.contains(m.getPos().getKey()) && m.getScore() >= tmp.getScore()) {
+            if (m != null && m.getPos() != null && !sTt.contains(m.getPos().getKey()) && 
+                    m.getScore() >= tmp.getScore()) {
                 tmp = m;
             }
         }
@@ -121,9 +125,9 @@ public class CounterPositionSubroutine extends AbstractSubroutine {
             for (String k : d.getCornerKeys()) {
                 pos = c.getPosition(k);
                 if (pos.isOccupied()) {
-                    if (pos.getPiece().color.bitColor == bitColor) {
+                    if (pos.getPiece().color.bit == bitColor) {
                         ++i;
-                    } else if (pos.getPiece().color.bitColor != bitColor) {
+                    } else if (pos.getPiece().color.bit != bitColor) {
                         ++j;
                     }
                 } else {

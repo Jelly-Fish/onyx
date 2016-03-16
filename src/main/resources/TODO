@@ -21,4 +21,10 @@ Take move output not working (no * OR **).
 1- TEST playing whites.
 2- improve color display.
 3- improve CNX searching.
-4- !!! search win link position and OVERRIDE !important
+4- [!!! search win link position and OVERRIDE !important DONE]
+--------------------------------------------------------------------------------
+16-03-2016 :
+1- Win link counter search overrides takes moves : TODO : if counter win link ==
+take move in conection search then override take move (else take is not performed.
+2- Win link does not work if high border max is the link position (if for blacks
+win link == 12/L column and board is 12x12). 

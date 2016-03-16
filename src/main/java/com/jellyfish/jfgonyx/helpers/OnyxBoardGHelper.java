@@ -182,7 +182,7 @@ public class OnyxBoardGHelper {
 
         OnyxBoardGHelper.translate(g, p);
 
-        g.setColor(piece.color.boolColor
+        g.setColor(piece.color.bool
                 ? GraphicsConst.BLACK_OUTLINE : GraphicsConst.WHITE_OUTLINE);
         g.drawOval(p.gX - 15, p.gY - 15, 30, 30);
         g.setColor(piece.color.color);

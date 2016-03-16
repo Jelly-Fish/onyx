@@ -66,7 +66,7 @@ public class AttackPositionSubroutine extends AbstractSubroutine {
             keys = d.getCornerKeys();
             for (int i = 0; i < keys.length; ++i) {
                 tmp = c.getPosition(keys[i]);
-                iPos[i] = tmp.isOccupied() && tmp.getPiece().color.bitColor != bitColor ? 
+                iPos[i] = tmp.isOccupied() && tmp.getPiece().color.bit != bitColor ? 
                         1 : 0;
             }
             

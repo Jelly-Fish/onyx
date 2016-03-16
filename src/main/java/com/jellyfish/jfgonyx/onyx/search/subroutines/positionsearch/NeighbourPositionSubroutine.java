@@ -65,7 +65,7 @@ public class NeighbourPositionSubroutine extends AbstractSubroutine {
             count = 0;
             for (String k : d.getCornerKeys()) {
                 pos = c.getPosition(k);
-                if (pos.isOccupied() && pos.getPiece().color.bitColor == bitColor) ++count;
+                if (pos.isOccupied() && pos.getPiece().color.bit == bitColor) ++count;
                 else key = k;
             }
             

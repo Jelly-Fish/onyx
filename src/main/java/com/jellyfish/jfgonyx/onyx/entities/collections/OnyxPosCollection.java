@@ -136,7 +136,7 @@ public class OnyxPosCollection {
                 if (!key.equals(keys[index]) && board.getPosCollection().positions.containsKey(keys[index])) {
 
                     if (board.getPosCollection().getPosition(keys[index]).isOccupied() &&
-                        board.getPosCollection().getPosition(keys[index]).getPiece().color.bitColor != bitColor) {
+                        board.getPosCollection().getPosition(keys[index]).getPiece().color.bit != bitColor) {
                         if (i == 1) {
                             if (lI == 0 && index == 2) ++i;
                             if (lI == 1 && index == 3) ++i;
@@ -145,7 +145,7 @@ public class OnyxPosCollection {
                             lI = index;
                         }
                     } else if (board.getPosCollection().getPosition(keys[index]).isOccupied() &&
-                        board.getPosCollection().getPosition(keys[index]).getPiece().color.bitColor == bitColor) {
+                        board.getPosCollection().getPosition(keys[index]).getPiece().color.bit == bitColor) {
                         ++j;
                     }
                 }
@@ -156,7 +156,7 @@ public class OnyxPosCollection {
                     if (board.getPosCollection().positions.containsKey(k) &&
                             !key.equals(k) && 
                             board.getPosCollection().positions.get(k).isOccupied() &&
-                            board.getPosCollection().positions.get(k).getPiece().color.bitColor != bitColor) {
+                            board.getPosCollection().positions.get(k).getPiece().color.bit != bitColor) {
                         captured.add(board.getPosCollection().getPosition(k));
                     }
                 }
@@ -191,7 +191,7 @@ public class OnyxPosCollection {
                 if (!key.equals(keys[index]) && board.getPosCollection().positions.containsKey(keys[index])) {
 
                     if (board.getPosCollection().getPosition(keys[index]).isOccupied() &&
-                        board.getPosCollection().getPosition(keys[index]).getPiece().color.bitColor != bitColor) {
+                        board.getPosCollection().getPosition(keys[index]).getPiece().color.bit != bitColor) {
                         if (i == 1) {
                             if ((lI == 0 && index == 2) || (lI == 1 && index == 3)) {
                                 ++i;
@@ -203,7 +203,7 @@ public class OnyxPosCollection {
                             posSet.add(board.getPosCollection().getPosition(keys[index]));
                         }
                     } else if (board.getPosCollection().getPosition(keys[index]).isOccupied() &&
-                        board.getPosCollection().getPosition(keys[index]).getPiece().color.bitColor == bitColor) {
+                        board.getPosCollection().getPosition(keys[index]).getPiece().color.bit == bitColor) {
                         ++j;
                     }
                 }
@@ -225,7 +225,7 @@ public class OnyxPosCollection {
         
         int n = 0;
         for (OnyxPos p : this.positions.values()) {
-            n = p.isOccupied() && p.getPiece().color.bitColor == GraphicsConst.COLOR.BLACK.bitColor ?
+            n = p.isOccupied() && p.getPiece().color.bit == GraphicsConst.COLOR.BLACK.bit ?
                     ++n : n;
         }
         
@@ -236,7 +236,7 @@ public class OnyxPosCollection {
         
         int n = 0;
         for (OnyxPos p : this.positions.values()) {
-            n = p.isOccupied() && p.getPiece().color.bitColor == GraphicsConst.COLOR.WHITE.bitColor ?
+            n = p.isOccupied() && p.getPiece().color.bit == GraphicsConst.COLOR.WHITE.bit ?
                     ++n : n;
         }
         

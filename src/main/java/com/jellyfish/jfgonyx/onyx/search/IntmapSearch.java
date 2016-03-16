@@ -70,7 +70,7 @@ public class IntmapSearch extends AbstractOnyxSearch implements OnyxRandomSeacha
     public boolean isWin(final Intmap imap, final GraphicsConst.COLOR c) {
         
         final int[][] mtx = imap.getMtx_intmap();
-        final List<Point> bounds = this.getStartIndexes(mtx, c.bitColor);
+        final List<Point> bounds = this.getStartIndexes(mtx, c.bit);
         return false;
     }
     

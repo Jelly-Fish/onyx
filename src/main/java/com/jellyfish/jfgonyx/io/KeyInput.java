@@ -68,7 +68,7 @@ public class KeyInput implements KeyListener {
         if (OnyxGame.getInstance().isGameEnd()) return;
         
         final GraphicsConst.COLOR c = this.board.getPosCollection().getVirtualPiece().color;
-        OnyxGame.getInstance().initMove(GraphicsConst.COLOR.getOposite(c.boolColor));
+        OnyxGame.getInstance().initMove(GraphicsConst.COLOR.getOposite(c.bool));
 
         try {
             if (this.ops.get(KeyInput.EVENT.VIRTUAL_P_MOVE).exec(e, this.board)) {

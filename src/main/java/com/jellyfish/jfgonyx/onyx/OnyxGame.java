@@ -146,7 +146,7 @@ public class OnyxGame {
         if (this.isGameEnd() || Onyx.isLose(c, this.colorToPlay)) return;
         final OnyxMove m = Onyx.getNewVirtual(c, board, this.colorToPlay);
         c.getPosition(m.getPos().getKey()).setVirtualPiece(
-            new OnyxVirtualPiece(GraphicsConst.COLOR.getVirtualOposite(this.colorToPlay.boolColor))
+            new OnyxVirtualPiece(GraphicsConst.COLOR.getVirtualOposite(this.colorToPlay.bool))
         );
     }
             
@@ -162,7 +162,7 @@ public class OnyxGame {
         
         if (this.colorToPlay == null) throw new OnyxGameSyncException();
         if (!this.requestInitialized) throw new OnyxGameSyncException(
-                String.format(OnyxGameSyncException.WRONG_TURN_MSG, this.colorToPlay.strColor));
+                String.format(OnyxGameSyncException.WRONG_TURN_MSG, this.colorToPlay.str));
     }
     
     public boolean isGameEnd() {

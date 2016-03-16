@@ -35,6 +35,7 @@ import com.jellyfish.jfgonyx.onyx.search.subroutines.positionsearch.NeighbourPos
 import com.jellyfish.jfgonyx.onyx.search.subroutines.positionsearch.CounterPositionSubroutine;
 import com.jellyfish.jfgonyx.onyx.search.subroutines.positionsearch.TakePositionSubroutine;
 import com.jellyfish.jfgonyx.constants.GraphicsConst;
+import com.jellyfish.jfgonyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.abstractions.AbstractOnyxSearch;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
@@ -42,6 +43,7 @@ import com.jellyfish.jfgonyx.onyx.interfaces.search.OnyxPositionSearchable;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException;
+import com.jellyfish.jfgonyx.onyx.search.subroutines.connectionsearch.WinConnectionLinkSubroutine;
 import com.jellyfish.jfgonyx.onyx.search.subroutines.positionsearch.AttackPositionSubroutine;
 import com.jellyfish.jfgonyx.onyx.search.subroutines.positionsearch.CenterPositionSubroutine;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
@@ -75,13 +77,13 @@ public class PositionSearch extends AbstractOnyxSearch implements OnyxPositionSe
         
         try {
             
-            final OnyxMove capture = new TakePositionSubroutine().getTakePos(c, board, color.bitColor);
+            final OnyxMove capture = new TakePositionSubroutine().getTakePos(c, board, color.bit);
             moves.add(capture);
             moves.add(new CounterPositionSubroutine().getCounterPos(c, board, color));
-            moves.add(new NeighbourPositionSubroutine().getNeighbourPos(c, board, color.bitColor));
-            moves.add(new AttackPositionSubroutine().getAttackPos(c, board, color.bitColor));
+            moves.add(new NeighbourPositionSubroutine().getNeighbourPos(c, board, color.bit));
+            moves.add(new AttackPositionSubroutine().getAttackPos(c, board, color.bit));
             moves.add(new CenterPositionSubroutine().getCenterPos(c, board.getDiamondCollection()));
-            
+                        
             OnyxMove tmp = null;
             for (OnyxMove m : moves) {
                 if (m == null) continue;
@@ -90,7 +92,7 @@ public class PositionSearch extends AbstractOnyxSearch implements OnyxPositionSe
             }
             
             if (tmp == null) throw new NoValidOnyxPositionsFoundException();
-            if (capture != null) posSet = c.getTakePositions(capture.getPos().getKey(), color.bitColor, board);
+            if (capture != null) posSet = c.getTakePositions(capture.getPos().getKey(), color.bit, board);
             if (c.getPosition(tmp.getPos().getKey()).isOccupied()) throw new NoValidOnyxPositionsFoundException();
             
             if (tmp.isCapture()) return new OnyxMove(tmp.getPos(), tmp.getPiece(), posSet, tmp.getScore());

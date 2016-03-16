@@ -101,7 +101,7 @@ public class TailConnectionSubroutine extends AbstractSubroutine {
         for (String k : p.connections) {
             if (!k.equals(kEx)) {
                 tmp = c.getPosition(k);
-                if (tmp.isOccupied() && tmp.getPiece().color.bitColor == this.color.bitColor 
+                if (tmp.isOccupied() && tmp.getPiece().color.bit == this.color.bit 
                         && !this.checked.contains(tmp.getKey())) {
                     this.findTailPos(c.getPosition(k), k);
                 }
@@ -126,18 +126,18 @@ public class TailConnectionSubroutine extends AbstractSubroutine {
                  * will be overrided by weaker move.
                  */
                 tmp = pos;
-                if (this.color.boolColor) {
+                if (this.color.bool) {
                     if (this.startPos.isLowXBorder()) score = tmp.x;
                     else if (this.startPos.isHighXBorder()) score = boardLength - tmp.x;
                 }
                 
-                if (!this.color.boolColor) {
+                if (!this.color.bool) {
                     if (this.startPos.isLowYBorder()) score = tmp.y;
                     else if (this.startPos.isHighYBorder()) score = boardLength - tmp.y;
                 }
             } 
 
-            if (this.color.boolColor) {
+            if (this.color.bool) {
                 if (this.startPos.isLowXBorder() && pos.x > tmp.x) {
                     score = pos.x;
                     tmp = pos;
@@ -147,7 +147,7 @@ public class TailConnectionSubroutine extends AbstractSubroutine {
                 }
             }
 
-            if (!this.color.boolColor) {
+            if (!this.color.bool) {
                 if (this.startPos.isLowYBorder() && pos.y > tmp.y) {
                     score = pos.y;
                     tmp = pos;

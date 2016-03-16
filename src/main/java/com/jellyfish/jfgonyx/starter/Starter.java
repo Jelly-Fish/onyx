@@ -81,7 +81,7 @@ public class Starter {
     
     private static void start(final GraphicsConst.COLOR color) {
         
-        if (color.boolColor) {
+        if (color.bool) {
             startBlack();
         } else {
             startWhite();
@@ -102,7 +102,7 @@ public class Starter {
         panel.init();
         mainFrame = new MainFrame(panel, board);
         MainFrame.print(String.format(NEW_GAME, LogHelper.getDTFullStamp(), 
-                GraphicsConst.COLOR.WHITE.strColor), HTMLDisplayHelper.GOLD);
+                GraphicsConst.COLOR.WHITE.str), HTMLDisplayHelper.GOLD);
         board.setObserver(mainFrame);
         OnyxGame.getInstance().init((OnyxBoardI) board, GraphicsConst.COLOR.BLACK);
         OnyxGame.getInstance().initMove(GraphicsConst.COLOR.BLACK);
@@ -131,7 +131,7 @@ public class Starter {
         panel.init();
         mainFrame = new MainFrame(panel, board);
         MainFrame.print(String.format(NEW_GAME, LogHelper.getDTFullStamp(), 
-                GraphicsConst.COLOR.BLACK.strColor), HTMLDisplayHelper.GOLD);
+                GraphicsConst.COLOR.BLACK.str), HTMLDisplayHelper.GOLD);
         board.setObserver(mainFrame);
         OnyxGame.getInstance().init((OnyxBoardI) board, GraphicsConst.COLOR.WHITE);
         new Intmap(positions).print(0, OnyxGame.getInstance().dtStamp);
@@ -157,7 +157,7 @@ public class Starter {
         new Intmap(OnyxGame.getInstance().boardInterface.getPosCollection()
             ).print(0, OnyxGame.getInstance().dtStamp);
         MainFrame.print(String.format(RESTART_GAME, LogHelper.getDTFullStamp(), 
-                GraphicsConst.COLOR.WHITE.strColor), HTMLDisplayHelper.GOLD);
+                GraphicsConst.COLOR.WHITE.str), HTMLDisplayHelper.GOLD);
         OnyxGame.getInstance().boardInterface.notifyMoves(OnyxGame.getInstance().moves, 
                 HTMLDisplayHelper.GAINSBORO);
         OnyxGame.getInstance().initialized = true;
@@ -188,7 +188,7 @@ public class Starter {
         new Intmap(OnyxGame.getInstance().boardInterface.getPosCollection()
             ).print(0, OnyxGame.getInstance().dtStamp);
         MainFrame.print(String.format(RESTART_GAME, LogHelper.getDTFullStamp(), 
-                GraphicsConst.COLOR.BLACK.strColor), HTMLDisplayHelper.GOLD);
+                GraphicsConst.COLOR.BLACK.str), HTMLDisplayHelper.GOLD);
         OnyxGame.getInstance().boardInterface.notifyMoves(OnyxGame.getInstance().moves, 
                 HTMLDisplayHelper.GAINSBORO);
         OnyxGame.getInstance().initialized = true;

@@ -194,7 +194,7 @@ public class MainFrame extends javax.swing.JFrame implements OnyxObserver {
 
     private void restartGameMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_restartGameMenuItemActionPerformed
         if (OnyxGame.getInstance().initialized) {
-            if (OnyxGame.getInstance().engineColor.boolColor) {
+            if (OnyxGame.getInstance().engineColor.bool) {
                 Starter.restartBlack();
             } else {
                 Starter.restartWhite();
@@ -275,13 +275,6 @@ public class MainFrame extends javax.swing.JFrame implements OnyxObserver {
     public final void notifyMove(final OnyxMove m, final String color) {
         
         this.move_labels.add(m.toString());
-        /**
-         * FIXME : UI must have control on full raw or HTML output.
-         *
-        this.dataTextPane.setText(StringUtils.EMPTY); 
-        MainFrameGHelper.appendHTMLData(this.move_labels, this.board.getPosCollection(), 
-                this.htmlEditorKit, this.doc);
-         */
         MainFrameGHelper.appendRawData(LogHelper.getDTFullStamp() + 
                 StringUtils.SPACE + m.toString(), htmlEditorKit, doc, color);
     }

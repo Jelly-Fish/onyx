@@ -44,39 +44,47 @@ public class OnyxMove {
     private final OnyxPiece piece;
     private final List<OnyxPos> captured;
     private final boolean win;
+    private final boolean counterWin;
+
     private float score;
 
     public OnyxMove(final OnyxPos pos, final OnyxPiece piece, final List<OnyxPos> captured, 
-            final boolean win, final float score) {
+            final boolean win, final boolean counterWin, final float score) {
         this.pos = pos;
         this.piece = piece;
         this.win = win;
         this.captured = captured;
         this.score = score;
+        this.counterWin = counterWin;
     }
     
     public OnyxMove(final boolean win) {
-        this(null, null, null, win, win ? OnyxConst.SCORE.WIN.getValue() : 0f);
+        this(null, null, null, win, false, win ? OnyxConst.SCORE.WIN.getValue() : 0f);
     }
     
     public OnyxMove(final OnyxPos pos) {
-        this(pos, null, null, false, 0);
+        this(pos, null, null, false, false, 0);
     }
     
     public OnyxMove(final OnyxPos pos, final OnyxPiece piece) {
-        this(pos, piece, null, false, 0);
+        this(pos, piece, null, false, false, 0);
     }
     
     public OnyxMove(final OnyxPos pos, final float score) {
-        this(pos, null, null, false, score);
+        this(pos, null, null, false, false, score);
+    }
+    
+    public OnyxMove(final OnyxPos pos, final boolean counterWin, final List<OnyxPos> captured, 
+            final float score) {
+        this(pos, null, captured, false, false, score);
     }
     
     public OnyxMove(final OnyxPos pos, final OnyxPiece piece, final float score) {
-        this(pos, piece, null, false, score);
+        this(pos, piece, null, false, false, score);
     }
     
     public OnyxMove(final OnyxPos pos, final OnyxPiece piece, final List<OnyxPos> captured, final float score) {
-        this(pos, piece, captured, false, score);
+        this(pos, piece, captured, false, false, score);
     }
     
     public boolean isCapture() {
@@ -107,6 +115,10 @@ public class OnyxMove {
     
     public boolean isWin() {
         return win;
+    }
+    
+    public boolean isCounterWinLink() {
+        return counterWin;
     }
     
     public float getScore() {

@@ -63,15 +63,15 @@ public class GraphicsConst {
         VIRTUAL_WHITE("virtual white", new Color(1f,1f,1f,.8f), false, 0), 
         VIRTUAL_BLACK("virtual black", new Color(0f,0f,0f,.8f), true, 1);
         
-        public final String strColor;
-        public final Boolean boolColor;
-        public final int bitColor;
+        public final String str;
+        public final Boolean bool;
+        public final int bit;
         public final Color color;
         
-        COLOR(final String strColor, final Color color, final Boolean bColor, final int bitColor) {
-            this.strColor = strColor;
-            this.boolColor = bColor;
-            this.bitColor = bitColor;
+        COLOR(final String str, final Color color, final Boolean bool, final int bit) {
+            this.str = str;
+            this.bool = bool;
+            this.bit = bit;
             this.color = color;
         }
         

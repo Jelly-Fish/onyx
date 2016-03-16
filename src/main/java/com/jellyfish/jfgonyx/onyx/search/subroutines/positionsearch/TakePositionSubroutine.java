@@ -78,29 +78,29 @@ public class TakePositionSubroutine extends AbstractSubroutine {
             
             if (c.getPosition(positions[0].getKey()).isOccupied() && 
                     c.getPosition(positions[2].getKey()).isOccupied() &&
-                    c.getPosition(positions[0].getKey()).getPiece().color.bitColor != bitColor && 
-                    c.getPosition(positions[2].getKey()).getPiece().color.bitColor != bitColor) { 
+                    c.getPosition(positions[0].getKey()).getPiece().color.bit != bitColor && 
+                    c.getPosition(positions[2].getKey()).getPiece().color.bit != bitColor) { 
                 
                 if (c.getPosition(positions[3].getKey()).isOccupied() && 
-                        c.getPosition(positions[3].getKey()).getPiece().color.bitColor == bitColor &&
+                        c.getPosition(positions[3].getKey()).getPiece().color.bit == bitColor &&
                         !c.getPosition(positions[1].getKey()).isOccupied()) {
                     posSet.add(positions[1]);
                 } else if (c.getPosition(positions[1].getKey()).isOccupied() && 
-                        c.getPosition(positions[1].getKey()).getPiece().color.bitColor == bitColor &&
+                        c.getPosition(positions[1].getKey()).getPiece().color.bit == bitColor &&
                         !c.getPosition(positions[3].getKey()).isOccupied()) {
                     posSet.add(c.getPosition(positions[3].getKey()));
                 }
             } else if (c.getPosition(positions[1].getKey()).isOccupied() && 
                     c.getPosition(positions[3].getKey()).isOccupied() &&
-                    c.getPosition(positions[1].getKey()).getPiece().color.bitColor != bitColor && 
-                    c.getPosition(positions[3].getKey()).getPiece().color.bitColor != bitColor) {
+                    c.getPosition(positions[1].getKey()).getPiece().color.bit != bitColor && 
+                    c.getPosition(positions[3].getKey()).getPiece().color.bit != bitColor) {
                 
                 if (c.getPosition(positions[2].getKey()).isOccupied() && 
-                    c.getPosition(positions[2].getKey()).getPiece().color.bitColor == bitColor &&
+                    c.getPosition(positions[2].getKey()).getPiece().color.bit == bitColor &&
                         !c.getPosition(positions[0].getKey()).isOccupied()) {
                     posSet.add(c.getPosition(positions[0].getKey()));
                 } else if (c.getPosition(positions[0].getKey()).isOccupied() && 
-                        c.getPosition(positions[0].getKey()).getPiece().color.bitColor == bitColor &&
+                        c.getPosition(positions[0].getKey()).getPiece().color.bit == bitColor &&
                         !c.getPosition(positions[2].getKey()).isOccupied()) {
                     posSet.add(c.getPosition(positions[2].getKey()));
                 }

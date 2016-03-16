@@ -47,14 +47,14 @@ public class OnyxPositionUtils {
     public static List<OnyxPos> getBorders(final OnyxPosCollection c, final GraphicsConst.COLOR color) {
         
         final List<OnyxPos> borders = new ArrayList<>();
-        if (color.boolColor) {
+        if (color.bool) {
             for (int i = 1; i <= OnyxConst.BOARD_SIDE_SQUARE_COUNT + 1; ++i) {
                 borders.add(c.getPosition(
                     String.format(OnyxPosCollection.KEY_FORMAT, 1f, (float) i)));
                 borders.add(c.getPosition(
                     String.format(OnyxPosCollection.KEY_FORMAT, 12f, (float) i)));
             }
-        } else if (!color.boolColor) {
+        } else if (!color.bool) {
             for (int i = 1; i <= OnyxConst.BOARD_SIDE_SQUARE_COUNT + 1; ++i) {
                 borders.add(c.getPosition(
                     String.format(OnyxPosCollection.KEY_FORMAT, (float) i, 1f)));
@@ -69,10 +69,10 @@ public class OnyxPositionUtils {
         
         final List<OnyxPos> positions = new ArrayList<>();
         for (OnyxPos p : pos) {
-            if (p.isOccupied() && p.getPiece().color.bitColor == color.bitColor) {
-                if (color.boolColor && ((int) p.x) == 1) { // Black position.
+            if (p.isOccupied() && p.getPiece().color.bit == color.bit) {
+                if (color.bool && ((int) p.x) == 1) { // Black position.
                     positions.add(p);
-                } else if (!color.boolColor && ((int) p.y) == 1) { // Else white position.
+                } else if (!color.bool && ((int) p.y) == 1) { // Else white position.
                     positions.add(p);
                 }
             }
@@ -85,12 +85,12 @@ public class OnyxPositionUtils {
         
         final List<OnyxPos> positions = new ArrayList<>();
         for (OnyxPos p : pos) {
-            if (p.isOccupied() && p.getPiece().color.bitColor == color.bitColor) {
-                if (color.boolColor) {
+            if (p.isOccupied() && p.getPiece().color.bit == color.bit) {
+                if (color.bool) {
                     if (p.x < 1.1f || p.x > ((float) (OnyxConst.BOARD_SIDE_SQUARE_COUNT + 1)) - .1F) {
                         positions.add(p);
                     }
-                } else if (!color.boolColor) {
+                } else if (!color.bool) {
                     if (p.y < 1.1f || p.y > ((float) (OnyxConst.BOARD_SIDE_SQUARE_COUNT + 1)) - .1f) {
                         positions.add(p);
                     }
