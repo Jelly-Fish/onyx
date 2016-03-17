@@ -102,10 +102,8 @@ class Onyx {
             Onyx.gameEnd = win || lose;
                         
             // Do printing debug stuff...
-            print(OnyxGame.getInstance().getMoveCount() % 2 != 0 ? 
-                String.format(POSCOL_SEARCH_FORMAT,
-                    OnyxConst.POS_MAP.get(mPOSCOL.getPos().getKey()), mPOSCOL.getScore()) :
-                    StringUtils.EMPTY);
+            print(String.format(POSCOL_SEARCH_FORMAT,
+                    OnyxConst.POS_MAP.get(mPOSCOL.getPos().getKey()), mPOSCOL.getScore()));
             print(String.format(CNX_SEARCH_FORMAT,
                 OnyxConst.POS_MAP.get(mCNX.getPos().getKey()), mCNX.getScore()));
             print(win ? 

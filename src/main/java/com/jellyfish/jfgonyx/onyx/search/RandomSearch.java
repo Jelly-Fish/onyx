@@ -33,6 +33,7 @@ package com.jellyfish.jfgonyx.onyx.search;
 
 import com.jellyfish.jfgonyx.onyx.interfaces.search.OnyxRandomSeachable;
 import com.jellyfish.jfgonyx.constants.GraphicsConst;
+import com.jellyfish.jfgonyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.abstractions.AbstractOnyxSearch;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
@@ -53,7 +54,7 @@ public class RandomSearch extends AbstractOnyxSearch implements OnyxRandomSeacha
         
         for (OnyxPos p : c.getPositions().values()) {
             if (!p.isOccupied() && !p.isDiamondCenter()) {
-                return new OnyxMove(p);
+                return new OnyxMove(p, OnyxConst.SCORE.RANDOM.getValue());
             }
         }
         

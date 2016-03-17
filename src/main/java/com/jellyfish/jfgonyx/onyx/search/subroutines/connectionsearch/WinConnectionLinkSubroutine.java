@@ -71,8 +71,7 @@ public class WinConnectionLinkSubroutine extends WinConnectionSubroutine {
                 if (search.isWin()) {
                     print(OnyxConst.POS_MAP.get(m.getPos().getKey()), WIN_MOVE);
                     this.c.getPositions().get(m.getPos().getKey()).setPiece(null);
-                    return new OnyxMove(m.getPos(), true, new ArrayList<OnyxPos>(), 
-                            OnyxConst.SCORE.WIN_LINK.getValue());
+                    return new OnyxMove(m.getPos(), OnyxConst.SCORE.WIN_LINK.getValue());
                 }
             }
             

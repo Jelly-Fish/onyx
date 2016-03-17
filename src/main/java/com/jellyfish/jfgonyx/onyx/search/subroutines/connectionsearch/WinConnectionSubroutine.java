@@ -48,7 +48,7 @@ public class WinConnectionSubroutine extends AbstractSubroutine {
     private final static String WIN_CANDIDATE = "Win search %s @ %s | iteration %s";
     protected final OnyxPosCollection c;
     protected final GraphicsConst.COLOR color;
-    protected final float max = OnyxConst.BOARD_SIDE_SQUARE_COUNT + 1;
+    protected final float max = OnyxConst.BOARD_SIDE_SQUARE_COUNT + 1f;
     protected final Set<String> checked = new HashSet<>();
     protected boolean win = false;
     protected int iteration = -1;

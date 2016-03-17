@@ -155,10 +155,15 @@ public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnecti
         List<OnyxPos> posSet = null;
         final GraphicsConst.COLOR opColor = GraphicsConst.COLOR.getOposite(color.bool);
         final OnyxMove m = new WinConnectionLinkSubroutine(c, opColor).connectionLink(this.cnxPos);
-        if (m != null) m.setScore(OnyxConst.SCORE.COUNTER_WIN_LINK.getValue());
-        final OnyxMove capture = new TakePositionSubroutine().getTakePos(c, board, opColor.bit);
+        final OnyxMove capture = new TakePositionSubroutine().getTakePos(c, board, color.bit);
+        
         if (capture != null) posSet = c.getTakePositions(capture.getPos().getKey(), color.bit, board);
-        if (posSet != null && m != null) m.getCaptured().addAll(posSet);
+        
+        if (capture != null && posSet != null && m != null && m.getPos().equals(capture.getPos())) {
+            m.setScore(OnyxConst.SCORE.COUNTER_WIN_LINK.getValue());
+            m.getCaptured().clear();
+            m.getCaptured().addAll(posSet);
+        }
 
         return m;
     }

@@ -152,7 +152,6 @@ public class Starter {
         final OnyxBoardI board = OnyxGame.getInstance().boardInterface;
         OnyxGame.newInstance().moves.clear();
         OnyxGame.getInstance().init(board, GraphicsConst.COLOR.BLACK);
-        OnyxGame.getInstance().initMove(GraphicsConst.COLOR.BLACK);
         OnyxGame.getInstance().boardInterface.initStartLayout();
         new Intmap(OnyxGame.getInstance().boardInterface.getPosCollection()
             ).print(0, OnyxGame.getInstance().dtStamp);
@@ -161,8 +160,9 @@ public class Starter {
         OnyxGame.getInstance().boardInterface.notifyMoves(OnyxGame.getInstance().moves, 
                 HTMLDisplayHelper.GAINSBORO);
         OnyxGame.getInstance().initialized = true;
-        
+                
         try {
+            OnyxGame.getInstance().initMove(GraphicsConst.COLOR.BLACK);
             OnyxGame.getInstance().performMove(OnyxGame.getInstance().boardInterface.getPosCollection(), 
                     (OnyxBoard) OnyxGame.getInstance().boardInterface);
         } catch (OnyxGameSyncException | NoValidOnyxPositionsFoundException | InvalidOnyxPositionException ex) {
