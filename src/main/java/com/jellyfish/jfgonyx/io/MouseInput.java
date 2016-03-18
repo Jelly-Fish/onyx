@@ -92,7 +92,12 @@ public class MouseInput implements MouseListener, MouseMotionListener {
     }
     
     @Override
-    public void mouseClicked(MouseEvent e) { }
+    public void mouseClicked(MouseEvent e) { 
+        /**
+         * FIXME : use mouse to append moves ?
+         * System.out.println("M click x:" + e.getX() + " M click y:" + e.getY());
+         */
+    }
 
     @Override
     public void mouseEntered(MouseEvent e) { }

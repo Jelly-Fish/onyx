@@ -63,5 +63,7 @@ public interface OnyxBoardI {
     void notifyMoves(final HashMap<Integer, OnyxMove> moves, final String color);
     
     void focus();
+
+    void restart();
     
 }

@@ -61,6 +61,14 @@ public class OnyxPosCollection {
         OnyxConnectionHelper.print(this);
     }
     
+    public void clearPieces() {
+        for (OnyxPos p : this.positions.values()) {
+            p.setPiece(null);
+            if (p.isVirtuallyOccupied()) p.getVirtualPiece().setTmpOnyxPosition(null);
+            p.setVirtualPiece(null);
+        }
+    }
+    
     private void initPositionCollection(final OnyxDiamondCollection c) {
         
         String k = null;

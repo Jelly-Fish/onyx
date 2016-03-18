@@ -89,6 +89,11 @@ public class OnyxBoard extends javax.swing.JPanel implements OnyxBoardI {
     }
     
     @Override
+    public void restart() {
+        this.positions.clearPieces();
+    }
+    
+    @Override
     public void initStartLayout() {
         
         for (OnyxPos p : this.positions.getPositions().values()) p.setPiece(null);

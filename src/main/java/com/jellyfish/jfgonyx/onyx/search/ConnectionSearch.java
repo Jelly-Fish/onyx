@@ -145,17 +145,20 @@ public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnecti
      */
     private OnyxMove searchCounterWinLink(final OnyxPosCollection c, final OnyxBoard board, 
             final GraphicsConst.COLOR color) throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {   
-        
-        /**
-         * FIXME : test override of win link move by take move if positions
-         * are equal - here, if counter win link & take, then take must 
-         * override counter win link and be applied.
-         */
-        
+
         List<OnyxPos> posSet = null;
         final GraphicsConst.COLOR opColor = GraphicsConst.COLOR.getOposite(color.bool);
         final OnyxMove m = new WinConnectionLinkSubroutine(c, opColor).connectionLink(this.cnxPos);
         final OnyxMove capture = new TakePositionSubroutine().getTakePos(c, board, color.bit);
+        
+        if (m != null) {
+            System.out.println("counter win link pos : " + OnyxConst.POS_MAP.get(m.getPos().getKey()));
+        }
+        
+        if (capture != null) {
+            System.out.println("counter win link pos capture pos : " + 
+                    OnyxConst.POS_MAP.get(capture.getPos().getKey()));
+        }
         
         if (capture != null) posSet = c.getTakePositions(capture.getPos().getKey(), color.bit, board);
         
