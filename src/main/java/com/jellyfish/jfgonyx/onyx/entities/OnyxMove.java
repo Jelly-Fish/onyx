@@ -42,7 +42,7 @@ public class OnyxMove {
     
     private final OnyxPos pos;
     private final OnyxPiece piece;
-    private final List<OnyxPos> captured;
+    private List<OnyxPos> captured;
     private final boolean win;
 
     private float score;
@@ -88,6 +88,10 @@ public class OnyxMove {
         return this.captured != null && this.captured.size() > 0;
     }
     
+    public boolean hasPosition() {
+        return !(this.pos == null);
+    }
+    
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
@@ -100,6 +104,10 @@ public class OnyxMove {
     
     public List<OnyxPos> getCaptured() {
         return captured;
+    }
+    
+    public void setCaptured(List<OnyxPos> captured) {
+        this.captured = captured;
     }
 
     public OnyxPos getPos() {

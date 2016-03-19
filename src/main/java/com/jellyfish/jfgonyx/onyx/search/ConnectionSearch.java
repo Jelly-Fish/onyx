@@ -67,9 +67,9 @@ public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnecti
         
         this.cnxPos.clear();
         final OnyxMove[] cnxMoves = new OnyxMove[3];
-        cnxMoves[0] = getTailMove(c, board, color);
-        cnxMoves[1] = searchWinMove(c, color);
-        cnxMoves[2] = searchCounterWinLink(c, board, color);
+        cnxMoves[0] = this.getTailMove(c, board, color);
+        cnxMoves[1] = this.searchWinMove(c, color);
+        cnxMoves[2] = this.searchCounterWinLink(c, board, color);
         
         OnyxMove tmp = null;
         for (OnyxMove m : cnxMoves) {
@@ -89,7 +89,7 @@ public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnecti
         
         WinConnectionSubroutine search = null;
         for (OnyxPos p : borders) {
-            search = new WinConnectionSubroutine(c, color);
+            search = new WinConnectionSubroutine(c, color, true);
             search.connection(p, p.getKey());
             if (search.isWin()) {
                 return true;
@@ -146,29 +146,30 @@ public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnecti
     private OnyxMove searchCounterWinLink(final OnyxPosCollection c, final OnyxBoard board, 
             final GraphicsConst.COLOR color) throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {   
 
+        int count = 0;
         List<OnyxPos> posSet = null;
+        final List<OnyxMove> moves = new ArrayList<>();
+        OnyxMove move = null;
+        
         final GraphicsConst.COLOR opColor = GraphicsConst.COLOR.getOposite(color.bool);
-        final OnyxMove m = new WinConnectionLinkSubroutine(c, opColor).connectionLink(this.cnxPos);
-        final OnyxMove capture = new TakePositionSubroutine().getTakePos(c, board, color.bit);
+        moves.add(this.getTailMove(c, board, opColor));
+        moves.add(this.searchWinMove(c, opColor));
+        for (OnyxMove m : moves) count = m == null ? count : ++count;
         
-        if (m != null) {
-            System.out.println("counter win link pos : " + OnyxConst.POS_MAP.get(m.getPos().getKey()));
-        }
-        
-        if (capture != null) {
-            System.out.println("counter win link pos capture pos : " + 
-                    OnyxConst.POS_MAP.get(capture.getPos().getKey()));
-        }
-        
-        if (capture != null) posSet = c.getTakePositions(capture.getPos().getKey(), color.bit, board);
-        
-        if (capture != null && posSet != null && m != null && m.getPos().equals(capture.getPos())) {
-            m.setScore(OnyxConst.SCORE.COUNTER_WIN_LINK.getValue());
-            m.getCaptured().clear();
-            m.getCaptured().addAll(posSet);
+        if (count > 0) {
+            
+            move = new WinConnectionLinkSubroutine(c, opColor).connectionLink(moves);
+            final OnyxMove capture = new TakePositionSubroutine().getTakePos(c, board, color.bit);
+            if (capture != null) posSet = c.getTakePositions(capture.getPos().getKey(), color.bit, board);
+
+            if (capture != null && posSet != null && move != null && move.getPos().equals(capture.getPos())) {
+                move.setScore(OnyxConst.SCORE.COUNTER_WIN_LINK.getValue());
+                move.setCaptured(new ArrayList<OnyxPos>());
+                move.getCaptured().addAll(posSet);
+            }
         }
 
-        return m;
+        return move;
     }
     
 }

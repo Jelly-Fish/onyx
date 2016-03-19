@@ -34,3 +34,10 @@ win link == 12/L column and board is 12x12).
 16-03-2017 1 & 3 >> DONE
 2- Win link does not work if high border max is the link position (if for blacks
 win link == 12/L column and board is 12x12). 
+--------------------------------------------------------------------------------
+19-03-2017 :
+1- Win link does not work if high border (perhaps both low & high borders) & win
+link is on a corner of 5 square diamond. [!] Check that, if move is subject to take
+but is yet a win move, that move is or is not played...
+2- highborder (x=12) progress is countered but final win position is not
+blocked (playing blacks an progressing from right to left....). 

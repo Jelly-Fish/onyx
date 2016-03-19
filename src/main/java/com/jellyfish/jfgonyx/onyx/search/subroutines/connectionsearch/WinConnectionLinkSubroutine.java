@@ -46,7 +46,7 @@ import java.util.List;
  */
 public class WinConnectionLinkSubroutine extends WinConnectionSubroutine {
     
-    private final static String WIN_MOVE = "[!] Win link position found @ %s";
+    private final static String WIN_LINK_MOVE = "[!] Win link position found @ %s";
     
     public WinConnectionLinkSubroutine(final OnyxPosCollection c, final GraphicsConst.COLOR color) {
         super(c, color);
@@ -61,14 +61,16 @@ public class WinConnectionLinkSubroutine extends WinConnectionSubroutine {
         WinConnectionSubroutine search = null;
         for (OnyxMove m : tails) {
             
+            if (m == null) continue;
+            
             tmp = new OnyxPiece(this.color);
             this.c.getPositions().get(m.getPos().getKey()).setPiece(tmp);
 
             for (OnyxPos p : borders) {
-                search = new WinConnectionSubroutine(this.c, this.color);
+                search = new WinConnectionSubroutine(this.c, this.color, false);
                 search.connection(p, p.getKey());
                 if (search.isWin()) {
-                    print(OnyxConst.POS_MAP.get(m.getPos().getKey()), WIN_MOVE);
+                    print(OnyxConst.POS_MAP.get(m.getPos().getKey()), WIN_LINK_MOVE);
                     this.c.getPositions().get(m.getPos().getKey()).setPiece(null);
                     return new OnyxMove(m.getPos(), OnyxConst.SCORE.WIN_LINK.getValue());
                 }

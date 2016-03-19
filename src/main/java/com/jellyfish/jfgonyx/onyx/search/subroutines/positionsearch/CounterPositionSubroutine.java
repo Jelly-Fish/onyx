@@ -77,7 +77,7 @@ public class CounterPositionSubroutine extends AbstractSubroutine {
                 (this.move == null || m.getScore() > this.move.getScore()) ? m : this.move;
         }
         
-        if (this.move != null && this.move.getPos() != null) {
+        if (this.move != null && this.move.hasPosition()) {
             print(color.str, this.move.getPos().getKey(), 
                     String.valueOf(this.move.getScore()),BEST_CANDIDATE);
         }
@@ -96,7 +96,7 @@ public class CounterPositionSubroutine extends AbstractSubroutine {
         
         for (OnyxPos p : pos) cnx.addAll(new TailConnectionSubroutine(c, color, b).getTails(p, p.getKey()));
         for (OnyxMove m : cnx) {
-            if (m != null && m.getPos() != null && 
+            if (m != null && m.hasPosition() && 
                     m.getPos().isSubjectToTake(b, c, color)) sTt.add(m.getPos().getKey());
             else tmp = m;
         }
@@ -104,7 +104,7 @@ public class CounterPositionSubroutine extends AbstractSubroutine {
         if (tmp == null) return null;
         
         for (OnyxMove m : cnx) {
-            if (m != null && m.getPos() != null && !sTt.contains(m.getPos().getKey()) && 
+            if (m != null && m.hasPosition() && !sTt.contains(m.getPos().getKey()) && 
                     m.getScore() >= tmp.getScore()) {
                 tmp = m;
             }

@@ -91,7 +91,7 @@ public class PositionSearch extends AbstractOnyxSearch implements OnyxPositionSe
             
             if (tmp == null) throw new NoValidOnyxPositionsFoundException();
             if (capture != null) posSet = c.getTakePositions(capture.getPos().getKey(), color.bit, board);
-            if (c.getPosition(tmp.getPos().getKey()).isOccupied()) {
+            if (!tmp.hasPosition() || c.getPosition(tmp.getPos().getKey()).isOccupied()) {
                 final OnyxMove rm = new RandomSearch().search(c, board, color);
                 if (rm == null) throw new NoValidOnyxPositionsFoundException();
                 else return rm;

@@ -48,14 +48,23 @@ public class WinConnectionSubroutine extends AbstractSubroutine {
     private final static String WIN_CANDIDATE = "Win search %s @ %s | iteration %s";
     protected final OnyxPosCollection c;
     protected final GraphicsConst.COLOR color;
+    protected final boolean display;
     protected final float max = OnyxConst.BOARD_SIDE_SQUARE_COUNT + 1f;
     protected final Set<String> checked = new HashSet<>();
     protected boolean win = false;
     protected int iteration = -1;
     
+    public WinConnectionSubroutine(final OnyxPosCollection c, final GraphicsConst.COLOR color, 
+            final boolean display) {
+        this.c = c;
+        this.color = color;
+        this.display = display;
+    }
+    
     public WinConnectionSubroutine(final OnyxPosCollection c, final GraphicsConst.COLOR color) {
         this.c = c;
         this.color = color;
+        this.display = false;
     }
     
     public void connection(final OnyxPos p, final String kEx) {       
@@ -89,7 +98,7 @@ public class WinConnectionSubroutine extends AbstractSubroutine {
     }
    
     public boolean isWin() {
-        if (this.win) print(this.color.str.toUpperCase(), WIN);
+        if (this.win && this.display) print(this.color.str.toUpperCase(), WIN);
         return this.win;
     }
     
