@@ -51,7 +51,9 @@ public abstract class AbstractSubroutine {
     protected OnyxMove move = null;
     
     public final void print(final String sK, final List<OnyxMove> candidates, final String f) {
+        
         for (OnyxMove m : candidates) {
+            if (!m.hasPosition() || m.getPos().getKey() == null) continue;
             MainFrame.print(String.format(f, OnyxConst.POS_MAP.get(sK), 
                     OnyxConst.POS_MAP.get(m.getPos().getKey()), m.getScore()), 
                     HTMLDisplayHelper.WHITE);
@@ -59,7 +61,9 @@ public abstract class AbstractSubroutine {
     }
     
     public final void print(final String sK, final Set<OnyxMove> candidates, final String f) {
+        
         for (OnyxMove m : candidates) {
+            if (!m.hasPosition() || m.getPos().getKey() == null) continue;
             MainFrame.print(String.format(f, OnyxConst.POS_MAP.get(sK), 
                     OnyxConst.POS_MAP.get(m.getPos().getKey()), m.getScore()),
                     HTMLDisplayHelper.WHITE);
@@ -67,6 +71,9 @@ public abstract class AbstractSubroutine {
     }
     
     public final void print(final String sK, final OnyxMove candidate, final String f) {
+        
+        if (!candidate.hasPosition() || candidate.getPos().getKey() == null) return;
+        
         MainFrame.print(String.format(f, 
                 OnyxConst.POS_MAP.get(sK), 
                 OnyxConst.POS_MAP.get(candidate.getPos().getKey()), candidate.getScore()),
@@ -74,16 +81,25 @@ public abstract class AbstractSubroutine {
     }
     
     public final void print(final String k, final String n, final String f) {
+        
+        if (k == null || n == null) return;
+        
         MainFrame.print(String.format(f, OnyxConst.POS_MAP.get(k), n),
                 HTMLDisplayHelper.WHITE);
     }
     
     public final void print(final String color, final String k, final String n, final String f) {
+        
+        if (color == null || k == null || n == null) return;
+        
         MainFrame.print(String.format(f, color, OnyxConst.POS_MAP.get(k), n),
                 HTMLDisplayHelper.WHITE);
     }
     
     public final void print(final String k, final String f) {
+        
+        if (k == null) return;
+        
         MainFrame.print(String.format(f, k),
                 HTMLDisplayHelper.WHITE);
     }

@@ -69,8 +69,9 @@ public class CounterPositionSubroutine extends AbstractSubroutine {
             throws NoValidOnyxPositionsFoundException {
         
         final List<OnyxMove> candidates = new ArrayList<>();
-        candidates.add(this.lockCounterPos(c, b, color.bit));
-        candidates.add(this.strongCounterPos(c, b, GraphicsConst.COLOR.getOposite(color.bool)));
+        candidates.add(this.smallLock(c, b, color.bit));
+        candidates.add(this.counterPos(c, b, GraphicsConst.COLOR.getOposite(color.bool)));
+        candidates.add(this.bigLock(c, b, color));
         
         for (OnyxMove m : candidates) {
             if (m != null) this.move = 
@@ -85,7 +86,7 @@ public class CounterPositionSubroutine extends AbstractSubroutine {
         return this.move;
     }
     
-    private OnyxMove strongCounterPos(final OnyxPosCollection c, final OnyxBoard b, 
+    private OnyxMove counterPos(final OnyxPosCollection c, final OnyxBoard b, 
             final GraphicsConst.COLOR color) throws NoValidOnyxPositionsFoundException {
         
         final List<OnyxPos> pos = OnyxPositionUtils.trimByAllBorderPositionsByColor(
@@ -96,8 +97,9 @@ public class CounterPositionSubroutine extends AbstractSubroutine {
         
         for (OnyxPos p : pos) cnx.addAll(new TailConnectionSubroutine(c, color, b).getTails(p, p.getKey()));
         for (OnyxMove m : cnx) {
-            if (m != null && m.hasPosition() && 
-                    m.getPos().isSubjectToTake(b, c, color)) sTt.add(m.getPos().getKey());
+            if (m != null && m.hasPosition() && m.getPos().isSubjectToTake(b, c, color)) {
+                sTt.add(m.getPos().getKey());
+            }
             else tmp = m;
         }
         
@@ -110,10 +112,10 @@ public class CounterPositionSubroutine extends AbstractSubroutine {
             }
         }
         
-        return new OnyxMove(tmp.getPos(), tmp.getPiece(), OnyxConst.SCORE.COUNTER_POS.getValue() * 1.1f);
+        return new OnyxMove(tmp.getPos(), tmp.getPiece(), OnyxConst.SCORE.COUNTER_POS.getValue());
     }
     
-    private OnyxMove lockCounterPos(final OnyxPosCollection c, final OnyxBoard b, final int bitColor) {
+    private OnyxMove smallLock(final OnyxPosCollection c, final OnyxBoard b, final int bitColor) {
         
         int i, j;
         OnyxPos pos = null;
@@ -136,7 +138,39 @@ public class CounterPositionSubroutine extends AbstractSubroutine {
             }
             
             if (i == 2 && j == 1 && !c.getPosition(key).isOccupied()) {
-                return new OnyxMove(c.getPosition(key), OnyxConst.SCORE.ATTACK.getValue() * 1.2f);
+                return new OnyxMove(c.getPosition(key), OnyxConst.SCORE.SMALL_LOCK.getValue());
+            }
+        }        
+        
+        return null;
+    }
+    
+    private OnyxMove bigLock(final OnyxPosCollection c, final OnyxBoard b, 
+            final GraphicsConst.COLOR color) throws NoValidOnyxPositionsFoundException {
+        
+        int i, j;
+        OnyxPos pos = null;
+        String key = StringUtils.EMPTY;
+        
+        for (OnyxDiamond d : b.getDiamondCollection().getDiamonds().values()) {
+            
+            i = 0; j = 0;
+            for (String k : d.getCornerKeys()) {
+                pos = c.getPosition(k);
+                if (pos.isOccupied()) {
+                    if (pos.getPiece().color.bit == color.bit) {
+                        ++i;
+                    } else if (pos.getPiece().color.bit != color.bit) {
+                        ++j;
+                    }
+                } else {
+                    key = k;
+                }
+            }
+            
+            if (i == 2 && j == 1 && !c.getPosition(key).isOccupied() && 
+                    c.getPosition(key).isSubjectToTake(b, c, color)) {
+                return new OnyxMove(c.getPosition(key), OnyxConst.SCORE.BIG_LOCK.getValue());
             }
         }        
         

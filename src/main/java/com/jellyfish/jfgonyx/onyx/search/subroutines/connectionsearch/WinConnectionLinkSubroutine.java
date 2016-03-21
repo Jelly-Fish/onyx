@@ -61,7 +61,7 @@ public class WinConnectionLinkSubroutine extends WinConnectionSubroutine {
         WinConnectionSubroutine search = null;
         for (OnyxMove m : tails) {
             
-            if (m == null) continue;
+            if (m == null || !m.hasPosition()) continue;
             
             tmp = new OnyxPiece(this.color);
             this.c.getPositions().get(m.getPos().getKey()).setPiece(tmp);
