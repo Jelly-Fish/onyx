@@ -86,31 +86,28 @@ public class CounterPositionSubroutine extends AbstractSubroutine {
         return this.move;
     }
     
+    @SuppressWarnings("null")
     private OnyxMove counterPos(final OnyxPosCollection c, final OnyxBoard b, 
             final GraphicsConst.COLOR color) throws NoValidOnyxPositionsFoundException {
         
         final List<OnyxPos> pos = OnyxPositionUtils.trimByAllBorderPositionsByColor(
                 OnyxPositionUtils.getBorders(c, color), color);
         final List<OnyxMove> cnx = new ArrayList<>();
-        final Set<String> sTt = new HashSet<>();
         OnyxMove tmp = null;
         
-        for (OnyxPos p : pos) cnx.addAll(new TailConnectionSubroutine(c, color, b).getTails(p, p.getKey()));
+        for (OnyxPos p : pos) cnx.addAll(new TailConnectionSubroutine(c, color, 
+                b).getTails(p, p.getKey()));
+
         for (OnyxMove m : cnx) {
-            if (m != null && m.hasPosition() && m.getPos().isSubjectToTake(b, c, color)) {
-                sTt.add(m.getPos().getKey());
-            }
-            else tmp = m;
-        }
-        
-        if (tmp == null) return null;
-        
-        for (OnyxMove m : cnx) {
-            if (m != null && m.hasPosition() && !sTt.contains(m.getPos().getKey()) && 
-                    m.getScore() >= tmp.getScore()) {
+            if (tmp == null) tmp = m;
+            if (m != null && m.hasPosition() && 
+                !m.getPos().posHelper.willEnableTake(b, c, GraphicsConst.COLOR.getOposite(color.bool)) && 
+                m.getScore() >= tmp.getScore()) {
                 tmp = m;
             }
         }
+        
+        if (tmp == null) return null;
         
         return new OnyxMove(tmp.getPos(), tmp.getPiece(), OnyxConst.SCORE.COUNTER_POS.getValue());
     }
@@ -169,7 +166,7 @@ public class CounterPositionSubroutine extends AbstractSubroutine {
             }
             
             if (i == 2 && j == 1 && !c.getPosition(key).isOccupied() && 
-                    c.getPosition(key).isSubjectToTake(b, c, color)) {
+                    c.getPosition(key).posHelper.isSubjectToTake(b, c, color)) {
                 return new OnyxMove(c.getPosition(key), OnyxConst.SCORE.BIG_LOCK.getValue());
             }
         }        

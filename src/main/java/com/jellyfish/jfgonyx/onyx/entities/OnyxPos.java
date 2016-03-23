@@ -35,7 +35,7 @@ import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
 import com.jellyfish.jfgonyx.constants.GraphicsConst;
 import com.jellyfish.jfgonyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
-import com.jellyfish.jfgonyx.ui.OnyxBoard;
+import com.jellyfish.jfgonyx.onyx.search.subroutines.positionsearch.OnyxPosStateSubroutine;
 import java.util.List;
 
 /**
@@ -50,6 +50,7 @@ public class OnyxPos {
     private OnyxVirtualPiece vPiece;
     public final OnyxDiamond diamond;
     public String[] connections;
+    public OnyxPosStateSubroutine posHelper = null;
 
     public OnyxPos(final float x, final float y, final OnyxDiamond d) {
         this.x = x;
@@ -57,6 +58,11 @@ public class OnyxPos {
         this.gX = ((int) x) * GraphicsConst.SQUARE_WIDTH;
         this.gY = ((int) y) * GraphicsConst.SQUARE_WIDTH;
         this.diamond = d;
+        this.init();
+    }
+    
+    private void init() {
+        this.posHelper = new OnyxPosStateSubroutine(this);
     }
     
     public boolean isOccupied() {
@@ -65,45 +71,6 @@ public class OnyxPos {
     
     public boolean isOccupied(final int bitColor) {
         return this.isOccupied() && this.piece.color.bit == bitColor;
-    }
-    
-    public boolean isSubjectToTake(final OnyxBoard board, final OnyxPosCollection c, 
-            final GraphicsConst.COLOR color) {
-        
-        if (this.isDiamondCenter()) return false;
-        boolean r = false;
-        final GraphicsConst.COLOR oC = GraphicsConst.COLOR.getOposite(color.bool);
-        String[] keys = null;
-        int k = -1, l = 0, j = 0, m = -1; 
-
-        for (OnyxDiamond d : board.getDiamondCollection().getDiamondsByPosKey(this.getKey())) {
-
-            keys = d.getCornerKeys();
-            for (int i = 0; i < keys.length; ++i) {
-                if (c.getPosition(keys[i]).isOccupied() && 
-                        c.getPosition(keys[i]).getPiece().color.bit == oC.bit &&
-                        !this.getKey().equals(c.getPosition(keys[i]).getKey())) {
-                    k = i;
-                    ++l;
-                } 
-                if (c.getPosition(keys[i]).isOccupied(color.bit)&& 
-                        c.getPosition(keys[i]).getPiece().color.bit == color.bit) {
-                    ++j;
-                }
-                if (this.getKey().equals(c.getPosition(keys[i]).getKey())) m = i;
-            }
-
-            if (l == 1 && j == 1 && k > -1 && m > -1) {
-                if ((k == 0 && m == 2) || (k == 1 && m == 3) || (k == 2 && m == 0) ||
-                        (k == 3 && m == 1)) {
-                    r = true;
-                }
-            }
-
-            k = -1; l = 0; j = 0; m = -1;
-        }
-
-        return r;
     }
     
     public boolean isVirtuallyOccupied() {
