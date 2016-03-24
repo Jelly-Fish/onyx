@@ -69,8 +69,8 @@ public class OnyxPos {
         return !(this.piece == null);
     }
     
-    public boolean isOccupied(final int bitColor) {
-        return this.isOccupied() && this.piece.color.bit == bitColor;
+    public boolean isOccupied(final int bit) {
+        return this.isOccupied() && this.piece.color.bit == bit;
     }
     
     public boolean isVirtuallyOccupied() {

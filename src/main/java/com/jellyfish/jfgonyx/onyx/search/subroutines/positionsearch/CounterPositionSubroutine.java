@@ -37,15 +37,14 @@ import com.jellyfish.jfgonyx.onyx.entities.OnyxDiamond;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
+import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException;
 import com.jellyfish.jfgonyx.onyx.search.searchutils.OnyxPositionUtils;
 import com.jellyfish.jfgonyx.onyx.search.subroutines.abstractions.AbstractSubroutine;
 import com.jellyfish.jfgonyx.onyx.search.subroutines.connectionsearch.TailConnectionSubroutine;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -62,11 +61,11 @@ public class CounterPositionSubroutine extends AbstractSubroutine {
      * @param color COLOR.
      * @return Strongest counter move found to prevent sealing, take positions &
      * tail counter positions else NULL if no such position has been found.
-     * @throws com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException
+     * @throws com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException if shit hits the fan.
+     * @throws com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException if shit hits the fan.
      */
     public final OnyxMove getCounterPos(final OnyxPosCollection c, final OnyxBoard b, 
-            final GraphicsConst.COLOR color) 
-            throws NoValidOnyxPositionsFoundException {
+            final GraphicsConst.COLOR color) throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
         
         final List<OnyxMove> candidates = new ArrayList<>();
         candidates.add(this.smallLock(c, b, color.bit));
@@ -74,13 +73,14 @@ public class CounterPositionSubroutine extends AbstractSubroutine {
         candidates.add(this.bigLock(c, b, color));
         
         for (OnyxMove m : candidates) {
-            if (m != null) this.move = 
-                (this.move == null || m.getScore() > this.move.getScore()) ? m : this.move;
+            if (m != null) {
+                this.move = (this.move == null || m.getScore() > this.move.getScore()) ? m : this.move;
+            }
         }
         
         if (this.move != null && this.move.hasPosition()) {
             print(color.str, this.move.getPos().getKey(), 
-                    String.valueOf(this.move.getScore()),BEST_CANDIDATE);
+                    String.valueOf(this.move.getScore()), BEST_CANDIDATE);
         }
         
         return this.move;
@@ -88,7 +88,7 @@ public class CounterPositionSubroutine extends AbstractSubroutine {
     
     @SuppressWarnings("null")
     private OnyxMove counterPos(final OnyxPosCollection c, final OnyxBoard b, 
-            final GraphicsConst.COLOR color) throws NoValidOnyxPositionsFoundException {
+            final GraphicsConst.COLOR color) throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
         
         final List<OnyxPos> pos = OnyxPositionUtils.trimByAllBorderPositionsByColor(
                 OnyxPositionUtils.getBorders(c, color), color);
@@ -100,9 +100,8 @@ public class CounterPositionSubroutine extends AbstractSubroutine {
 
         for (OnyxMove m : cnx) {
             if (tmp == null) tmp = m;
-            if (m != null && m.hasPosition() && 
-                !m.getPos().posHelper.willEnableTake(b, c, GraphicsConst.COLOR.getOposite(color.bool)) && 
-                m.getScore() >= tmp.getScore()) {
+            if (m != null && m.hasPosition() && !m.getPos().posHelper.willEnableTake(b, c, 
+                    GraphicsConst.COLOR.getOposite(color.bool)) && m.getScore() >= tmp.getScore()) {
                 tmp = m;
             }
         }
@@ -112,7 +111,14 @@ public class CounterPositionSubroutine extends AbstractSubroutine {
         return new OnyxMove(tmp.getPos(), tmp.getPiece(), OnyxConst.SCORE.COUNTER_POS.getValue());
     }
     
-    private OnyxMove smallLock(final OnyxPosCollection c, final OnyxBoard b, final int bitColor) {
+    /**
+     * Lock diamond by playing this position.
+     * @param c onyx position collection.
+     * @param b onyx board.
+     * @param bit color to search for as bit value.
+     * @return Onyx move to play to counter such a position.
+     */
+    private OnyxMove smallLock(final OnyxPosCollection c, final OnyxBoard b, final int bit) {
         
         int i, j;
         OnyxPos pos = null;
@@ -124,9 +130,9 @@ public class CounterPositionSubroutine extends AbstractSubroutine {
             for (String k : d.getCornerKeys()) {
                 pos = c.getPosition(k);
                 if (pos.isOccupied()) {
-                    if (pos.getPiece().color.bit == bitColor) {
+                    if (pos.getPiece().color.bit == bit) {
                         ++i;
-                    } else if (pos.getPiece().color.bit != bitColor) {
+                    } else if (pos.getPiece().color.bit != bit) {
                         ++j;
                     }
                 } else {
@@ -142,8 +148,18 @@ public class CounterPositionSubroutine extends AbstractSubroutine {
         return null;
     }
     
+    /**
+     * This lock will counter a take position that oponent could play resulting
+     * in a take or double take outcome.
+     * @param c onyx position collection.
+     * @param b onyx board.
+     * @param color color to search for.
+     * @return OnyxMove to play if found.
+     * @throws NoValidOnyxPositionsFoundException if shit hits the fan.
+     * @throws InvalidOnyxPositionException if shit hits the fan.
+     */
     private OnyxMove bigLock(final OnyxPosCollection c, final OnyxBoard b, 
-            final GraphicsConst.COLOR color) throws NoValidOnyxPositionsFoundException {
+            final GraphicsConst.COLOR color) throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
         
         int i, j;
         OnyxPos pos = null;

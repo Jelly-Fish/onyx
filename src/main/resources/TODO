@@ -41,3 +41,7 @@ link is on a corner of 5 square diamond. [!] Check that, if move is subject to t
 but is yet a win move, that move is or is not played...
 2- highborder (x=12) progress is countered but final win position is not
 blocked (playing blacks an progressing from right to left....). 
+--------------------------------------------------------------------------------
+24-03-2017 :
+counter search DONE for counter take position and preventing playing moves that
+will result in oponent take moves. see OnyxPosStateSubroutine

@@ -67,7 +67,7 @@ public class PositionSearch extends AbstractOnyxSearch implements OnyxPositionSe
      *   Find forward positions depending on color
      */
     @Override
-    public OnyxMove search(final OnyxPosCollection c, final OnyxBoard board, final GraphicsConst.COLOR color) 
+    public OnyxMove search(final OnyxPosCollection c, final OnyxBoard b, final GraphicsConst.COLOR color) 
             throws NoValidOnyxPositionsFoundException {
     
         List<OnyxPos> posSet = null;
@@ -75,24 +75,26 @@ public class PositionSearch extends AbstractOnyxSearch implements OnyxPositionSe
         
         try {
             
-            final OnyxMove capture = new TakePositionSubroutine().getTakePos(c, board, color.bit);
+            final OnyxMove capture = new TakePositionSubroutine().getTakePos(c, b, color.bit);
             moves.add(capture);
-            moves.add(new CounterPositionSubroutine().getCounterPos(c, board, color));
-            moves.add(new NeighbourPositionSubroutine().getNeighbourPos(c, board, color.bit));
-            moves.add(new AttackPositionSubroutine().getAttackPos(c, board, color.bit));
-            moves.add(new CenterPositionSubroutine().getCenterPos(c, board.getDiamondCollection()));
+            moves.add(new CounterPositionSubroutine().getCounterPos(c, b, color));
+            moves.add(new NeighbourPositionSubroutine().getNeighbourPos(c, b, color.bit));
+            moves.add(new AttackPositionSubroutine().getAttackPos(c, b, color.bit));
+            moves.add(new CenterPositionSubroutine().getCenterPos(c, b.getDiamondCollection()));
                         
             OnyxMove tmp = null;
             for (OnyxMove m : moves) {
                 if (m == null) continue;
+                if (m.getPos().posHelper.willEnableTake(b, c, color)) continue;
                 if (tmp == null) tmp = m;
                 else tmp = m.getScore() > tmp.getScore() ? m : tmp;
             }
             
             if (tmp == null) throw new NoValidOnyxPositionsFoundException();
-            if (capture != null) posSet = c.getTakePositions(capture.getPos().getKey(), color.bit, board);
+            
+            if (capture != null) posSet = c.getTakePositions(capture.getPos().getKey(), color.bit, b);
             if (!tmp.hasPosition() || c.getPosition(tmp.getPos().getKey()).isOccupied()) {
-                final OnyxMove rm = new RandomSearch().search(c, board, color);
+                final OnyxMove rm = new RandomSearch().search(c, b, color);
                 if (rm == null) throw new NoValidOnyxPositionsFoundException();
                 else return rm;
             }

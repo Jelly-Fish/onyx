@@ -35,6 +35,7 @@ import com.jellyfish.jfgonyx.constants.GraphicsConst;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxDiamond;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
+import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import com.jellyfish.jfgonyx.onyx.search.subroutines.abstractions.AbstractSubroutine;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
 
@@ -56,38 +57,30 @@ public class OnyxPosStateSubroutine extends AbstractSubroutine {
      * @param c onyx position collection instance.
      * @param color the color that is potentially will enable a take move if played.
      * @return true if position will enable take for oponent.
+     * @throws com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException
      */
     public final boolean willEnableTake(final OnyxBoard board, final OnyxPosCollection c, 
-            final GraphicsConst.COLOR color) {
-        
-        /**
-         * FIXME : shitty, fucks up counter position search, setting oponent
-         * take moves are not prohibited.
-         */
-        
+            final GraphicsConst.COLOR color) throws InvalidOnyxPositionException {
+
         if (this.pos.isDiamondCenter()) return false;
         
-        final GraphicsConst.COLOR oC = GraphicsConst.COLOR.getOposite(color.bool);
+        final GraphicsConst.COLOR opColor = GraphicsConst.COLOR.getOposite(color.bool);
         String[] keys = null;
         int k = -1, l = 0, j = 0, m = -1; 
 
         for (OnyxDiamond d : board.getDiamondCollection().getDiamondsByPosKey(this.pos.getKey())) {
 
+            if (d.isFivePosDiamond() && d.getCenterPos().isOccupied()) continue;
+            
             keys = d.getCornerKeys();
             for (int i = 0; i < keys.length; ++i) {
                 
-                if (this.pos.getKey().equals(c.getPosition(keys[i]).getKey()) &&
-                        !this.pos.isOccupied()) {
+                if (this.pos.getKey().equals(c.getPosition(keys[i]).getKey())) {
                     m = i;
                 } else {
                     
-                    if (c.getPosition(keys[i]).isOccupied() && 
-                            c.getPosition(keys[i]).getPiece().color.bit == oC.bit) {
-                        ++l;
-                    }
-
-                    if (c.getPosition(keys[i]).isOccupied(color.bit) && 
-                            c.getPosition(keys[i]).getPiece().color.bit == color.bit) {
+                    if (c.getPosition(keys[i]).isOccupied(opColor.bit)) ++l;
+                    if (c.getPosition(keys[i]).isOccupied(color.bit)) {
                         ++j;
                         k = i;
                     }
@@ -108,21 +101,17 @@ public class OnyxPosStateSubroutine extends AbstractSubroutine {
     }
     
     /**
-     * Is this position, if not occupied/played, will result in a take for
-     * oponent Color.
+     * Is this position, if not occupied/played, will result in a take 
+     * oportunity for oponent Color.
      * @param board Onyx board instance.
      * @param c onyx position collection instance.
      * @param color the color that is potentially subject to take move.
      * @return true if position is subject to take.
+     * @throws com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException
      */
     public final boolean isSubjectToTake(final OnyxBoard board, final OnyxPosCollection c, 
-            final GraphicsConst.COLOR color) {
-        
-        /**
-         * FIXME : shitty, fucks up - Does not always block take positions by
-         * oponent - must block 100% of possible take situations for oponent.
-         */
-        
+            final GraphicsConst.COLOR color) throws InvalidOnyxPositionException {
+
         if (this.pos.isDiamondCenter()) return false;
         
         final GraphicsConst.COLOR oC = GraphicsConst.COLOR.getOposite(color.bool);
@@ -131,30 +120,24 @@ public class OnyxPosStateSubroutine extends AbstractSubroutine {
 
         for (OnyxDiamond d : board.getDiamondCollection().getDiamondsByPosKey(this.pos.getKey())) {
 
+            if (d.isFivePosDiamond() && d.getCenterPos().isOccupied()) continue;
+            
             keys = d.getCornerKeys();
             for (int i = 0; i < keys.length; ++i) {
                 
-                if (this.pos.getKey().equals(c.getPosition(keys[i]).getKey()) &&
-                        !this.pos.isOccupied()) {
+                if (this.pos.getKey().equals(c.getPosition(keys[i]).getKey())) {
                     m = i;
                 } else {
                     
-                    if (c.getPosition(keys[i]).isOccupied() && 
-                            c.getPosition(keys[i]).getPiece().color.bit == oC.bit &&
-                            !this.pos.getKey().equals(c.getPosition(keys[i]).getKey())) {
+                    if (c.getPosition(keys[i]).isOccupied(oC.bit)) {
                         ++l;
-                    } 
-
-                    if (c.getPosition(keys[i]).isOccupied(color.bit) && 
-                            c.getPosition(keys[i]).getPiece().color.bit == color.bit &&
-                            !this.pos.getKey().equals(c.getPosition(keys[i]).getKey())) {
-                        ++j;
                         k = i;
                     }
+                    if (c.getPosition(keys[i]).isOccupied(color.bit)) ++j;
                 }
             }
 
-            if (l == 2 && j == 1 && k > -1 && m > -1 && m != k) {
+            if (l == 1 && j == 2 && k > -1 && m > -1 && m != k) {
                 if ((k == 0 && m == 2) || (k == 1 && m == 3) || (k == 2 && m == 0) ||
                         (k == 3 && m == 1)) {
                     return true;
