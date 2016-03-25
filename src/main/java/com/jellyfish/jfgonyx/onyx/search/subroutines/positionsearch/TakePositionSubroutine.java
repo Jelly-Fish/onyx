@@ -56,7 +56,8 @@ public class TakePositionSubroutine extends AbstractSubroutine {
      * @return Strongest take move key found or NULL if no such position has been found.
      * @throws com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException
      */
-    public final OnyxMove getTakePos(final OnyxPosCollection c, final OnyxBoard b, final int bitColor) throws InvalidOnyxPositionException {
+    public final OnyxMove getTakePos(final OnyxPosCollection c, final OnyxBoard b, 
+            final int bitColor) throws InvalidOnyxPositionException {
         
         int count, i;
         OnyxPos[] positions = new OnyxPos[4];

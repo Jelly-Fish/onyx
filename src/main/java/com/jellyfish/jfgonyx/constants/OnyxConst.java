@@ -285,7 +285,7 @@ public class OnyxConst {
         RANDOM(0f), 
         COUNTER_POS(68.7f), 
         ATTACK(34.4f), 
-        SMALL_LOCK(203.4f),
+        SMALL_LOCK(67.4f),
         BIG_LOCK(301.2f), 
         CENTER(19.7f), 
         OVERRIDE(500.0f);
