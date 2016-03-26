@@ -53,8 +53,11 @@ import org.apache.commons.lang3.StringUtils;
  */
 class Onyx {
     
-    public static boolean gameEnd = false; 
+    public static boolean gameEnd = false;
+    public static boolean whitePlayingLowBorder = false;
+    public static boolean blackPlayingLowBorder = false;
     
+    // String formats.
     private static final String ERR = "Something got messy :X >> %s";
     private static final String POSCOL_SEARCH_FORMAT = "SEARCH.ONYXPOSCOL -> [%s] score -> [%.1f]";
     private static final String CNX_SEARCH_FORMAT = "SEARCH.CNX -> [%s] score -> [%.3f]";

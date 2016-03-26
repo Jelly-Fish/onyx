@@ -66,7 +66,11 @@ public class OnyxGame {
     private boolean requestInitialized = false;
     private int moveCount = 0;
 
-    private OnyxGame() { }
+    private OnyxGame() { 
+        Onyx.gameEnd = false;
+        Onyx.whitePlayingLowBorder = false;
+        Onyx.blackPlayingLowBorder = false;
+    }
     
     public void init(final OnyxBoardI boardInterface, final GraphicsConst.COLOR engineColor) {
         this.wait = false;
@@ -120,6 +124,7 @@ public class OnyxGame {
     
     public void appendMove(final OnyxMove move) {
         
+        this.updateTailTendency(move);
         this.moves.put(this.moves.size() + 1, move);
         ++this.moveCount;
         if (this.initialized && this.boardInterface != null) {
@@ -163,6 +168,26 @@ public class OnyxGame {
         if (this.colorToPlay == null) throw new OnyxGameSyncException();
         if (!this.requestInitialized) throw new OnyxGameSyncException(
                 String.format(OnyxGameSyncException.WRONG_TURN_MSG, this.colorToPlay.str));
+    }
+    
+    /**
+     * Is White/Black playing tails starting at high or low border ?
+     * @param m Onyx move instance.
+     * @see OnyxMove
+     */    
+    private void updateTailTendency(final OnyxMove m) {
+        
+        if (!m.hasTailStart() || !m.getTailStartPos().isOccupied()) return;
+        
+        if (m.getTailStartPos().getPiece().color.bool) {
+            Onyx.blackPlayingLowBorder = m.getTailStartPos().isLowXBorder();
+        } else {
+            Onyx.whitePlayingLowBorder = m.getTailStartPos().isLowYBorder();
+        }
+    }
+     
+    public boolean getLowBorderTendency(final GraphicsConst.COLOR color) {
+        return color.bool ? Onyx.blackPlayingLowBorder : Onyx.whitePlayingLowBorder;
     }
     
     public boolean isGameEnd() {

@@ -40,9 +40,11 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class OnyxMove {
     
+    private final static String TAKE = "*";
     private final OnyxPos pos;
+    private OnyxPos tailStart = null;
     private final OnyxPiece piece;
-    private List<OnyxPos> captured;
+    private List<OnyxPos> captured = null;
     private final boolean win;
 
     private float score;
@@ -89,7 +91,11 @@ public class OnyxMove {
     }
     
     public boolean hasPosition() {
-        return !(this.pos == null);
+        return this.pos != null;
+    }
+    
+    public boolean hasTailStart() {
+        return this.tailStart != null;
     }
     
     @Override
@@ -97,7 +103,8 @@ public class OnyxMove {
         StringBuilder sb = new StringBuilder();
         sb.append(OnyxConst.POS_MAP.get(this.pos.getKey()));
         if (this.isCapture()) {
-            sb.append(this.captured.size() == 2 ? "*" : this.captured.size() == 4 ? "**" : StringUtils.EMPTY);
+            sb.append(this.captured.size() == 2 ? TAKE : this.captured.size() == 4 ? 
+                    TAKE + TAKE : StringUtils.EMPTY);
         }
         return sb.toString();
     }
@@ -128,6 +135,14 @@ public class OnyxMove {
     
     public void setScore(final float s) {
         this.score = s;
+    }
+    
+    public OnyxPos getTailStartPos() {
+        return tailStart;
+    }
+
+    public void setTailStartPos(final OnyxPos tailStart) {
+        this.tailStart = tailStart;
     }
         
 }

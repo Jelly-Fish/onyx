@@ -37,7 +37,6 @@ import com.jellyfish.jfgonyx.onyx.OnyxGame;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
-import com.jellyfish.jfgonyx.onyx.search.searchutils.SearchUtils;
 import com.jellyfish.jfgonyx.onyx.search.subroutines.abstractions.AbstractSubroutine;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
 import java.util.ArrayList;
@@ -67,20 +66,31 @@ public class TailConnectionSubroutine extends AbstractSubroutine {
         this.board = board;
     }
     
-    public OnyxMove getTail(final OnyxPos p, final String kEx) {
+    /**
+     * @param p tail search start position, this position will be used to
+     * determinate start position region.
+     * @return OnyxMove instances.
+     */
+    public OnyxMove getTail(final OnyxPos p) {
         
         this.startPos = p;
-        this.findTailPos(p, kEx);
+        this.findTailPos(p, p.getKey());
         this.score();
         this.trim();
         if (this.candidate != null) print(p.getKey(), this.candidate, BEST_CANDIDATE);
         return this.candidate;
     }
     
-    public List<OnyxMove> getTails(final OnyxPos p, final String kEx) {
+    /**
+     * @param p tail search start position, this position will be used to
+     * determinate start position region.
+     * @return list of OnyxMove instances.
+     * @see OnyxMove
+     */
+    public List<OnyxMove> getTails(final OnyxPos p) {
         
         this.startPos = p;
-        this.findTailPos(p, kEx);
+        this.findTailPos(p, p.getKey());
         this.score();
         return this.candidates;
     }
@@ -110,7 +120,13 @@ public class TailConnectionSubroutine extends AbstractSubroutine {
     }
 
     private void score() {
-
+                
+        /**
+         * FIXME : low/high tail oponent tendency for increasing score. 
+         */
+        final boolean lowBorderTendency = 
+                OnyxGame.getInstance().getLowBorderTendency(this.startPos.getPiece().color);
+        
         final float boardLength = ((float) OnyxConst.BOARD_SIDE_SQUARE_COUNT) + 1f;
         float score = -1f;
         OnyxPos tmp = null, pos = null;
@@ -126,18 +142,22 @@ public class TailConnectionSubroutine extends AbstractSubroutine {
                  * will be overrided by weaker move.
                  */
                 tmp = pos;
-                if (this.color.bool) {
+                
+                if (this.color.bool) {                   
                     if (this.startPos.isLowXBorder()) score = tmp.x;
                     else if (this.startPos.isHighXBorder()) score = boardLength - tmp.x;
+                    //score = lowBorderTendency ? (tmp.y >= (boardLength / 2) ? (score * 1.1f) : score) : score; 
                 }
                 
                 if (!this.color.bool) {
                     if (this.startPos.isLowYBorder()) score = tmp.y;
                     else if (this.startPos.isHighYBorder()) score = boardLength - tmp.y;
+                    //score = lowBorderTendency ? (tmp.x >= (boardLength / 2) ? (score * 1.1f) : score) : score;
                 }
             } 
 
             if (this.color.bool) {
+                
                 if (this.startPos.isLowXBorder() && pos.x > tmp.x) {
                     score = pos.x;
                     tmp = pos;
@@ -145,9 +165,12 @@ public class TailConnectionSubroutine extends AbstractSubroutine {
                     score = boardLength - pos.x;
                     tmp = pos;
                 }
+                
+                //score = lowBorderTendency ? (tmp.y >= (boardLength / 2) ? (score * 1.1f) : score) : score;
             }
 
             if (!this.color.bool) {
+                
                 if (this.startPos.isLowYBorder() && pos.y > tmp.y) {
                     score = pos.y;
                     tmp = pos;
@@ -155,6 +178,8 @@ public class TailConnectionSubroutine extends AbstractSubroutine {
                     score = boardLength - pos.y;
                     tmp = pos;
                 }
+                
+                //score = lowBorderTendency ? (tmp.x >= (boardLength / 2) ? (score * 1.1f) : score) : score;
             }
         }
         
@@ -162,13 +187,19 @@ public class TailConnectionSubroutine extends AbstractSubroutine {
         this.candidates.add(candidate);
     }
     
+    /**
+     * Trim tails by score and oponent tail link tendency.
+     */
+    @SuppressWarnings("null")
     private void trim() {
-        
+
         OnyxMove tmp = null;
         for (OnyxMove m : this.candidates) {
             if (tmp == null) tmp = m;
             if (m.getScore() > tmp.getScore()) tmp = m;
         }
+        
+        tmp.setTailStartPos(this.startPos);
         this.candidate = tmp;
     }
     

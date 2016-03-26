@@ -113,7 +113,7 @@ public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnecti
                 OnyxPositionUtils.getBorders(c, color), color);
         
         for (OnyxPos p : pos) {
-            this.cnxPos.add(new TailConnectionSubroutine(c, color, board).getTail(p, p.getKey()));
+            this.cnxPos.add(new TailConnectionSubroutine(c, color, board).getTail(p));
         }
         
         OnyxMove tmp = null;

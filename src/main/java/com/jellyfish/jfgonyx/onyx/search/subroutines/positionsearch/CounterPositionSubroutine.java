@@ -69,7 +69,7 @@ public class CounterPositionSubroutine extends AbstractSubroutine {
         
         final List<OnyxMove> candidates = new ArrayList<>();
         candidates.add(this.smallLock(c, b, color.bit));
-        candidates.add(this.counterPos(c, b, GraphicsConst.COLOR.getOposite(color.bool)));
+        candidates.add(this.counterPos(c, b, color));
         candidates.add(this.bigLock(c, b, color));
         
         for (OnyxMove m : candidates) {
@@ -90,18 +90,23 @@ public class CounterPositionSubroutine extends AbstractSubroutine {
     private OnyxMove counterPos(final OnyxPosCollection c, final OnyxBoard b, 
             final GraphicsConst.COLOR color) throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
         
+        final GraphicsConst.COLOR opColor = GraphicsConst.COLOR.getOposite(color.bool);
         final List<OnyxPos> pos = OnyxPositionUtils.trimByAllBorderPositionsByColor(
-                OnyxPositionUtils.getBorders(c, color), color);
+                OnyxPositionUtils.getBorders(c, opColor), opColor);
         final List<OnyxMove> cnx = new ArrayList<>();
         OnyxMove tmp = null;
         
-        for (OnyxPos p : pos) cnx.addAll(new TailConnectionSubroutine(c, color, 
-                b).getTails(p, p.getKey()));
+        for (OnyxPos p : pos) cnx.addAll(new TailConnectionSubroutine(c, opColor, 
+                b).getTails(p));
 
         for (OnyxMove m : cnx) {
+            
             if (tmp == null) tmp = m;
-            if (m != null && m.hasPosition() && !m.getPos().posHelper.willEnableTake(b, c, 
-                    GraphicsConst.COLOR.getOposite(color.bool)) && m.getScore() >= tmp.getScore()) {
+            
+            if (m != null && m.hasPosition() && 
+                !m.getPos().posHelper.willEnableTake(b, c, color) && 
+                m.getScore() >= tmp.getScore()) {
+                
                 tmp = m;
             }
         }

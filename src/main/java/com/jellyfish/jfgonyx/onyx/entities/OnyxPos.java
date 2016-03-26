@@ -100,7 +100,7 @@ public class OnyxPos {
     }
     
     public boolean isHighYBorder() {
-        return !(this.y < ((float) (OnyxConst.BOARD_SIDE_SQUARE_COUNT + 1)) + .1f);
+        return this.y > ((float) (OnyxConst.BOARD_SIDE_SQUARE_COUNT + 1)) - .1f;
     }
 
     public int occursCount(final OnyxPos p, final List<OnyxPos> posSet) {
