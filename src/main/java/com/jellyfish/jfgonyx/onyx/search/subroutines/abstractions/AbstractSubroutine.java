@@ -77,7 +77,7 @@ public abstract class AbstractSubroutine {
         MainFrame.print(String.format(f, 
                 OnyxConst.POS_MAP.get(sK), 
                 OnyxConst.POS_MAP.get(candidate.getPos().getKey()), candidate.getScore()),
-                HTMLDisplayHelper.WHITE);
+                HTMLDisplayHelper.GRAY);
     }
     
     public final void print(final String k, final String n, final String f) {
@@ -93,7 +93,7 @@ public abstract class AbstractSubroutine {
         if (color == null || k == null || n == null) return;
         
         MainFrame.print(String.format(f, color, OnyxConst.POS_MAP.get(k), n),
-                HTMLDisplayHelper.WHITE);
+                HTMLDisplayHelper.GRAY);
     }
     
     public final void print(final String k, final String f) {
@@ -101,7 +101,7 @@ public abstract class AbstractSubroutine {
         if (k == null) return;
         
         MainFrame.print(String.format(f, k),
-                HTMLDisplayHelper.WHITE);
+                HTMLDisplayHelper.GRAY);
     }
     
 }

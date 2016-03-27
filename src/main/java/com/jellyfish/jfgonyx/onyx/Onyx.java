@@ -111,8 +111,8 @@ class Onyx {
                 OnyxConst.POS_MAP.get(mCNX.getPos().getKey()), mCNX.getScore()));
             print(win ? 
                 String.format(WIN, GraphicsConst.COLOR.getOposite(color.bool).str) : 
-                StringUtils.EMPTY);
-            print(lose ? String.format(LOSE, color.str) : StringUtils.EMPTY);
+                StringUtils.EMPTY, HTMLDisplayHelper.GOLD);
+            print(lose ? String.format(LOSE, color.str) : StringUtils.EMPTY, HTMLDisplayHelper.WHITE);
             
             if (Onyx.gameEnd) return null;
             final OnyxMove m = SearchUtils.assertByScore(mPOSCOL, mCNX);
@@ -147,9 +147,11 @@ class Onyx {
     }
     
     private static void print(final String s) {
-        if (!StringUtils.isBlank(s)) {
-            MainFrame.print(s, HTMLDisplayHelper.WHITE);
-        }
+        if (!StringUtils.isBlank(s)) MainFrame.print(s, HTMLDisplayHelper.GAINSBORO);
+    }
+    
+    private static void print(final String s, final String style) {
+        if (!StringUtils.isBlank(s)) MainFrame.print(s, style);
     }
         
 }

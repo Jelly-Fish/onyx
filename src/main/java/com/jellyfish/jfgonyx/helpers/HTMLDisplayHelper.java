@@ -43,6 +43,7 @@ public class HTMLDisplayHelper {
     private static final String FONT_STYLE = "font-family: %s; font-size: %spx; color: %s"; 
     
     public static final String WHITE = "rgb(245,245,245)";
+    public static final String GRAY = "rgb(162,162,168)";
     public static final String LIME = "rgb(0,255,0)";
     public static final String MEDIUM_TURQUOISE = "rgb(72,209,204)";
     public static final String DARK_TURQUOISE = "rgb(0,206,209)";

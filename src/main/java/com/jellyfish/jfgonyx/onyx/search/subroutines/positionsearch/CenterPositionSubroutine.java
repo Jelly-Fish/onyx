@@ -32,14 +32,12 @@
 package com.jellyfish.jfgonyx.onyx.search.subroutines.positionsearch;
 
 import com.jellyfish.jfgonyx.constants.OnyxConst;
-import com.jellyfish.jfgonyx.onyx.OnyxGame;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxDiamond;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxDiamondCollection;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
-import com.jellyfish.jfgonyx.onyx.search.searchutils.SearchUtils;
 import com.jellyfish.jfgonyx.onyx.search.subroutines.abstractions.AbstractSubroutine;
 import com.jellyfish.jfgonyx.onyx.utils.RandomUtils;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
