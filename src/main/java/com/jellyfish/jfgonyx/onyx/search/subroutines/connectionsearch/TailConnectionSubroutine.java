@@ -37,7 +37,9 @@ import com.jellyfish.jfgonyx.onyx.OnyxGame;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
+import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import com.jellyfish.jfgonyx.onyx.search.subroutines.abstractions.AbstractSubroutine;
+import com.jellyfish.jfgonyx.onyx.search.subroutines.positionsearch.OnyxPosStateSubroutine;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -70,13 +72,14 @@ public class TailConnectionSubroutine extends AbstractSubroutine {
      * @param p tail search start position, this position will be used to
      * determinate start position region.
      * @return OnyxMove instances.
+     * @throws com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException
      */
-    public OnyxMove getTail(final OnyxPos p) {
+    public OnyxMove getTail(final OnyxPos p) throws InvalidOnyxPositionException {
         
         this.startPos = p;
         this.findTailPos(p, p.getKey());
         this.score();
-        this.trim();
+        this.trimFoundMoves();
         if (this.candidate != null) print(p.getKey(), this.candidate, BEST_CANDIDATE);
         return this.candidate;
     }
@@ -194,15 +197,18 @@ public class TailConnectionSubroutine extends AbstractSubroutine {
      * Trim tails by score and oponent tail link tendency.
      */
     @SuppressWarnings("null")
-    private void trim() {
+    private void trimFoundMoves() throws InvalidOnyxPositionException {
 
         OnyxMove tmp = null;
         for (OnyxMove m : this.candidates) {
             if (tmp == null) tmp = m;
+            if (new OnyxPosStateSubroutine(tmp.getPos()
+                ).willEnableTake(this.board, this.c, this.color)) continue;
             if (m.getScore() > tmp.getScore()) tmp = m;
         }
         
-        tmp.setTailStartPos(this.startPos);
+        if (tmp != null) tmp.setTailStartPos(this.startPos);
+        
         this.candidate = tmp;
     }
     

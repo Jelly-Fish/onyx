@@ -104,8 +104,7 @@ public class CenterPositionSubroutine extends AbstractSubroutine {
         }
         
         if (move != null) print(OnyxConst.POS_MAP.get(move.getPos().getKey()), BEST_CANDIDATE);
-        
-        move.setScore(SearchUtils.calibrateCenterMoves(OnyxGame.getInstance(), move.getScore()));
+
         return move;
     }
     

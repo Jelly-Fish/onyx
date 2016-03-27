@@ -58,12 +58,13 @@ public class SearchUtils {
         throw new NoValidOnyxPositionsFoundException();
     }
     
+    @Deprecated
     public static float calibrateCenterMoves(final OnyxGame game, final float score) {
         return game.getMoveCount() < 12 ? OnyxConst.SCORE.OVERRIDE.getValue() + score : score;
     }
     
     public static float calibrateTailMoves(final OnyxGame game, final float score) {
-        return (game.getMoveCount() > 12 && game.getMoveCount() < 18) ?
+        return (game.getMoveCount() < 20) ?
             OnyxConst.SCORE.OVERRIDE.getValue() + score : score;              
     }
     

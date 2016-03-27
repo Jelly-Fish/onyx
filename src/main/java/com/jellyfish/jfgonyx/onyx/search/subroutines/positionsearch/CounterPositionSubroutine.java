@@ -112,10 +112,11 @@ public class CounterPositionSubroutine extends AbstractSubroutine {
             }
         }
         
-        if (tmp == null) return null;
+        if (tmp == null || tmp.getPos() == null) return null;
         
         OnyxGame.getInstance().updateTailTendency(tmp);
-        return new OnyxMove(tmp.getPos(), tmp.getPiece(), OnyxConst.SCORE.COUNTER_POS.getValue());
+        final float score = OnyxConst.SCORE.COUNTER_POS.getValue() + (color.bool ? tmp.getPos().y : tmp.getPos().x);
+        return new OnyxMove(tmp.getPos(), tmp.getPiece(), score);
     }
     
     /**

@@ -148,7 +148,7 @@ class Onyx {
     
     private static void print(final String s) {
         if (!StringUtils.isBlank(s)) {
-            MainFrame.print(s, HTMLDisplayHelper.LIME_GREEN);
+            MainFrame.print(s, HTMLDisplayHelper.WHITE);
         }
     }
         

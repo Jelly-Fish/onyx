@@ -277,6 +277,7 @@ public class MainFrame extends javax.swing.JFrame implements OnyxObserver {
         this.move_labels.add(m.toString());
         MainFrameGHelper.appendRawData(LogHelper.getDTFullStamp() + 
                 StringUtils.SPACE + m.toString(), htmlEditorKit, doc, color);
+        this.dataTextPane.select(doc.getLength(), doc.getLength());
     }
     
     public static final void print(final String data, final String color) {       

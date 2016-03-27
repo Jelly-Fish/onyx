@@ -52,7 +52,7 @@ public class OnyxPosStateSubroutine extends AbstractSubroutine {
     
     /**
      * Is this position, if played occupied/played, will result in a take for
-     * oponent Color - oposite to isSubjectToTake search. 
+     * oponent Color.
      * @param board Onyx board instance.
      * @param c onyx position collection instance.
      * @param color the color that is potentially will enable a take move if played.
