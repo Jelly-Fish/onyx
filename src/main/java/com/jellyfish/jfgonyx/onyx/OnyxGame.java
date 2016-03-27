@@ -123,8 +123,7 @@ public class OnyxGame {
     }
     
     public void appendMove(final OnyxMove move) {
-        
-        this.updateTailTendency(move);
+                
         this.moves.put(this.moves.size() + 1, move);
         ++this.moveCount;
         if (this.initialized && this.boardInterface != null) {
@@ -175,7 +174,7 @@ public class OnyxGame {
      * @param m Onyx move instance.
      * @see OnyxMove
      */    
-    private void updateTailTendency(final OnyxMove m) {
+    public void updateTailTendency(final OnyxMove m) {
         
         if (!m.hasTailStart() || !m.getTailStartPos().isOccupied()) return;
         

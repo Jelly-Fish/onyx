@@ -92,6 +92,7 @@ public class TailConnectionSubroutine extends AbstractSubroutine {
         this.startPos = p;
         this.findTailPos(p, p.getKey());
         this.score();
+        this.addStartPositionToCandidates();
         return this.candidates;
     }
 
@@ -125,14 +126,15 @@ public class TailConnectionSubroutine extends AbstractSubroutine {
          * FIXME : low/high tail oponent tendency for increasing score. 
          */
         final boolean lowBorderTendency = 
-                OnyxGame.getInstance().getLowBorderTendency(this.startPos.getPiece().color);
+                OnyxGame.getInstance().getLowBorderTendency(
+                        GraphicsConst.COLOR.getOposite(this.startPos.getPiece().color.bool));
         
         final float boardLength = ((float) OnyxConst.BOARD_SIDE_SQUARE_COUNT) + 1f;
         float score = -1f;
         OnyxPos tmp = null, pos = null;
 
         for (String k : this.keyCandidates) {
-
+            
             pos = c.getPosition(k);    
             if (tmp == null) {
                 
@@ -146,40 +148,41 @@ public class TailConnectionSubroutine extends AbstractSubroutine {
                 if (this.color.bool) {                   
                     if (this.startPos.isLowXBorder()) score = tmp.x;
                     else if (this.startPos.isHighXBorder()) score = boardLength - tmp.x;
-                    //score = lowBorderTendency ? (tmp.y >= (boardLength / 2) ? (score * 1.1f) : score) : score; 
+                    score = lowBorderTendency ? (tmp.y > (boardLength / 2) ? (score + 1f) : score) : score; 
                 }
                 
                 if (!this.color.bool) {
                     if (this.startPos.isLowYBorder()) score = tmp.y;
                     else if (this.startPos.isHighYBorder()) score = boardLength - tmp.y;
-                    //score = lowBorderTendency ? (tmp.x >= (boardLength / 2) ? (score * 1.1f) : score) : score;
+                    score = lowBorderTendency ? (tmp.x > (boardLength / 2) ? (score + 1f) : score) : score;
                 }
-            } 
+            } else {
 
-            if (this.color.bool) {
-                
-                if (this.startPos.isLowXBorder() && pos.x > tmp.x) {
-                    score = pos.x;
-                    tmp = pos;
-                } else if (this.startPos.isHighXBorder() && pos.x < tmp.x) {
-                    score = boardLength - pos.x;
-                    tmp = pos;
-                }
-                
-                //score = lowBorderTendency ? (tmp.y >= (boardLength / 2) ? (score * 1.1f) : score) : score;
-            }
+                if (this.color.bool) {
 
-            if (!this.color.bool) {
-                
-                if (this.startPos.isLowYBorder() && pos.y > tmp.y) {
-                    score = pos.y;
-                    tmp = pos;
-                } else if (this.startPos.isHighYBorder() && pos.y < tmp.y) {
-                    score = boardLength - pos.y;
-                    tmp = pos;
+                    if (this.startPos.isLowXBorder() && pos.x >= tmp.x) {
+                        score = pos.x;
+                        tmp = pos;
+                        score = lowBorderTendency ? (tmp.y > (boardLength / 2) ? (score + 1f) : score) : score;
+                    } else if (this.startPos.isHighXBorder() && pos.x <= tmp.x) {
+                        score = boardLength - pos.x;
+                        tmp = pos;
+                        score = lowBorderTendency ? (tmp.y > (boardLength / 2) ? (score + 1f) : score) : score;
+                    }
                 }
-                
-                //score = lowBorderTendency ? (tmp.x >= (boardLength / 2) ? (score * 1.1f) : score) : score;
+
+                if (!this.color.bool) {
+                    
+                    if (this.startPos.isLowYBorder() && pos.y >= tmp.y) {
+                        score = pos.y;
+                        tmp = pos;
+                        score = lowBorderTendency ? (tmp.x > (boardLength / 2) ? (score + 1f) : score) : score;
+                    } else if (this.startPos.isHighYBorder() && pos.y <= tmp.y) {
+                        score = boardLength - pos.y;
+                        tmp = pos;
+                        score = lowBorderTendency ? (tmp.x > (boardLength / 2) ? (score + 1f) : score) : score;
+                    }                    
+                }
             }
         }
         
@@ -201,6 +204,10 @@ public class TailConnectionSubroutine extends AbstractSubroutine {
         
         tmp.setTailStartPos(this.startPos);
         this.candidate = tmp;
+    }
+    
+    private void addStartPositionToCandidates() {
+        for (OnyxMove m : this.candidates) m.setTailStartPos(this.startPos);
     }
     
     public OnyxMove getCandidate() {
