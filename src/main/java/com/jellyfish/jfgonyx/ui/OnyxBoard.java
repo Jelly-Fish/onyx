@@ -48,6 +48,8 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -62,6 +64,7 @@ public class OnyxBoard extends javax.swing.JPanel implements OnyxBoardI {
     private final KeyInput keyInput;
     private final MouseInput mouseInput;
     private final List<OnyxObserver> observers = new ArrayList<>();
+    private final Rectangle[] borderRectangles;
     
     public OnyxBoard(final OnyxDiamondCollection diamonds, final OnyxPosCollection positions) {
         
@@ -69,6 +72,7 @@ public class OnyxBoard extends javax.swing.JPanel implements OnyxBoardI {
         this.diamonds = diamonds;
         this.positions = positions;
         this.setSize(GraphicsConst.BOARD_WIDTH, GraphicsConst.BOARD_WIDTH);
+        this.borderRectangles = initBorderRectangles();
         this.setOpaque(false);
         this.setDoubleBuffered(true);
         this.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -80,6 +84,26 @@ public class OnyxBoard extends javax.swing.JPanel implements OnyxBoardI {
         this.addMouseMotionListener(mouseInput);
         this.setFocusable(true);
         this.focus();
+    }
+    
+    private Rectangle[] initBorderRectangles() {
+        
+        return new Rectangle[] {
+            new Rectangle(0, 0, (GraphicsConst.SQUARE_WIDTH - 10), GraphicsConst.BOARD_WIDTH),
+            new Rectangle(0, GraphicsConst.BOARD_WIDTH - (GraphicsConst.SQUARE_WIDTH - 10), 
+                GraphicsConst.BOARD_WIDTH, (GraphicsConst.SQUARE_WIDTH - 10)),
+            new Rectangle(GraphicsConst.BOARD_WIDTH - (GraphicsConst.SQUARE_WIDTH - 10), 0,
+                (GraphicsConst.SQUARE_WIDTH - 10), GraphicsConst.BOARD_WIDTH),
+            new Rectangle(0, 0, GraphicsConst.BOARD_WIDTH, (GraphicsConst.SQUARE_WIDTH - 10))
+        };
+    }
+    
+    @Override
+    public boolean collidesWithBorders(final Point point) {
+        for (Rectangle r : this.borderRectangles) {
+            if (r.contains(point)) return true;
+        }
+        return false;
     }
     
     @Override

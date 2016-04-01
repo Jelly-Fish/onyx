@@ -34,6 +34,7 @@ package com.jellyfish.jfgonyx.onyx.interfaces;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxDiamondCollection;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
+import java.awt.Point;
 import java.util.HashMap;
 import java.util.List;
 
@@ -65,5 +66,7 @@ public interface OnyxBoardI {
     void focus();
 
     void restart();
+    
+    boolean collidesWithBorders(final Point point);
     
 }

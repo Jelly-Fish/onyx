@@ -29,46 +29,27 @@
  * POSSIBILITY OF SUCH DAMAGE. 
  ******************************************************************************
  */
-package com.jellyfish.jfgonyx.io.events;
-
-import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
-import com.jellyfish.jfgonyx.onyx.interfaces.OnyxExecutable;
-import com.jellyfish.jfgonyx.ui.OnyxBoard;
-import java.awt.event.InputEvent;
-import java.awt.event.MouseEvent;
+package com.jellyfish.jfgonyx.onyx.entities;
 
 /**
  * @author thw
  */
-public class BoardDragger implements OnyxExecutable {
+public class OnyxPosRectangle {
 
-    private static BoardDragger instance = null;
-    private int iX = 0, iY = 0;
-    
-    @Override
-    public boolean exec(final InputEvent e, final OnyxBoard board) throws InvalidOnyxPositionException {
-        
-        final MouseEvent evt = (MouseEvent) e;
-        board.setLocation(evt.getLocationOnScreen().x - this.iX, evt.getLocationOnScreen().y - this.iY);
-        this.iX = evt.getLocationOnScreen().x - board.getX();
-        this.iY = evt.getLocationOnScreen().y - board.getY();
-        return true;
+    private final float x;
+    private final float y;
+    private final float w;
+    private final float h;
+
+    public OnyxPosRectangle(float x, float y, float w, float h) {
+        this.x = x;
+        this.y = y;
+        this.w = w;
+        this.h = h;
     }
     
-    public void update(MouseEvent e, final OnyxBoard board) {
-        
-        if (board.contains(e.getPoint())) {
-            this.iX = e.getLocationOnScreen().x - board.getX();
-            this.iY = e.getLocationOnScreen().y - board.getY();
-        }
-    }
-      
-    public static BoardDragger getInstance() {
-        
-        if (instance == null) {
-            instance = new BoardDragger();
-        }
-        return instance;
+    public boolean contains(final float x, final float y) {
+        return false;
     }
     
 }

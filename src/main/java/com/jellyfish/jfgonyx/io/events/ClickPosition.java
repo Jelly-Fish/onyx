@@ -31,42 +31,61 @@
  */
 package com.jellyfish.jfgonyx.io.events;
 
+import com.jellyfish.jfgonyx.onyx.entities.OnyxVirtualPiece;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import com.jellyfish.jfgonyx.onyx.interfaces.OnyxExecutable;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
 import java.awt.event.InputEvent;
-import java.awt.event.MouseEvent;
 
 /**
  * @author thw
  */
-public class BoardDragger implements OnyxExecutable {
+public class ClickPosition implements OnyxExecutable {
 
-    private static BoardDragger instance = null;
-    private int iX = 0, iY = 0;
+    private static ClickPosition instance = null;
+    private OnyxVirtualPiece vBackup = null;
     
     @Override
     public boolean exec(final InputEvent e, final OnyxBoard board) throws InvalidOnyxPositionException {
         
-        final MouseEvent evt = (MouseEvent) e;
-        board.setLocation(evt.getLocationOnScreen().x - this.iX, evt.getLocationOnScreen().y - this.iY);
-        this.iX = evt.getLocationOnScreen().x - board.getX();
-        this.iY = evt.getLocationOnScreen().y - board.getY();
-        return true;
+        /**
+         * FIXME, so far, return false.
+         */
+        return false;
+        
+        /*
+        final MouseEvent mE = (MouseEvent) e;
+        String k = null, oldK = null;
+        final OnyxVirtualPiece v = board.getPosCollection().getVirtualPiece() == null ?
+            this.vBackup : board.getPosCollection().getVirtualPiece();
+
+        this.vBackup = v;
+        
+        for (OnyxPos p : board.getPosCollection().getPositions().values()) {
+            
+            if (p.rectangle.contains((float) mE.getX(), (float) mE.getY())) {
+                
+                k = p.getKey();
+                if (board.getPosCollection().getPositions().containsKey(k)) {
+                    oldK = v.getTmpOnyxPosition().getKey();
+                    v.setTmpOnyxPosition(board.getPosCollection().getPositions().get(k));
+                    board.getPosCollection().getPosition(k).setVirtualPiece(v);
+                    board.getPosCollection().getPosition(oldK).setVirtualPiece(null);
+                    board.repaint();
+                    
+                    return true;
+                }
+            }
+        }
+        
+        return false;
+        */
     }
     
-    public void update(MouseEvent e, final OnyxBoard board) {
-        
-        if (board.contains(e.getPoint())) {
-            this.iX = e.getLocationOnScreen().x - board.getX();
-            this.iY = e.getLocationOnScreen().y - board.getY();
-        }
-    }
-      
-    public static BoardDragger getInstance() {
+    public static ClickPosition getInstance() {
         
         if (instance == null) {
-            instance = new BoardDragger();
+            instance = new ClickPosition();
         }
         return instance;
     }

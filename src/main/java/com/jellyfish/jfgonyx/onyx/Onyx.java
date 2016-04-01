@@ -62,7 +62,6 @@ class Onyx {
     private static final String POSCOL_SEARCH_FORMAT = "SEARCH.ONYXPOSCOL -> [%s] score -> [%.1f]";
     private static final String CNX_SEARCH_FORMAT = "SEARCH.CNX -> [%s] score -> [%.3f]";
     private static final String WIN = "%s's WIN ! WuHu !!!";
-    private static final String LOSE = "%s's l00S3..."; 
             
     private final static HashMap<SEARCH_TYPE, OnyxAbstractSearchable> SEARCH = new HashMap<>();
     static {
@@ -112,7 +111,6 @@ class Onyx {
             print(win ? 
                 String.format(WIN, GraphicsConst.COLOR.getOposite(color.bool).str) : 
                 StringUtils.EMPTY, HTMLDisplayHelper.GOLD);
-            print(lose ? String.format(LOSE, color.str) : StringUtils.EMPTY, HTMLDisplayHelper.WHITE);
             
             if (Onyx.gameEnd) return null;
             final OnyxMove m = SearchUtils.assertByScore(mPOSCOL, mCNX);
@@ -138,10 +136,7 @@ class Onyx {
     }
     
     static boolean isLose(final OnyxPosCollection c, final GraphicsConst.COLOR color) throws NoValidOnyxPositionsFoundException {
-        final boolean lose = ((ConnectionSearch) SEARCH.get(SEARCH_TYPE.CNX)).isWin(
-                    c, color);
-        print(lose ? 
-            String.format(LOSE, GraphicsConst.COLOR.getOposite(color.bool).str) : StringUtils.EMPTY);
+        final boolean lose = ((ConnectionSearch) SEARCH.get(SEARCH_TYPE.CNX)).isWin(c, color);
         Onyx.gameEnd = lose;
         return lose;
     }

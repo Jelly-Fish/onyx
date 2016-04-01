@@ -182,18 +182,21 @@ public class OnyxBoardGHelper {
 
         OnyxBoardGHelper.translate(g, p);
 
-        g.setColor(piece.color.bool
-                ? GraphicsConst.BLACK_OUTLINE : GraphicsConst.WHITE_OUTLINE);
-        g.drawOval(p.gX - 15, p.gY - 15, 30, 30);
+        g.setColor(piece.color.bool ? 
+            GraphicsConst.BLACK_OUTLINE : GraphicsConst.WHITE_OUTLINE);
+        g.drawOval(p.gX - GraphicsConst.TRANSLATION, p.gY - GraphicsConst.TRANSLATION, 
+            GraphicsConst.TRANSLATION * 2, GraphicsConst.TRANSLATION * 2);
         g.setColor(piece.color.color);
-        g.fillOval(p.gX - 15, p.gY - 15, 30, 30);
+        g.fillOval(p.gX - GraphicsConst.TRANSLATION, p.gY - GraphicsConst.TRANSLATION, 
+            GraphicsConst.TRANSLATION * 2, GraphicsConst.TRANSLATION * 2);
         
         if (piece.isVirtual() || piece.isEngineMove()) {
             final Stroke s = g.getStroke();
             g.setStroke(new BasicStroke(2));
             g.setColor(piece.isEngineMove() ?
                 GraphicsConst.ONYX_ENGINE_MOVE_OUTLINE : GraphicsConst.VIRTUAL_OUTLINE);
-            g.drawOval(p.gX - 15, p.gY - 15, 30, 30);
+            g.drawOval(p.gX - GraphicsConst.TRANSLATION, p.gY - GraphicsConst.TRANSLATION,
+                GraphicsConst.TRANSLATION * 2, GraphicsConst.TRANSLATION * 2);
             g.setStroke(s);
         }
 
