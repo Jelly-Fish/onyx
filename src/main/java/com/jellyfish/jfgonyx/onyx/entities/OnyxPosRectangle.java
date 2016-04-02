@@ -41,7 +41,7 @@ public class OnyxPosRectangle {
     private final float w;
     private final float h;
 
-    public OnyxPosRectangle(float x, float y, float w, float h) {
+    public OnyxPosRectangle(final float x, final float y, final float w, final float h) {
         this.x = x;
         this.y = y;
         this.w = w;
@@ -49,7 +49,7 @@ public class OnyxPosRectangle {
     }
     
     public boolean contains(final float x, final float y) {
-        return false;
+        return (x > this.x && x < (this.x + this.w) && y > this.y && y < (this.y + this.h));
     }
     
 }

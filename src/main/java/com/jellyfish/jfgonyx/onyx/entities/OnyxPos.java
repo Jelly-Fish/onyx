@@ -36,8 +36,6 @@ import com.jellyfish.jfgonyx.constants.GraphicsConst;
 import com.jellyfish.jfgonyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import com.jellyfish.jfgonyx.onyx.search.subroutines.positionsearch.OnyxPosStateSubroutine;
-import java.awt.Rectangle;
-import java.awt.geom.Rectangle2D;
 import java.util.List;
 
 /**
@@ -61,12 +59,7 @@ public class OnyxPos {
         this.gX = ((int) x) * GraphicsConst.SQUARE_WIDTH;
         this.gY = ((int) y) * GraphicsConst.SQUARE_WIDTH;
         this.diamond = d;
-        this.rectangle = new OnyxPosRectangle(
-            (x * GraphicsConst.SQUARE_WIDTH) - 10f,
-            (y * GraphicsConst.SQUARE_WIDTH) - 10f,
-            ((float) GraphicsConst.SQUARE_WIDTH) * 2f,
-            ((float) GraphicsConst.SQUARE_WIDTH) * 2f
-        );
+        this.rectangle = this.initRectangle(x, y);
         this.init();
     }
     
@@ -172,6 +165,13 @@ public class OnyxPos {
 
     public void setPiece(final OnyxPiece piece) {
         this.piece = piece;
+    }
+
+    private OnyxPosRectangle initRectangle(final float x, final float y) {
+        return  new OnyxPosRectangle(
+            (x * GraphicsConst.SQUARE_WIDTH) - 24f, 
+            (y * GraphicsConst.SQUARE_WIDTH) - 24f, 48f, 48f
+        );
     }
     
 }

@@ -31,11 +31,13 @@
  */
 package com.jellyfish.jfgonyx.io.events;
 
+import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxVirtualPiece;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import com.jellyfish.jfgonyx.onyx.interfaces.OnyxExecutable;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
 import java.awt.event.InputEvent;
+import java.awt.event.MouseEvent;
 
 /**
  * @author thw
@@ -47,27 +49,26 @@ public class ClickPosition implements OnyxExecutable {
     
     @Override
     public boolean exec(final InputEvent e, final OnyxBoard board) throws InvalidOnyxPositionException {
-        
-        /**
-         * FIXME, so far, return false.
-         */
-        return false;
-        
-        /*
+
         final MouseEvent mE = (MouseEvent) e;
         String k = null, oldK = null;
         final OnyxVirtualPiece v = board.getPosCollection().getVirtualPiece() == null ?
             this.vBackup : board.getPosCollection().getVirtualPiece();
-
+        
         this.vBackup = v;
         
         for (OnyxPos p : board.getPosCollection().getPositions().values()) {
             
+            if (!p.isDiamondCenter()) {
+                
+            }
+            
             if (p.rectangle.contains((float) mE.getX(), (float) mE.getY())) {
                 
-                k = p.getKey();
+                k = p.getKey();                
                 if (board.getPosCollection().getPositions().containsKey(k)) {
                     oldK = v.getTmpOnyxPosition().getKey();
+                    if (oldK.equals(k)) return false; 
                     v.setTmpOnyxPosition(board.getPosCollection().getPositions().get(k));
                     board.getPosCollection().getPosition(k).setVirtualPiece(v);
                     board.getPosCollection().getPosition(oldK).setVirtualPiece(null);
@@ -79,7 +80,6 @@ public class ClickPosition implements OnyxExecutable {
         }
         
         return false;
-        */
     }
     
     public static ClickPosition getInstance() {
