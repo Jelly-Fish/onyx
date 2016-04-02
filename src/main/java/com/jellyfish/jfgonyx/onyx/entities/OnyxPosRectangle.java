@@ -52,4 +52,20 @@ public class OnyxPosRectangle {
         return (x > this.x && x < (this.x + this.w) && y > this.y && y < (this.y + this.h));
     }
     
+    public float getX() {
+        return x;
+    }
+
+    public float getY() {
+        return y;
+    }
+
+    public float getW() {
+        return w;
+    }
+
+    public float getH() {
+        return h;
+    }
+    
 }

@@ -59,8 +59,8 @@ public class OnyxPos {
         this.gX = ((int) x) * GraphicsConst.SQUARE_WIDTH;
         this.gY = ((int) y) * GraphicsConst.SQUARE_WIDTH;
         this.diamond = d;
-        this.rectangle = this.initRectangle(x, y);
         this.init();
+        this.rectangle = this.initRectangle(this.x, this.y);
     }
     
     private void init() {
@@ -167,10 +167,41 @@ public class OnyxPos {
         this.piece = piece;
     }
 
-    private OnyxPosRectangle initRectangle(final float x, final float y) {
+    private OnyxPosRectangle initRectangle(final float paramX, final float paramY) {
+        
+        /**
+         * FIXME : improve accuracy.
+         */
+        
+        float pX = paramX, pY = paramY;
+
+        if (!this.diamond.isFivePosDiamond() && !this.isDiamondCenter()) {
+            
+            if (pX % 2 == 0 && pY % 2 == 0) {
+                pX  += (2f / GraphicsConst.SQUARE_WIDTH);
+                pY += (2f / GraphicsConst.SQUARE_WIDTH);
+            } else {
+                if (pX % 2 == 0) {
+                    pY += (8f / GraphicsConst.SQUARE_WIDTH);
+                } else {
+                    pX  += (2f / GraphicsConst.SQUARE_WIDTH);
+                }
+
+                if (pY % 2 == 0) {
+                    pX += (8f / GraphicsConst.SQUARE_WIDTH);
+                } else {
+                    pY += (2f / GraphicsConst.SQUARE_WIDTH);
+                }
+            }
+            
+        } else {
+            pY += (4f / GraphicsConst.SQUARE_WIDTH);
+            pX += (4f / GraphicsConst.SQUARE_WIDTH);
+        }
+        
         return  new OnyxPosRectangle(
-            (x * GraphicsConst.SQUARE_WIDTH) - 24f, 
-            (y * GraphicsConst.SQUARE_WIDTH) - 24f, 48f, 48f
+            (pX * GraphicsConst.SQUARE_WIDTH) - 16f, 
+            (pY * GraphicsConst.SQUARE_WIDTH) - 16f, 32f, 32f
         );
     }
     

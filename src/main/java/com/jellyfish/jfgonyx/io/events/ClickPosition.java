@@ -58,11 +58,7 @@ public class ClickPosition implements OnyxExecutable {
         this.vBackup = v;
         
         for (OnyxPos p : board.getPosCollection().getPositions().values()) {
-            
-            if (!p.isDiamondCenter()) {
-                
-            }
-            
+
             if (p.rectangle.contains((float) mE.getX(), (float) mE.getY())) {
                 
                 k = p.getKey();                

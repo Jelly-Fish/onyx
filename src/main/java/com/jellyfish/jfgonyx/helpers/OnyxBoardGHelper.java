@@ -40,6 +40,7 @@ import com.jellyfish.jfgonyx.constants.GraphicsConst;
 import com.jellyfish.jfgonyx.constants.OnyxBoardPositionOutlineConst;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
 import java.awt.BasicStroke;
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Polygon;
 import java.awt.RenderingHints;
@@ -172,6 +173,11 @@ public class OnyxBoardGHelper {
     private static void drawPieces(Graphics2D g, final OnyxPosCollection c) {
 
         for (OnyxPos p : c.getPositions().values()) {
+            
+            g.setColor(Color.GREEN);
+            g.drawOval((int) p.rectangle.getX(), (int) p.rectangle.getY(), 
+                (int) p.rectangle.getW(), (int) p.rectangle.getH());
+            
             if (p.isOccupied()) {
                 OnyxBoardGHelper.drawPiece(g, p, p.getPiece());
             }
