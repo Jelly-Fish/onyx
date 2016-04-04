@@ -31,9 +31,13 @@
  */
 package com.jellyfish.jfgonyx.io;
 
+import com.jellyfish.jfgonyx.constants.GraphicsConst;
 import com.jellyfish.jfgonyx.io.events.BoardDragger;
 import com.jellyfish.jfgonyx.io.events.ClickPosition;
+import com.jellyfish.jfgonyx.onyx.OnyxGame;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
+import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException;
+import com.jellyfish.jfgonyx.onyx.exceptions.OnyxGameSyncException;
 import com.jellyfish.jfgonyx.onyx.interfaces.OnyxExecutable;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
 import java.awt.Cursor;
@@ -62,6 +66,7 @@ public class MouseInput implements MouseListener, MouseMotionListener {
     }
     
     public void init(final OnyxBoard board) {
+        
         this.board = board;
         this.ops.put(MouseInput.EVENT.DRAG_BOARD, BoardDragger.getInstance());
         this.ops.put(MouseInput.EVENT.SELECT_POS, ClickPosition.getInstance());
@@ -72,6 +77,7 @@ public class MouseInput implements MouseListener, MouseMotionListener {
     
     @Override
     public void mousePressed(MouseEvent e) {
+        
         this.mouseDown = true;
         this.mouseDownOnBorder = this.board.collidesWithBorders(new Point(e.getX(), e.getY()));
         if (this.mouseDownOnBorder) this.board.setCursor(this.GRAB_CURSOR);
@@ -99,11 +105,22 @@ public class MouseInput implements MouseListener, MouseMotionListener {
     
     @Override
     public void mouseClicked(MouseEvent e) { 
+        
+        if (OnyxGame.getInstance().isGameEnd()) return;
+        
+        final GraphicsConst.COLOR c = this.board.getPosCollection().getVirtualPiece().color;
+        OnyxGame.getInstance().initMove(GraphicsConst.COLOR.getOposite(c.bool));
+        
         try {
-            ops.get(MouseInput.EVENT.SELECT_POS).exec(e, this.board);
-        } catch (final InvalidOnyxPositionException Iopex) {
-            Logger.getLogger(MouseInput.class.getName()).log(Level.SEVERE, null, Iopex);
+            if (ops.get(MouseInput.EVENT.SELECT_POS).exec(e, this.board)) {
+                OnyxGame.getInstance().performMove(this.board.getPosCollection(), this.board);
+            }
+        } catch (final OnyxGameSyncException | NoValidOnyxPositionsFoundException | 
+                InvalidOnyxPositionException ex) {
+            Logger.getLogger(KeyInput.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        OnyxGame.getInstance().closeMove();
     }
 
     @Override

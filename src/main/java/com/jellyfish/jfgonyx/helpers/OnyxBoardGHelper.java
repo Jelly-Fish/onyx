@@ -174,9 +174,12 @@ public class OnyxBoardGHelper {
 
         for (OnyxPos p : c.getPositions().values()) {
             
+            /**
+             * FIXME : debug grphically for mouse click position selection.
             g.setColor(Color.GREEN);
             g.drawOval((int) p.rectangle.getX(), (int) p.rectangle.getY(), 
                 (int) p.rectangle.getW(), (int) p.rectangle.getH());
+            */
             
             if (p.isOccupied()) {
                 OnyxBoardGHelper.drawPiece(g, p, p.getPiece());

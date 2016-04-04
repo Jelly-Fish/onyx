@@ -168,7 +168,7 @@ public class OnyxPos {
     }
 
     private OnyxPosRectangle initRectangle(final float paramX, final float paramY) {
-        
+
         /**
          * FIXME : improve accuracy.
          */
@@ -176,27 +176,22 @@ public class OnyxPos {
         float pX = paramX, pY = paramY;
 
         if (!this.diamond.isFivePosDiamond() && !this.isDiamondCenter()) {
-            
-            if (pX % 2 == 0 && pY % 2 == 0) {
-                pX  += (2f / GraphicsConst.SQUARE_WIDTH);
-                pY += (2f / GraphicsConst.SQUARE_WIDTH);
-            } else {
-                if (pX % 2 == 0) {
-                    pY += (8f / GraphicsConst.SQUARE_WIDTH);
-                } else {
-                    pX  += (2f / GraphicsConst.SQUARE_WIDTH);
-                }
 
-                if (pY % 2 == 0) {
-                    pX += (8f / GraphicsConst.SQUARE_WIDTH);
-                } else {
-                    pY += (2f / GraphicsConst.SQUARE_WIDTH);
-                }
+            if (pX % 2f == 0 && pY % 2f == 0) {
+                pY += .2f;
+                pX += .2f;
+            }
+            
+            if (pX % 2f == 0) {
+                pY += .2f;
+            }
+
+            if (pY % 2f == 0) {
+                pX += .2f;
             }
             
         } else {
-            pY += (4f / GraphicsConst.SQUARE_WIDTH);
-            pX += (4f / GraphicsConst.SQUARE_WIDTH);
+            pY += .1f; pX += .1f;
         }
         
         return  new OnyxPosRectangle(
