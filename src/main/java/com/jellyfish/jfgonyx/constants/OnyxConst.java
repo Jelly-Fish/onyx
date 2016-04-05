@@ -41,6 +41,7 @@ public class OnyxConst {
     
     public static final String KEY_SEPARATOR = "/";
     public static final int BOARD_SIDE_SQUARE_COUNT = 11;
+    public static final float BOARD_SIDE_POS_COUNT = ((float) OnyxConst.BOARD_SIDE_SQUARE_COUNT) + 1f;
     
     public static final HashMap<String, String> POS_MAP = new HashMap<>();
     static {

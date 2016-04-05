@@ -63,15 +63,18 @@ class Onyx {
     private static final String CNX_SEARCH_FORMAT = "SEARCH.CNX -> [%s] score -> [%.3f]";
     private static final String WIN = "%s's WIN ! WuHu !!!";
             
-    private final static HashMap<SEARCH_TYPE, OnyxAbstractSearchable> SEARCH = new HashMap<>();
+    private final static HashMap<STYPE, OnyxAbstractSearchable> SEARCH = new HashMap<>();
     static {
-        SEARCH.put(SEARCH_TYPE.POSCOL, new PositionSearch());
-        SEARCH.put(SEARCH_TYPE.RANDOM, new RandomSearch());
-        SEARCH.put(SEARCH_TYPE.INTMAP, new IntmapSearch());
-        SEARCH.put(SEARCH_TYPE.CNX, new ConnectionSearch());
+        SEARCH.put(STYPE.POSCOL, new PositionSearch());
+        SEARCH.put(STYPE.RANDOM, new RandomSearch());
+        SEARCH.put(STYPE.INTMAP, new IntmapSearch());
+        SEARCH.put(STYPE.CNX, new ConnectionSearch());
     }
     
-    static enum SEARCH_TYPE {
+    /**
+     * Search types.
+     */
+    static enum STYPE {
         
         RANDOM("Random dumb search :X"), 
         POSCOL("Use onyx position collection for take or counter position searches."),
@@ -80,7 +83,7 @@ class Onyx {
         
         private final String desc;
         
-        SEARCH_TYPE(final String desc) {
+        STYPE(final String desc) {
             this.desc = desc;
         }   
         
@@ -93,13 +96,13 @@ class Onyx {
         
         try {
             
-            final OnyxMove mPOSCOL = SEARCH.get(SEARCH_TYPE.POSCOL).search(c, board, color);
-            final boolean win = ((ConnectionSearch) SEARCH.get(SEARCH_TYPE.CNX)).isWin(
+            final OnyxMove mPOSCOL = SEARCH.get(STYPE.POSCOL).search(c, board, color);
+            final boolean win = ((ConnectionSearch) SEARCH.get(STYPE.CNX)).isWin(
                     c, GraphicsConst.COLOR.getOposite(color.bool));
-            final boolean lose = ((ConnectionSearch) SEARCH.get(SEARCH_TYPE.CNX)).isWin(
+            final boolean lose = ((ConnectionSearch) SEARCH.get(STYPE.CNX)).isWin(
                     c, color);
-            final OnyxMove mCNX = SEARCH.get(SEARCH_TYPE.CNX).search(c, board, color);
-            
+            final OnyxMove mCNX = SEARCH.get(STYPE.CNX).search(c, board, color);
+                        
             // Assert game ended :
             Onyx.gameEnd = win || lose;
                         
@@ -132,11 +135,11 @@ class Onyx {
     
     static OnyxMove getNewVirtual(final OnyxPosCollection c, final OnyxBoard board, final GraphicsConst.COLOR color) 
             throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
-        return SEARCH.get(SEARCH_TYPE.RANDOM).search(c, board, color);
+        return SEARCH.get(STYPE.RANDOM).search(c, board, color);
     }
     
     static boolean isLose(final OnyxPosCollection c, final GraphicsConst.COLOR color) throws NoValidOnyxPositionsFoundException {
-        final boolean lose = ((ConnectionSearch) SEARCH.get(SEARCH_TYPE.CNX)).isWin(c, color);
+        final boolean lose = ((ConnectionSearch) SEARCH.get(STYPE.CNX)).isWin(c, color);
         Onyx.gameEnd = lose;
         return lose;
     }

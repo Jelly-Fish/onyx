@@ -38,6 +38,7 @@ import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxDiamond;
 import com.jellyfish.jfgonyx.constants.GraphicsConst;
 import com.jellyfish.jfgonyx.constants.OnyxBoardPositionOutlineConst;
+import com.jellyfish.jfgonyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -179,8 +180,8 @@ public class OnyxBoardGHelper {
             g.setColor(Color.GREEN);
             g.drawOval((int) p.rectangle.getX(), (int) p.rectangle.getY(), 
                 (int) p.rectangle.getW(), (int) p.rectangle.getH());
-            */
-            
+             */
+                        
             if (p.isOccupied()) {
                 OnyxBoardGHelper.drawPiece(g, p, p.getPiece());
             }
@@ -272,7 +273,7 @@ public class OnyxBoardGHelper {
         
         int x = 4;
         int y = GraphicsConst.BOARD_WIDTH - GraphicsConst.SQUARE_WIDTH - 12;
-        for (int i = 1; i <= 12; ++i) {
+        for (int i = 1; i <= OnyxConst.BOARD_SIDE_POS_COUNT; ++i) {
             value = String.valueOf(i);
             g.drawString(value, value.length() > 1 ? x : x * 2, y);
             y -= GraphicsConst.SQUARE_WIDTH;
@@ -280,7 +281,7 @@ public class OnyxBoardGHelper {
         
         x = GraphicsConst.BOARD_WIDTH - 20;
         y = GraphicsConst.BOARD_WIDTH - GraphicsConst.SQUARE_WIDTH - 4;
-        for (int i = 1; i <= 12; ++i) {
+        for (int i = 1; i <= OnyxConst.BOARD_SIDE_POS_COUNT; ++i) {
             value = String.valueOf(i);
             g.drawString(value, value.length() > 1 ? x : x + 4, y);
             y -= GraphicsConst.SQUARE_WIDTH;

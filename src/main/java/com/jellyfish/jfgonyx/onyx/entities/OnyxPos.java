@@ -44,6 +44,7 @@ import java.util.List;
  */
 public class OnyxPos {
     
+    private static final float SELECT_CERCLE_RADIUS = 17.6f;
     public final float x, y;
     public final int gX, gY;
     private OnyxPiece piece;
@@ -195,8 +196,9 @@ public class OnyxPos {
         }
         
         return  new OnyxPosRectangle(
-            (pX * GraphicsConst.SQUARE_WIDTH) - 16f, 
-            (pY * GraphicsConst.SQUARE_WIDTH) - 16f, 32f, 32f
+            (pX * GraphicsConst.SQUARE_WIDTH) - SELECT_CERCLE_RADIUS, 
+            (pY * GraphicsConst.SQUARE_WIDTH) - SELECT_CERCLE_RADIUS, 
+                SELECT_CERCLE_RADIUS * 2f, SELECT_CERCLE_RADIUS * 2f
         );
     }
     

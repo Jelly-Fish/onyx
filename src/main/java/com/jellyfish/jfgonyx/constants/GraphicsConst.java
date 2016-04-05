@@ -54,7 +54,7 @@ public class GraphicsConst {
     public static final Color BLACK_OUTLINE = new Color(64,64,64);
     public static final Color VIRTUAL_OUTLINE = Color.CYAN;
     public static final Color ONYX_ENGINE_MOVE_OUTLINE = Color.RED;
-    public static final int TRANSLATION = 15;
+    public static final int TRANSLATION = 16;
     public static final int CENTER_TRANSLATION = 32;
     
     public static enum COLOR {
