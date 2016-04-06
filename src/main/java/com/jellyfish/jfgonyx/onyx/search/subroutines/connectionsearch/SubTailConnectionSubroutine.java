@@ -34,49 +34,50 @@ package com.jellyfish.jfgonyx.onyx.search.subroutines.connectionsearch;
 import com.jellyfish.jfgonyx.constants.GraphicsConst;
 import com.jellyfish.jfgonyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
-import com.jellyfish.jfgonyx.onyx.entities.OnyxPiece;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
-import com.jellyfish.jfgonyx.onyx.search.searchutils.OnyxPositionUtils;
-import java.util.List;
+import com.jellyfish.jfgonyx.ui.OnyxBoard;
 
 /**
- *
+ * Find sub tails meaning tails that do not start on borders.
  * @author thw
  */
-public class WinConnectionLinkSubroutine extends WinConnectionSubroutine {
-        
-    public WinConnectionLinkSubroutine(final OnyxPosCollection c, final GraphicsConst.COLOR color) {
-        super(c, color);
+public class SubTailConnectionSubroutine extends TailConnectionSubroutine {
+
+    public SubTailConnectionSubroutine(final OnyxPosCollection c, final GraphicsConst.COLOR color, 
+            final OnyxBoard board) {
+        super(c, color, board);
     }
     
-    public OnyxMove connectionLink(final List<OnyxMove> tails) {       
-        
-        final List<OnyxPos> borders = OnyxPositionUtils.trimByBorderStartPositionsAndColor(
-                OnyxPositionUtils.getBordersByColor(this.c, this.color), this.color);
-        
-        OnyxPiece tmp = null;
-        WinConnectionSubroutine search = null;
-        for (OnyxMove m : tails) {
-            
-            if (m == null || !m.hasPosition()) continue;
-            
-            tmp = new OnyxPiece(this.color);
-            this.c.getPositions().get(m.getPos().getKey()).setPiece(tmp);
+    @Override
+    protected final void score() {
 
-            for (OnyxPos p : borders) {
-                search = new WinConnectionSubroutine(this.c, this.color, false);
-                search.connection(p, p.getKey());
-                if (search.isWin()) {
-                    this.c.getPositions().get(m.getPos().getKey()).setPiece(null);
-                    return new OnyxMove(m.getPos(), OnyxConst.SCORE.WIN_LINK.getValue());
-                }
-            }
+        this.candidate = new OnyxMove(this.getCounterPos(this.tail), 
+                ((float) (this.links * 10)) * OnyxConst.SCORE.SUB_TAIL.getValue());
+        this.candidates.add(candidate);
+    }
+    
+    public OnyxPos getCounterPos(final OnyxPos p) {
+        
+        /**
+         * FIXME : tot tired to finish - counter sub tails by trimming on x OR y... 
+         */
+        
+        for (String k : p.connections) {
             
-            this.c.getPositions().get(m.getPos().getKey()).setPiece(null);
+            if (!this.c.getPosition(k).isOccupied()) {
+                
+                if ((this.color.bool && c.getPosition(k).x == this.c.getPosition(k).x) || 
+                        (!this.color.bool && c.getPosition(k).y == this.c.getPosition(k).y)) {
+                    return c.getPosition(k);
+                }
+                
+                return c.getPosition(k);
+            }
         }
         
         return null;
     }
     
 }
+

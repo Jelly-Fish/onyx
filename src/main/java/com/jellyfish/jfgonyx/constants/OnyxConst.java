@@ -283,6 +283,7 @@ public class OnyxConst {
         TAKE(600.0f), 
         NEIGHBOUR(1f), 
         TAIL(13.37f),
+        SUB_TAIL(13.77f),
         RANDOM(1f), 
         COUNTER_POS(127.4f), 
         ATTACK(34.4f), 

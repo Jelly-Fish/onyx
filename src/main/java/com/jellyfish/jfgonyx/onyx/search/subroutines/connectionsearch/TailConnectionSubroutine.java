@@ -52,14 +52,16 @@ import java.util.Set;
 public class TailConnectionSubroutine extends AbstractSubroutine {
     
     private final static String BEST_CANDIDATE = "Candidate for start @ %s : [%s] score: %f";
-    private final OnyxPosCollection c;
+    protected final OnyxPosCollection c;
     private final OnyxBoard board;
-    private final GraphicsConst.COLOR color;
-    private final List<OnyxMove> candidates = new ArrayList<>();
-    private final Set<String> keyCandidates = new HashSet();
-    private final Set<String> checked = new HashSet();
-    private OnyxPos startPos;
-    private OnyxMove candidate;
+    protected final GraphicsConst.COLOR color;
+    protected final List<OnyxMove> candidates = new ArrayList<>();
+    protected final Set<String> keyCandidates = new HashSet();
+    private final Set<String> checkedKeys = new HashSet();
+    protected OnyxPos startPos;
+    protected OnyxMove candidate;
+    protected int links = 0;
+    protected OnyxPos tail = null;
     
     public TailConnectionSubroutine(final OnyxPosCollection c, final GraphicsConst.COLOR color, 
             final OnyxBoard board) {
@@ -77,7 +79,7 @@ public class TailConnectionSubroutine extends AbstractSubroutine {
     public OnyxMove getTail(final OnyxPos p) throws InvalidOnyxPositionException {
         
         this.startPos = p;
-        this.findTailPos(p, p.getKey());
+        this.tail = this.findTailPos(p, p.getKey());
         this.score();
         this.trimFoundMoves();
         if (this.candidate != null) print(p.getKey(), this.candidate, BEST_CANDIDATE);
@@ -93,15 +95,16 @@ public class TailConnectionSubroutine extends AbstractSubroutine {
     public List<OnyxMove> getTails(final OnyxPos p) {
         
         this.startPos = p;
-        this.findTailPos(p, p.getKey());
+        this.tail = this.findTailPos(p, p.getKey());
         this.score();
         this.addStartPositionToCandidates();
         return this.candidates;
     }
 
-    private void findTailPos(final OnyxPos p, final String kEx) {       
+    private OnyxPos findTailPos(final OnyxPos p, final String kEx) {       
         
-        this.checked.add(p.getKey());
+        ++this.links;
+        this.checkedKeys.add(p.getKey());
         OnyxPos tmp = null;
         for (String k : p.connections) {
             if (!k.equals(kEx)) {
@@ -116,18 +119,17 @@ public class TailConnectionSubroutine extends AbstractSubroutine {
             if (!k.equals(kEx)) {
                 tmp = c.getPosition(k);
                 if (tmp.isOccupied() && tmp.getPiece().color.bit == this.color.bit 
-                        && !this.checked.contains(tmp.getKey())) {
+                        && !this.checkedKeys.contains(tmp.getKey())) {
                     this.findTailPos(c.getPosition(k), k);
                 }
             }
         }
+        
+        return p;
     }
 
-    private void score() {
-                
-        /**
-         * FIXME : low/high tail oponent tendency for increasing score. 
-         */
+    protected void score() {
+
         final boolean lowBorderTendency = 
                 OnyxGame.getInstance().getLowBorderTendency(
                         GraphicsConst.COLOR.getOposite(this.startPos.getPiece().color.bool));
@@ -138,7 +140,7 @@ public class TailConnectionSubroutine extends AbstractSubroutine {
 
         for (String k : this.keyCandidates) {
             
-            pos = c.getPosition(k);    
+            pos = this.c.getPosition(k);    
             if (tmp == null) {
                 
                 /**
@@ -218,6 +220,14 @@ public class TailConnectionSubroutine extends AbstractSubroutine {
     
     public OnyxMove getCandidate() {
         return candidate;
+    }
+    
+    public Set<String> getCheckedKeys() {
+        return checkedKeys;
+    }
+    
+    public int getLinks() {
+        return links;
     }
     
 }

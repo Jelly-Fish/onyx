@@ -38,19 +38,21 @@ import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author thw
  */
 public class OnyxPositionUtils {
 
-    public static List<OnyxPos> getBorders(final OnyxPosCollection c, final GraphicsConst.COLOR color, final float b) {
+    public static List<OnyxPos> getBordersByColor(final OnyxPosCollection c, final GraphicsConst.COLOR color) {
         
         final List<OnyxPos> borders = new ArrayList<>();
         if (color.bool) {
             for (int i = 1; i <= OnyxConst.BOARD_SIDE_POS_COUNT; ++i) {
                 borders.add(c.getPosition(
-                    String.format(OnyxPosCollection.KEY_FORMAT, b, (float) i)));
+                    String.format(OnyxPosCollection.KEY_FORMAT, 1f, (float) i)));
                 borders.add(c.getPosition(
                     String.format(OnyxPosCollection.KEY_FORMAT, 
                         OnyxConst.BOARD_SIDE_POS_COUNT, (float) i)));
@@ -58,7 +60,7 @@ public class OnyxPositionUtils {
         } else if (!color.bool) {
             for (int i = 1; i <= OnyxConst.BOARD_SIDE_POS_COUNT; ++i) {
                 borders.add(c.getPosition(
-                    String.format(OnyxPosCollection.KEY_FORMAT, (float) i, b)));
+                    String.format(OnyxPosCollection.KEY_FORMAT, (float) i, 1f)));
                 borders.add(c.getPosition(
                     String.format(OnyxPosCollection.KEY_FORMAT, (float) i, OnyxConst.BOARD_SIDE_POS_COUNT)));
             }
@@ -67,15 +69,37 @@ public class OnyxPositionUtils {
         return borders;
     }
     
-    public static List<OnyxPos> trimByBorderStartPositionsByColor(final List<OnyxPos> pos, final GraphicsConst.COLOR color,
-        final float b) {
+    public static List<OnyxPos> getSubBordersByColor(final OnyxPosCollection c, final GraphicsConst.COLOR color) {
+        
+        final List<OnyxPos> borders = new ArrayList<>();
+        float j = .5f;
+        String k = StringUtils.EMPTY;
+        
+        while (j < OnyxConst.BOARD_SIDE_POS_COUNT) {
+            
+            for (float i = .5f; i < OnyxConst.BOARD_SIDE_POS_COUNT; i += .5f) {
+                k = String.format(OnyxPosCollection.KEY_FORMAT, i, j);
+                if (c.containsPosition(k) && c.getPosition(k).isOccupied() && 
+                        c.getPosition(k).getPiece().color.bit == color.bit) {
+                    borders.add(c.getPosition(k));
+                }
+            }
+            
+            j += .5f;
+        }
+        
+        return borders;
+    }
+    
+    public static List<OnyxPos> trimByBorderStartPositionsAndColor(final List<OnyxPos> pos, 
+            final GraphicsConst.COLOR color) {
         
         final List<OnyxPos> positions = new ArrayList<>();
         for (OnyxPos p : pos) {
             if (p.isOccupied() && p.getPiece().color.bit == color.bit) {
-                if (color.bool && p.x == b) { // Black position.
+                if (color.bool && p.x == 1f) { // Black position.
                     positions.add(p);
-                } else if (!color.bool && p.y == b) { // Else white position.
+                } else if (!color.bool && p.y == 1f) { // Else white position.
                     positions.add(p);
                 }
             }
@@ -84,7 +108,8 @@ public class OnyxPositionUtils {
         return positions;
     }
     
-    public static List<OnyxPos> trimByAllExternalBorderByColor(final List<OnyxPos> pos, final GraphicsConst.COLOR color) {
+    public static List<OnyxPos> trimByAllExternalBorderByColor(final List<OnyxPos> pos, 
+            final GraphicsConst.COLOR color) {
         
         final List<OnyxPos> positions = new ArrayList<>();
         for (OnyxPos p : pos) {
@@ -98,6 +123,19 @@ public class OnyxPositionUtils {
                         positions.add(p);
                     }
                 }
+            }
+        }
+        
+        return positions;
+    }
+    
+    public static List<OnyxPos> trimBorderByColorWithExceptions(final List<OnyxPos> pos, 
+            final GraphicsConst.COLOR color, final Set<String> exceptions) {
+        
+        final List<OnyxPos> positions = new ArrayList<>();
+        for (OnyxPos p : pos) {
+            if (p.isOccupied() && !exceptions.contains(p.getKey()) && p.getPiece().color.bit == color.bit) {
+                positions.add(p);
             }
         }
         

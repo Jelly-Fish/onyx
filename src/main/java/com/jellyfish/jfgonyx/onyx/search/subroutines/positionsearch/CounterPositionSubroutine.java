@@ -93,7 +93,7 @@ public class CounterPositionSubroutine extends AbstractSubroutine {
         
         final GraphicsConst.COLOR opColor = GraphicsConst.COLOR.getOposite(color.bool);
         final List<OnyxPos> pos = OnyxPositionUtils.trimByAllExternalBorderByColor(
-                OnyxPositionUtils.getBorders(c, opColor, 1f), opColor);
+                OnyxPositionUtils.getBordersByColor(c, opColor), opColor);
         final List<OnyxMove> cnx = new ArrayList<>();
         OnyxMove tmp = null;
         
