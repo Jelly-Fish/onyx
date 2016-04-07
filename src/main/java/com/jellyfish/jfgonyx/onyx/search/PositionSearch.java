@@ -42,6 +42,7 @@ import com.jellyfish.jfgonyx.onyx.interfaces.search.OnyxPositionSearchable;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException;
+import com.jellyfish.jfgonyx.onyx.search.searchutils.MoveUtils;
 import com.jellyfish.jfgonyx.onyx.search.subroutines.positionsearch.AttackPositionSubroutine;
 import com.jellyfish.jfgonyx.onyx.search.subroutines.positionsearch.CenterPositionSubroutine;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
@@ -67,6 +68,7 @@ public class PositionSearch extends AbstractOnyxSearch implements OnyxPositionSe
      *   Find forward positions depending on color
      */
     @Override
+    @SuppressWarnings("null")
     public OnyxMove search(final OnyxPosCollection c, final OnyxBoard b, final GraphicsConst.COLOR color) 
             throws NoValidOnyxPositionsFoundException {
     
@@ -84,9 +86,9 @@ public class PositionSearch extends AbstractOnyxSearch implements OnyxPositionSe
                         
             OnyxMove tmp = null;
             for (OnyxMove m : moves) {
-                if (m == null) continue;
+                if (MoveUtils.isNotMove(m)) continue;
                 if (m.getPos().posHelper.willEnableTake(b, c, color)) continue;
-                if (tmp == null) tmp = m;
+                if (MoveUtils.isNotMove(tmp)) tmp = m;
                 else tmp = m.getScore() > tmp.getScore() ? m : tmp;
             }
             
@@ -95,7 +97,7 @@ public class PositionSearch extends AbstractOnyxSearch implements OnyxPositionSe
             if (capture != null) posSet = c.getTakePositions(capture.getPos().getKey(), color.bit, b);
             if (!tmp.hasPosition() || c.getPosition(tmp.getPos().getKey()).isOccupied()) {
                 final OnyxMove rm = new RandomSearch().search(c, b, color);
-                if (rm == null) throw new NoValidOnyxPositionsFoundException();
+                if (MoveUtils.isNotMove(rm)) throw new NoValidOnyxPositionsFoundException();
                 else return rm;
             }
             

@@ -31,9 +31,25 @@
  */
 package com.jellyfish.jfgonyx.onyx.abstractions;
 
+import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
+import com.jellyfish.jfgonyx.onyx.search.searchutils.MoveUtils;
+import java.util.List;
+
 /**
  * @author thw
  */
 public class AbstractOnyxSearch {
+    
+    protected final OnyxMove trim(final List<OnyxMove> moves) {
+        
+        OnyxMove tmp = null;
+        for (OnyxMove m : moves) {
+            if (MoveUtils.isNotMove(m)) continue;
+            if (MoveUtils.isNotMove(tmp)) tmp = m;
+            else if (m.getScore() > tmp.getScore()) tmp = m;
+        }
+        
+        return tmp;
+    }
     
 }

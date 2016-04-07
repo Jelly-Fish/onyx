@@ -40,6 +40,7 @@ import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException;
+import com.jellyfish.jfgonyx.onyx.search.searchutils.MoveUtils;
 import com.jellyfish.jfgonyx.onyx.search.searchutils.OnyxPositionUtils;
 import com.jellyfish.jfgonyx.onyx.search.subroutines.abstractions.AbstractSubroutine;
 import com.jellyfish.jfgonyx.onyx.search.subroutines.connectionsearch.TailConnectionSubroutine;
@@ -74,12 +75,12 @@ public class CounterPositionSubroutine extends AbstractSubroutine {
         candidates.add(this.bigLock(c, b, color));
         
         for (OnyxMove m : candidates) {
-            if (m != null) {
-                this.move = (this.move == null || m.getScore() > this.move.getScore()) ? m : this.move;
+            if (MoveUtils.isMove(m)) {
+                this.move = (MoveUtils.isNotMove(this.move) || m.getScore() > this.move.getScore()) ? m : this.move;
             }
         }
         
-        if (this.move != null && this.move.hasPosition()) {
+        if (MoveUtils.isMove(this.move) && this.move.hasPosition()) {
             print(color.str, this.move.getPos().getKey(), 
                     String.valueOf(this.move.getScore()), BEST_CANDIDATE);
         }
@@ -102,9 +103,9 @@ public class CounterPositionSubroutine extends AbstractSubroutine {
 
         for (OnyxMove m : cnx) {
             
-            if (tmp == null) tmp = m;
+            if (MoveUtils.isNotMove(tmp)) tmp = m;
             
-            if (m != null && m.hasPosition() && 
+            if (MoveUtils.isMove(m) && m.hasPosition() && 
                 !m.getPos().posHelper.willEnableTake(b, c, color) && 
                 m.getScore() >= tmp.getScore()) {
                 
@@ -112,7 +113,7 @@ public class CounterPositionSubroutine extends AbstractSubroutine {
             }
         }
         
-        if (tmp == null || tmp.getPos() == null) return null;
+        if (MoveUtils.isNotMove(tmp) || tmp.getPos() == null) return null;
         
         OnyxGame.getInstance().updateTailTendency(tmp);
         final float score = OnyxConst.SCORE.COUNTER_POS.getValue() + (color.bool ? tmp.getPos().y : tmp.getPos().x);

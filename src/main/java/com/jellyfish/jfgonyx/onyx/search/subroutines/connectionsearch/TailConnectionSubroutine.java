@@ -38,6 +38,7 @@ import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
+import com.jellyfish.jfgonyx.onyx.search.searchutils.MoveUtils;
 import com.jellyfish.jfgonyx.onyx.search.subroutines.abstractions.AbstractSubroutine;
 import com.jellyfish.jfgonyx.onyx.search.subroutines.positionsearch.OnyxPosStateSubroutine;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
@@ -82,7 +83,7 @@ public class TailConnectionSubroutine extends AbstractSubroutine {
         this.tail = this.findTailPos(p, p.getKey());
         this.score();
         this.trimFoundMoves();
-        if (this.candidate != null) print(p.getKey(), this.candidate, BEST_CANDIDATE);
+        if (MoveUtils.isMove(this.candidate)) print(p.getKey(), this.candidate, BEST_CANDIDATE);
         return this.candidate;
     }
     
@@ -203,13 +204,14 @@ public class TailConnectionSubroutine extends AbstractSubroutine {
 
         OnyxMove tmp = null;
         for (OnyxMove m : this.candidates) {
-            if (tmp == null) tmp = m;
+            if (MoveUtils.isNotMove(m)) continue;
+            if (MoveUtils.isNotMove(tmp)) tmp = m;
             if (new OnyxPosStateSubroutine(tmp.getPos()
                 ).willEnableTake(this.board, this.c, this.color)) continue;
             if (m.getScore() > tmp.getScore()) tmp = m;
         }
         
-        if (tmp != null) tmp.setTailStartPos(this.startPos);
+        if (MoveUtils.isMove(tmp)) tmp.setTailStartPos(this.startPos);
         
         this.candidate = tmp;
     }

@@ -41,6 +41,7 @@ import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException;
 import com.jellyfish.jfgonyx.onyx.interfaces.search.OnyxConnectionSearchable;
+import com.jellyfish.jfgonyx.onyx.search.searchutils.MoveUtils;
 import com.jellyfish.jfgonyx.onyx.search.searchutils.OnyxPositionUtils;
 import com.jellyfish.jfgonyx.onyx.search.searchutils.SearchUtils;
 import com.jellyfish.jfgonyx.onyx.search.subroutines.connectionsearch.SubTailConnectionSubroutine;
@@ -67,23 +68,21 @@ public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnecti
     private final List<OnyxMove> cnxMoves = new ArrayList<>();
     
     @Override
+    @SuppressWarnings("null")
     public OnyxMove search(final OnyxPosCollection c, final OnyxBoard board, final GraphicsConst.COLOR color) 
             throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
         
         this.init();
         
-        this.cnxMoves.add(this.getTailMove(c, board, color));
+        final OnyxMove tail = this.getTailMove(c, board, color);
+        this.cnxMoves.add(tail);
         this.cnxMoves.add(this.searchWinMove(c, color));
         this.cnxMoves.add(this.searchCounterWinLink(c, board, color));
-        this.cnxMoves.add(this.getSubTailCounterMove(c, board, GraphicsConst.COLOR.getOposite(color.bool)));
-        
-        OnyxMove tmp = null;
-        for (OnyxMove m : this.cnxMoves) {
-            if (tmp == null) tmp = m;
-            else if (m != null && m.getScore() > tmp.getScore()) tmp = m;
-        }
-        
-        return tmp;
+        final OnyxMove counterTail = 
+                this.getSubTailCounterMove(c, board, GraphicsConst.COLOR.getOposite(color.bool));
+        this.cnxMoves.add(counterTail);
+                
+        return this.trim(this.cnxMoves);
     }
     
     private void init() {
@@ -103,9 +102,7 @@ public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnecti
         for (OnyxPos p : borders) {
             search = new WinConnectionSubroutine(c, color, true);
             search.connection(p, p.getKey());
-            if (search.isWin()) {
-                return true;
-            }
+            if (search.isWin()) return true;
         }
         
         return false;
@@ -118,6 +115,7 @@ public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnecti
      * @return best onyx connection search move as a non win end of tail position move.
      * @throws com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException
      */
+    @SuppressWarnings("null")
     private OnyxMove getTailMove(final OnyxPosCollection c, final OnyxBoard board, 
             final GraphicsConst.COLOR color) throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
         
@@ -131,18 +129,13 @@ public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnecti
             this.checkedKeys.addAll(sub.getCheckedKeys());
         }
         
-        OnyxMove tmp = null;
-        for (OnyxMove m : this.cnxTmpMoves) {
-            if (tmp == null) tmp = m;
-            if (m.getScore() >= tmp.getScore()) {
-                tmp = m;
-            }
-        }
-
-        return tmp != null ? new OnyxMove(tmp.getPos(), tmp.getPiece(),
+        final OnyxMove tmp = this.trim(this.cnxTmpMoves);
+        
+        return MoveUtils.isMove(tmp) ? new OnyxMove(tmp.getPos(), tmp.getPiece(),
             SearchUtils.calibrateTailMoves(OnyxGame.getInstance(), tmp.getScore())) : null;
     }
     
+    @SuppressWarnings("null")
     private OnyxMove getSubTailCounterMove(final OnyxPosCollection c, final OnyxBoard board, 
             final GraphicsConst.COLOR color) throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
         
@@ -154,15 +147,9 @@ public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnecti
             moves.add(new SubTailConnectionSubroutine(c, color, board).getTail(p));
         }
         
-        OnyxMove tmp = null;
-        for (OnyxMove m : moves) {
-            if (tmp == null) tmp = m;
-            if (m.getScore() >= tmp.getScore()) {
-                tmp = m;
-            }
-        }
-
-        return tmp != null ? new OnyxMove(tmp.getPos(), tmp.getPiece(), tmp.getScore()) : null;
+        final OnyxMove tmp = this.trim(moves);
+        
+        return MoveUtils.isMove(tmp) ? new OnyxMove(tmp.getPos(), tmp.getPiece(), tmp.getScore()) : null;
     }
     
     /**
@@ -191,15 +178,16 @@ public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnecti
         final GraphicsConst.COLOR opColor = GraphicsConst.COLOR.getOposite(color.bool);
         moves.add(this.getTailMove(c, board, opColor));
         moves.add(this.searchWinMove(c, opColor));
-        for (OnyxMove m : moves) count = m == null ? count : ++count;
+        for (OnyxMove m : moves) count = MoveUtils.isMove(m) ? ++count : count;
         
         if (count > 0) {
             
             move = new WinConnectionLinkSubroutine(c, opColor).connectionLink(moves);
             final OnyxMove capture = new TakePositionSubroutine().getTakePos(c, board, color.bit);
-            if (capture != null) posSet = c.getTakePositions(capture.getPos().getKey(), color.bit, board);
+            if (MoveUtils.isMove(capture)) posSet = c.getTakePositions(capture.getPos().getKey(), color.bit, board);
 
-            if (capture != null && posSet != null && move != null && move.getPos().equals(capture.getPos())) {
+            if (MoveUtils.isMove(capture) && posSet != null && MoveUtils.isMove(move) && 
+                    move.getPos().equals(capture.getPos())) {
                 move.setScore(OnyxConst.SCORE.COUNTER_WIN_LINK.getValue());
                 move.setCaptured(new ArrayList<OnyxPos>());
                 move.getCaptured().addAll(posSet);

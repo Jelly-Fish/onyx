@@ -37,6 +37,7 @@ import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPiece;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
+import com.jellyfish.jfgonyx.onyx.search.searchutils.MoveUtils;
 import com.jellyfish.jfgonyx.onyx.search.searchutils.OnyxPositionUtils;
 import java.util.List;
 
@@ -59,7 +60,7 @@ public class WinConnectionLinkSubroutine extends WinConnectionSubroutine {
         WinConnectionSubroutine search = null;
         for (OnyxMove m : tails) {
             
-            if (m == null || !m.hasPosition()) continue;
+            if (MoveUtils.isNotMove(m) || !m.hasPosition()) continue;
             
             tmp = new OnyxPiece(this.color);
             this.c.getPositions().get(m.getPos().getKey()).setPiece(tmp);

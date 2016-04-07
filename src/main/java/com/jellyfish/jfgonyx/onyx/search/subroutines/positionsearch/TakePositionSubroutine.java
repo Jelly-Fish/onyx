@@ -37,6 +37,7 @@ import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
+import com.jellyfish.jfgonyx.onyx.search.searchutils.MoveUtils;
 import com.jellyfish.jfgonyx.onyx.search.subroutines.abstractions.AbstractSubroutine;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
 import java.util.ArrayList;
@@ -109,7 +110,7 @@ public class TakePositionSubroutine extends AbstractSubroutine {
         }
         
         if (posSet.size() <= 0) return null;
-        if (posSet.size() == 1) move = new OnyxMove(posSet.get(0), 
+        if (posSet.size() == 1) this.move = new OnyxMove(posSet.get(0), 
                 posSet.get(0).getPiece(), posSet, OnyxConst.SCORE.TAKE.getValue());
         
         count = 0;
@@ -123,11 +124,11 @@ public class TakePositionSubroutine extends AbstractSubroutine {
             }            
         }
         
-        if (i > -1) move = new OnyxMove(posSet.get(i), posSet.get(i).getPiece(), 
+        if (i > -1) this.move = new OnyxMove(posSet.get(i), posSet.get(i).getPiece(), 
                 posSet, OnyxConst.SCORE.TAKE.getValue());
-        if (move != null) print(OnyxConst.POS_MAP.get(move.getPos().getKey()), BEST_CANDIDATE);
+        if (MoveUtils.isMove(this.move)) print(OnyxConst.POS_MAP.get(this.move.getPos().getKey()), BEST_CANDIDATE);
         
-        return move;
+        return this.move;
     }
     
 }

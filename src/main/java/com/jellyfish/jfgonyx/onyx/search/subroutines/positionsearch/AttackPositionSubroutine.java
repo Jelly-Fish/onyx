@@ -36,6 +36,7 @@ import com.jellyfish.jfgonyx.onyx.entities.OnyxDiamond;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
+import com.jellyfish.jfgonyx.onyx.search.searchutils.MoveUtils;
 import com.jellyfish.jfgonyx.onyx.search.subroutines.abstractions.AbstractSubroutine;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
 
@@ -71,17 +72,17 @@ public class AttackPositionSubroutine extends AbstractSubroutine {
             }
             
             if (iPos[0] + iPos[2] == 2 && iPos[1] + iPos[3] == 0 && !c.getPosition(keys[1]).isOccupied()) {
-                move = new OnyxMove(c.getPosition(keys[1]), OnyxConst.SCORE.ATTACK.getValue());
+                this.move = new OnyxMove(c.getPosition(keys[1]), OnyxConst.SCORE.ATTACK.getValue());
                 break;
             }
             
             if (iPos[1] + iPos[3] == 2 && iPos[0] + iPos[2] == 0 && !c.getPosition(keys[0]).isOccupied()) {
-                move = new OnyxMove(c.getPosition(keys[0]), OnyxConst.SCORE.ATTACK.getValue());
+                this.move = new OnyxMove(c.getPosition(keys[0]), OnyxConst.SCORE.ATTACK.getValue());
                 break;
             }
         }
         
-        if (move != null) print(OnyxConst.POS_MAP.get(move.getPos().getKey()), BEST_CANDIDATE);
+        if (MoveUtils.isMove(this.move)) print(OnyxConst.POS_MAP.get(move.getPos().getKey()), BEST_CANDIDATE);
         
         return move;
     }

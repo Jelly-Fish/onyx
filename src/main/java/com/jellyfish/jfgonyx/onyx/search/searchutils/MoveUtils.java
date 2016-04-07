@@ -29,51 +29,21 @@
  * POSSIBILITY OF SUCH DAMAGE. 
  ******************************************************************************
  */
-package com.jellyfish.jfgonyx.onyx.search.subroutines.connectionsearch;
+package com.jellyfish.jfgonyx.onyx.search.searchutils;
 
-import com.jellyfish.jfgonyx.constants.GraphicsConst;
-import com.jellyfish.jfgonyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
-import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
-import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
-import com.jellyfish.jfgonyx.ui.OnyxBoard;
 
 /**
- * Find sub tails meaning tails that do not start on borders.
  * @author thw
  */
-public class SubTailConnectionSubroutine extends TailConnectionSubroutine {
-
-    public SubTailConnectionSubroutine(final OnyxPosCollection c, final GraphicsConst.COLOR color, 
-            final OnyxBoard board) {
-        super(c, color, board);
+public class MoveUtils {
+    
+    public static boolean isMove(final OnyxMove m) {
+        return m != null;
     }
     
-    @Override
-    protected final void score() {
-
-        final OnyxPos p = this.getCounterPos(this.tail);
-        this.candidate = p != null ? new OnyxMove(p, ((float) this.links)  * OnyxConst.SCORE.SUB_TAIL.getValue()) : null;
-        this.candidates.add(candidate);
-    }
-    
-    private OnyxPos getCounterPos(final OnyxPos t) {
-        
-        if (t == null) return t;
-        
-        for (String k : t.connections) {
-            
-            if (!this.c.getPosition(k).isOccupied() && !this.c.getPosition(k).isDiamondCenter()) {
-                
-                if ((this.color.bool && t.y == this.c.getPosition(k).y) || 
-                        (!this.color.bool && t.x == this.c.getPosition(k).x)) {
-                    return c.getPosition(k);
-                }
-            }
-        }
-        
-        return null;
+    public static boolean isNotMove(final OnyxMove m) {
+        return m == null;
     }
     
 }
-

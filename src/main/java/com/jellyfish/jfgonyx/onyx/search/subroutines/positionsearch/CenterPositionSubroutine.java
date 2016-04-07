@@ -38,6 +38,7 @@ import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxDiamondCollection;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
+import com.jellyfish.jfgonyx.onyx.search.searchutils.MoveUtils;
 import com.jellyfish.jfgonyx.onyx.search.subroutines.abstractions.AbstractSubroutine;
 import com.jellyfish.jfgonyx.onyx.utils.RandomUtils;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
@@ -92,7 +93,7 @@ public class CenterPositionSubroutine extends AbstractSubroutine {
             }
             
             if (pos.size() > 0) {
-                move = new OnyxMove(pos.get(pos.size() == 1 ? 0 : RandomUtils.randInt(0, pos.size() - 1)), 
+                this.move = new OnyxMove(pos.get(pos.size() == 1 ? 0 : RandomUtils.randInt(0, pos.size() - 1)), 
                     OnyxConst.SCORE.CENTER.getValue() - side);
                 break;
             }
@@ -101,7 +102,7 @@ public class CenterPositionSubroutine extends AbstractSubroutine {
             ++side;
         }
         
-        if (move != null) print(OnyxConst.POS_MAP.get(move.getPos().getKey()), BEST_CANDIDATE);
+        if (MoveUtils.isMove(this.move)) print(OnyxConst.POS_MAP.get(this.move.getPos().getKey()), BEST_CANDIDATE);
 
         return move;
     }
@@ -169,8 +170,8 @@ public class CenterPositionSubroutine extends AbstractSubroutine {
         if (r == null || r.length == 0) return null;
         i = r.length / 2;
         
-        move = new OnyxMove(r[i].getCenterPos(), OnyxConst.SCORE.CENTER.getValue());
-        if (move != null) print(OnyxConst.POS_MAP.get(move.getPos().getKey()), BEST_CANDIDATE);
+        this.move = new OnyxMove(r[i].getCenterPos(), OnyxConst.SCORE.CENTER.getValue());
+        if (MoveUtils.isMove(this.move)) print(OnyxConst.POS_MAP.get(this.move.getPos().getKey()), BEST_CANDIDATE);
         
         return move;
     }
