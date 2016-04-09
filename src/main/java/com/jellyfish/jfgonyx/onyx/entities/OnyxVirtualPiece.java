@@ -31,7 +31,7 @@
  */
 package com.jellyfish.jfgonyx.onyx.entities;
 
-import com.jellyfish.jfgonyx.constants.GraphicsConst;
+import com.jellyfish.jfgonyx.constants.OnyxConst;
 
 /**
  *
@@ -39,7 +39,7 @@ import com.jellyfish.jfgonyx.constants.GraphicsConst;
  */
 public class OnyxVirtualPiece extends OnyxPiece {
 
-    public OnyxVirtualPiece(final GraphicsConst.COLOR c) {
+    public OnyxVirtualPiece(final OnyxConst.COLOR c) {
         super(c);
         this.virtual = true;
     }

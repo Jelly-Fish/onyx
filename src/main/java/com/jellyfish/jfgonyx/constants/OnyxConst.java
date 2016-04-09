@@ -31,6 +31,7 @@
  */
 package com.jellyfish.jfgonyx.constants;
 
+import java.awt.Color;
 import java.util.HashMap;
 
 /**
@@ -283,7 +284,7 @@ public class OnyxConst {
         TAKE(600.0f), 
         NEIGHBOUR(1f), 
         TAIL(13.37f),
-        SUB_TAIL(52.77f),
+        SUB_TAIL(39.77f),
         RANDOM(1f), 
         COUNTER_POS(127.4f), 
         ATTACK(34.4f), 
@@ -300,6 +301,38 @@ public class OnyxConst {
         
         public float getValue() {
             return this.score;
+        }
+        
+    }
+ 
+    public static enum COLOR {
+        
+        WHITE("white", GraphicsConst.WHITE, false, 0), BLACK("black", GraphicsConst.BLACK, true, 1),
+        VIRTUAL_WHITE("virtual white", new Color(1f,1f,1f,.8f), false, 0), 
+        VIRTUAL_BLACK("virtual black", new Color(0f,0f,0f,.8f), true, 1);
+        
+        public final String str;
+        public final Boolean bool;
+        public final int bit;
+        public final Color color;
+        
+        COLOR(final String str, final Color color, final Boolean bool, final int bit) {
+            this.str = str;
+            this.bool = bool;
+            this.bit = bit;
+            this.color = color;
+        }
+        
+        public static COLOR getOposite(final boolean bool) {
+            return bool ? COLOR.WHITE : COLOR.BLACK;
+        }
+        
+        public static COLOR getVirtualOposite(final boolean bool) {
+            return bool ? COLOR.VIRTUAL_WHITE : COLOR.VIRTUAL_BLACK;
+        }
+        
+        public static COLOR getVirtual(final boolean bool) {
+            return bool ? COLOR.VIRTUAL_BLACK : COLOR.VIRTUAL_WHITE;
         }
         
     }

@@ -30,7 +30,7 @@
 
 package com.jellyfish.jfgonyx.starter;
 
-import com.jellyfish.jfgonyx.constants.GraphicsConst;
+import com.jellyfish.jfgonyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.helpers.HTMLDisplayHelper;
 import com.jellyfish.jfgonyx.helpers.LogHelper;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxDiamondCollection;
@@ -75,10 +75,10 @@ public class Starter {
         }
         //</editor-fold>
         
-        start(GraphicsConst.COLOR.BLACK);
+        start(OnyxConst.COLOR.BLACK);
     }
     
-    private static void start(final GraphicsConst.COLOR color) {
+    private static void start(final OnyxConst.COLOR color) {
         
         if (color.bool) {
             startBlack();
@@ -101,10 +101,10 @@ public class Starter {
         panel.init();
         mainFrame = new MainFrame(panel, board);
         MainFrame.print(String.format(NEW_GAME, LogHelper.getDTFullStamp(), 
-                GraphicsConst.COLOR.WHITE.str), HTMLDisplayHelper.GOLD);
+                OnyxConst.COLOR.WHITE.str), HTMLDisplayHelper.GOLD);
         board.setObserver(mainFrame);
-        OnyxGame.getInstance().init((OnyxBoardI) board, GraphicsConst.COLOR.BLACK);
-        OnyxGame.getInstance().initMove(GraphicsConst.COLOR.BLACK);
+        OnyxGame.getInstance().init((OnyxBoardI) board, OnyxConst.COLOR.BLACK);
+        OnyxGame.getInstance().initMove(OnyxConst.COLOR.BLACK);
         try {
             OnyxGame.getInstance().performMove(positions, board);
         } catch (OnyxGameSyncException | NoValidOnyxPositionsFoundException | InvalidOnyxPositionException ex) {
@@ -122,7 +122,7 @@ public class Starter {
         OnyxBoardGHelper.buildPolygons(diamonds);
         final OnyxPosCollection positions = new OnyxPosCollection();
         positions.init(diamonds);
-        positions.spawnVirtualPiece(GraphicsConst.COLOR.VIRTUAL_BLACK);
+        positions.spawnVirtualPiece(OnyxConst.COLOR.VIRTUAL_BLACK);
         final OnyxBoard board = new OnyxBoard(diamonds, positions);
         board.initStartLayout();
         board.initInput();
@@ -130,9 +130,9 @@ public class Starter {
         panel.init();
         mainFrame = new MainFrame(panel, board);
         MainFrame.print(String.format(NEW_GAME, LogHelper.getDTFullStamp(), 
-                GraphicsConst.COLOR.BLACK.str), HTMLDisplayHelper.GOLD);
+                OnyxConst.COLOR.BLACK.str), HTMLDisplayHelper.GOLD);
         board.setObserver(mainFrame);
-        OnyxGame.getInstance().init((OnyxBoardI) board, GraphicsConst.COLOR.WHITE);
+        OnyxGame.getInstance().init((OnyxBoardI) board, OnyxConst.COLOR.WHITE);
         new Intmap(positions).print(0, OnyxGame.getInstance().dtStamp);
         board.notifyMoves(OnyxGame.getInstance().moves, HTMLDisplayHelper.GAINSBORO);
         OnyxGame.getInstance().initialized = true;
@@ -146,18 +146,18 @@ public class Starter {
         final OnyxBoardI board = OnyxGame.getInstance().boardInterface;
         board.restart();
         OnyxGame.newInstance().moves.clear();        
-        OnyxGame.getInstance().init(board, GraphicsConst.COLOR.BLACK);
+        OnyxGame.getInstance().init(board, OnyxConst.COLOR.BLACK);
         OnyxGame.getInstance().boardInterface.initStartLayout();
         new Intmap(OnyxGame.getInstance().boardInterface.getPosCollection()
             ).print(0, OnyxGame.getInstance().dtStamp);
         MainFrame.print(String.format(RESTART_GAME, LogHelper.getDTFullStamp(), 
-                GraphicsConst.COLOR.WHITE.str), HTMLDisplayHelper.GOLD);
+                OnyxConst.COLOR.WHITE.str), HTMLDisplayHelper.GOLD);
         OnyxGame.getInstance().boardInterface.notifyMoves(OnyxGame.getInstance().moves, 
                 HTMLDisplayHelper.GAINSBORO);
         OnyxGame.getInstance().initialized = true;
                 
         try {
-            OnyxGame.getInstance().initMove(GraphicsConst.COLOR.BLACK);
+            OnyxGame.getInstance().initMove(OnyxConst.COLOR.BLACK);
             OnyxGame.getInstance().performMove(OnyxGame.getInstance().boardInterface.getPosCollection(), 
                     (OnyxBoard) OnyxGame.getInstance().boardInterface);
         } catch (OnyxGameSyncException | NoValidOnyxPositionsFoundException | InvalidOnyxPositionException ex) {
@@ -172,18 +172,18 @@ public class Starter {
         final OnyxBoardI board = OnyxGame.getInstance().boardInterface;
         board.restart();
         OnyxGame.newInstance().moves.clear();
-        OnyxGame.getInstance().init(board, GraphicsConst.COLOR.WHITE);
+        OnyxGame.getInstance().init(board, OnyxConst.COLOR.WHITE);
         OnyxGame.getInstance().boardInterface.initStartLayout();
         new Intmap(OnyxGame.getInstance().boardInterface.getPosCollection()
             ).print(0, OnyxGame.getInstance().dtStamp);
         MainFrame.print(String.format(RESTART_GAME, LogHelper.getDTFullStamp(), 
-                GraphicsConst.COLOR.BLACK.str), HTMLDisplayHelper.GOLD);
+                OnyxConst.COLOR.BLACK.str), HTMLDisplayHelper.GOLD);
         OnyxGame.getInstance().boardInterface.notifyMoves(OnyxGame.getInstance().moves, 
                 HTMLDisplayHelper.GAINSBORO);
         OnyxGame.getInstance().initialized = true;
         
         OnyxGame.getInstance().boardInterface.getPosCollection().spawnVirtualPiece(
-            GraphicsConst.COLOR.VIRTUAL_BLACK);
+            OnyxConst.COLOR.VIRTUAL_BLACK);
         OnyxGame.getInstance().setGameEnd(false);
     }
     

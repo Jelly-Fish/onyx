@@ -32,6 +32,7 @@
 package com.jellyfish.jfgonyx.onyx.search.subroutines.positionsearch;
 
 import com.jellyfish.jfgonyx.constants.GraphicsConst;
+import com.jellyfish.jfgonyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxDiamond;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
@@ -60,11 +61,11 @@ public class OnyxPosStateSubroutine extends AbstractSubroutine {
      * @throws com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException
      */
     public final boolean willEnableTake(final OnyxBoard board, final OnyxPosCollection c, 
-            final GraphicsConst.COLOR color) throws InvalidOnyxPositionException {
+            final OnyxConst.COLOR color) throws InvalidOnyxPositionException {
 
         if (this.pos == null || this.pos.isDiamondCenter()) return false;
         
-        final GraphicsConst.COLOR opColor = GraphicsConst.COLOR.getOposite(color.bool);
+        final OnyxConst.COLOR opColor = OnyxConst.COLOR.getOposite(color.bool);
         String[] keys = null;
         int k = -1, l = 0, j = 0, m = -1; 
 
@@ -110,11 +111,11 @@ public class OnyxPosStateSubroutine extends AbstractSubroutine {
      * @throws com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException
      */
     public final boolean isSubjectToTake(final OnyxBoard board, final OnyxPosCollection c, 
-            final GraphicsConst.COLOR color) throws InvalidOnyxPositionException {
+            final OnyxConst.COLOR color) throws InvalidOnyxPositionException {
 
         if (this.pos.isDiamondCenter()) return false;
         
-        final GraphicsConst.COLOR oC = GraphicsConst.COLOR.getOposite(color.bool);
+        final OnyxConst.COLOR oC = OnyxConst.COLOR.getOposite(color.bool);
         String[] keys = null;
         int k = -1, l = 0, j = 0, m = -1; 
 

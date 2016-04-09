@@ -31,7 +31,7 @@
  */
 package com.jellyfish.jfgonyx.io;
 
-import com.jellyfish.jfgonyx.constants.GraphicsConst;
+import com.jellyfish.jfgonyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.io.events.KeyMoveVirutalPiece;
 import com.jellyfish.jfgonyx.onyx.OnyxGame;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
@@ -67,8 +67,8 @@ public class KeyInput implements KeyListener {
         
         if (OnyxGame.getInstance().isGameEnd()) return;
         
-        final GraphicsConst.COLOR c = this.board.getPosCollection().getVirtualPiece().color;
-        OnyxGame.getInstance().initMove(GraphicsConst.COLOR.getOposite(c.bool));
+        final OnyxConst.COLOR c = this.board.getPosCollection().getVirtualPiece().color;
+        OnyxGame.getInstance().initMove(OnyxConst.COLOR.getOposite(c.bool));
 
         try {
             if (this.ops.get(KeyInput.EVENT.VIRTUAL_P_MOVE).exec(e, this.board)) {

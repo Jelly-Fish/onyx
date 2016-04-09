@@ -32,7 +32,7 @@
 package com.jellyfish.jfgonyx.onyx.search;
 
 import com.jellyfish.jfgonyx.onyx.search.searchutils.Intmap;
-import com.jellyfish.jfgonyx.constants.GraphicsConst;
+import com.jellyfish.jfgonyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.abstractions.AbstractOnyxSearch;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
@@ -52,7 +52,7 @@ public class IntmapSearch extends AbstractOnyxSearch implements OnyxRandomSeacha
 
     @Override
     public OnyxMove search(final OnyxPosCollection c, final OnyxBoard board, 
-            final GraphicsConst.COLOR color) throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
+            final OnyxConst.COLOR color) throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
         
         final boolean win = this.isWin(new Intmap(c), color);
         return null;
@@ -67,7 +67,7 @@ public class IntmapSearch extends AbstractOnyxSearch implements OnyxRandomSeacha
      *   ELSE return false
      */
     @Deprecated
-    public boolean isWin(final Intmap imap, final GraphicsConst.COLOR c) {
+    public boolean isWin(final Intmap imap, final OnyxConst.COLOR c) {
         
         final int[][] mtx = imap.getMtx_intmap();
         final List<Point> bounds = this.getStartIndexes(mtx, c.bit);
@@ -75,7 +75,7 @@ public class IntmapSearch extends AbstractOnyxSearch implements OnyxRandomSeacha
     }
     
     @Override
-    public boolean isWin(final OnyxPosCollection c, final GraphicsConst.COLOR color) 
+    public boolean isWin(final OnyxPosCollection c, final OnyxConst.COLOR color) 
             throws NoValidOnyxPositionsFoundException {
         throw new UnsupportedOperationException();
     }

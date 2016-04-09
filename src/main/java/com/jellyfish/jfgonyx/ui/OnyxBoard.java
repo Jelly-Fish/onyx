@@ -31,6 +31,7 @@
 package com.jellyfish.jfgonyx.ui;
 
 import com.jellyfish.jfgonyx.constants.GraphicsConst;
+import com.jellyfish.jfgonyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxDiamond;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxDiamondCollection;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPiece;
@@ -122,28 +123,28 @@ public class OnyxBoard extends javax.swing.JPanel implements OnyxBoardI {
         
         for (OnyxPos p : this.positions.getPositions().values()) p.setPiece(null);
         
-        this.positions.getPosition("1,0-6,0").addPiece(new OnyxPiece(GraphicsConst.COLOR.BLACK));
+        this.positions.getPosition("1,0-6,0").addPiece(new OnyxPiece(OnyxConst.COLOR.BLACK));
         OnyxGame.getInstance().appendMove(new OnyxMove(this.positions.getPosition("1,0-6,0"), 
                 this.positions.getPosition("1,0-6,0").getPiece()));
-        this.positions.getPosition("6,0-1,0").addPiece(new OnyxPiece(GraphicsConst.COLOR.WHITE));
+        this.positions.getPosition("6,0-1,0").addPiece(new OnyxPiece(OnyxConst.COLOR.WHITE));
         OnyxGame.getInstance().appendMove(new OnyxMove(this.positions.getPosition("6,0-1,0"), 
                 this.positions.getPosition("6,0-1,0").getPiece()));
-        this.positions.getPosition("12,0-7,0").addPiece(new OnyxPiece(GraphicsConst.COLOR.BLACK));
+        this.positions.getPosition("12,0-7,0").addPiece(new OnyxPiece(OnyxConst.COLOR.BLACK));
         OnyxGame.getInstance().appendMove(new OnyxMove(this.positions.getPosition("12,0-7,0"), 
                 this.positions.getPosition("12,0-7,0").getPiece()));
-        this.positions.getPosition("7,0-12,0").addPiece(new OnyxPiece(GraphicsConst.COLOR.WHITE));
+        this.positions.getPosition("7,0-12,0").addPiece(new OnyxPiece(OnyxConst.COLOR.WHITE));
         OnyxGame.getInstance().appendMove(new OnyxMove(this.positions.getPosition("7,0-12,0"), 
                 this.positions.getPosition("7,0-12,0").getPiece()));
-        this.positions.getPosition("1,0-7,0").addPiece(new OnyxPiece(GraphicsConst.COLOR.BLACK));
+        this.positions.getPosition("1,0-7,0").addPiece(new OnyxPiece(OnyxConst.COLOR.BLACK));
         OnyxGame.getInstance().appendMove(new OnyxMove(this.positions.getPosition("1,0-7,0"), 
                 this.positions.getPosition("1,0-7,0").getPiece()));
-        this.positions.getPosition("7,0-1,0").addPiece(new OnyxPiece(GraphicsConst.COLOR.WHITE));
+        this.positions.getPosition("7,0-1,0").addPiece(new OnyxPiece(OnyxConst.COLOR.WHITE));
         OnyxGame.getInstance().appendMove(new OnyxMove(this.positions.getPosition("7,0-1,0"), 
                 this.positions.getPosition("7,0-1,0").getPiece()));
-        this.positions.getPosition("12,0-6,0").addPiece(new OnyxPiece(GraphicsConst.COLOR.BLACK));
+        this.positions.getPosition("12,0-6,0").addPiece(new OnyxPiece(OnyxConst.COLOR.BLACK));
         OnyxGame.getInstance().appendMove(new OnyxMove(this.positions.getPosition("12,0-6,0"), 
                 this.positions.getPosition("12,0-6,0").getPiece()));
-        this.positions.getPosition("6,0-12,0").addPiece(new OnyxPiece(GraphicsConst.COLOR.WHITE));
+        this.positions.getPosition("6,0-12,0").addPiece(new OnyxPiece(OnyxConst.COLOR.WHITE));
         OnyxGame.getInstance().appendMove(new OnyxMove(this.positions.getPosition("6,0-12,0"), 
                 this.positions.getPosition("6,0-12,0").getPiece()));
     }
@@ -158,7 +159,6 @@ public class OnyxBoard extends javax.swing.JPanel implements OnyxBoardI {
     public boolean isCenterPosPlayable(final String k) {
         
         int counter = 0;
-        OnyxDiamond tmpDiamond = null;
         if (k == null || !this.positions.containsPosition(k) || 
                 !this.isDiamondCenter(k)) {
             return false;

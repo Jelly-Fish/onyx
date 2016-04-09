@@ -31,7 +31,6 @@
  */
 package com.jellyfish.jfgonyx.onyx.search.subroutines.connectionsearch;
 
-import com.jellyfish.jfgonyx.constants.GraphicsConst;
 import com.jellyfish.jfgonyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.OnyxGame;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
@@ -52,10 +51,10 @@ import java.util.Set;
  */
 public class TailConnectionSubroutine extends AbstractSubroutine {
     
-    private final static String BEST_CANDIDATE = "Candidate for start @ %s : [%s] score: %f";
+    protected AbstractSubroutine.SUBROUTINE_TYPE type;
     protected final OnyxPosCollection c;
-    private final OnyxBoard board;
-    protected final GraphicsConst.COLOR color;
+    protected final OnyxBoard board;
+    protected final OnyxConst.COLOR color;
     protected final List<OnyxMove> candidates = new ArrayList<>();
     protected final Set<String> keyCandidates = new HashSet();
     private final Set<String> checkedKeys = new HashSet();
@@ -64,11 +63,12 @@ public class TailConnectionSubroutine extends AbstractSubroutine {
     protected int links = 0;
     protected OnyxPos tail = null;
     
-    public TailConnectionSubroutine(final OnyxPosCollection c, final GraphicsConst.COLOR color, 
+    public TailConnectionSubroutine(final OnyxPosCollection c, final OnyxConst.COLOR color, 
             final OnyxBoard board) {
         this.c = c;
         this.color = color;
         this.board = board;
+        this.type = AbstractSubroutine.SUBROUTINE_TYPE.TAIL;
     }
     
     /**
@@ -83,7 +83,8 @@ public class TailConnectionSubroutine extends AbstractSubroutine {
         this.tail = this.findTailPos(p, p.getKey());
         this.score();
         this.trimFoundMoves();
-        if (MoveUtils.isMove(this.candidate)) print(p.getKey(), this.candidate, BEST_CANDIDATE);
+        if (MoveUtils.isMove(this.candidate)) print(AbstractSubroutine.BEST_CANDIDATE_TAIL_FORMAT, 
+                p.getKey(), this.type, this.color.str, this.candidate);
         return this.candidate;
     }
     
@@ -133,7 +134,7 @@ public class TailConnectionSubroutine extends AbstractSubroutine {
 
         final boolean lowBorderTendency = 
                 OnyxGame.getInstance().getLowBorderTendency(
-                        GraphicsConst.COLOR.getOposite(this.startPos.getPiece().color.bool));
+                        OnyxConst.COLOR.getOposite(this.startPos.getPiece().color.bool));
         
         final float boardLength = ((float) OnyxConst.BOARD_SIDE_SQUARE_COUNT) + 1f;
         float score = -1f;
@@ -200,7 +201,7 @@ public class TailConnectionSubroutine extends AbstractSubroutine {
      * Trim tails by score and oponent tail link tendency.
      */
     @SuppressWarnings("null")
-    private void trimFoundMoves() throws InvalidOnyxPositionException {
+    protected void trimFoundMoves() throws InvalidOnyxPositionException {
 
         OnyxMove tmp = null;
         for (OnyxMove m : this.candidates) {

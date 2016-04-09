@@ -31,23 +31,23 @@
  */
 package com.jellyfish.jfgonyx.onyx.entities;
 
-import com.jellyfish.jfgonyx.constants.GraphicsConst;
+import com.jellyfish.jfgonyx.constants.OnyxConst;
 
 /**
  * @author thw
  */
 public class OnyxPiece {
     
-    public final GraphicsConst.COLOR color;
+    public final OnyxConst.COLOR color;
     protected boolean virtual = false;
     protected boolean engineMove = false;
     private OnyxPos tmpOnyxPosition = null;
 
-    public OnyxPiece(final GraphicsConst.COLOR c) {
+    public OnyxPiece(final OnyxConst.COLOR c) {
         this.color = c;
     }
     
-    public OnyxPiece(final GraphicsConst.COLOR c, final boolean engineMove) {
+    public OnyxPiece(final OnyxConst.COLOR c, final boolean engineMove) {
         this(c);
         this.engineMove = engineMove;
     }

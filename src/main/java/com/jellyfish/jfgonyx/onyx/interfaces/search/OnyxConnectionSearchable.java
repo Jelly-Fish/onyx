@@ -31,8 +31,10 @@
  */
 package com.jellyfish.jfgonyx.onyx.interfaces.search;
 
-import com.jellyfish.jfgonyx.constants.GraphicsConst;
+import com.jellyfish.jfgonyx.constants.OnyxConst;
+import com.jellyfish.jfgonyx.onyx.entities.OnyxDiamond;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
+import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException;
@@ -56,7 +58,7 @@ public interface OnyxConnectionSearchable extends OnyxAbstractSearchable {
      * @see OnyxPosCollection OnyxPos instaces mapped to string key coordinates.
      */
     @Override
-    OnyxMove search(final OnyxPosCollection c, final OnyxBoard board, final GraphicsConst.COLOR color) 
+    OnyxMove search(final OnyxPosCollection c, final OnyxBoard board, final OnyxConst.COLOR color) 
             throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException;
     
     /**
@@ -77,7 +79,7 @@ public interface OnyxConnectionSearchable extends OnyxAbstractSearchable {
      * @throws NoValidOnyxPositionsFoundException is it get's messy...
      */
     @Override
-    boolean isWin(final OnyxPosCollection c, final GraphicsConst.COLOR color) 
+    boolean isWin(final OnyxPosCollection c, final OnyxConst.COLOR color) 
             throws NoValidOnyxPositionsFoundException;
     
 }

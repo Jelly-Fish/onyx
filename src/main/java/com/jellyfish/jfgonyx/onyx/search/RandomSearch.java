@@ -32,7 +32,6 @@
 package com.jellyfish.jfgonyx.onyx.search;
 
 import com.jellyfish.jfgonyx.onyx.interfaces.search.OnyxRandomSeachable;
-import com.jellyfish.jfgonyx.constants.GraphicsConst;
 import com.jellyfish.jfgonyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.abstractions.AbstractOnyxSearch;
@@ -49,7 +48,7 @@ import com.jellyfish.jfgonyx.ui.OnyxBoard;
 public class RandomSearch extends AbstractOnyxSearch implements OnyxRandomSeachable {
     
     @Override
-    public OnyxMove search(final OnyxPosCollection c, final OnyxBoard board, final GraphicsConst.COLOR color)
+    public OnyxMove search(final OnyxPosCollection c, final OnyxBoard board, final OnyxConst.COLOR color)
             throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
         
         for (OnyxPos p : c.getPositions().values()) {
@@ -62,7 +61,7 @@ public class RandomSearch extends AbstractOnyxSearch implements OnyxRandomSeacha
     }
     
     @Override
-    public boolean isWin(final OnyxPosCollection c, final GraphicsConst.COLOR color) 
+    public boolean isWin(final OnyxPosCollection c, final OnyxConst.COLOR color) 
             throws NoValidOnyxPositionsFoundException {
         throw new UnsupportedOperationException();
     }

@@ -31,11 +31,14 @@
  */
 package com.jellyfish.jfgonyx.onyx.search.subroutines.connectionsearch;
 
-import com.jellyfish.jfgonyx.constants.GraphicsConst;
 import com.jellyfish.jfgonyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
+import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
+import com.jellyfish.jfgonyx.onyx.search.searchutils.MoveUtils;
+import com.jellyfish.jfgonyx.onyx.search.subroutines.abstractions.AbstractSubroutine;
+import com.jellyfish.jfgonyx.onyx.search.subroutines.positionsearch.OnyxPosStateSubroutine;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
 
 /**
@@ -44,17 +47,41 @@ import com.jellyfish.jfgonyx.ui.OnyxBoard;
  */
 public class SubTailConnectionSubroutine extends TailConnectionSubroutine {
 
-    public SubTailConnectionSubroutine(final OnyxPosCollection c, final GraphicsConst.COLOR color, 
+    public SubTailConnectionSubroutine(final OnyxPosCollection c, final OnyxConst.COLOR color, 
             final OnyxBoard board) {
         super(c, color, board);
+        this.type = AbstractSubroutine.SUBROUTINE_TYPE.COUNTER_SUBTAIL;
     }
     
     @Override
     protected final void score() {
-
         final OnyxPos p = this.getCounterPos(this.tail);
-        this.candidate = p != null ? new OnyxMove(p, ((float) this.links)  * OnyxConst.SCORE.SUB_TAIL.getValue()) : null;
+        this.candidate = p != null ? 
+                new OnyxMove(p, ((float) this.links) * OnyxConst.SCORE.SUB_TAIL.getValue()) : null;
         this.candidates.add(candidate);
+    }
+    
+    /**
+     * Trim tails by score and oponent tail link tendency.
+     * @throws com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException
+     * Counter search - Override because switch color needed.
+     */
+    @SuppressWarnings("null")
+    @Override
+    protected void trimFoundMoves() throws InvalidOnyxPositionException {
+
+        OnyxMove tmp = null;
+        for (OnyxMove m : this.candidates) {
+            if (MoveUtils.isNotMove(m)) continue;
+            if (MoveUtils.isNotMove(tmp)) tmp = m;
+            if (new OnyxPosStateSubroutine(tmp.getPos()).willEnableTake(this.board, 
+                    this.c, OnyxConst.COLOR.getOposite(this.color.bool))) continue;
+            if (m.getScore() > tmp.getScore()) tmp = m;
+        }
+        
+        if (MoveUtils.isMove(tmp)) tmp.setTailStartPos(this.startPos);
+        
+        this.candidate = tmp;
     }
     
     private OnyxPos getCounterPos(final OnyxPos t) {

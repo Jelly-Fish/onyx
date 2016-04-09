@@ -31,7 +31,6 @@
  */
 package com.jellyfish.jfgonyx.onyx.search.subroutines.connectionsearch;
 
-import com.jellyfish.jfgonyx.constants.GraphicsConst;
 import com.jellyfish.jfgonyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPiece;
@@ -47,7 +46,7 @@ import java.util.List;
  */
 public class WinConnectionLinkSubroutine extends WinConnectionSubroutine {
         
-    public WinConnectionLinkSubroutine(final OnyxPosCollection c, final GraphicsConst.COLOR color) {
+    public WinConnectionLinkSubroutine(final OnyxPosCollection c, final OnyxConst.COLOR color) {
         super(c, color);
     }
     

@@ -48,8 +48,6 @@ import java.util.List;
  */
 public class TakePositionSubroutine extends AbstractSubroutine {
     
-    private final static String BEST_CANDIDATE = "Take/Capture position [%s]";
-    
     /**
      * @param c Onyx position collection.
      * @param b Onyx board instance.
@@ -126,7 +124,8 @@ public class TakePositionSubroutine extends AbstractSubroutine {
         
         if (i > -1) this.move = new OnyxMove(posSet.get(i), posSet.get(i).getPiece(), 
                 posSet, OnyxConst.SCORE.TAKE.getValue());
-        if (MoveUtils.isMove(this.move)) print(OnyxConst.POS_MAP.get(this.move.getPos().getKey()), BEST_CANDIDATE);
+        if (MoveUtils.isMove(this.move)) print(AbstractSubroutine.BEST_CANDIDATE_TAKE_CAPTURE, 
+                OnyxConst.POS_MAP.get(this.move.getPos().getKey()));
         
         return this.move;
     }

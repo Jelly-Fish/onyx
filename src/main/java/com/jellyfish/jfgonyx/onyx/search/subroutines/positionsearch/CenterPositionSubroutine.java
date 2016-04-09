@@ -52,16 +52,16 @@ import java.util.Set;
  */
 public class CenterPositionSubroutine extends AbstractSubroutine {
     
-    private final static String BEST_CANDIDATE = "Center position [%s]";
-
     /**
      * Get playable diamond center position nearest to board center.
      * @param c position collection.
      * @param d diamond collection.
+     * @param color search color.
      * @return Best OnyxMove instance or null.
      * @throws com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException if a position is invalid.
      */
-    public final OnyxMove getCenterPos(final OnyxPosCollection c, final OnyxDiamondCollection d) throws InvalidOnyxPositionException {
+    public final OnyxMove getCenterPos(final OnyxPosCollection c, final OnyxDiamondCollection d, 
+            final OnyxConst.COLOR color) throws InvalidOnyxPositionException {
 
         boolean found = false;
         float side = 3f;
@@ -102,7 +102,8 @@ public class CenterPositionSubroutine extends AbstractSubroutine {
             ++side;
         }
         
-        if (MoveUtils.isMove(this.move)) print(OnyxConst.POS_MAP.get(this.move.getPos().getKey()), BEST_CANDIDATE);
+        if (MoveUtils.isMove(this.move)) print(AbstractSubroutine.BEST_CANDIDATE_CENTER_POS,
+                AbstractSubroutine.SUBROUTINE_TYPE.CENTER_POS, color, this.move.getPos().getKey());
 
         return move;
     }
@@ -171,7 +172,6 @@ public class CenterPositionSubroutine extends AbstractSubroutine {
         i = r.length / 2;
         
         this.move = new OnyxMove(r[i].getCenterPos(), OnyxConst.SCORE.CENTER.getValue());
-        if (MoveUtils.isMove(this.move)) print(OnyxConst.POS_MAP.get(this.move.getPos().getKey()), BEST_CANDIDATE);
         
         return move;
     }

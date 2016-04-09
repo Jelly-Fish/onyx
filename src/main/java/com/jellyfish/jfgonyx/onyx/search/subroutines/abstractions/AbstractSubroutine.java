@@ -44,6 +44,30 @@ import java.util.Set;
  */
 public abstract class AbstractSubroutine {
     
+    public final static String BEST_CANDIDATE_TAIL_FORMAT = "Candidate for %s %s start @ %s : [%s] score: %f";
+    public final static String BEST_CANDIDATE_COUNTER_FORMAT = "Candidate for %s %s : [%s] score: %f";
+    public final static String BEST_CANDIDATE_CENTER_POS = "Candidate for %s %s : [%s]";
+    public final static String BEST_CANDIDATE_TAKE_CAPTURE = "Candidate for take/capture position [%s]";
+    
+    public static enum SUBROUTINE_TYPE {
+    
+        TAIL("{tail search}"),
+        COUNTER_SUBTAIL("{counter sub-tail search}"),
+        CENTER_POS("{center position search}"),
+        COUNTER_POS("{counter position search}");
+        
+        private final String desc;
+        
+        SUBROUTINE_TYPE(final String desc) {
+            this.desc = desc;
+        }
+        
+        public String getDesc() {
+            return this.desc;
+        }
+        
+    }
+    
     /**
      * Search resulat as Onyx move istance.
      * @see OnyxMove
@@ -70,38 +94,43 @@ public abstract class AbstractSubroutine {
         }
     }
     
-    public final void print(final String sK, final OnyxMove candidate, final String f) {
+    public final void print(final String f, final String sK, final AbstractSubroutine.SUBROUTINE_TYPE t, 
+            final String color, final OnyxMove candidate) {
         
         if (!candidate.hasPosition() || candidate.getPos().getKey() == null) return;
         
         MainFrame.print(String.format(f, 
+                t.getDesc(),
+                color,
                 OnyxConst.POS_MAP.get(sK), 
                 OnyxConst.POS_MAP.get(candidate.getPos().getKey()), candidate.getScore()),
                 HTMLDisplayHelper.GRAY);
     }
     
-    public final void print(final String k, final String n, final String f) {
+    public final void print(final String f, final AbstractSubroutine.SUBROUTINE_TYPE t, 
+            final String color, final String k, final float score) {
         
-        if (k == null || n == null) return;
+        if (color == null || k == null) return;
         
-        MainFrame.print(String.format(f, OnyxConst.POS_MAP.get(k), n),
-                HTMLDisplayHelper.WHITE);
-    }
-    
-    public final void print(final String color, final String k, final String n, final String f) {
-        
-        if (color == null || k == null || n == null) return;
-        
-        MainFrame.print(String.format(f, color, OnyxConst.POS_MAP.get(k), n),
+        MainFrame.print(String.format(f, 
+                t.getDesc(), 
+                color, 
+                OnyxConst.POS_MAP.get(k), 
+                score),
                 HTMLDisplayHelper.GRAY);
     }
     
-    public final void print(final String k, final String f) {
+    public final void print(final String f, final AbstractSubroutine.SUBROUTINE_TYPE t,
+            final OnyxConst.COLOR color, final String k) {
         
         if (k == null) return;
         
-        MainFrame.print(String.format(f, k),
+        MainFrame.print(String.format(f, t.getDesc(), color.str, OnyxConst.POS_MAP.get(k)),
                 HTMLDisplayHelper.GRAY);
+    }
+    
+    public final void print(final String f, final String color) {
+        MainFrame.print(String.format(f, color), HTMLDisplayHelper.GRAY);
     }
     
 }

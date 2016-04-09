@@ -59,10 +59,10 @@ public class OnyxGame {
     public boolean wait = false;
     public OnyxBoardI boardInterface = null;
     public String dtStamp;
-    public GraphicsConst.COLOR engineColor = null;
+    public OnyxConst.COLOR engineColor = null;
     
     private static OnyxGame instance = null;
-    private GraphicsConst.COLOR colorToPlay = null;
+    private OnyxConst.COLOR colorToPlay = null;
     private boolean requestInitialized = false;
     private int moveCount = 0;
 
@@ -72,7 +72,7 @@ public class OnyxGame {
         Onyx.blackPlayingLowBorder = false;
     }
     
-    public void init(final OnyxBoardI boardInterface, final GraphicsConst.COLOR engineColor) {
+    public void init(final OnyxBoardI boardInterface, final OnyxConst.COLOR engineColor) {
         this.wait = false;
         this.requestInitialized = false;
         this.colorToPlay = null;
@@ -111,7 +111,7 @@ public class OnyxGame {
     /**
      * @param color the color to play next or to search move for and append to board.
      */
-    public void initMove(final GraphicsConst.COLOR color) {
+    public void initMove(final OnyxConst.COLOR color) {
         this.colorToPlay = color;
         this.initMoveRequest();
     }
@@ -150,7 +150,7 @@ public class OnyxGame {
         if (this.isGameEnd() || Onyx.isLose(c, this.colorToPlay)) return;
         final OnyxMove m = Onyx.getNewVirtual(c, board, this.colorToPlay);
         c.getPosition(m.getPos().getKey()).setVirtualPiece(
-            new OnyxVirtualPiece(GraphicsConst.COLOR.getVirtualOposite(this.colorToPlay.bool))
+            new OnyxVirtualPiece(OnyxConst.COLOR.getVirtualOposite(this.colorToPlay.bool))
         );
     }
             
@@ -185,7 +185,7 @@ public class OnyxGame {
         }
     }
      
-    public boolean getLowBorderTendency(final GraphicsConst.COLOR color) {
+    public boolean getLowBorderTendency(final OnyxConst.COLOR color) {
         return color.bool ? Onyx.blackPlayingLowBorder : Onyx.whitePlayingLowBorder;
     }
     

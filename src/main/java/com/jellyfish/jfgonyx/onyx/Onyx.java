@@ -31,7 +31,6 @@
  */
 package com.jellyfish.jfgonyx.onyx;
 
-import com.jellyfish.jfgonyx.constants.GraphicsConst;
 import com.jellyfish.jfgonyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.helpers.HTMLDisplayHelper;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
@@ -92,13 +91,13 @@ class Onyx {
         }
     }
        
-    static OnyxMove search(final OnyxPosCollection c, final OnyxBoard board, final GraphicsConst.COLOR color) {
+    static OnyxMove search(final OnyxPosCollection c, final OnyxBoard board, final OnyxConst.COLOR color) {
         
         try {
             
             final OnyxMove mPOSCOL = SEARCH.get(STYPE.POSCOL).search(c, board, color);
             final boolean win = ((ConnectionSearch) SEARCH.get(STYPE.CNX)).isWin(
-                    c, GraphicsConst.COLOR.getOposite(color.bool));
+                    c, OnyxConst.COLOR.getOposite(color.bool));
             final boolean lose = ((ConnectionSearch) SEARCH.get(STYPE.CNX)).isWin(
                     c, color);
             final OnyxMove mCNX = SEARCH.get(STYPE.CNX).search(c, board, color);
@@ -112,7 +111,7 @@ class Onyx {
             print(String.format(CNX_SEARCH_FORMAT,
                 OnyxConst.POS_MAP.get(mCNX.getPos().getKey()), mCNX.getScore()));
             print(win ? 
-                String.format(WIN, GraphicsConst.COLOR.getOposite(color.bool).str) : 
+                String.format(WIN, OnyxConst.COLOR.getOposite(color.bool).str) : 
                 StringUtils.EMPTY, HTMLDisplayHelper.GOLD);
             
             if (Onyx.gameEnd) return null;
@@ -133,12 +132,12 @@ class Onyx {
         return null;
     }
     
-    static OnyxMove getNewVirtual(final OnyxPosCollection c, final OnyxBoard board, final GraphicsConst.COLOR color) 
+    static OnyxMove getNewVirtual(final OnyxPosCollection c, final OnyxBoard board, final OnyxConst.COLOR color) 
             throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
         return SEARCH.get(STYPE.RANDOM).search(c, board, color);
     }
     
-    static boolean isLose(final OnyxPosCollection c, final GraphicsConst.COLOR color) throws NoValidOnyxPositionsFoundException {
+    static boolean isLose(final OnyxPosCollection c, final OnyxConst.COLOR color) throws NoValidOnyxPositionsFoundException {
         final boolean lose = ((ConnectionSearch) SEARCH.get(STYPE.CNX)).isWin(c, color);
         Onyx.gameEnd = lose;
         return lose;

@@ -31,7 +31,6 @@
  */
 package com.jellyfish.jfgonyx.onyx.search.subroutines.positionsearch;
 
-import com.jellyfish.jfgonyx.constants.GraphicsConst;
 import com.jellyfish.jfgonyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.OnyxGame;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxDiamond;
@@ -54,9 +53,7 @@ import org.apache.commons.lang3.StringUtils;
  * @author thw
  */
 public class CounterPositionSubroutine extends AbstractSubroutine {
-    
-    private final static String BEST_CANDIDATE = "Counter position for %s [%s] score: %s";
-    
+
     /**
      * @param c Onyx position collection.
      * @param b Onyx board instance.
@@ -67,7 +64,7 @@ public class CounterPositionSubroutine extends AbstractSubroutine {
      * @throws com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException if shit hits the fan.
      */
     public final OnyxMove getCounterPos(final OnyxPosCollection c, final OnyxBoard b, 
-            final GraphicsConst.COLOR color) throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
+            final OnyxConst.COLOR color) throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
         
         final List<OnyxMove> candidates = new ArrayList<>();
         candidates.add(this.smallLock(c, b, color.bit));
@@ -81,8 +78,11 @@ public class CounterPositionSubroutine extends AbstractSubroutine {
         }
         
         if (MoveUtils.isMove(this.move) && this.move.hasPosition()) {
-            print(color.str, this.move.getPos().getKey(), 
-                    String.valueOf(this.move.getScore()), BEST_CANDIDATE);
+            print(AbstractSubroutine.BEST_CANDIDATE_COUNTER_FORMAT, 
+                    AbstractSubroutine.SUBROUTINE_TYPE.COUNTER_POS,
+                    color.str, 
+                    this.move.getPos().getKey(), 
+                    this.move.getScore());
         }
         
         return this.move;
@@ -90,9 +90,9 @@ public class CounterPositionSubroutine extends AbstractSubroutine {
     
     @SuppressWarnings("null")
     private OnyxMove counterPos(final OnyxPosCollection c, final OnyxBoard b, 
-            final GraphicsConst.COLOR color) throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
+            final OnyxConst.COLOR color) throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
         
-        final GraphicsConst.COLOR opColor = GraphicsConst.COLOR.getOposite(color.bool);
+        final OnyxConst.COLOR opColor = OnyxConst.COLOR.getOposite(color.bool);
         final List<OnyxPos> pos = OnyxPositionUtils.trimByAllExternalBorderByColor(
                 OnyxPositionUtils.getBordersByColor(c, opColor), opColor);
         final List<OnyxMove> cnx = new ArrayList<>();
@@ -168,7 +168,7 @@ public class CounterPositionSubroutine extends AbstractSubroutine {
      * @throws InvalidOnyxPositionException if shit hits the fan.
      */
     private OnyxMove bigLock(final OnyxPosCollection c, final OnyxBoard b, 
-            final GraphicsConst.COLOR color) throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
+            final OnyxConst.COLOR color) throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
         
         int i, j;
         OnyxPos pos = null;

@@ -75,7 +75,8 @@ public class NeighbourPositionSubroutine extends AbstractSubroutine {
             }
         }
         
-        if (MoveUtils.isMove(this.move)) print(OnyxConst.POS_MAP.get(this.move.getPos().getKey()), BEST_CANDIDATE);
+        if (MoveUtils.isMove(this.move)) print(BEST_CANDIDATE, 
+                OnyxConst.POS_MAP.get(this.move.getPos().getKey()));
         
         return this.move;
     }

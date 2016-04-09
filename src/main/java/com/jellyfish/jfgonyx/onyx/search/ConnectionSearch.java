@@ -31,7 +31,6 @@
  */
 package com.jellyfish.jfgonyx.onyx.search;
 
-import com.jellyfish.jfgonyx.constants.GraphicsConst;
 import com.jellyfish.jfgonyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.OnyxGame;
 import com.jellyfish.jfgonyx.onyx.abstractions.AbstractOnyxSearch;
@@ -69,7 +68,7 @@ public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnecti
     
     @Override
     @SuppressWarnings("null")
-    public OnyxMove search(final OnyxPosCollection c, final OnyxBoard board, final GraphicsConst.COLOR color) 
+    public OnyxMove search(final OnyxPosCollection c, final OnyxBoard board, final OnyxConst.COLOR color) 
             throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
         
         this.init();
@@ -79,7 +78,7 @@ public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnecti
         this.cnxMoves.add(this.searchWinMove(c, color));
         this.cnxMoves.add(this.searchCounterWinLink(c, board, color));
         final OnyxMove counterTail = 
-                this.getSubTailCounterMove(c, board, GraphicsConst.COLOR.getOposite(color.bool));
+                this.getSubTailCounterMove(c, board, OnyxConst.COLOR.getOposite(color.bool));
         this.cnxMoves.add(counterTail);
                 
         return this.trim(this.cnxMoves);
@@ -92,7 +91,7 @@ public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnecti
     }
     
     @Override
-    public boolean isWin(final OnyxPosCollection c, final GraphicsConst.COLOR color) 
+    public boolean isWin(final OnyxPosCollection c, final OnyxConst.COLOR color) 
             throws NoValidOnyxPositionsFoundException {
         
         final List<OnyxPos> borders = OnyxPositionUtils.trimByBorderStartPositionsAndColor(
@@ -117,7 +116,7 @@ public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnecti
      */
     @SuppressWarnings("null")
     private OnyxMove getTailMove(final OnyxPosCollection c, final OnyxBoard board, 
-            final GraphicsConst.COLOR color) throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
+            final OnyxConst.COLOR color) throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
         
         final List<OnyxPos> pos = OnyxPositionUtils.trimByAllExternalBorderByColor(
                 OnyxPositionUtils.getBordersByColor(c, color), color);
@@ -137,7 +136,7 @@ public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnecti
     
     @SuppressWarnings("null")
     private OnyxMove getSubTailCounterMove(final OnyxPosCollection c, final OnyxBoard board, 
-            final GraphicsConst.COLOR color) throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
+            final OnyxConst.COLOR color) throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
         
         final List<OnyxMove> moves = new ArrayList<>();
         final List<OnyxPos> pos = OnyxPositionUtils.trimBorderByColorWithExceptions(
@@ -157,7 +156,7 @@ public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnecti
      * @param color the color to check for win position.
      * @return winning onyx connection or null.
      */
-    private OnyxMove searchWinMove(final OnyxPosCollection c, final GraphicsConst.COLOR color) 
+    private OnyxMove searchWinMove(final OnyxPosCollection c, final OnyxConst.COLOR color) 
             throws NoValidOnyxPositionsFoundException {      
         return new WinConnectionLinkSubroutine(c, color).connectionLink(this.cnxTmpMoves);
     }
@@ -168,14 +167,14 @@ public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnecti
      * @return winning onyx connection or null.
      */
     private OnyxMove searchCounterWinLink(final OnyxPosCollection c, final OnyxBoard board, 
-            final GraphicsConst.COLOR color) throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {   
+            final OnyxConst.COLOR color) throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {   
 
         int count = 0;
         List<OnyxPos> posSet = null;
         final List<OnyxMove> moves = new ArrayList<>();
         OnyxMove move = null;
         
-        final GraphicsConst.COLOR opColor = GraphicsConst.COLOR.getOposite(color.bool);
+        final OnyxConst.COLOR opColor = OnyxConst.COLOR.getOposite(color.bool);
         moves.add(this.getTailMove(c, board, opColor));
         moves.add(this.searchWinMove(c, opColor));
         for (OnyxMove m : moves) count = MoveUtils.isMove(m) ? ++count : count;

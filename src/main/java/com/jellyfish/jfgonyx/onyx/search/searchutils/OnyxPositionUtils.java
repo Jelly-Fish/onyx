@@ -46,7 +46,7 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class OnyxPositionUtils {
 
-    public static List<OnyxPos> getBordersByColor(final OnyxPosCollection c, final GraphicsConst.COLOR color) {
+    public static List<OnyxPos> getBordersByColor(final OnyxPosCollection c, final OnyxConst.COLOR color) {
         
         final List<OnyxPos> borders = new ArrayList<>();
         if (color.bool) {
@@ -69,7 +69,7 @@ public class OnyxPositionUtils {
         return borders;
     }
     
-    public static List<OnyxPos> getSubBordersByColor(final OnyxPosCollection c, final GraphicsConst.COLOR color) {
+    public static List<OnyxPos> getSubBordersByColor(final OnyxPosCollection c, final OnyxConst.COLOR color) {
         
         final List<OnyxPos> borders = new ArrayList<>();
         float j = .5f;
@@ -92,7 +92,7 @@ public class OnyxPositionUtils {
     }
     
     public static List<OnyxPos> trimByBorderStartPositionsAndColor(final List<OnyxPos> pos, 
-            final GraphicsConst.COLOR color) {
+            final OnyxConst.COLOR color) {
         
         final List<OnyxPos> positions = new ArrayList<>();
         for (OnyxPos p : pos) {
@@ -109,7 +109,7 @@ public class OnyxPositionUtils {
     }
     
     public static List<OnyxPos> trimByAllExternalBorderByColor(final List<OnyxPos> pos, 
-            final GraphicsConst.COLOR color) {
+            final OnyxConst.COLOR color) {
         
         final List<OnyxPos> positions = new ArrayList<>();
         for (OnyxPos p : pos) {
@@ -130,7 +130,7 @@ public class OnyxPositionUtils {
     }
     
     public static List<OnyxPos> trimBorderByColorWithExceptions(final List<OnyxPos> pos, 
-            final GraphicsConst.COLOR color, final Set<String> exceptions) {
+            final OnyxConst.COLOR color, final Set<String> exceptions) {
         
         final List<OnyxPos> positions = new ArrayList<>();
         for (OnyxPos p : pos) {

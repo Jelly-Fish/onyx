@@ -31,7 +31,7 @@
  */
 package com.jellyfish.jfgonyx.io;
 
-import com.jellyfish.jfgonyx.constants.GraphicsConst;
+import com.jellyfish.jfgonyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.io.events.BoardDragger;
 import com.jellyfish.jfgonyx.io.events.ClickPosition;
 import com.jellyfish.jfgonyx.onyx.OnyxGame;
@@ -108,8 +108,8 @@ public class MouseInput implements MouseListener, MouseMotionListener {
         
         if (OnyxGame.getInstance().isGameEnd()) return;
         
-        final GraphicsConst.COLOR c = this.board.getPosCollection().getVirtualPiece().color;
-        OnyxGame.getInstance().initMove(GraphicsConst.COLOR.getOposite(c.bool));
+        final OnyxConst.COLOR c = this.board.getPosCollection().getVirtualPiece().color;
+        OnyxGame.getInstance().initMove(OnyxConst.COLOR.getOposite(c.bool));
         
         try {
             if (ops.get(MouseInput.EVENT.SELECT_POS).exec(e, this.board)) {

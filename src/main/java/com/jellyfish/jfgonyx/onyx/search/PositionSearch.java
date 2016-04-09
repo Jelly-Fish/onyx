@@ -34,7 +34,7 @@ package com.jellyfish.jfgonyx.onyx.search;
 import com.jellyfish.jfgonyx.onyx.search.subroutines.positionsearch.NeighbourPositionSubroutine;
 import com.jellyfish.jfgonyx.onyx.search.subroutines.positionsearch.CounterPositionSubroutine;
 import com.jellyfish.jfgonyx.onyx.search.subroutines.positionsearch.TakePositionSubroutine;
-import com.jellyfish.jfgonyx.constants.GraphicsConst;
+import com.jellyfish.jfgonyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.abstractions.AbstractOnyxSearch;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
@@ -69,7 +69,7 @@ public class PositionSearch extends AbstractOnyxSearch implements OnyxPositionSe
      */
     @Override
     @SuppressWarnings("null")
-    public OnyxMove search(final OnyxPosCollection c, final OnyxBoard b, final GraphicsConst.COLOR color) 
+    public OnyxMove search(final OnyxPosCollection c, final OnyxBoard b, final OnyxConst.COLOR color) 
             throws NoValidOnyxPositionsFoundException {
     
         List<OnyxPos> posSet = null;
@@ -82,7 +82,7 @@ public class PositionSearch extends AbstractOnyxSearch implements OnyxPositionSe
             moves.add(new CounterPositionSubroutine().getCounterPos(c, b, color));
             moves.add(new NeighbourPositionSubroutine().getNeighbourPos(c, b, color.bit));
             moves.add(new AttackPositionSubroutine().getAttackPos(c, b, color.bit));
-            moves.add(new CenterPositionSubroutine().getCenterPos(c, b.getDiamondCollection()));
+            moves.add(new CenterPositionSubroutine().getCenterPos(c, b.getDiamondCollection(), color));
                         
             OnyxMove tmp = null;
             for (OnyxMove m : moves) {
@@ -112,7 +112,7 @@ public class PositionSearch extends AbstractOnyxSearch implements OnyxPositionSe
     }
     
     @Override
-    public boolean isWin(final OnyxPosCollection c, final GraphicsConst.COLOR color) 
+    public boolean isWin(final OnyxPosCollection c, final OnyxConst.COLOR color) 
             throws NoValidOnyxPositionsFoundException {
         throw new UnsupportedOperationException();
     }

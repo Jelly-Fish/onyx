@@ -39,7 +39,7 @@ import java.util.List;
  * @author thw
  */
 public class AbstractOnyxSearch {
-    
+       
     protected final OnyxMove trim(final List<OnyxMove> moves) {
         
         OnyxMove tmp = null;

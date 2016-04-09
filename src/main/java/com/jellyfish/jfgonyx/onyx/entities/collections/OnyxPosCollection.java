@@ -32,6 +32,7 @@
 package com.jellyfish.jfgonyx.onyx.entities.collections;
 
 import com.jellyfish.jfgonyx.constants.GraphicsConst;
+import com.jellyfish.jfgonyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.helpers.OnyxConnectionHelper;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxDiamond;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
@@ -82,7 +83,7 @@ public class OnyxPosCollection {
         }
     }
     
-    public void spawnVirtualPiece(final GraphicsConst.COLOR c) {
+    public void spawnVirtualPiece(final OnyxConst.COLOR c) {
         this.positions.get(String.format(OnyxPosCollection.KEY_FORMAT, 7f, 6f)).setVirtualPiece(
             new OnyxVirtualPiece(c)
         );
@@ -96,7 +97,7 @@ public class OnyxPosCollection {
         return this.getPosition(k) != null;
     }
     
-    public boolean isValidMove(final OnyxPos pos, final OnyxBoard board, final GraphicsConst.COLOR color) {
+    public boolean isValidMove(final OnyxPos pos, final OnyxBoard board, final OnyxConst.COLOR color) {
         final boolean isCenter = board.isDiamondCenter(pos.getKey());
         return ((!pos.isOccupied() && !isCenter)) || 
             (isCenter && board.isCenterPosPlayable(pos.getKey()));        
@@ -233,7 +234,7 @@ public class OnyxPosCollection {
         
         int n = 0;
         for (OnyxPos p : this.positions.values()) {
-            n = p.isOccupied() && p.getPiece().color.bit == GraphicsConst.COLOR.BLACK.bit ?
+            n = p.isOccupied() && p.getPiece().color.bit == OnyxConst.COLOR.BLACK.bit ?
                     ++n : n;
         }
         
@@ -244,7 +245,7 @@ public class OnyxPosCollection {
         
         int n = 0;
         for (OnyxPos p : this.positions.values()) {
-            n = p.isOccupied() && p.getPiece().color.bit == GraphicsConst.COLOR.WHITE.bit ?
+            n = p.isOccupied() && p.getPiece().color.bit == OnyxConst.COLOR.WHITE.bit ?
                     ++n : n;
         }
         
