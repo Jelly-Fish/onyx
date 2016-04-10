@@ -199,6 +199,7 @@ public class TailConnectionSubroutine extends AbstractSubroutine {
     
     /**
      * Trim tails by score and oponent tail link tendency.
+     * @throws com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException
      */
     @SuppressWarnings("null")
     protected void trimFoundMoves() throws InvalidOnyxPositionException {

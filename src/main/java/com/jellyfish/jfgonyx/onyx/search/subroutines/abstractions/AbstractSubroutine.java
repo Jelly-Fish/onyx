@@ -35,8 +35,6 @@ import com.jellyfish.jfgonyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.helpers.HTMLDisplayHelper;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
 import com.jellyfish.jfgonyx.ui.MainFrame;
-import java.util.List;
-import java.util.Set;
 
 /**
  *
@@ -46,15 +44,18 @@ public abstract class AbstractSubroutine {
     
     public final static String BEST_CANDIDATE_TAIL_FORMAT = "Candidate for %s %s start @ %s : [%s] score: %f";
     public final static String BEST_CANDIDATE_COUNTER_FORMAT = "Candidate for %s %s : [%s] score: %f";
-    public final static String BEST_CANDIDATE_CENTER_POS = "Candidate for %s %s : [%s]";
-    public final static String BEST_CANDIDATE_TAKE_CAPTURE = "Candidate for take/capture position [%s]";
+    public final static String BEST_CANDIDATE = "Candidate for %s %s : [%s]";
+    
     
     public static enum SUBROUTINE_TYPE {
     
         TAIL("{tail search}"),
-        COUNTER_SUBTAIL("{counter sub-tail search}"),
+        COUNTER_SUBTAIL("{sub-tail search}"),
         CENTER_POS("{center position search}"),
-        COUNTER_POS("{counter position search}");
+        COUNTER_POS("{counter position search}"),
+        TAKE("{capture position search}"),
+        NEIGHBOUR("{neighbour position search}"),
+        ATTACK("{attack position search}");
         
         private final String desc;
         
@@ -73,26 +74,6 @@ public abstract class AbstractSubroutine {
      * @see OnyxMove
      */
     protected OnyxMove move = null;
-    
-    public final void print(final String sK, final List<OnyxMove> candidates, final String f) {
-        
-        for (OnyxMove m : candidates) {
-            if (!m.hasPosition() || m.getPos().getKey() == null) continue;
-            MainFrame.print(String.format(f, OnyxConst.POS_MAP.get(sK), 
-                    OnyxConst.POS_MAP.get(m.getPos().getKey()), m.getScore()), 
-                    HTMLDisplayHelper.WHITE);
-        }
-    }
-    
-    public final void print(final String sK, final Set<OnyxMove> candidates, final String f) {
-        
-        for (OnyxMove m : candidates) {
-            if (!m.hasPosition() || m.getPos().getKey() == null) continue;
-            MainFrame.print(String.format(f, OnyxConst.POS_MAP.get(sK), 
-                    OnyxConst.POS_MAP.get(m.getPos().getKey()), m.getScore()),
-                    HTMLDisplayHelper.WHITE);
-        }
-    }
     
     public final void print(final String f, final String sK, final AbstractSubroutine.SUBROUTINE_TYPE t, 
             final String color, final OnyxMove candidate) {

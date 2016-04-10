@@ -45,9 +45,7 @@ import com.jellyfish.jfgonyx.ui.OnyxBoard;
  * @author thw
  */
 public class AttackPositionSubroutine extends AbstractSubroutine {
-    
-    private final static String BEST_CANDIDATE = "Attack position [%s]";
-    
+
     /**
      * @param c Onyx position collection.
      * @param b Onyx board instance.
@@ -82,7 +80,10 @@ public class AttackPositionSubroutine extends AbstractSubroutine {
             }
         }
         
-        if (MoveUtils.isMove(this.move)) print(OnyxConst.POS_MAP.get(move.getPos().getKey()), BEST_CANDIDATE);
+        if (MoveUtils.isMove(this.move) && this.move.getPos() != null) print(AbstractSubroutine.BEST_CANDIDATE, 
+                AbstractSubroutine.SUBROUTINE_TYPE.ATTACK, 
+                bitColor == 0 ? OnyxConst.COLOR.BLACK : OnyxConst.COLOR.WHITE, 
+                OnyxConst.POS_MAP.get(this.move.getPos().getKey()));
         
         return move;
     }

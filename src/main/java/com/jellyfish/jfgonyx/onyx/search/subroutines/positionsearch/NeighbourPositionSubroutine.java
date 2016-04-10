@@ -75,7 +75,9 @@ public class NeighbourPositionSubroutine extends AbstractSubroutine {
             }
         }
         
-        if (MoveUtils.isMove(this.move)) print(BEST_CANDIDATE, 
+        if (MoveUtils.isMove(this.move)) print(AbstractSubroutine.BEST_CANDIDATE, 
+                AbstractSubroutine.SUBROUTINE_TYPE.NEIGHBOUR, 
+                bitColor == 0 ? OnyxConst.COLOR.BLACK : OnyxConst.COLOR.WHITE, 
                 OnyxConst.POS_MAP.get(this.move.getPos().getKey()));
         
         return this.move;

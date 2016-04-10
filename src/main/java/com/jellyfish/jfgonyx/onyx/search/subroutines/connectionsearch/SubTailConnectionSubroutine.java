@@ -87,19 +87,46 @@ public class SubTailConnectionSubroutine extends TailConnectionSubroutine {
     private OnyxPos getCounterPos(final OnyxPos t) {
         
         if (t == null) return t;
+        OnyxPos tmp = null;
         
         for (String k : t.connections) {
             
-            if (!this.c.getPosition(k).isOccupied() && !this.c.getPosition(k).isDiamondCenter()) {
+            tmp = this.c.getPosition(k);
+            
+            if (!tmp.isOccupied() && !tmp.isDiamondCenter()) {
                 
-                if ((this.color.bool && t.y == this.c.getPosition(k).y) || 
-                        (!this.color.bool && t.x == this.c.getPosition(k).x)) {
-                    return c.getPosition(k);
+                if ((this.color.bool && this.isAtTailEnd(tmp) && t.y == tmp.y) || 
+                    (!this.color.bool && this.isAtTailEnd(tmp) && t.x == tmp.x)) {
+                    return tmp;
                 }
             }
         }
         
         return null;
+    }
+    
+    private boolean isAtTailEnd(final OnyxPos t) {
+        
+        /**
+         * Avoid returning sub tail counter positions that are not between
+         * start position and tail of the sub tail connections (depending
+         * on color and start position + found tail posiion) - see below.
+         */
+        
+        if (this.color.bool) {
+            
+            return this.tail.x > this.startPos.x ? 
+                (t.x < this.startPos.x || t.x > this.tail.x) :
+                (t.x > this.startPos.x || t.x < this.tail.x);
+            
+        } else if (!this.color.bool) {
+            
+            return this.tail.y > this.startPos.y ?
+                (t.y < this.startPos.y || t.y > this.tail.y) :
+                (t.y > this.startPos.y || t.y < this.tail.y);
+        }
+        
+        return false;
     }
     
 }

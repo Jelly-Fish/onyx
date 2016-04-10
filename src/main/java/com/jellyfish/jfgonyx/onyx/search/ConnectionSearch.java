@@ -160,6 +160,12 @@ public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnecti
             throws NoValidOnyxPositionsFoundException {      
         return new WinConnectionLinkSubroutine(c, color).connectionLink(this.cnxTmpMoves);
     }
+
+    private OnyxMove searchWinMove(final OnyxPosCollection c, final List<OnyxMove> tails, 
+            final OnyxConst.COLOR color) 
+            throws NoValidOnyxPositionsFoundException {      
+        return new WinConnectionLinkSubroutine(c, color).connectionLink(tails);
+    }
     
     /**
      * @param c collection of unique Onyx positions - positions are independent from OnyxDiamond instances.
@@ -175,8 +181,11 @@ public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnecti
         OnyxMove move = null;
         
         final OnyxConst.COLOR opColor = OnyxConst.COLOR.getOposite(color.bool);
-        moves.add(this.getTailMove(c, board, opColor));
-        moves.add(this.searchWinMove(c, opColor));
+        move = this.getTailMove(c, board, opColor);
+        moves.add(move);
+        move = this.searchWinMove(c, moves, opColor);
+        moves.add(move);
+        
         for (OnyxMove m : moves) count = MoveUtils.isMove(m) ? ++count : count;
         
         if (count > 0) {
