@@ -47,14 +47,25 @@ import com.jellyfish.jfgonyx.ui.OnyxBoard;
  */
 public class SubTailConnectionSubroutine extends TailConnectionSubroutine {
 
+    /**
+     * Minimum and maximum x/y values of sub bourders.
+     * @see OnyxPositionUtils class getSubBordersByColor method.
+     */
+    private final float minX, minY, maxX, maxY;    
+    
     public SubTailConnectionSubroutine(final OnyxPosCollection c, final OnyxConst.COLOR color, 
-            final OnyxBoard board) {
+            final OnyxBoard board, final float minX, final float minY, final float maxX, final float maxY) {
         super(c, color, board);
         this.type = AbstractSubroutine.SUBROUTINE_TYPE.COUNTER_SUBTAIL;
+        this.minX = minX;
+        this.minY = minY;
+        this.maxX = maxX;
+        this.maxY = maxY;
     }
-    
+
     @Override
     protected final void score() {
+        
         final OnyxPos p = this.getCounterPos(this.tail);
         this.candidate = p != null ? 
                 new OnyxMove(p, ((float) this.links) * OnyxConst.SCORE.SUB_TAIL.getValue()) : null;
@@ -108,22 +119,15 @@ public class SubTailConnectionSubroutine extends TailConnectionSubroutine {
     private boolean isAtTailEnd(final OnyxPos t) {
         
         /**
-         * Avoid returning sub tail counter positions that are not between
-         * start position and tail of the sub tail connections (depending
-         * on color and start position + found tail posiion) - see below.
+         * Avoid returning sub tail counter positions that are between
+         * max/min tail/start position of the sub tail (depending on color 
+         * and start position + found tail posiion) - see below.
          */
         
         if (this.color.bool) {
-            
-            return this.tail.x > this.startPos.x ? 
-                (t.x < this.startPos.x || t.x > this.tail.x) :
-                (t.x > this.startPos.x || t.x < this.tail.x);
-            
+            return t.x <= this.minX || t.x >= this.maxX;
         } else if (!this.color.bool) {
-            
-            return this.tail.y > this.startPos.y ?
-                (t.y < this.startPos.y || t.y > this.tail.y) :
-                (t.y > this.startPos.y || t.y < this.tail.y);
+            return t.y <= this.minY || t.y >= this.maxY;
         }
         
         return false;

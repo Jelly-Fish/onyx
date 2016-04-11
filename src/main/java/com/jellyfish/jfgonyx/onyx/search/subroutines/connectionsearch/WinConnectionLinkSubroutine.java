@@ -59,7 +59,10 @@ public class WinConnectionLinkSubroutine extends WinConnectionSubroutine {
         WinConnectionSubroutine search = null;
        
         /**
-         * If tail is start border then add to borders.
+         * If tail is on a start border then add to borders - connection link
+         * search is uses only low borders for search : is tail is a low
+         * border (if black & x=1f or white & y=1y) then add to boder collection
+         * local final List<OnyxPos> borders.
          */
         for (OnyxMove m : tails) {
             if ((this.color.bool && MoveUtils.isMove(m) && m.hasPosition() && m.getPos().x == 1f) || 

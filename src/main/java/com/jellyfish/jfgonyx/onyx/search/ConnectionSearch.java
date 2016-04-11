@@ -137,41 +137,41 @@ public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnecti
     private OnyxMove getSubTailCounterMove(final OnyxPosCollection c, final OnyxBoard board, 
             final OnyxConst.COLOR color) throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
         
+        List<OnyxPos> posSet = null;
         final List<OnyxMove> moves = new ArrayList<>();
         final List<OnyxPos> pos = OnyxPositionUtils.trimBorderByColorWithExceptions(
                 OnyxPositionUtils.getSubBordersByColor(c, color), color, this.checkedKeys);
         
+        float minX = OnyxConst.BOARD_SIDE_POS_COUNT, minY = OnyxConst.BOARD_SIDE_POS_COUNT,
+            maxX = 0f, maxY = 0f;
+        
         for (OnyxPos p : pos) {
-            moves.add(new SubTailConnectionSubroutine(c, color, board).getTail(p));
+            minX = p.x < minX ? p.x : minX;
+            minY = p.y < minY ? p.y : minY;
+            maxX = p.x > maxX ? p.x : maxX;
+            maxY = p.y > maxY ? p.y : maxY;
+        }
+        
+        for (OnyxPos p : pos) {
+            moves.add(new SubTailConnectionSubroutine(c, color, board, minX, minY, maxX, maxY).getTail(p));
         }
         
         final OnyxMove tmp = this.trim(moves);
         
+        /**
+         * FIXME : refactor take possibility & if true apply captures :
+         */
+        final OnyxConst.COLOR opColor = OnyxConst.COLOR.getOposite(color.bool);
+        final OnyxMove capture = new TakePositionSubroutine().getTakePos(c, board, opColor.bit);
+        if (MoveUtils.isMove(capture)) posSet = c.getTakePositions(capture.getPos().getKey(), opColor.bit, board);
+        if (MoveUtils.isMove(capture) && posSet != null && MoveUtils.isMove(tmp) && 
+                tmp.getPos().equals(capture.getPos())) {
+            tmp.setScore(OnyxConst.SCORE.COUNTER_WIN_LINK.getValue());
+            tmp.setCaptured(new ArrayList<OnyxPos>());
+            tmp.getCaptured().addAll(posSet);
+        }
+        
         return MoveUtils.isMove(tmp) ? new OnyxMove(tmp.getPos(), tmp.getPiece(), tmp.getScore()) : null;
-    }
-    
-    /**
-     * @param c collection of unique Onyx positions - positions are independent from OnyxDiamond instances.
-     * @param color the color to check for win position.
-     * @return winning onyx connection or null.
-     * @throws NoValidOnyxPositionsFoundException 
-     */
-    private OnyxMove searchWinMove(final OnyxPosCollection c, final OnyxConst.COLOR color) 
-        throws NoValidOnyxPositionsFoundException {      
-        return new WinConnectionLinkSubroutine(c, color).connectionLink(this.cnxTmpMoves);
-    }
-
-    /**
-     * @param c collection of unique Onyx positions - positions are independent from OnyxDiamond instances.
-     * @param tails cnx tails found for current configuration.
-     * @param color to search for.
-     * @return winning onyx connection or null.
-     * @throws NoValidOnyxPositionsFoundException 
-     */
-    private OnyxMove searchWinMove(final OnyxPosCollection c, final List<OnyxMove> tails, 
-            final OnyxConst.COLOR color) 
-            throws NoValidOnyxPositionsFoundException {      
-        return new WinConnectionLinkSubroutine(c, color).connectionLink(tails);
     }
     
     /**
@@ -196,6 +196,10 @@ public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnecti
         if (count > 0) {
             
             move = new WinConnectionLinkSubroutine(c, opColor).connectionLink(moves);
+            
+            /**
+             * FIXME : refactor take possibility & if true apply captures :
+             */
             final OnyxMove capture = new TakePositionSubroutine().getTakePos(c, board, color.bit);
             if (MoveUtils.isMove(capture)) posSet = c.getTakePositions(capture.getPos().getKey(), color.bit, board);
 
@@ -208,6 +212,30 @@ public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnecti
         }
 
         return move;
+    }
+        
+    /**
+     * @param c collection of unique Onyx positions - positions are independent from OnyxDiamond instances.
+     * @param color the color to check for win position.
+     * @return winning onyx connection or null.
+     * @throws NoValidOnyxPositionsFoundException 
+     */
+    private OnyxMove searchWinMove(final OnyxPosCollection c, final OnyxConst.COLOR color) 
+        throws NoValidOnyxPositionsFoundException {      
+        return new WinConnectionLinkSubroutine(c, color).connectionLink(this.cnxTmpMoves);
+    }
+
+    /**
+     * @param c collection of unique Onyx positions - positions are independent from OnyxDiamond instances.
+     * @param tails cnx tails found for current configuration.
+     * @param color to search for.
+     * @return winning onyx connection or null.
+     * @throws NoValidOnyxPositionsFoundException 
+     */
+    private OnyxMove searchWinMove(final OnyxPosCollection c, final List<OnyxMove> tails, 
+            final OnyxConst.COLOR color) 
+            throws NoValidOnyxPositionsFoundException {      
+        return new WinConnectionLinkSubroutine(c, color).connectionLink(tails);
     }
     
 }

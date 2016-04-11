@@ -80,7 +80,7 @@ public class TailConnectionSubroutine extends AbstractSubroutine {
     public OnyxMove getTail(final OnyxPos p) throws InvalidOnyxPositionException {
         
         this.startPos = p;
-        this.tail = this.findTailPos(p, p.getKey());
+        this.tail = this.findTail(p, p.getKey());
         this.score();
         this.trimFoundMoves();
         if (MoveUtils.isMove(this.candidate)) print(AbstractSubroutine.BEST_CANDIDATE_TAIL_FORMAT, 
@@ -97,17 +97,18 @@ public class TailConnectionSubroutine extends AbstractSubroutine {
     public List<OnyxMove> getTails(final OnyxPos p) {
         
         this.startPos = p;
-        this.tail = this.findTailPos(p, p.getKey());
+        this.tail = this.findTail(p, p.getKey());
         this.score();
         this.addStartPositionToCandidates();
         return this.candidates;
     }
 
-    private OnyxPos findTailPos(final OnyxPos p, final String kEx) {       
+    private OnyxPos findTail(final OnyxPos p, final String kEx) {       
         
         ++this.links;
         this.checkedKeys.add(p.getKey());
         OnyxPos tmp = null;
+        
         for (String k : p.connections) {
             if (!k.equals(kEx)) {
                 tmp = c.getPosition(k);
@@ -122,7 +123,7 @@ public class TailConnectionSubroutine extends AbstractSubroutine {
                 tmp = c.getPosition(k);
                 if (tmp.isOccupied() && tmp.getPiece().color.bit == this.color.bit 
                         && !this.checkedKeys.contains(tmp.getKey())) {
-                    this.findTailPos(c.getPosition(k), k);
+                    this.findTail(c.getPosition(k), k);
                 }
             }
         }
