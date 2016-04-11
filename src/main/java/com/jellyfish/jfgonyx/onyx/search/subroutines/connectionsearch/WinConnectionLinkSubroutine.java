@@ -57,6 +57,17 @@ public class WinConnectionLinkSubroutine extends WinConnectionSubroutine {
         
         OnyxPiece tmp = null;
         WinConnectionSubroutine search = null;
+       
+        /**
+         * If tail is start border then add to borders.
+         */
+        for (OnyxMove m : tails) {
+            if ((this.color.bool && MoveUtils.isMove(m) && m.hasPosition() && m.getPos().x == 1f) || 
+                (!this.color.bool && MoveUtils.isMove(m) && m.hasPosition() && m.getPos().y == 1f)) {
+                borders.add(m.getPos());
+            }
+        }
+
         for (OnyxMove m : tails) {
             
             if (MoveUtils.isNotMove(m) || !m.hasPosition()) continue;

@@ -134,7 +134,6 @@ public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnecti
             SearchUtils.calibrateTailMoves(OnyxGame.getInstance(), tmp.getScore())) : null;
     }
     
-    @SuppressWarnings("null")
     private OnyxMove getSubTailCounterMove(final OnyxPosCollection c, final OnyxBoard board, 
             final OnyxConst.COLOR color) throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
         
@@ -155,12 +154,20 @@ public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnecti
      * @param c collection of unique Onyx positions - positions are independent from OnyxDiamond instances.
      * @param color the color to check for win position.
      * @return winning onyx connection or null.
+     * @throws NoValidOnyxPositionsFoundException 
      */
     private OnyxMove searchWinMove(final OnyxPosCollection c, final OnyxConst.COLOR color) 
-            throws NoValidOnyxPositionsFoundException {      
+        throws NoValidOnyxPositionsFoundException {      
         return new WinConnectionLinkSubroutine(c, color).connectionLink(this.cnxTmpMoves);
     }
 
+    /**
+     * @param c collection of unique Onyx positions - positions are independent from OnyxDiamond instances.
+     * @param tails cnx tails found for current configuration.
+     * @param color to search for.
+     * @return winning onyx connection or null.
+     * @throws NoValidOnyxPositionsFoundException 
+     */
     private OnyxMove searchWinMove(final OnyxPosCollection c, final List<OnyxMove> tails, 
             final OnyxConst.COLOR color) 
             throws NoValidOnyxPositionsFoundException {      
@@ -181,10 +188,8 @@ public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnecti
         OnyxMove move = null;
         
         final OnyxConst.COLOR opColor = OnyxConst.COLOR.getOposite(color.bool);
-        move = this.getTailMove(c, board, opColor);
-        moves.add(move);
-        move = this.searchWinMove(c, moves, opColor);
-        moves.add(move);
+        moves.add(this.getTailMove(c, board, opColor));
+        moves.add(this.searchWinMove(c, moves, opColor));
         
         for (OnyxMove m : moves) count = MoveUtils.isMove(m) ? ++count : count;
         
