@@ -157,21 +157,20 @@ public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnecti
         }
         
         final OnyxMove tmp = this.trim(moves);
-        
+
         /**
-         * FIXME : refactor take possibility & if true apply captures :
+         * Take possibility & if true apply captures :
          */
         final OnyxConst.COLOR opColor = OnyxConst.COLOR.getOposite(color.bool);
         final OnyxMove capture = new TakePositionSubroutine().getTakePos(c, board, opColor.bit);
         if (MoveUtils.isMove(capture)) posSet = c.getTakePositions(capture.getPos().getKey(), opColor.bit, board);
         if (MoveUtils.isMove(capture) && posSet != null && MoveUtils.isMove(tmp) && 
                 tmp.getPos().equals(capture.getPos())) {
-            tmp.setScore(OnyxConst.SCORE.COUNTER_WIN_LINK.getValue());
             tmp.setCaptured(new ArrayList<OnyxPos>());
             tmp.getCaptured().addAll(posSet);
         }
         
-        return MoveUtils.isMove(tmp) ? new OnyxMove(tmp.getPos(), tmp.getPiece(), tmp.getScore()) : null;
+        return MoveUtils.isMove(tmp) ? tmp : null;
     }
     
     /**
@@ -198,7 +197,7 @@ public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnecti
             move = new WinConnectionLinkSubroutine(c, opColor).connectionLink(moves);
             
             /**
-             * FIXME : refactor take possibility & if true apply captures :
+             * Take possibility & if true apply captures :
              */
             final OnyxMove capture = new TakePositionSubroutine().getTakePos(c, board, color.bit);
             if (MoveUtils.isMove(capture)) posSet = c.getTakePositions(capture.getPos().getKey(), color.bit, board);
