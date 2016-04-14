@@ -72,29 +72,6 @@ public class SubTailConnectionSubroutine extends TailConnectionSubroutine {
         this.candidates.add(candidate);
     }
     
-    /**
-     * Trim tails by score and oponent tail link tendency.
-     * @throws com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException
-     * Counter search - Override because switch color needed.
-     */
-    @SuppressWarnings("null")
-    @Override
-    protected void trimFoundMoves() throws InvalidOnyxPositionException {
-
-        OnyxMove tmp = null;
-        for (OnyxMove m : this.candidates) {
-            if (MoveUtils.isNotMove(m)) continue;
-            if (MoveUtils.isNotMove(tmp)) tmp = m;
-            if (new OnyxPosStateSubroutine(tmp.getPos()).willEnableTake(this.board, 
-                    this.c, OnyxConst.COLOR.getOposite(this.color.bool))) continue;
-            if (m.getScore() > tmp.getScore()) tmp = m;
-        }
-        
-        if (MoveUtils.isMove(tmp)) tmp.setTailStartPos(this.startPos);
-        
-        this.candidate = tmp;
-    }
-    
     private OnyxPos getCounterPos(final OnyxPos t) {
         
         if (t == null) return t;

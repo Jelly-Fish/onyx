@@ -74,6 +74,7 @@ public class TailConnectionSubroutine extends AbstractSubroutine {
     /**
      * @param p tail search start position, this position will be used to
      * determinate start position region.
+     * @param trim perform trim ?
      * @return OnyxMove instances.
      * @throws com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException
      */
@@ -82,7 +83,6 @@ public class TailConnectionSubroutine extends AbstractSubroutine {
         this.startPos = p;
         this.tail = this.findTail(p, p.getKey());
         this.score();
-        this.trimFoundMoves();
         if (MoveUtils.isMove(this.candidate)) print(AbstractSubroutine.BEST_CANDIDATE_TAIL_FORMAT, 
                 p.getKey(), this.type, this.color.str, this.candidate);
         return this.candidate;
@@ -196,27 +196,6 @@ public class TailConnectionSubroutine extends AbstractSubroutine {
         
         this.candidate = new OnyxMove(tmp, score * OnyxConst.SCORE.TAIL.getValue());
         this.candidates.add(candidate);
-    }
-    
-    /**
-     * Trim tails by score and oponent tail link tendency.
-     * @throws com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException
-     */
-    @SuppressWarnings("null")
-    protected void trimFoundMoves() throws InvalidOnyxPositionException {
-
-        OnyxMove tmp = null;
-        for (OnyxMove m : this.candidates) {
-            if (MoveUtils.isNotMove(m)) continue;
-            if (MoveUtils.isNotMove(tmp)) tmp = m;
-            if (new OnyxPosStateSubroutine(tmp.getPos()
-                ).willEnableTake(this.board, this.c, this.color)) continue;
-            if (m.getScore() > tmp.getScore()) tmp = m;
-        }
-        
-        if (MoveUtils.isMove(tmp)) tmp.setTailStartPos(this.startPos);
-        
-        this.candidate = tmp;
     }
     
     private void addStartPositionToCandidates() {

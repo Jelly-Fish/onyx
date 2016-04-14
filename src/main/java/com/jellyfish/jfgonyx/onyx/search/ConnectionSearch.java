@@ -67,7 +67,6 @@ public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnecti
     private final List<OnyxMove> cnxMoves = new ArrayList<>();
     
     @Override
-    @SuppressWarnings("null")
     public OnyxMove search(final OnyxPosCollection c, final OnyxBoard board, final OnyxConst.COLOR color) 
             throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
         
@@ -114,7 +113,6 @@ public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnecti
      * @return best onyx connection search move as a non win end of tail position move.
      * @throws com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException
      */
-    @SuppressWarnings("null")
     private OnyxMove getTailMove(final OnyxPosCollection c, final OnyxBoard board, 
             final OnyxConst.COLOR color) throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
         
@@ -128,7 +126,7 @@ public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnecti
             this.checkedKeys.addAll(sub.getCheckedKeys());
         }
         
-        final OnyxMove tmp = this.trim(this.cnxTmpMoves);
+        final OnyxMove tmp = this.trim(this.cnxTmpMoves, board, c, color);
         
         return MoveUtils.isMove(tmp) ? new OnyxMove(tmp.getPos(), tmp.getPiece(),
             SearchUtils.calibrateTailMoves(OnyxGame.getInstance(), tmp.getScore())) : null;
@@ -156,10 +154,10 @@ public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnecti
             moves.add(new SubTailConnectionSubroutine(c, color, board, minX, minY, maxX, maxY).getTail(p));
         }
         
-        final OnyxMove tmp = this.trim(moves);
+        final OnyxMove tmp = this.trim(moves, board, c, OnyxConst.COLOR.getOposite(color.bool));
 
         /**
-         * Take possibility & if true apply captures :
+         * Take possibility - if so then apply captures :
          */
         final OnyxConst.COLOR opColor = OnyxConst.COLOR.getOposite(color.bool);
         final OnyxMove capture = new TakePositionSubroutine().getTakePos(c, board, opColor.bit);
