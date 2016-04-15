@@ -35,10 +35,8 @@ import com.jellyfish.jfgonyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
-import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
-import com.jellyfish.jfgonyx.onyx.search.searchutils.MoveUtils;
-import com.jellyfish.jfgonyx.onyx.search.subroutines.abstractions.AbstractSubroutine;
-import com.jellyfish.jfgonyx.onyx.search.subroutines.positionsearch.OnyxPosStateSubroutine;
+import com.jellyfish.jfgonyx.onyx.abstractions.AbstractSubroutine;
+import com.jellyfish.jfgonyx.onyx.search.searchutils.OnyxPositionUtils;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
 
 /**
@@ -98,7 +96,7 @@ public class SubTailConnectionSubroutine extends TailConnectionSubroutine {
         /**
          * Avoid returning sub tail counter positions that are between
          * max/min tail/start position of the sub tail (depending on color 
-         * and start position + found tail posiion) - see below.
+         * and start position + found tail posiion).
          */
         
         if (this.color.bool) {

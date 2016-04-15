@@ -76,14 +76,28 @@ public class AbstractOnyxSearch {
     protected final OnyxMove trim(final List<OnyxMove> moves, final OnyxBoard b, 
             final OnyxPosCollection c, final OnyxConst.COLOR color) throws InvalidOnyxPositionException {
         
+        int count = 0;
         OnyxMove tmp = null;
+        
         for (OnyxMove m : moves) {
+            
             if (MoveUtils.isNotMove(m)) continue;
-            if (MoveUtils.isNotMove(tmp)) tmp = m;
-            if (!(new OnyxPosStateSubroutine(tmp.getPos()).willEnableTake(b, c, color)) &&
+            if ((MoveUtils.isNotMove(tmp)) || 
+                !(new OnyxPosStateSubroutine(tmp.getPos()).willEnableTake(b, c, color)) &&
                     m.getScore() > tmp.getScore()) {
                 tmp = m;
+                ++count;
             }
+        }
+        
+        /**
+         * As tmp = m if tmp is = NULL, tmp will = m even if tmp 
+         * willEnableTake TRUE - therefor if count = 1 check for 
+         * willEnableTake once again - score will be equal to first 
+         * non NULL move and coparing score will be irrelevant.
+         */
+        if (count == 1 && new OnyxPosStateSubroutine(tmp.getPos()).willEnableTake(b, c, color)) {
+            return null;
         }
         
         return tmp;

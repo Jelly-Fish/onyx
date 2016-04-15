@@ -139,6 +139,7 @@ public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnecti
         final List<OnyxMove> moves = new ArrayList<>();
         final List<OnyxPos> pos = OnyxPositionUtils.trimBorderByColorWithExceptions(
                 OnyxPositionUtils.getSubBordersByColor(c, color), color, this.checkedKeys);
+        pos.addAll(OnyxPositionUtils.getSubCounterBordersByColor(c, color));
         
         float minX = OnyxConst.BOARD_SIDE_POS_COUNT, minY = OnyxConst.BOARD_SIDE_POS_COUNT,
             maxX = 0f, maxY = 0f;

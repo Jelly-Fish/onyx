@@ -106,9 +106,9 @@ class Onyx {
             Onyx.gameEnd = win || lose;
                         
             // Do printing debug stuff...
-            print(String.format(POSCOL_SEARCH_FORMAT,
+            if (mPOSCOL != null) print(String.format(POSCOL_SEARCH_FORMAT,
                     OnyxConst.POS_MAP.get(mPOSCOL.getPos().getKey()), mPOSCOL.getScore()));
-            print(String.format(CNX_SEARCH_FORMAT,
+            if (mCNX != null) print(String.format(CNX_SEARCH_FORMAT,
                 OnyxConst.POS_MAP.get(mCNX.getPos().getKey()), mCNX.getScore()));
             print(win ? 
                 String.format(WIN, OnyxConst.COLOR.getOposite(color.bool).str) : 

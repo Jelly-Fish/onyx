@@ -46,7 +46,6 @@ public class OnyxMove {
     private final OnyxPiece piece;
     private List<OnyxPos> captured = null;
     private final boolean win;
-
     private float score;
 
     public OnyxMove(final OnyxPos pos, final OnyxPiece piece, final List<OnyxPos> captured, 

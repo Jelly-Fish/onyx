@@ -37,7 +37,7 @@ import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
 import com.jellyfish.jfgonyx.onyx.search.searchutils.MoveUtils;
-import com.jellyfish.jfgonyx.onyx.search.subroutines.abstractions.AbstractSubroutine;
+import com.jellyfish.jfgonyx.onyx.abstractions.AbstractSubroutine;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
 
 /**
