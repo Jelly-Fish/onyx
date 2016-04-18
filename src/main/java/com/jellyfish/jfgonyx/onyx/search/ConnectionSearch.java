@@ -224,6 +224,7 @@ public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnecti
     }
 
     /**
+     * Win move search used for countering oponent win move.
      * @param c collection of unique Onyx positions - positions are independent from OnyxDiamond instances.
      * @param tails cnx tails found for current configuration.
      * @param color to search for.

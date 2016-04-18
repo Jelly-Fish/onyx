@@ -51,16 +51,15 @@ public class WinConnectionLinkSubroutine extends WinConnectionSubroutine {
     }
     
     public OnyxMove connectionLink(final List<OnyxMove> tails) {       
-        
+
         final List<OnyxPos> borders = OnyxPositionUtils.trimByBorderStartPositionsAndColor(
                 OnyxPositionUtils.getBordersByColor(this.c, this.color), this.color);
-        
         OnyxPiece tmp = null;
         WinConnectionSubroutine search = null;
        
         /**
          * If tail is on a start border then add to borders - connection link
-         * search is uses only low borders for search : is tail is a low
+         * search is uses only low borders for search : if tail is a low
          * border (if black & x=1f or white & y=1y) then add to boder collection
          * local final List<OnyxPos> borders.
          */
@@ -79,6 +78,15 @@ public class WinConnectionLinkSubroutine extends WinConnectionSubroutine {
             this.c.getPositions().get(m.getPos().getKey()).setPiece(tmp);
 
             for (OnyxPos p : borders) {
+                
+                /**
+                 * FIXME : perhaps here, if win link is a direct win move (ex : 
+                 * high border white to low border white withour need for a
+                 * extra link (fake) piece then subroutine if corrupted :
+                 * will only work for non direct links - in previous case then
+                 * move is a simple win move : FIX.
+                 */
+                
                 search = new WinConnectionSubroutine(this.c, this.color, false);
                 search.connection(p, p.getKey());
                 if (search.isWin()) {
