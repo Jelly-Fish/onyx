@@ -139,7 +139,7 @@ public class OnyxPositionUtils {
         return borders;
     }
 
-    public static List<OnyxPos> trimByAllExternalBorderByColor(final List<OnyxPos> pos, 
+    public static List<OnyxPos> trimAllExternalBordersByColor(final List<OnyxPos> pos, 
             final OnyxConst.COLOR color) {
         
         final List<OnyxPos> positions = new ArrayList<>();

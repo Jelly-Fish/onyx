@@ -71,6 +71,7 @@ public class WinConnectionSubroutine extends AbstractSubroutine {
         
         OnyxPos tmp = null;
         for (String k : p.connections) {
+            
             tmp = c.getPosition(k);
             if (this.persue(tmp, kEx)) {
                 if ((this.color.bool && tmp.x > this.max - .1f) ||
@@ -86,13 +87,6 @@ public class WinConnectionSubroutine extends AbstractSubroutine {
     boolean persue(final OnyxPos p, final String kEx) {
         return p != null && !this.checked.contains(p.getKey()) && !p.getKey().equals(kEx) &&
                 p.isOccupied() && p.getPiece().color.bit == this.color.bit;
-    }
-    
-    @SuppressWarnings("empty-statement")
-    private int keyArraySize(final String[] keys) {
-        int i = -1;
-        while (keys[++i] != null);
-        return i;
     }
    
     public boolean isWin() {

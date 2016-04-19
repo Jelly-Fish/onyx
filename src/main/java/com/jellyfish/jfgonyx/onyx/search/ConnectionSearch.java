@@ -116,7 +116,7 @@ public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnecti
     private OnyxMove getTailMove(final OnyxPosCollection c, final OnyxBoard board, 
             final OnyxConst.COLOR color) throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
         
-        final List<OnyxPos> pos = OnyxPositionUtils.trimByAllExternalBorderByColor(
+        final List<OnyxPos> pos = OnyxPositionUtils.trimAllExternalBordersByColor(
                 OnyxPositionUtils.getBordersByColor(c, color), color);
         TailConnectionSubroutine sub;
         

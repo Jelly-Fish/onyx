@@ -38,6 +38,7 @@ import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
 import com.jellyfish.jfgonyx.onyx.search.searchutils.MoveUtils;
 import com.jellyfish.jfgonyx.onyx.search.searchutils.OnyxPositionUtils;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -51,7 +52,8 @@ public class WinConnectionLinkSubroutine extends WinConnectionSubroutine {
     }
     
     public OnyxMove connectionLink(final List<OnyxMove> tails) {       
-
+        
+        final List<OnyxPos> borderTails = new ArrayList<>();
         final List<OnyxPos> borders = OnyxPositionUtils.trimByBorderStartPositionsAndColor(
                 OnyxPositionUtils.getBordersByColor(this.c, this.color), this.color);
         OnyxPiece tmp = null;
@@ -64,34 +66,38 @@ public class WinConnectionLinkSubroutine extends WinConnectionSubroutine {
          * local final List<OnyxPos> borders.
          */
         for (OnyxMove m : tails) {
-            if ((this.color.bool && MoveUtils.isMove(m) && m.hasPosition() && m.getPos().x == 1f) || 
-                (!this.color.bool && MoveUtils.isMove(m) && m.hasPosition() && m.getPos().y == 1f)) {
+            if ((this.color.bool && MoveUtils.isMove(m) && m.hasPosition() && m.getPos().x < 1.1f) || 
+                (!this.color.bool && MoveUtils.isMove(m) && m.hasPosition() && m.getPos().y < 1.1f)) {
                 borders.add(m.getPos());
+                borderTails.add(m.getPos());
             }
         }
 
         for (OnyxMove m : tails) {
             
             if (MoveUtils.isNotMove(m) || !m.hasPosition()) continue;
-            
+
             tmp = new OnyxPiece(this.color);
             this.c.getPositions().get(m.getPos().getKey()).setPiece(tmp);
 
             for (OnyxPos p : borders) {
                 
-                /**
-                 * FIXME : perhaps here, if win link is a direct win move (ex : 
-                 * high border white to low border white withour need for a
-                 * extra link (fake) piece then subroutine if corrupted :
-                 * will only work for non direct links - in previous case then
-                 * move is a simple win move : FIX.
-                 */
-                
                 search = new WinConnectionSubroutine(this.c, this.color, false);
                 search.connection(p, p.getKey());
-                if (search.isWin()) {
+                if (search.isWin() && !borderTails.contains(p)) {
                     this.c.getPositions().get(m.getPos().getKey()).setPiece(null);
                     return new OnyxMove(m.getPos(), OnyxConst.SCORE.WIN_LINK.getValue());
+                } else if (search.isWin() && borderTails.contains(p)) {
+                    
+                    /**
+                     * If border tail (meaning the tails that on a low border
+                     * (y OR x strictly smaller than 1.1f)) then the tmp position
+                     * must be set to null to remove link simulation BUT the 
+                     * position to return is not in tail list (tails here) but
+                     * is the border position.
+                     */
+                    this.c.getPositions().get(m.getPos().getKey()).setPiece(null);
+                    return new OnyxMove(p, OnyxConst.SCORE.WIN_LINK.getValue());
                 }
             }
             
