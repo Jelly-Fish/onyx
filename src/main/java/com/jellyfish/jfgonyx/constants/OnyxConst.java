@@ -31,11 +31,11 @@
  */
 package com.jellyfish.jfgonyx.constants;
 
+import com.jellyfish.jfgonyx.vars.GraphicsVars;
 import java.awt.Color;
 import java.util.HashMap;
 
 /**
- *
  * @author thw
  */
 public class OnyxConst {
@@ -307,7 +307,8 @@ public class OnyxConst {
  
     public static enum COLOR {
         
-        WHITE("white", GraphicsConst.WHITE, false, 0), BLACK("black", GraphicsConst.BLACK, true, 1),
+        WHITE("white", GraphicsVars.getInstance().WHITE_PIECE, false, 0), 
+        BLACK("black", GraphicsVars.getInstance().BLACK_PIECE, true, 1),
         VIRTUAL_WHITE("virtual white", new Color(1f,1f,1f,.8f), false, 0), 
         VIRTUAL_BLACK("virtual black", new Color(0f,0f,0f,.8f), true, 1);
         

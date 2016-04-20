@@ -31,6 +31,7 @@
  */
 package com.jellyfish.jfgonyx.constants;
 
+import com.jellyfish.jfgonyx.vars.GraphicsVars;
 import java.awt.Font;
 import java.awt.Polygon;
 
@@ -44,31 +45,31 @@ public class OnyxBoardPositionOutlineConst {
         
         OnyxBoardPositionOutlineConst.OUTLINE_POLYGONS[0] =
         new Polygon(
-            new int[] { 0, GraphicsConst.BOARD_WIDTH, 
-                GraphicsConst.BOARD_WIDTH - 24, 24 },
+            new int[] { 0, GraphicsVars.getInstance().getInstance().BOARD_WIDTH, 
+                GraphicsVars.getInstance().BOARD_WIDTH - 24, 24 },
             new int[] { 0, 0, 24, 24 }, 4
         );
         OnyxBoardPositionOutlineConst.OUTLINE_POLYGONS[1] =
         new Polygon(
-            new int[] { GraphicsConst.BOARD_WIDTH - 24, 
-                GraphicsConst.BOARD_WIDTH, GraphicsConst.BOARD_WIDTH,
-                GraphicsConst.BOARD_WIDTH - 24 },
-            new int[] { 24, 0, GraphicsConst.BOARD_WIDTH,
-                GraphicsConst.BOARD_WIDTH - 24 }, 4
+            new int[] { GraphicsVars.getInstance().BOARD_WIDTH - 24, 
+                GraphicsVars.getInstance().BOARD_WIDTH, GraphicsVars.getInstance().BOARD_WIDTH,
+                GraphicsVars.getInstance().BOARD_WIDTH - 24 },
+            new int[] { 24, 0, GraphicsVars.getInstance().BOARD_WIDTH,
+                GraphicsVars.getInstance().BOARD_WIDTH - 24 }, 4
         );
         OnyxBoardPositionOutlineConst.OUTLINE_POLYGONS[2] =
         new Polygon(
-            new int[] { 24, GraphicsConst.BOARD_WIDTH - 24, 
-                GraphicsConst.BOARD_WIDTH, 0 },
-            new int[] { GraphicsConst.BOARD_WIDTH - 24, 
-                GraphicsConst.BOARD_WIDTH - 24, GraphicsConst.BOARD_WIDTH,
-                GraphicsConst.BOARD_WIDTH }, 4
+            new int[] { 24, GraphicsVars.getInstance().BOARD_WIDTH - 24, 
+                GraphicsVars.getInstance().BOARD_WIDTH, 0 },
+            new int[] { GraphicsVars.getInstance().BOARD_WIDTH - 24, 
+                GraphicsVars.getInstance().BOARD_WIDTH - 24, GraphicsVars.getInstance().BOARD_WIDTH,
+                GraphicsVars.getInstance().BOARD_WIDTH }, 4
         );
         OnyxBoardPositionOutlineConst.OUTLINE_POLYGONS[3] =
         new Polygon(
             new int[] { 0, 24, 24, 0 },
-            new int[] { 0, 24, GraphicsConst.BOARD_WIDTH - 24,
-                GraphicsConst.BOARD_WIDTH }, 4
+            new int[] { 0, 24, GraphicsVars.getInstance().BOARD_WIDTH - 24,
+                GraphicsVars.getInstance().BOARD_WIDTH }, 4
         );
         
     }

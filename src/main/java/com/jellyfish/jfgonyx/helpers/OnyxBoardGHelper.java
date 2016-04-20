@@ -36,7 +36,7 @@ import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxDiamondCollection;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPiece;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxDiamond;
-import com.jellyfish.jfgonyx.constants.GraphicsConst;
+import com.jellyfish.jfgonyx.vars.GraphicsVars;
 import com.jellyfish.jfgonyx.constants.OnyxBoardPositionOutlineConst;
 import com.jellyfish.jfgonyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
@@ -62,47 +62,47 @@ public class OnyxBoardGHelper {
                 if (d.isFivePosDiamond()) {
                     d.setPolygon(new Polygon(
                         new int[]{
-                            d.positions[0].gX, d.positions[1].gX + GraphicsConst.ZIGZAG,
-                            d.positions[2].gX + GraphicsConst.ZIGZAG, d.positions[3].gX
+                            d.positions[0].gX, d.positions[1].gX + GraphicsVars.getInstance().ZIGZAG,
+                            d.positions[2].gX + GraphicsVars.getInstance().ZIGZAG, d.positions[3].gX
                         },
                         new int[]{
-                            d.positions[0].gY + GraphicsConst.ZIGZAG,
-                            d.positions[1].gY + GraphicsConst.ZIGZAG,
+                            d.positions[0].gY + GraphicsVars.getInstance().ZIGZAG,
+                            d.positions[1].gY + GraphicsVars.getInstance().ZIGZAG,
                             d.positions[2].gY, d.positions[3].gY
                         }, 4));
                 } else {
                     d.setPolygon(new Polygon(
                         new int[]{
-                            d.positions[0].gX, d.positions[1].gX + GraphicsConst.ZIGZAG,
-                            d.positions[2].gX + GraphicsConst.ZIGZAG, d.positions[3].gX
+                            d.positions[0].gX, d.positions[1].gX + GraphicsVars.getInstance().ZIGZAG,
+                            d.positions[2].gX + GraphicsVars.getInstance().ZIGZAG, d.positions[3].gX
                         },
                         new int[]{
                             d.positions[0].gY, d.positions[1].gY,
-                            d.positions[2].gY + GraphicsConst.ZIGZAG,
-                            d.positions[3].gY + GraphicsConst.ZIGZAG
+                            d.positions[2].gY + GraphicsVars.getInstance().ZIGZAG,
+                            d.positions[3].gY + GraphicsVars.getInstance().ZIGZAG
                         }, 4));
                 }
             } else {
                 if (d.isFivePosDiamond()) {
                     d.setPolygon(new Polygon(
                         new int[]{
-                            d.positions[0].gX + GraphicsConst.ZIGZAG, d.positions[1].gX,
-                            d.positions[2].gX, d.positions[3].gX + GraphicsConst.ZIGZAG
+                            d.positions[0].gX + GraphicsVars.getInstance().ZIGZAG, d.positions[1].gX,
+                            d.positions[2].gX, d.positions[3].gX + GraphicsVars.getInstance().ZIGZAG
                         },
                         new int[]{
                             d.positions[0].gY, d.positions[1].gY,
-                            d.positions[2].gY + GraphicsConst.ZIGZAG,
-                            d.positions[3].gY + GraphicsConst.ZIGZAG
+                            d.positions[2].gY + GraphicsVars.getInstance().ZIGZAG,
+                            d.positions[3].gY + GraphicsVars.getInstance().ZIGZAG
                         }, 4));
                 } else {
                     d.setPolygon(new Polygon(
                         new int[]{
-                            d.positions[0].gX + GraphicsConst.ZIGZAG, d.positions[1].gX,
-                            d.positions[2].gX, d.positions[3].gX + GraphicsConst.ZIGZAG
+                            d.positions[0].gX + GraphicsVars.getInstance().ZIGZAG, d.positions[1].gX,
+                            d.positions[2].gX, d.positions[3].gX + GraphicsVars.getInstance().ZIGZAG
                         },
                         new int[]{
-                            d.positions[0].gY + GraphicsConst.ZIGZAG,
-                            d.positions[1].gY + GraphicsConst.ZIGZAG,
+                            d.positions[0].gY + GraphicsVars.getInstance().ZIGZAG,
+                            d.positions[1].gY + GraphicsVars.getInstance().ZIGZAG,
                             d.positions[2].gY, d.positions[3].gY
                         }, 4));
                 }
@@ -124,42 +124,42 @@ public class OnyxBoardGHelper {
 
             if (d.onPairLine) {
                 if (d.isFivePosDiamond()) {
-                    g.setColor(GraphicsConst.FULL_DIAMOND);
+                    g.setColor(GraphicsVars.getInstance().FULL_DIAMOND);
                     g.fillPolygon(d.getPolygon());
-                    g.setColor(GraphicsConst.LINE);
+                    g.setColor(GraphicsVars.getInstance().LINE);
                     g.drawPolygon(d.getPolygon());
-                    g.drawLine(d.positions[0].gX, d.positions[0].gY + GraphicsConst.ZIGZAG,
-                            d.positions[2].gX + GraphicsConst.ZIGZAG, d.positions[2].gY);
-                    g.drawLine(d.positions[1].gX + GraphicsConst.ZIGZAG,
-                            d.positions[1].gY + GraphicsConst.ZIGZAG,
+                    g.drawLine(d.positions[0].gX, d.positions[0].gY + GraphicsVars.getInstance().ZIGZAG,
+                            d.positions[2].gX + GraphicsVars.getInstance().ZIGZAG, d.positions[2].gY);
+                    g.drawLine(d.positions[1].gX + GraphicsVars.getInstance().ZIGZAG,
+                            d.positions[1].gY + GraphicsVars.getInstance().ZIGZAG,
                             d.positions[3].gX, d.positions[3].gY);
                 } else {
-                    g.setColor(GraphicsConst.DIAMOND);
+                    g.setColor(GraphicsVars.getInstance().DIAMOND);
                     g.fillPolygon(d.getPolygon());
-                    g.setColor(GraphicsConst.LINE);
+                    g.setColor(GraphicsVars.getInstance().LINE);
                     g.drawPolygon(d.getPolygon());
-                    g.drawLine(d.positions[1].gX + GraphicsConst.ZIGZAG, d.positions[1].gY,
-                            d.positions[3].gX, d.positions[3].gY + GraphicsConst.ZIGZAG);
+                    g.drawLine(d.positions[1].gX + GraphicsVars.getInstance().ZIGZAG, d.positions[1].gY,
+                            d.positions[3].gX, d.positions[3].gY + GraphicsVars.getInstance().ZIGZAG);
                 }
             } else {
                 if (d.isFivePosDiamond()) {
-                    g.setColor(GraphicsConst.FULL_DIAMOND);
+                    g.setColor(GraphicsVars.getInstance().FULL_DIAMOND);
                     g.fillPolygon(d.getPolygon());
-                    g.setColor(GraphicsConst.LINE);
+                    g.setColor(GraphicsVars.getInstance().LINE);
                     g.drawPolygon(d.getPolygon());
-                    g.drawLine(d.positions[0].gX + GraphicsConst.ZIGZAG, d.positions[0].gY,
-                            d.positions[2].gX, d.positions[2].gY + GraphicsConst.ZIGZAG);
+                    g.drawLine(d.positions[0].gX + GraphicsVars.getInstance().ZIGZAG, d.positions[0].gY,
+                            d.positions[2].gX, d.positions[2].gY + GraphicsVars.getInstance().ZIGZAG);
                     g.drawLine(d.positions[1].gX, d.positions[1].gY,
-                            d.positions[3].gX + GraphicsConst.ZIGZAG,
-                            d.positions[3].gY + GraphicsConst.ZIGZAG);
+                            d.positions[3].gX + GraphicsVars.getInstance().ZIGZAG,
+                            d.positions[3].gY + GraphicsVars.getInstance().ZIGZAG);
                 } else {
-                    g.setColor(GraphicsConst.DIAMOND);
-                    g.setColor(GraphicsConst.DIAMOND);
+                    g.setColor(GraphicsVars.getInstance().DIAMOND);
+                    g.setColor(GraphicsVars.getInstance().DIAMOND);
                     g.fillPolygon(d.getPolygon());
-                    g.setColor(GraphicsConst.LINE);
+                    g.setColor(GraphicsVars.getInstance().LINE);
                     g.drawPolygon(d.getPolygon());
-                    g.drawLine(d.positions[0].gX + GraphicsConst.ZIGZAG,
-                            d.positions[0].gY + GraphicsConst.ZIGZAG,
+                    g.drawLine(d.positions[0].gX + GraphicsVars.getInstance().ZIGZAG,
+                            d.positions[0].gY + GraphicsVars.getInstance().ZIGZAG,
                             d.positions[2].gX, d.positions[2].gY);
                 }
             }
@@ -193,20 +193,20 @@ public class OnyxBoardGHelper {
         OnyxBoardGHelper.translate(g, p);
 
         g.setColor(piece.color.bool ? 
-            GraphicsConst.BLACK_OUTLINE : GraphicsConst.WHITE_OUTLINE);
-        g.drawOval(p.gX - GraphicsConst.TRANSLATION, p.gY - GraphicsConst.TRANSLATION, 
-            GraphicsConst.TRANSLATION * 2, GraphicsConst.TRANSLATION * 2);
+            GraphicsVars.getInstance().BLACK_OUTLINE : GraphicsVars.getInstance().WHITE_OUTLINE);
+        g.drawOval(p.gX - GraphicsVars.getInstance().TRANSLATION, p.gY - GraphicsVars.getInstance().TRANSLATION, 
+            GraphicsVars.getInstance().TRANSLATION * 2, GraphicsVars.getInstance().TRANSLATION * 2);
         g.setColor(piece.color.color);
-        g.fillOval(p.gX - GraphicsConst.TRANSLATION, p.gY - GraphicsConst.TRANSLATION, 
-            GraphicsConst.TRANSLATION * 2, GraphicsConst.TRANSLATION * 2);
+        g.fillOval(p.gX - GraphicsVars.getInstance().TRANSLATION, p.gY - GraphicsVars.getInstance().TRANSLATION, 
+            GraphicsVars.getInstance().TRANSLATION * 2, GraphicsVars.getInstance().TRANSLATION * 2);
         
         if (piece.isVirtual() || piece.isEngineMove()) {
             final Stroke s = g.getStroke();
             g.setStroke(new BasicStroke(2));
             g.setColor(piece.isEngineMove() ?
-                GraphicsConst.ONYX_ENGINE_MOVE_OUTLINE : GraphicsConst.VIRTUAL_OUTLINE);
-            g.drawOval(p.gX - GraphicsConst.TRANSLATION, p.gY - GraphicsConst.TRANSLATION,
-                GraphicsConst.TRANSLATION * 2, GraphicsConst.TRANSLATION * 2);
+                GraphicsVars.getInstance().ONYX_ENGINE_MOVE_OUTLINE : GraphicsVars.getInstance().VIRTUAL_OUTLINE);
+            g.drawOval(p.gX - GraphicsVars.getInstance().TRANSLATION, p.gY - GraphicsVars.getInstance().TRANSLATION,
+                GraphicsVars.getInstance().TRANSLATION * 2, GraphicsVars.getInstance().TRANSLATION * 2);
             g.setStroke(s);
         }
 
@@ -217,19 +217,19 @@ public class OnyxBoardGHelper {
         
         int c = 0;
         if (p.x % 2 == 0) {
-            g.translate(0, GraphicsConst.TRANSLATION);
+            g.translate(0, GraphicsVars.getInstance().TRANSLATION);
         } else if (p.isDiamondCenter()) {
             ++c;
         }
         
         if (p.y % 2 == 0) {
-            g.translate(GraphicsConst.TRANSLATION, 0);
+            g.translate(GraphicsVars.getInstance().TRANSLATION, 0);
         } else if (p.isDiamondCenter()) {
             ++c;
         }
         
         if (c == 2) {
-            g.translate(GraphicsConst.CENTER_TRANSLATION, GraphicsConst.CENTER_TRANSLATION);
+            g.translate(GraphicsVars.getInstance().CENTER_TRANSLATION, GraphicsVars.getInstance().CENTER_TRANSLATION);
         }
     }
     
@@ -237,70 +237,70 @@ public class OnyxBoardGHelper {
         
         int c = 0;
         if (p.x % 2 == 0) {
-            g.translate(0, -GraphicsConst.TRANSLATION);
+            g.translate(0, -GraphicsVars.getInstance().TRANSLATION);
         } else if (p.isDiamondCenter()) {
             ++c;
         }
         
         if (p.y % 2 == 0) {
-            g.translate(-GraphicsConst.TRANSLATION, 0);
+            g.translate(-GraphicsVars.getInstance().TRANSLATION, 0);
         } else if (p.isDiamondCenter()) {
             ++c;
         }
         
         if (c == 2) {
-            g.translate(-GraphicsConst.CENTER_TRANSLATION, -GraphicsConst.CENTER_TRANSLATION);
+            g.translate(-GraphicsVars.getInstance().CENTER_TRANSLATION, -GraphicsVars.getInstance().CENTER_TRANSLATION);
         }
     }
 
     private static void drawBackground(Graphics2D g, final OnyxBoard board) {
-        g.setColor(GraphicsConst.BACKGROUND);
+        g.setColor(GraphicsVars.getInstance().BACKGROUND);
         g.fillRect(0, 0, board.getWidth(), board.getHeight());
     }
     
     private static void drawPositionOutline(Graphics2D g, final OnyxBoard board) {
         
-        g.setColor(GraphicsConst.BLACK);
+        g.setColor(GraphicsVars.getInstance().BLACK_PIECE);
         for (Polygon p : OnyxBoardPositionOutlineConst.OUTLINE_POLYGONS) {
             g.fillPolygon(p);
-            g.setColor(
-                g.getColor().equals(GraphicsConst.BLACK) ? GraphicsConst.WHITE : GraphicsConst.BLACK);
+            g.setColor(g.getColor().equals(GraphicsVars.getInstance().BLACK_PIECE) ? 
+                GraphicsVars.getInstance().WHITE_PIECE : GraphicsVars.getInstance().BLACK_PIECE);
         }
         
-        g.setColor(GraphicsConst.BACKGROUND);
+        g.setColor(GraphicsVars.getInstance().BACKGROUND);
         g.setFont(OnyxBoardPositionOutlineConst.POS_FONT);
         String value = StringUtils.EMPTY;
         
         int x = 4;
-        int y = GraphicsConst.BOARD_WIDTH - GraphicsConst.SQUARE_WIDTH - 12;
+        int y = GraphicsVars.getInstance().BOARD_WIDTH - GraphicsVars.getInstance().SQUARE_WIDTH - 12;
         for (int i = 1; i <= OnyxConst.BOARD_SIDE_POS_COUNT; ++i) {
             value = String.valueOf(i);
             g.drawString(value, value.length() > 1 ? x : x * 2, y);
-            y -= GraphicsConst.SQUARE_WIDTH;
+            y -= GraphicsVars.getInstance().SQUARE_WIDTH;
         }
         
-        x = GraphicsConst.BOARD_WIDTH - 20;
-        y = GraphicsConst.BOARD_WIDTH - GraphicsConst.SQUARE_WIDTH - 4;
+        x = GraphicsVars.getInstance().BOARD_WIDTH - 20;
+        y = GraphicsVars.getInstance().BOARD_WIDTH - GraphicsVars.getInstance().SQUARE_WIDTH - 4;
         for (int i = 1; i <= OnyxConst.BOARD_SIDE_POS_COUNT; ++i) {
             value = String.valueOf(i);
             g.drawString(value, value.length() > 1 ? x : x + 4, y);
-            y -= GraphicsConst.SQUARE_WIDTH;
+            y -= GraphicsVars.getInstance().SQUARE_WIDTH;
         }
         
-        x = GraphicsConst.SQUARE_WIDTH - 8;
+        x = GraphicsVars.getInstance().SQUARE_WIDTH - 8;
         y = 17;
         for (int i = 0; i < OnyxBoardPositionOutlineConst.CHAR_VALUES.length; ++i) {
             value = OnyxBoardPositionOutlineConst.CHAR_VALUES[i];
             g.drawString(value, x, y);
-            x += GraphicsConst.SQUARE_WIDTH;
+            x += GraphicsVars.getInstance().SQUARE_WIDTH;
         }
         
-        x = GraphicsConst.SQUARE_WIDTH + 8;
-        y = GraphicsConst.BOARD_WIDTH - 7;
+        x = GraphicsVars.getInstance().SQUARE_WIDTH + 8;
+        y = GraphicsVars.getInstance().BOARD_WIDTH - 7;
         for (int i = 0; i < OnyxBoardPositionOutlineConst.CHAR_VALUES.length; ++i) {
             value = OnyxBoardPositionOutlineConst.CHAR_VALUES[i];
             g.drawString(value, x, y);
-            x += GraphicsConst.SQUARE_WIDTH;
+            x += GraphicsVars.getInstance().SQUARE_WIDTH;
         }
     }
     

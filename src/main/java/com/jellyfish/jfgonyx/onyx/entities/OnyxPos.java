@@ -32,7 +32,7 @@
 package com.jellyfish.jfgonyx.onyx.entities;
 
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
-import com.jellyfish.jfgonyx.constants.GraphicsConst;
+import com.jellyfish.jfgonyx.vars.GraphicsVars;
 import com.jellyfish.jfgonyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import com.jellyfish.jfgonyx.onyx.search.subroutines.positionsearch.OnyxPosStateSubroutine;
@@ -57,8 +57,8 @@ public class OnyxPos {
     public OnyxPos(final float x, final float y, final OnyxDiamond d) {
         this.x = x;
         this.y = y;
-        this.gX = ((int) x) * GraphicsConst.SQUARE_WIDTH;
-        this.gY = ((int) y) * GraphicsConst.SQUARE_WIDTH;
+        this.gX = ((int) x) * GraphicsVars.getInstance().SQUARE_WIDTH;
+        this.gY = ((int) y) * GraphicsVars.getInstance().SQUARE_WIDTH;
         this.diamond = d;
         this.init();
         this.rectangle = this.initRectangle(this.x, this.y);
@@ -196,8 +196,8 @@ public class OnyxPos {
         }
         
         return  new OnyxPosRectangle(
-            (pX * GraphicsConst.SQUARE_WIDTH) - SELECT_CERCLE_RADIUS, 
-            (pY * GraphicsConst.SQUARE_WIDTH) - SELECT_CERCLE_RADIUS, 
+            (pX * GraphicsVars.getInstance().SQUARE_WIDTH) - SELECT_CERCLE_RADIUS, 
+            (pY * GraphicsVars.getInstance().SQUARE_WIDTH) - SELECT_CERCLE_RADIUS, 
                 SELECT_CERCLE_RADIUS * 2f, SELECT_CERCLE_RADIUS * 2f
         );
     }

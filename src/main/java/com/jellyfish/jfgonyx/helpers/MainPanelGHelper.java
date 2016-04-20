@@ -31,7 +31,7 @@
  */
 package com.jellyfish.jfgonyx.helpers;
 
-import com.jellyfish.jfgonyx.constants.GraphicsConst;
+import com.jellyfish.jfgonyx.vars.GraphicsVars;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.util.List;
@@ -47,7 +47,8 @@ public class MainPanelGHelper {
         g.setFont(font);
         int c = 1, y = 20, x = 10, marginTop = font.getSize();
         for (String m : moves) {
-            g.setColor(c % 2 == 0 ? GraphicsConst.WHITE : GraphicsConst.BLACK);
+            g.setColor(c % 2 == 0 ? 
+                GraphicsVars.getInstance().WHITE_PIECE : GraphicsVars.getInstance().BLACK_PIECE);
             m = String.format(format, c, m);
             g.drawString(m, x, y);
             x += m.length() * 10;

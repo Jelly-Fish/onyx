@@ -1,0 +1,98 @@
+/**
+ * *****************************************************************************
+ * Copyright (c) 2015, 2016, 2017, Thomas.H Warner. All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions are met:
+ *
+ * 1. Redistributions of source code must retain the above copyright notice,
+ * this list of conditions and the following disclaimer.
+ *
+ * 2. Redistributions in binary form must reproduce the above copyright notice,
+ * this list of conditions and the following disclaimer in the documentation
+ * and/or other materials provided with the distribution.
+ *
+ * 3. Neither the name of the copyright holder nor the names of its contributors
+ * may be used to endorse or promote products derived from this software without
+ * specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE
+ * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
+ * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
+ * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
+ * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
+ * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ * POSSIBILITY OF SUCH DAMAGE. 
+ ******************************************************************************
+ */
+package com.jellyfish.jfgonyx.ui.utils;
+
+import com.jellyfish.jfgonyx.vars.GraphicsVars;
+import com.thoughtworks.xstream.XStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+/**
+ * @author thw
+ */
+public class DataUtils {
+    
+    /**
+     * data directory for serializations.
+     */
+    public static final String DATA_ROOT = "data/";
+
+    /**
+     * XML file extention.
+     */
+    public static final String XML_FILE_EXTENTION = ".xml";
+
+    public static GraphicsVars xmlDeserializeGraphicsVars(final String path) {
+
+        final XStream xstream = new XStream();
+        xstream.autodetectAnnotations(true);
+        GraphicsVars vars = null;
+        try (FileInputStream fip = new FileInputStream(new File(path))) {
+            
+            vars = (GraphicsVars) xstream.fromXML(fip);
+            
+        } catch (final FileNotFoundException fnfex) {
+            Logger.getLogger(DataUtils.class.getName()).log(Level.SEVERE, null, fnfex);
+        } catch (final IOException ioex) {
+            Logger.getLogger(DataUtils.class.getName()).log(Level.SEVERE, null, ioex);
+        }
+        
+        return vars;
+    }
+    
+    public static void xmlSerializeGraphicsVars(final GraphicsVars vars) {
+        
+        final String path = DataUtils.DATA_ROOT + vars.getClass().getSimpleName() + 
+                DataUtils.XML_FILE_EXTENTION;
+        
+        final XStream xstream = new XStream();
+        xstream.autodetectAnnotations(true);
+
+        try (FileOutputStream fop = new FileOutputStream(new File(path))) {
+            
+            xstream.toXML(vars, fop);
+            fop.flush();
+            fop.close();
+            
+        } catch (final FileNotFoundException fnfex) {
+            Logger.getLogger(DataUtils.class.getName()).log(Level.SEVERE, null, fnfex);
+        } catch (final IOException ioex) {
+            Logger.getLogger(DataUtils.class.getName()).log(Level.SEVERE, null, ioex);
+        }
+    }
+    
+}

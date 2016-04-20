@@ -30,7 +30,7 @@
 
 package com.jellyfish.jfgonyx.ui;
 
-import com.jellyfish.jfgonyx.constants.GraphicsConst;
+import com.jellyfish.jfgonyx.vars.GraphicsVars;
 import com.jellyfish.jfgonyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxDiamond;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxDiamondCollection;
@@ -72,12 +72,13 @@ public class OnyxBoard extends javax.swing.JPanel implements OnyxBoardI {
         super();
         this.diamonds = diamonds;
         this.positions = positions;
-        this.setSize(GraphicsConst.BOARD_WIDTH, GraphicsConst.BOARD_WIDTH);
+        this.setSize(GraphicsVars.getInstance().BOARD_WIDTH, GraphicsVars.getInstance().BOARD_WIDTH);
         this.borderRectangles = initBorderRectangles();
         this.setOpaque(false);
         this.setDoubleBuffered(true);
         this.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        this.setPreferredSize(new Dimension(GraphicsConst.BOARD_WIDTH, GraphicsConst.BOARD_WIDTH));
+        this.setPreferredSize(new Dimension(GraphicsVars.getInstance().BOARD_WIDTH, 
+                GraphicsVars.getInstance().BOARD_WIDTH));
         this.keyInput = new KeyInput();
         this.mouseInput = new MouseInput();
         this.addKeyListener(keyInput);
@@ -90,12 +91,15 @@ public class OnyxBoard extends javax.swing.JPanel implements OnyxBoardI {
     private Rectangle[] initBorderRectangles() {
         
         return new Rectangle[] {
-            new Rectangle(0, 0, (GraphicsConst.SQUARE_WIDTH - 10), GraphicsConst.BOARD_WIDTH),
-            new Rectangle(0, GraphicsConst.BOARD_WIDTH - (GraphicsConst.SQUARE_WIDTH - 10), 
-                GraphicsConst.BOARD_WIDTH, (GraphicsConst.SQUARE_WIDTH - 10)),
-            new Rectangle(GraphicsConst.BOARD_WIDTH - (GraphicsConst.SQUARE_WIDTH - 10), 0,
-                (GraphicsConst.SQUARE_WIDTH - 10), GraphicsConst.BOARD_WIDTH),
-            new Rectangle(0, 0, GraphicsConst.BOARD_WIDTH, (GraphicsConst.SQUARE_WIDTH - 10))
+            new Rectangle(0, 0, (GraphicsVars.getInstance().SQUARE_WIDTH - 10), 
+                    GraphicsVars.getInstance().BOARD_WIDTH),
+            new Rectangle(0, 
+                GraphicsVars.getInstance().BOARD_WIDTH - (GraphicsVars.getInstance().SQUARE_WIDTH - 10), 
+                GraphicsVars.getInstance().BOARD_WIDTH, (GraphicsVars.getInstance().SQUARE_WIDTH - 10)),
+            new Rectangle(GraphicsVars.getInstance().BOARD_WIDTH - (GraphicsVars.getInstance().SQUARE_WIDTH - 10), 0,
+                (GraphicsVars.getInstance().SQUARE_WIDTH - 10), GraphicsVars.getInstance().BOARD_WIDTH),
+            new Rectangle(0, 0, GraphicsVars.getInstance().BOARD_WIDTH, 
+                (GraphicsVars.getInstance().SQUARE_WIDTH - 10))
         };
     }
     

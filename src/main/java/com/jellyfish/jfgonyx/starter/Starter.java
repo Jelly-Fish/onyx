@@ -45,6 +45,8 @@ import com.jellyfish.jfgonyx.onyx.search.searchutils.Intmap;
 import com.jellyfish.jfgonyx.ui.MainFrame;
 import com.jellyfish.jfgonyx.ui.OnyxPanel;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
+import com.jellyfish.jfgonyx.ui.utils.DataUtils;
+import com.jellyfish.jfgonyx.vars.GraphicsVars;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.UIManager;
@@ -75,6 +77,7 @@ public class Starter {
         }
         //</editor-fold>
         
+        deserialize();
         start(OnyxConst.COLOR.BLACK);
     }
     
@@ -185,6 +188,14 @@ public class Starter {
         OnyxGame.getInstance().boardInterface.getPosCollection().spawnVirtualPiece(
             OnyxConst.COLOR.VIRTUAL_BLACK);
         OnyxGame.getInstance().setGameEnd(false);
+    }
+
+    private static void deserialize() {
+        GraphicsVars.setInstance(
+            DataUtils.xmlDeserializeGraphicsVars(
+            DataUtils.DATA_ROOT + GraphicsVars.class.getSimpleName() +
+            DataUtils.XML_FILE_EXTENTION
+        ));
     }
     
 }
