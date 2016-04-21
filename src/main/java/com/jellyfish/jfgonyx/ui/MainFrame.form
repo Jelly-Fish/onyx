@@ -94,6 +94,34 @@
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="changeFivePositionsDiamondColorMenuItemActionPerformed"/>
                   </Events>
                 </MenuItem>
+                <MenuItem class="javax.swing.JPopupMenu$Separator" name="colorSettingsSeparator2">
+                </MenuItem>
+                <MenuItem class="javax.swing.JMenuItem" name="changeDataTextPaneBackgroundColorMenuItem">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Change data output background color"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="changeDataTextPaneBackgroundColorMenuItemActionPerformed"/>
+                  </Events>
+                </MenuItem>
+                <MenuItem class="javax.swing.JPopupMenu$Separator" name="colorSettingsSeparator3">
+                </MenuItem>
+                <MenuItem class="javax.swing.JMenuItem" name="changeWhitePieceColorMenuItem">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Change white piece colors"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="changeWhitePieceColorMenuItemActionPerformed"/>
+                  </Events>
+                </MenuItem>
+                <MenuItem class="javax.swing.JMenuItem" name="changeBlackPieceColorMenuItem">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Change black piece colors"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="changeBlackPieceColorMenuItemActionPerformed"/>
+                  </Events>
+                </MenuItem>
               </SubComponents>
             </Menu>
           </SubComponents>

@@ -64,10 +64,7 @@ public class BoardDragger implements OnyxExecutable {
     }
       
     public static BoardDragger getInstance() {
-        
-        if (instance == null) {
-            instance = new BoardDragger();
-        }
+        if (instance == null) instance = new BoardDragger();
         return instance;
     }
     

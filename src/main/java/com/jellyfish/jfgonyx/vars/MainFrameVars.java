@@ -31,42 +31,41 @@
  */
 package com.jellyfish.jfgonyx.vars;
 
+import com.jellyfish.jfgonyx.ui.MainFrame;
 import java.awt.Color;
 
 /**
  * @author thw
  */
-public class GraphicsVars implements java.io.Serializable {
+public class MainFrameVars implements java.io.Serializable {
     
-    private static GraphicsVars instance = new GraphicsVars();
+    private static MainFrameVars instance = new MainFrameVars();
     
-    private GraphicsVars() { }
+    public int width = 800;
+    public int height = 600;
+    public int x = 20;
+    public int y = 20;
+    public int mainSplitPaneDividerLocation = 300;
+    public Color dataPaneBackgroundColor = Color.BLACK;
     
-    public int SQUARE_WIDTH = 50;
-    public int BOARD_WIDTH = 670;
-    public int ZIGZAG = 12;
-    public Color WHITE_PIECE = Color.WHITE;
-    public Color BLACK_PIECE = Color.BLACK;
-    public Color COMPONENTS_BACKGROUND_COLOR1 = new Color(172,172,162);
-    public Color COMPONENTS_BACKGROUND_COLOR2 = new Color(124,124,124);
-    public Color BACKGROUND = new Color(210,160,48);
-    public Color FULL_DIAMOND = new Color(169,125,16);
-    public Color DIAMOND = new Color(212,170,54);
-    public Color LINE = new Color(12,12,12);
-    public Color WHITE_OUTLINE = new Color(16,16,16);
-    public Color BLACK_OUTLINE = new Color(64,64,64);
-    public Color VIRTUAL_OUTLINE = Color.CYAN;
-    public Color ONYX_ENGINE_MOVE_OUTLINE = Color.RED;
-    public int TRANSLATION = 16;
-    public int CENTER_TRANSLATION = 32;
-        
-    public static GraphicsVars getInstance() {       
-        if (instance == null) instance = new GraphicsVars();
+    private MainFrameVars() { }      
+    
+    public void update(final MainFrame frame) {
+        this.width = frame.getWidth();
+        this.height = frame.getHeight();
+        this.x = frame.getX();
+        this.y = frame.getY();
+        this.mainSplitPaneDividerLocation = frame.getMainSplitPane().getDividerLocation();
+        this.dataPaneBackgroundColor = frame.getDataTextPane().getBackground();
+    }
+    
+    public static MainFrameVars getInstance() {
+        if (instance == null) instance = new MainFrameVars();
         return instance;
     }
     
-    public static void setInstance(final GraphicsVars gv) {
-        instance = gv;
+    public static void setInstance(final MainFrameVars mfv) {
+        instance = mfv;
     }
     
 }

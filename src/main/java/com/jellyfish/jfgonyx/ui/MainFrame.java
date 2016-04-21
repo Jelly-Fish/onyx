@@ -38,10 +38,9 @@ import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.interfaces.OnyxObserver;
 import com.jellyfish.jfgonyx.starter.Starter;
 import com.jellyfish.jfgonyx.ui.utils.DataUtils;
-import java.awt.Color;
+import com.jellyfish.jfgonyx.vars.MainFrameVars;
 import java.awt.Cursor;
 import java.awt.Dimension;
-import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.LinkedList;
@@ -111,6 +110,11 @@ public class MainFrame extends javax.swing.JFrame implements OnyxObserver {
         changeBoardBackgroundColorMenuItem = new javax.swing.JMenuItem();
         changeFourSideDiamondColorMenuItem = new javax.swing.JMenuItem();
         changeFivePositionsDiamondColorMenuItem = new javax.swing.JMenuItem();
+        colorSettingsSeparator2 = new javax.swing.JPopupMenu.Separator();
+        changeDataTextPaneBackgroundColorMenuItem = new javax.swing.JMenuItem();
+        colorSettingsSeparator3 = new javax.swing.JPopupMenu.Separator();
+        changeWhitePieceColorMenuItem = new javax.swing.JMenuItem();
+        changeBlackPieceColorMenuItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setName("mainFrame"); // NOI18N
@@ -220,6 +224,32 @@ public class MainFrame extends javax.swing.JFrame implements OnyxObserver {
             }
         });
         colorSettingsMenu.add(changeFivePositionsDiamondColorMenuItem);
+        colorSettingsMenu.add(colorSettingsSeparator2);
+
+        changeDataTextPaneBackgroundColorMenuItem.setText("Change data output background color");
+        changeDataTextPaneBackgroundColorMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                changeDataTextPaneBackgroundColorMenuItemActionPerformed(evt);
+            }
+        });
+        colorSettingsMenu.add(changeDataTextPaneBackgroundColorMenuItem);
+        colorSettingsMenu.add(colorSettingsSeparator3);
+
+        changeWhitePieceColorMenuItem.setText("Change white piece colors");
+        changeWhitePieceColorMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                changeWhitePieceColorMenuItemActionPerformed(evt);
+            }
+        });
+        colorSettingsMenu.add(changeWhitePieceColorMenuItem);
+
+        changeBlackPieceColorMenuItem.setText("Change black piece colors");
+        changeBlackPieceColorMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                changeBlackPieceColorMenuItemActionPerformed(evt);
+            }
+        });
+        colorSettingsMenu.add(changeBlackPieceColorMenuItem);
 
         settingsMenu.add(colorSettingsMenu);
 
@@ -291,18 +321,44 @@ public class MainFrame extends javax.swing.JFrame implements OnyxObserver {
     }//GEN-LAST:event_changeFivePositionsDiamondColorMenuItemActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
-        DataUtils.xmlSerializeGraphicsVars(GraphicsVars.getInstance().getInstance());
+        MainFrameVars.getInstance().update(this);
+        DataUtils.xmlSerialize(MainFrameVars.getInstance(), MainFrameVars.class);
+        DataUtils.xmlSerialize(GraphicsVars.getInstance(), GraphicsVars.class);
     }//GEN-LAST:event_formWindowClosing
+
+    private void changeDataTextPaneBackgroundColorMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changeDataTextPaneBackgroundColorMenuItemActionPerformed
+        MainFrameVars.getInstance().dataPaneBackgroundColor = JColorChooser.showDialog(this, 
+            "Change data output background color", MainFrameVars.getInstance().dataPaneBackgroundColor);
+        this.dataTextPane.setBackground(MainFrameVars.getInstance().dataPaneBackgroundColor);
+        this.dataTextPane.repaint();
+    }//GEN-LAST:event_changeDataTextPaneBackgroundColorMenuItemActionPerformed
+
+    private void changeWhitePieceColorMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changeWhitePieceColorMenuItemActionPerformed
+        GraphicsVars.getInstance().WHITE_PIECE = JColorChooser.showDialog(this, 
+            "Choose a new color for white pieces", GraphicsVars.getInstance().WHITE_PIECE);
+        this.board.repaint();
+    }//GEN-LAST:event_changeWhitePieceColorMenuItemActionPerformed
+
+    private void changeBlackPieceColorMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changeBlackPieceColorMenuItemActionPerformed
+        GraphicsVars.getInstance().BLACK_PIECE = JColorChooser.showDialog(this, 
+            "Choose a new color for black pieces", GraphicsVars.getInstance().BLACK_PIECE);
+        this.board.repaint();
+    }//GEN-LAST:event_changeBlackPieceColorMenuItemActionPerformed
     // </editor-fold>     
     
     // <editor-fold defaultstate="collapsed" desc="Main frame vars">          
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem changeBackgroundColorMenuItem;
+    private javax.swing.JMenuItem changeBlackPieceColorMenuItem;
     private javax.swing.JMenuItem changeBoardBackgroundColorMenuItem;
+    private javax.swing.JMenuItem changeDataTextPaneBackgroundColorMenuItem;
     private javax.swing.JMenuItem changeFivePositionsDiamondColorMenuItem;
     private javax.swing.JMenuItem changeFourSideDiamondColorMenuItem;
+    private javax.swing.JMenuItem changeWhitePieceColorMenuItem;
     private javax.swing.JMenu colorSettingsMenu;
     private javax.swing.JPopupMenu.Separator colorSettingsSeparator1;
+    private javax.swing.JPopupMenu.Separator colorSettingsSeparator2;
+    private javax.swing.JPopupMenu.Separator colorSettingsSeparator3;
     private javax.swing.JTextPane dataTextPane;
     private javax.swing.JMenu editMenu;
     private javax.swing.JMenu fileMenu;
@@ -341,7 +397,7 @@ public class MainFrame extends javax.swing.JFrame implements OnyxObserver {
             }
         });
         this.dataTextPane.setContentType("text/html");
-        this.dataTextPane.setBackground(Color.BLACK);
+        this.dataTextPane.setBackground(MainFrameVars.getInstance().dataPaneBackgroundColor);
         final HTMLEditorKit html = new HTMLEditorKit();
         this.dataTextPane.setEditorKit(html);
         htmlEditorKit = (HTMLEditorKit) this.dataTextPane.getEditorKit();
@@ -351,10 +407,9 @@ public class MainFrame extends javax.swing.JFrame implements OnyxObserver {
         caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
         this.board.focus();
         this.pack();
-        this.setSize(GraphicsVars.getInstance().BOARD_WIDTH + 36 + 300, 
-                GraphicsVars.getInstance().BOARD_WIDTH + 68);
-        this.setLocation(((int) (Toolkit.getDefaultToolkit().getScreenSize().getWidth() / 2)) - 
-                (this.getWidth() / 2), 20);
+        this.setSize(MainFrameVars.getInstance().width, MainFrameVars.getInstance().height);
+        this.setLocation(MainFrameVars.getInstance().x, MainFrameVars.getInstance().y);
+        this.mainSplitPane.setDividerLocation(MainFrameVars.getInstance().mainSplitPaneDividerLocation);
         final ImageIcon icn = new ImageIcon(getClass().getClassLoader().getResource("icons/icn.png"));
         this.setIconImage(icn.getImage());
         this.setTitle("Onyx");
@@ -366,6 +421,14 @@ public class MainFrame extends javax.swing.JFrame implements OnyxObserver {
                 javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         mainScrollPane.setVerticalScrollBarPolicy(
                 javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+    }
+    
+    public javax.swing.JSplitPane getMainSplitPane() {
+        return this.mainSplitPane;
+    }
+    
+    public javax.swing.JTextPane getDataTextPane() {
+        return this.dataTextPane;
     }
     
     @Override

@@ -47,6 +47,7 @@ import com.jellyfish.jfgonyx.ui.OnyxPanel;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
 import com.jellyfish.jfgonyx.ui.utils.DataUtils;
 import com.jellyfish.jfgonyx.vars.GraphicsVars;
+import com.jellyfish.jfgonyx.vars.MainFrameVars;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.UIManager;
@@ -192,9 +193,14 @@ public class Starter {
 
     private static void deserialize() {
         GraphicsVars.setInstance(
-            DataUtils.xmlDeserializeGraphicsVars(
+            (GraphicsVars) DataUtils.xmlDeserialize(
             DataUtils.DATA_ROOT + GraphicsVars.class.getSimpleName() +
-            DataUtils.XML_FILE_EXTENTION
+            DataUtils.XML_FILE_EXTENTION, GraphicsVars.class.getClass()
+        ));
+        MainFrameVars.setInstance(
+            (MainFrameVars) DataUtils.xmlDeserialize(
+            DataUtils.DATA_ROOT + MainFrameVars.class.getSimpleName() +
+            DataUtils.XML_FILE_EXTENTION, MainFrameVars.class.getClass()
         ));
     }
     

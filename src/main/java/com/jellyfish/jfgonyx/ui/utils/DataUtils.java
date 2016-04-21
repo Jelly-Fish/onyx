@@ -56,14 +56,14 @@ public class DataUtils {
      */
     public static final String XML_FILE_EXTENTION = ".xml";
 
-    public static GraphicsVars xmlDeserializeGraphicsVars(final String path) {
+    public static <T> T xmlDeserialize(final String path, final Object t) {
 
         final XStream xstream = new XStream();
         xstream.autodetectAnnotations(true);
-        GraphicsVars vars = null;
+        Object obj = null;
         try (FileInputStream fip = new FileInputStream(new File(path))) {
             
-            vars = (GraphicsVars) xstream.fromXML(fip);
+            obj = xstream.fromXML(fip);
             
         } catch (final FileNotFoundException fnfex) {
             Logger.getLogger(DataUtils.class.getName()).log(Level.SEVERE, null, fnfex);
@@ -71,12 +71,12 @@ public class DataUtils {
             Logger.getLogger(DataUtils.class.getName()).log(Level.SEVERE, null, ioex);
         }
         
-        return vars;
+        return (T) obj;
     }
     
-    public static void xmlSerializeGraphicsVars(final GraphicsVars vars) {
+    public static void xmlSerialize(final Object data, final Class t) {
         
-        final String path = DataUtils.DATA_ROOT + vars.getClass().getSimpleName() + 
+        final String path = DataUtils.DATA_ROOT + data.getClass().getSimpleName() + 
                 DataUtils.XML_FILE_EXTENTION;
         
         final XStream xstream = new XStream();
@@ -84,7 +84,7 @@ public class DataUtils {
 
         try (FileOutputStream fop = new FileOutputStream(new File(path))) {
             
-            xstream.toXML(vars, fop);
+            xstream.toXML(t.cast(data), fop);
             fop.flush();
             fop.close();
             
