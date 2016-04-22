@@ -79,16 +79,13 @@ public class CounterPositionSubroutine extends AbstractSubroutine {
         
         if (MoveUtils.isMove(this.move) && this.move.hasPosition()) {
             print(AbstractSubroutine.BEST_CANDIDATE_COUNTER_FORMAT, 
-                    AbstractSubroutine.SUBROUTINE_TYPE.COUNTER_POS,
-                    color.str, 
-                    this.move.getPos().getKey(), 
-                    this.move.getScore());
+                AbstractSubroutine.SUBROUTINE_TYPE.COUNTER_POS, color.str, 
+                this.move.getPos().getKey(), this.move.getScore());
         }
         
         return this.move;
     }
     
-    @SuppressWarnings("null")
     private OnyxMove counterPos(final OnyxPosCollection c, final OnyxBoard b, 
             final OnyxConst.COLOR color) throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
         
@@ -117,6 +114,7 @@ public class CounterPositionSubroutine extends AbstractSubroutine {
         
         OnyxGame.getInstance().updateTailTendency(tmp);
         final float score = OnyxConst.SCORE.COUNTER_POS.getValue() + (color.bool ? tmp.getPos().y : tmp.getPos().x);
+        
         return new OnyxMove(tmp.getPos(), tmp.getPiece(), score);
     }
     
@@ -132,7 +130,7 @@ public class CounterPositionSubroutine extends AbstractSubroutine {
         int i, j;
         OnyxPos pos = null;
         String key = StringUtils.EMPTY;
-        
+                
         for (OnyxDiamond d : b.getDiamondCollection().getDiamonds().values()) {
             
             i = 0; j = 0;

@@ -102,8 +102,10 @@ public class CenterPositionSubroutine extends AbstractSubroutine {
             ++side;
         }
         
-        if (MoveUtils.isMove(this.move)) print(AbstractSubroutine.BEST_CANDIDATE,
-                AbstractSubroutine.SUBROUTINE_TYPE.CENTER_POS, color, this.move.getPos().getKey());
+        if (MoveUtils.isMove(this.move)) {
+            print(AbstractSubroutine.BEST_CANDIDATE, AbstractSubroutine.SUBROUTINE_TYPE.CENTER_POS, 
+                color, this.move.getPos().getKey());
+        }
 
         return move;
     }

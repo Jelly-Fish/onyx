@@ -1,13 +1,13 @@
 <com.jellyfish.jfgonyx.vars.MainFrameVars>
-  <width>1171</width>
-  <height>791</height>
-  <x>260</x>
-  <y>59</y>
-  <mainSplitPaneDividerLocation>334</mainSplitPaneDividerLocation>
+  <width>1608</width>
+  <height>876</height>
+  <x>-4</x>
+  <y>-4</y>
+  <mainSplitPaneDividerLocation>810</mainSplitPaneDividerLocation>
   <dataPaneBackgroundColor>
-    <red>0</red>
-    <green>0</green>
-    <blue>51</blue>
+    <red>27</red>
+    <green>14</green>
+    <blue>25</blue>
     <alpha>255</alpha>
   </dataPaneBackgroundColor>
 </com.jellyfish.jfgonyx.vars.MainFrameVars>

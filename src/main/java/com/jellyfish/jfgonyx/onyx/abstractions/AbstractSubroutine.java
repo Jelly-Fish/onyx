@@ -80,34 +80,25 @@ public abstract class AbstractSubroutine {
         
         if (!candidate.hasPosition() || candidate.getPos().getKey() == null) return;
         
-        MainFrame.print(String.format(f, 
-                t.getDesc(),
-                color,
-                OnyxConst.POS_MAP.get(sK), 
-                OnyxConst.POS_MAP.get(candidate.getPos().getKey()), candidate.getScore()),
-                HTMLDisplayHelper.GRAY);
+        MainFrame.print(String.format(f, t.getDesc(), color, OnyxConst.POS_MAP.get(sK), 
+            OnyxConst.POS_MAP.get(candidate.getPos().getKey()), candidate.getScore()),
+            HTMLDisplayHelper.GRAY);
     }
     
     public final void print(final String f, final AbstractSubroutine.SUBROUTINE_TYPE t, 
             final String color, final String k, final float score) {
         
         if (color == null || k == null) return;
-        
-        MainFrame.print(String.format(f, 
-                t.getDesc(), 
-                color, 
-                OnyxConst.POS_MAP.get(k), 
-                score),
-                HTMLDisplayHelper.GRAY);
+        MainFrame.print(String.format(f, t.getDesc(), color, OnyxConst.POS_MAP.get(k), 
+            score), HTMLDisplayHelper.GRAY);
     }
     
     public final void print(final String f, final AbstractSubroutine.SUBROUTINE_TYPE t,
             final OnyxConst.COLOR color, final String k) {
         
         if (k == null) return;
-        
         MainFrame.print(String.format(f, t.getDesc(), color.str, OnyxConst.POS_MAP.get(k)),
-                HTMLDisplayHelper.GRAY);
+            HTMLDisplayHelper.GRAY);
     }
     
     public final void print(final String f, final String color) {

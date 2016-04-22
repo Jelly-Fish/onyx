@@ -40,15 +40,12 @@ import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException;
 import com.jellyfish.jfgonyx.onyx.search.searchutils.MoveUtils;
 import com.jellyfish.jfgonyx.onyx.abstractions.AbstractSubroutine;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
-import org.apache.commons.lang3.StringUtils;
 
 /**
  *
  * @author thw
  */
 public class NeighbourPositionSubroutine extends AbstractSubroutine {
-    
-    private final static String BEST_CANDIDATE = "Neighbour position [%s]";
     
     /**
      * @param c Onyx position collection.
@@ -57,30 +54,39 @@ public class NeighbourPositionSubroutine extends AbstractSubroutine {
      * @return Neighbor move found or NULL if no such position has been found.
      * @throws com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException
      */
-    public final OnyxMove getNeighbourPos(final OnyxPosCollection c, final OnyxBoard b, final int bitColor) throws NoValidOnyxPositionsFoundException {
+    public final OnyxMove getNeighbourPos(final OnyxPosCollection c, final OnyxBoard b, 
+            final int bitColor) throws NoValidOnyxPositionsFoundException {
         
-        int count;
         OnyxPos pos = null;
-        String key = StringUtils.EMPTY;
+        
         for (OnyxDiamond d : b.getDiamondCollection().getDiamonds().values()) {
-            count = 0;
-            for (String k : d.getCornerKeys()) {
-                pos = c.getPosition(k);
-                if (pos.isOccupied() && pos.getPiece().color.bit == bitColor) ++count;
-                else key = k;
-            }
             
-            if (count > 1  && !c.getPosition(key).isOccupied()) {
-                return new OnyxMove(c.getPosition(key), OnyxConst.SCORE.NEIGHBOUR.getValue());
+            for (String k : d.getCornerKeys()) {
+                
+                pos = c.getPosition(k);
+                if (pos.isOccupied() && pos.getPiece().color.bit == bitColor) {
+                    
+                    for (String cnxK : pos.connections) {
+                        
+                        if (!c.getPosition(cnxK).isDiamondCenter() && !c.getPosition(cnxK).isOccupied()) {
+                            
+                            this.move = new OnyxMove(c.getPosition(cnxK), OnyxConst.SCORE.NEIGHBOUR.getValue());
+                            
+                            if (MoveUtils.isMove(this.move) && this.move.getPos() != null) {
+                                
+                                print(AbstractSubroutine.BEST_CANDIDATE, 
+                                    AbstractSubroutine.SUBROUTINE_TYPE.NEIGHBOUR, 
+                                    bitColor == 0 ? OnyxConst.COLOR.WHITE : OnyxConst.COLOR.BLACK, 
+                                    this.move.getPos().getKey());
+                                return this.move;
+                            }
+                        }
+                    }
+                }
             }
-        }
+        }      
         
-        if (MoveUtils.isMove(this.move)) print(AbstractSubroutine.BEST_CANDIDATE, 
-                AbstractSubroutine.SUBROUTINE_TYPE.NEIGHBOUR, 
-                bitColor == 0 ? OnyxConst.COLOR.BLACK : OnyxConst.COLOR.WHITE, 
-                OnyxConst.POS_MAP.get(this.move.getPos().getKey()));
-        
-        return this.move;
+        return null;
     }
     
 }
