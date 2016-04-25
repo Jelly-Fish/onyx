@@ -44,6 +44,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author thw
@@ -110,7 +111,7 @@ public class TailConnectionSubroutine extends AbstractSubroutine {
         for (String k : p.connections) {
             if (!k.equals(kEx)) {
                 tmp = c.getPosition(k);
-                if (!tmp.isOccupied() && c.isValidMove(tmp, board, color)) {
+                if (!tmp.isOccupied() && c.isValidMove(tmp, this.board, this.color)) {
                     this.keyCandidates.add(k);
                 }
             } 
@@ -139,6 +140,11 @@ public class TailConnectionSubroutine extends AbstractSubroutine {
         float score = -1f;
         OnyxPos tmp = null, pos = null;
 
+        /**
+         * FIXME : scoring here is dumb, only last tmp of N iteration is added
+         * to cadidates... FIX....
+         */
+        
         for (String k : this.keyCandidates) {
             
             pos = this.c.getPosition(k);    
@@ -197,7 +203,9 @@ public class TailConnectionSubroutine extends AbstractSubroutine {
     }
     
     private void addStartPositionToCandidates() {
-        for (OnyxMove m : this.candidates) m.setTailStartPos(this.startPos);
+        for (OnyxMove m : this.candidates) {
+            if (MoveUtils.isMove(m)) m.setTailStartPos(this.startPos);
+        }
     }
     
     public OnyxMove getCandidate() {
