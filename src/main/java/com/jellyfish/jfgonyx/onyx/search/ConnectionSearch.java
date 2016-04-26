@@ -122,14 +122,11 @@ public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnecti
         
         for (OnyxPos p : pos) {
             sub = new TailConnectionSubroutine(c, color, board);
-            /**
-             * FIXME : addALL getTails OR add getTail ?!!?.
-             */
-            this.cnxTmpMoves.addAll(sub.getTails(p));
+            this.cnxTmpMoves.add(sub.getTail(p, false));
             this.checkedKeys.addAll(sub.getCheckedKeys());
         }
         
-       final OnyxMove tmp = this.trim(this.cnxTmpMoves, board, c, color);
+        final OnyxMove tmp = this.trim(this.cnxTmpMoves, board, c, color);
         
         return MoveUtils.isMove(tmp) ? new OnyxMove(tmp.getPos(), tmp.getPiece(),
             SearchUtils.calibrateTailMoves(OnyxGame.getInstance(), tmp.getScore())) : null;
@@ -155,7 +152,7 @@ public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnecti
         }
         
         for (OnyxPos p : pos) {
-            moves.add(new SubTailConnectionSubroutine(c, color, board, minX, minY, maxX, maxY).getTail(p));
+            moves.add(new SubTailConnectionSubroutine(c, color, board, minX, minY, maxX, maxY).getTail(p, true));
         }
         
         final OnyxMove tmp = this.trim(moves, board, c, OnyxConst.COLOR.getOposite(color.bool));

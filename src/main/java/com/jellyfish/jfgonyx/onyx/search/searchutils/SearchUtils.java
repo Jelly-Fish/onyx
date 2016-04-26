@@ -63,7 +63,7 @@ public class SearchUtils {
     }
     
     public static float calibrateTailMoves(final OnyxGame game, final float score) {
-        return (game.getMoveCount() < 10) ?
+        return (game.getMoveCount() < 12) ?
             OnyxConst.SCORE.OVERRIDE.getValue() + score : score;              
     }
     

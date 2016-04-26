@@ -95,25 +95,14 @@ public class CounterPositionSubroutine extends AbstractSubroutine {
         final List<OnyxMove> cnx = new ArrayList<>();
         OnyxMove tmp = null;
         
-        for (OnyxPos p : pos) cnx.addAll(new TailConnectionSubroutine(c, opColor, 
-                b).getTails(p));
-
-        for (OnyxMove m : cnx) {
-            
-            if (MoveUtils.isNotMove(tmp)) tmp = m;
-            
-            if (MoveUtils.isMove(m) && m.hasPosition() && 
-                !m.getPos().posHelper.willEnableTake(b, c, color) && 
-                m.getScore() >= tmp.getScore()) {
-                
-                tmp = m;
-            }
-        }
+        for (OnyxPos p : pos) cnx.addAll(new TailConnectionSubroutine(c, opColor, b).getTails(p, true));
         
+        tmp = this.trim(cnx, b, c, opColor);
         if (MoveUtils.isNotMove(tmp) || tmp.getPos() == null) return null;
         
         OnyxGame.getInstance().updateTailTendency(tmp);
-        final float score = OnyxConst.SCORE.COUNTER_POS.getValue() + (color.bool ? tmp.getPos().y : tmp.getPos().x);
+        final float score = OnyxConst.SCORE.COUNTER_POS.getValue() + 
+            (color.bool ? tmp.getPos().y : tmp.getPos().x);
         
         return new OnyxMove(tmp.getPos(), tmp.getPiece(), score);
     }

@@ -44,7 +44,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author thw
@@ -62,6 +61,7 @@ public class TailConnectionSubroutine extends AbstractSubroutine {
     protected OnyxMove candidate;
     protected int links = 0;
     protected OnyxPos tail = null;
+    protected boolean counterSearch = false;
     
     public TailConnectionSubroutine(final OnyxPosCollection c, final OnyxConst.COLOR color, 
             final OnyxBoard board) {
@@ -74,14 +74,17 @@ public class TailConnectionSubroutine extends AbstractSubroutine {
     /**
      * @param p tail search start position, this position will be used to
      * determinate start position region.
+     * @param counterSearch
      * @return OnyxMove instances.
      * @throws com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException
      */
-    public OnyxMove getTail(final OnyxPos p) throws InvalidOnyxPositionException {
+    public OnyxMove getTail(final OnyxPos p, final boolean counterSearch) throws InvalidOnyxPositionException {
         
         this.startPos = p;
+        this.counterSearch = counterSearch;
         this.tail = this.findTail(p, p.getKey());
         this.score();
+        this.candidate = this.trim(this.candidates, this.board, this.c, this.color);
         if (MoveUtils.isMove(this.candidate)) print(AbstractSubroutine.BEST_CANDIDATE_TAIL_FORMAT, 
                 p.getKey(), this.type, this.color.str, this.candidate);
         return this.candidate;
@@ -90,15 +93,22 @@ public class TailConnectionSubroutine extends AbstractSubroutine {
     /**
      * @param p tail search start position, this position will be used to
      * determinate start position region.
+     * @param counterSearch
      * @return list of OnyxMove instances.
+     * @throws com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException
      * @see OnyxMove
      */
-    public List<OnyxMove> getTails(final OnyxPos p) {
+    public List<OnyxMove> getTails(final OnyxPos p, final boolean counterSearch) throws InvalidOnyxPositionException {
         
         this.startPos = p;
+        this.counterSearch = counterSearch;
         this.tail = this.findTail(p, p.getKey());
         this.score();
         this.addStartPositionToCandidates();
+        this.candidate = this.trim(this.candidates, this.board, this.c, this.color);
+        if (MoveUtils.isMove(this.candidate)) print(AbstractSubroutine.BEST_CANDIDATE_TAIL_FORMAT, 
+                p.getKey(), this.type, this.color.str, this.candidate);
+        
         return this.candidates;
     }
 
@@ -132,74 +142,51 @@ public class TailConnectionSubroutine extends AbstractSubroutine {
 
     protected void score() {
 
-        final boolean lowBorderTendency = 
-                OnyxGame.getInstance().getLowBorderTendency(
-                        OnyxConst.COLOR.getOposite(this.startPos.getPiece().color.bool));
+        final boolean lowBorderTendency = OnyxGame.getInstance().getLowBorderTendency(
+            OnyxConst.COLOR.getOposite(this.startPos.getPiece().color.bool));
         
+        boolean counterPosScored = false;
         final float boardLength = ((float) OnyxConst.BOARD_SIDE_SQUARE_COUNT) + 1f;
         float score = -1f;
         OnyxPos tmp = null, pos = null;
 
-        /**
-         * FIXME : scoring here is dumb, only last tmp of N iteration is added
-         * to cadidates... FIX....
-         */
-        
         for (String k : this.keyCandidates) {
             
+            score = -1f;
             pos = this.c.getPosition(k);    
-            if (tmp == null) {
-                
-                /**
-                 * If first blood, then init tmp & score : /!\ must be done /!\ :
-                 * If score stay's at -1f and 1st iteration is best move then it
-                 * will be overrided by weaker move.
-                 */
-                tmp = pos;
-                
-                if (this.color.bool) {                   
-                    if (this.startPos.isLowXBorder()) score = tmp.x;
-                    else if (this.startPos.isHighXBorder()) score = boardLength - tmp.x;
-                    score = lowBorderTendency ? (tmp.y > (boardLength / 2) ? (score + 1f) : score) : score; 
+            if (tmp == null) tmp = pos;
+            
+            if (this.color.bool) {
+
+                if (this.startPos.isLowXBorder() && pos.x >= tmp.x) {
+                    score = pos.x;
+                    tmp = pos;
+                    score = lowBorderTendency ? (tmp.y > (boardLength / 2) ? (score + 1f) : score) : score;
+                } else if (this.startPos.isHighXBorder() && pos.x <= tmp.x) {
+                    score = boardLength - pos.x;
+                    tmp = pos;
+                    score = lowBorderTendency ? (tmp.y > (boardLength / 2) ? (score + 1f) : score) : score;
                 }
                 
-                if (!this.color.bool) {
-                    if (this.startPos.isLowYBorder()) score = tmp.y;
-                    else if (this.startPos.isHighYBorder()) score = boardLength - tmp.y;
+                if (this.counterSearch) score = pos.x == tmp.x ? score * 1.2f : score;
+                
+            } else if (!this.color.bool) {
+
+                if (this.startPos.isLowYBorder() && pos.y >= tmp.y) {
+                    score = pos.y;
+                    tmp = pos;
                     score = lowBorderTendency ? (tmp.x > (boardLength / 2) ? (score + 1f) : score) : score;
-                }
-            } else {
-
-                if (this.color.bool) {
-
-                    if (this.startPos.isLowXBorder() && pos.x >= tmp.x) {
-                        score = pos.x;
-                        tmp = pos;
-                        score = lowBorderTendency ? (tmp.y > (boardLength / 2) ? (score + 1f) : score) : score;
-                    } else if (this.startPos.isHighXBorder() && pos.x <= tmp.x) {
-                        score = boardLength - pos.x;
-                        tmp = pos;
-                        score = lowBorderTendency ? (tmp.y > (boardLength / 2) ? (score + 1f) : score) : score;
-                    }
-                }
-
-                if (!this.color.bool) {
-                    
-                    if (this.startPos.isLowYBorder() && pos.y >= tmp.y) {
-                        score = pos.y;
-                        tmp = pos;
-                        score = lowBorderTendency ? (tmp.x > (boardLength / 2) ? (score + 1f) : score) : score;
-                    } else if (this.startPos.isHighYBorder() && pos.y <= tmp.y) {
-                        score = boardLength - pos.y;
-                        tmp = pos;
-                        score = lowBorderTendency ? (tmp.x > (boardLength / 2) ? (score + 1f) : score) : score;
-                    }                    
-                }
+                } else if (this.startPos.isHighYBorder() && pos.y <= tmp.y) {
+                    score = boardLength - pos.y;
+                    tmp = pos;
+                    score = lowBorderTendency ? (tmp.x > (boardLength / 2) ? (score + 1f) : score) : score;
+                }      
+                
+                if (this.counterSearch) score = pos.y == tmp.y ? score * 1.2f : score;
             }
+            
+            this.candidates.add(new OnyxMove(tmp, score * OnyxConst.SCORE.TAIL.getValue()));
         }
-        
-        this.candidate = new OnyxMove(tmp, score * OnyxConst.SCORE.TAIL.getValue());
-        this.candidates.add(candidate);
     }
     
     private void addStartPositionToCandidates() {

@@ -40,7 +40,7 @@ import com.jellyfish.jfgonyx.ui.MainFrame;
  *
  * @author thw
  */
-public abstract class AbstractSubroutine {
+public abstract class AbstractSubroutine extends AbstractOnyxSearch {
     
     public final static String BEST_CANDIDATE_TAIL_FORMAT = "Candidate for %s %s start @ %s : [%s] score: %f";
     public final static String BEST_CANDIDATE_COUNTER_FORMAT = "Candidate for %s %s : [%s] score: %f";
