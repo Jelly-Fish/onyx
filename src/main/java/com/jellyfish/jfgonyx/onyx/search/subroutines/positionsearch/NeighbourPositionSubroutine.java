@@ -72,7 +72,7 @@ public class NeighbourPositionSubroutine extends AbstractSubroutine {
                             
                             this.move = new OnyxMove(c.getPosition(cnxK), OnyxConst.SCORE.NEIGHBOUR.getValue());
                             
-                            if (MoveUtils.isMove(this.move) && this.move.getPos() != null) {
+                            if (MoveUtils.isMove(this.move)) {
                                 
                                 print(AbstractSubroutine.BEST_CANDIDATE, 
                                     AbstractSubroutine.SUBROUTINE_TYPE.NEIGHBOUR, 

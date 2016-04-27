@@ -107,7 +107,7 @@ public class TailConnectionSubroutine extends AbstractSubroutine {
         this.addStartPositionToCandidates();
         this.candidate = this.trim(this.candidates, this.board, this.c, this.color);
         if (MoveUtils.isMove(this.candidate)) print(AbstractSubroutine.BEST_CANDIDATE_TAIL_FORMAT, 
-                p.getKey(), this.type, this.color.str, this.candidate);
+                p.getKey(), AbstractSubroutine.SUBROUTINE_TYPE.TAILS, this.color.str, this.candidates);
         
         return this.candidates;
     }
@@ -145,19 +145,18 @@ public class TailConnectionSubroutine extends AbstractSubroutine {
         final boolean lowBorderTendency = OnyxGame.getInstance().getLowBorderTendency(
             OnyxConst.COLOR.getOposite(this.startPos.getPiece().color.bool));
         
-        boolean counterPosScored = false;
         final float boardLength = ((float) OnyxConst.BOARD_SIDE_SQUARE_COUNT) + 1f;
-        float score = -1f;
+        float score = 0f;
         OnyxPos tmp = null, pos = null;
 
         for (String k : this.keyCandidates) {
             
-            score = -1f;
+            score = 0f;
             pos = this.c.getPosition(k);    
             if (tmp == null) tmp = pos;
             
             if (this.color.bool) {
-
+                
                 if (this.startPos.isLowXBorder() && pos.x >= tmp.x) {
                     score = pos.x;
                     tmp = pos;
@@ -168,7 +167,7 @@ public class TailConnectionSubroutine extends AbstractSubroutine {
                     score = lowBorderTendency ? (tmp.y > (boardLength / 2) ? (score + 1f) : score) : score;
                 }
                 
-                if (this.counterSearch) score = pos.x == tmp.x ? score * 1.2f : score;
+                if (this.counterSearch) score = pos.x == tmp.x ? ++score * 2f : score;
                 
             } else if (!this.color.bool) {
 
@@ -182,7 +181,7 @@ public class TailConnectionSubroutine extends AbstractSubroutine {
                     score = lowBorderTendency ? (tmp.x > (boardLength / 2) ? (score + 1f) : score) : score;
                 }      
                 
-                if (this.counterSearch) score = pos.y == tmp.y ? score * 1.2f : score;
+                if (this.counterSearch) score = pos.y == tmp.y ? ++score * 2f : score;
             }
             
             this.candidates.add(new OnyxMove(tmp, score * OnyxConst.SCORE.TAIL.getValue()));

@@ -35,21 +35,23 @@ import com.jellyfish.jfgonyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.helpers.HTMLDisplayHelper;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
 import com.jellyfish.jfgonyx.ui.MainFrame;
+import java.util.List;
 
 /**
  *
  * @author thw
  */
 public abstract class AbstractSubroutine extends AbstractOnyxSearch {
-    
+
+    public final static String CANDIDATE_TAIL_FORMAT = "Candidate for %s %s start @ %s : [%s] score: %f";
     public final static String BEST_CANDIDATE_TAIL_FORMAT = "Candidate for %s %s start @ %s : [%s] score: %f";
     public final static String BEST_CANDIDATE_COUNTER_FORMAT = "Candidate for %s %s : [%s] score: %f";
     public final static String BEST_CANDIDATE = "Candidate for %s %s : [%s]";
     
-    
     public static enum SUBROUTINE_TYPE {
     
         TAIL("{tail search}"),
+        TAILS("{tails search}"),
         COUNTER_SUBTAIL("{sub-tail search}"),
         CENTER_POS("{center position search}"),
         COUNTER_POS("{counter position search}"),
@@ -83,6 +85,18 @@ public abstract class AbstractSubroutine extends AbstractOnyxSearch {
         MainFrame.print(String.format(f, t.getDesc(), color, OnyxConst.POS_MAP.get(sK), 
             OnyxConst.POS_MAP.get(candidate.getPos().getKey()), candidate.getScore()),
             HTMLDisplayHelper.GRAY);
+    }
+    
+    public final void print(final String f, final String sK, final AbstractSubroutine.SUBROUTINE_TYPE t, 
+            final String color, final List<OnyxMove> candidates) {
+        
+        final String k = OnyxConst.POS_MAP.get(sK);
+        for (OnyxMove m : candidates) {
+            if (!m.hasPosition() || m.getPos().getKey() == null) continue;
+            MainFrame.print(String.format(f, t.getDesc(), color, k, 
+                OnyxConst.POS_MAP.get(m.getPos().getKey()), m.getScore()),
+                HTMLDisplayHelper.GRAY);
+        }        
     }
     
     public final void print(final String f, final AbstractSubroutine.SUBROUTINE_TYPE t, 

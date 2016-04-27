@@ -80,7 +80,7 @@ public class AttackPositionSubroutine extends AbstractSubroutine {
             }
         }
         
-        if (MoveUtils.isMove(this.move) && this.move.getPos() != null) print(AbstractSubroutine.BEST_CANDIDATE, 
+        if (MoveUtils.isMove(this.move)) print(AbstractSubroutine.BEST_CANDIDATE, 
                 AbstractSubroutine.SUBROUTINE_TYPE.ATTACK, 
                 bitColor == 0 ? OnyxConst.COLOR.BLACK : OnyxConst.COLOR.WHITE, 
                 OnyxConst.POS_MAP.get(this.move.getPos().getKey()));

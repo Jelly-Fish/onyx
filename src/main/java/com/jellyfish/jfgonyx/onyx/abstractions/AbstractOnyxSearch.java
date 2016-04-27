@@ -38,6 +38,7 @@ import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import com.jellyfish.jfgonyx.onyx.search.searchutils.MoveUtils;
 import com.jellyfish.jfgonyx.onyx.search.subroutines.positionsearch.OnyxPosStateSubroutine;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -56,7 +57,7 @@ public class AbstractOnyxSearch {
         for (OnyxMove m : moves) {
             if (MoveUtils.isNotMove(m)) continue;
             if (MoveUtils.isNotMove(tmp)) tmp = m;
-            else if (m.getScore() > tmp.getScore()) tmp = m;
+            else if (m.getScore() >= tmp.getScore()) tmp = m;
         }
         
         return tmp;
@@ -82,9 +83,9 @@ public class AbstractOnyxSearch {
         for (OnyxMove m : moves) {
             
             if (MoveUtils.isNotMove(m)) continue;
-            if ((MoveUtils.isNotMove(tmp)) || 
-                !(new OnyxPosStateSubroutine(tmp.getPos()).willEnableTake(b, c, color)) &&
-                    m.getScore() > tmp.getScore()) {
+            if (MoveUtils.isNotMove(tmp)) tmp = m;
+            if (!(new OnyxPosStateSubroutine(tmp.getPos()).willEnableTake(b, c, color)) &&
+                    m.getScore() >= tmp.getScore()) {
                 tmp = m;
                 ++count;
             }
@@ -101,6 +102,29 @@ public class AbstractOnyxSearch {
         }
         
         return tmp;
+    }
+    
+        /**
+     * Trim overload - discards NULL, OnyxPos NULL & moves that will result
+     * in take opotunities for color oponent.
+     * @param moves moves to trim.
+     * @param b onyx board instance.
+     * @param c onyx position collection instance.
+     * @param color depending on color, if move will enable a take for oponent color
+     * @param minScore minimum score to qualify.
+     * then discard that move.
+     * @return move with highest scoring.
+     * @throws com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException
+     */
+    protected final OnyxMove trim(final List<OnyxMove> moves, final OnyxBoard b, 
+            final OnyxPosCollection c, final OnyxConst.COLOR color, final float minScore) throws InvalidOnyxPositionException {
+        
+        final List<OnyxMove> scoredMoves = new ArrayList<>();
+        for (OnyxMove m : moves) {
+            if (MoveUtils.isMove(m) && m.getScore() > minScore) scoredMoves.add(m);
+        }
+        
+        return this.trim(scoredMoves, b, c, color);
     }
     
 }

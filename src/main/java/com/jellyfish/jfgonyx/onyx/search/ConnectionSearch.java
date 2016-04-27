@@ -157,14 +157,11 @@ public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnecti
         
         final OnyxMove tmp = this.trim(moves, board, c, OnyxConst.COLOR.getOposite(color.bool));
 
-        /**
-         * Take possibility - if so then apply captures.
-         */
+        // Take possibility - if so then apply captures.
         final OnyxConst.COLOR opColor = OnyxConst.COLOR.getOposite(color.bool);
         final OnyxMove capture = new TakePositionSubroutine().getTakePos(c, board, opColor.bit);
         if (MoveUtils.isMove(capture)) posSet = c.getTakePositions(capture.getPos().getKey(), opColor.bit, board);
-        if (MoveUtils.isMove(capture) && posSet != null && MoveUtils.isMove(tmp) && 
-                tmp.getPos().equals(capture.getPos())) {
+        if (MoveUtils.isMove(capture, tmp) && posSet != null && tmp.getPos().equals(capture.getPos())) {
             tmp.setCaptured(new ArrayList<OnyxPos>());
             tmp.getCaptured().addAll(posSet);
         }
@@ -195,14 +192,11 @@ public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnecti
             
             move = new WinConnectionLinkSubroutine(c, opColor).connectionLink(moves);
             
-            /**
-             * Take possibility & if true apply captures :
-             */
+            // Take possibility & if true apply captures :
             final OnyxMove capture = new TakePositionSubroutine().getTakePos(c, board, color.bit);
             if (MoveUtils.isMove(capture)) posSet = c.getTakePositions(capture.getPos().getKey(), color.bit, board);
 
-            if (MoveUtils.isMove(capture) && posSet != null && MoveUtils.isMove(move) && 
-                    move.getPos().equals(capture.getPos())) {
+            if (MoveUtils.isMove(capture, move) && posSet != null && move.getPos().equals(capture.getPos())) {
                 move.setScore(OnyxConst.SCORE.COUNTER_WIN_LINK.getValue());
                 move.setCaptured(new ArrayList<OnyxPos>());
                 move.getCaptured().addAll(posSet);

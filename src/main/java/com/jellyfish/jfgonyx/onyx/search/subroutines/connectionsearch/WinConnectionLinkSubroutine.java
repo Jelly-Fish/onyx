@@ -66,13 +66,19 @@ public class WinConnectionLinkSubroutine extends WinConnectionSubroutine {
          * local final List<OnyxPos> borders.
          */
         for (OnyxMove m : tails) {
-            if ((this.color.bool && MoveUtils.isMove(m) && m.hasPosition() && m.getPos().x < 1.1f) || 
-                (!this.color.bool && MoveUtils.isMove(m) && m.hasPosition() && m.getPos().y < 1.1f)) {
+            if ((this.color.bool && MoveUtils.isMove(m) && m.getPos().x < 1.1f) || 
+                (!this.color.bool && MoveUtils.isMove(m) && m.getPos().y < 1.1f)) {
                 borders.add(m.getPos());
                 borderTails.add(m.getPos());
             }
         }
 
+        /**
+         * FIXME : does not work if long tail starting @ high-border
+         * connecting with low-border smaller tail; yet win link exists.
+         * [?] iterate through m.pos connections for missed win link
+         * connecxion moves ?? [?]
+         */
         for (OnyxMove m : tails) {
             
             if (MoveUtils.isNotMove(m) || !m.hasPosition()) continue;
