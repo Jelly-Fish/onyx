@@ -29,42 +29,31 @@
  * POSSIBILITY OF SUCH DAMAGE. 
  ******************************************************************************
  */
-package com.jellyfish.jfgonyx.onyx.search.searchutils;
+package com.jellyfish.jfgonyx.onyx.search;
 
 import com.jellyfish.jfgonyx.constants.OnyxConst;
-import com.jellyfish.jfgonyx.onyx.OnyxGame;
+import com.jellyfish.jfgonyx.onyx.abstractions.AbstractOnyxSearch;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
+import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
+import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException;
+import com.jellyfish.jfgonyx.onyx.interfaces.search.OnyxConnectionSearchable;
+import com.jellyfish.jfgonyx.ui.OnyxBoard;
 
 /**
  * @author thw
  */
-public class SearchUtils {
-    
-    public static OnyxMove assertByScore(final OnyxMove ... moves) throws NoValidOnyxPositionsFoundException {
+public class VirtualConnetionSearch extends AbstractOnyxSearch implements OnyxConnectionSearchable {
 
-        int r = -1;
-        float score = -1f;
-        for (int i = 0; i < moves.length; i++) {
-            if ((MoveUtils.isMove(moves[i])) && (r < 0 || moves[i].getScore() > score)) {
-                r = i;
-                score = moves[i].getScore();
-            }
-        }
-        
-        if (r >= 0 && score > 0) return moves[r];
-        
-        throw new NoValidOnyxPositionsFoundException();
+    @Override
+    public OnyxMove search(final OnyxPosCollection c, final OnyxBoard board, 
+            final OnyxConst.COLOR color) throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
+        return null;
     }
-    
-    @Deprecated
-    public static float calibrateCenterMoves(final OnyxGame game, final float score) {
-        return game.getMoveCount() < 12 ? OnyxConst.SCORE.OVERRIDE.getValue() + score : score;
-    }
-    
-    public static float calibrateTailMoves(final OnyxGame game, final float score) {
-        return (game.getMoveCount() < 20) ?
-            OnyxConst.SCORE.OVERRIDE.getValue() + score : score;              
+
+    @Override
+    public boolean isWin(final OnyxPosCollection c, final OnyxConst.COLOR color) throws NoValidOnyxPositionsFoundException {
+        throw new UnsupportedOperationException();
     }
     
 }

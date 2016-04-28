@@ -71,11 +71,7 @@ public class CounterPositionSubroutine extends AbstractSubroutine {
         candidates.add(this.counterPos(c, b, color));
         candidates.add(this.bigLock(c, b, color));
         
-        for (OnyxMove m : candidates) {
-            if (MoveUtils.isMove(m)) {
-                this.move = (MoveUtils.isNotMove(this.move) || m.getScore() > this.move.getScore()) ? m : this.move;
-            }
-        }
+        this.move = trim(candidates, b, c, color, .1f);
         
         if (MoveUtils.isMove(this.move) && this.move.hasPosition()) {
             print(AbstractSubroutine.BEST_CANDIDATE_COUNTER_FORMAT, 

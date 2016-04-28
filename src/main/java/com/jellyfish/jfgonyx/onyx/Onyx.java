@@ -68,6 +68,7 @@ class Onyx {
         SEARCH.put(STYPE.RANDOM, new RandomSearch());
         SEARCH.put(STYPE.INTMAP, new IntmapSearch());
         SEARCH.put(STYPE.CNX, new ConnectionSearch());
+        SEARCH.put(STYPE.VIRTUAL_CNX, new VirtualConnetionSearch());
     }
     
     /**
@@ -78,7 +79,8 @@ class Onyx {
         RANDOM("Random dumb search :X"), 
         POSCOL("Use onyx position collection for take or counter position searches."),
         INTMAP("Integer map search."), 
-        CNX("Connection search style building & taking advantage of position trees.");
+        CNX("Connection search style building & taking advantage of position trees."),
+        VIRTUAL_CNX("Virtual best links simulation.");
         
         private final String desc;
         
@@ -101,6 +103,7 @@ class Onyx {
             final boolean lose = ((ConnectionSearch) SEARCH.get(STYPE.CNX)).isWin(
                     c, color);
             final OnyxMove mCNX = SEARCH.get(STYPE.CNX).search(c, board, color);
+            final OnyxMove vCNX = SEARCH.get(STYPE.VIRTUAL_CNX).search(c, board, color);
                         
             // Assert game ended :
             Onyx.gameEnd = win || lose;

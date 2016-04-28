@@ -29,42 +29,13 @@
  * POSSIBILITY OF SUCH DAMAGE. 
  ******************************************************************************
  */
-package com.jellyfish.jfgonyx.onyx.search.searchutils;
+package com.jellyfish.jfgonyx.onyx.search.subroutines.connectionsearch;
 
-import com.jellyfish.jfgonyx.constants.OnyxConst;
-import com.jellyfish.jfgonyx.onyx.OnyxGame;
-import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
-import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException;
+import com.jellyfish.jfgonyx.onyx.abstractions.AbstractSubroutine;
 
 /**
  * @author thw
  */
-public class SearchUtils {
-    
-    public static OnyxMove assertByScore(final OnyxMove ... moves) throws NoValidOnyxPositionsFoundException {
-
-        int r = -1;
-        float score = -1f;
-        for (int i = 0; i < moves.length; i++) {
-            if ((MoveUtils.isMove(moves[i])) && (r < 0 || moves[i].getScore() > score)) {
-                r = i;
-                score = moves[i].getScore();
-            }
-        }
-        
-        if (r >= 0 && score > 0) return moves[r];
-        
-        throw new NoValidOnyxPositionsFoundException();
-    }
-    
-    @Deprecated
-    public static float calibrateCenterMoves(final OnyxGame game, final float score) {
-        return game.getMoveCount() < 12 ? OnyxConst.SCORE.OVERRIDE.getValue() + score : score;
-    }
-    
-    public static float calibrateTailMoves(final OnyxGame game, final float score) {
-        return (game.getMoveCount() < 20) ?
-            OnyxConst.SCORE.OVERRIDE.getValue() + score : score;              
-    }
+public class VirtualConnectionSubroutine extends AbstractSubroutine {
     
 }
