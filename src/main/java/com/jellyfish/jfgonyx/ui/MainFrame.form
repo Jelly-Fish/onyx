@@ -124,6 +124,11 @@
                 </MenuItem>
               </SubComponents>
             </Menu>
+            <Menu class="javax.swing.JMenu" name="colorThemesMenu">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Color themes"/>
+              </Properties>
+            </Menu>
           </SubComponents>
         </Menu>
       </SubComponents>

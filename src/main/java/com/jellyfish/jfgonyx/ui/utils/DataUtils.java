@@ -31,7 +31,6 @@
  */
 package com.jellyfish.jfgonyx.ui.utils;
 
-import com.jellyfish.jfgonyx.vars.GraphicsVars;
 import com.thoughtworks.xstream.XStream;
 import java.io.File;
 import java.io.FileInputStream;

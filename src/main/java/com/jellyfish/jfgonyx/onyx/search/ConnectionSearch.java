@@ -80,7 +80,7 @@ public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnecti
                 this.getSubTailCounterMove(c, board, OnyxConst.COLOR.getOposite(color.bool));
         this.cnxMoves.add(counterTail);
                 
-        return this.trim(this.cnxMoves);
+        return this.trim(this.cnxMoves, board, c, color);
     }
     
     private void init() {

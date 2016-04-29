@@ -37,6 +37,7 @@ import com.jellyfish.jfgonyx.onyx.OnyxGame;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.interfaces.OnyxObserver;
 import com.jellyfish.jfgonyx.starter.Starter;
+import com.jellyfish.jfgonyx.ui.utils.ColorThemeUtils;
 import com.jellyfish.jfgonyx.ui.utils.DataUtils;
 import com.jellyfish.jfgonyx.vars.MainFrameVars;
 import java.awt.Cursor;
@@ -115,6 +116,7 @@ public class MainFrame extends javax.swing.JFrame implements OnyxObserver {
         colorSettingsSeparator3 = new javax.swing.JPopupMenu.Separator();
         changeWhitePieceColorMenuItem = new javax.swing.JMenuItem();
         changeBlackPieceColorMenuItem = new javax.swing.JMenuItem();
+        colorThemesMenu = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setName("mainFrame"); // NOI18N
@@ -253,6 +255,9 @@ public class MainFrame extends javax.swing.JFrame implements OnyxObserver {
 
         settingsMenu.add(colorSettingsMenu);
 
+        colorThemesMenu.setText("Color themes");
+        settingsMenu.add(colorThemesMenu);
+
         menuBar.add(settingsMenu);
 
         setJMenuBar(menuBar);
@@ -297,8 +302,8 @@ public class MainFrame extends javax.swing.JFrame implements OnyxObserver {
     }//GEN-LAST:event_restartUIWhiteMenuItemActionPerformed
 
     private void changeBackgroundColorMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changeBackgroundColorMenuItemActionPerformed
-        this.mainPanel.setBackground(JColorChooser.showDialog(this, 
-            "Choose a new background color", this.mainPanel.getBackground()));
+        GraphicsVars.getInstance().COMPONENTS_BACKGROUND_COLOR1 = JColorChooser.showDialog(this, 
+            "Choose a new background color", GraphicsVars.getInstance().COMPONENTS_BACKGROUND_COLOR1);
         this.mainPanel.repaint();
     }//GEN-LAST:event_changeBackgroundColorMenuItemActionPerformed
 
@@ -327,9 +332,9 @@ public class MainFrame extends javax.swing.JFrame implements OnyxObserver {
     }//GEN-LAST:event_formWindowClosing
 
     private void changeDataTextPaneBackgroundColorMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changeDataTextPaneBackgroundColorMenuItemActionPerformed
-        MainFrameVars.getInstance().dataPaneBackgroundColor = JColorChooser.showDialog(this, 
-            "Change data output background color", MainFrameVars.getInstance().dataPaneBackgroundColor);
-        this.dataTextPane.setBackground(MainFrameVars.getInstance().dataPaneBackgroundColor);
+        GraphicsVars.getInstance().COMPONENTS_BACKGROUND_COLOR2 = JColorChooser.showDialog(this, 
+            "Change data output background color", GraphicsVars.getInstance().COMPONENTS_BACKGROUND_COLOR2);
+        this.dataTextPane.setBackground(GraphicsVars.getInstance().COMPONENTS_BACKGROUND_COLOR2);
         this.dataTextPane.repaint();
     }//GEN-LAST:event_changeDataTextPaneBackgroundColorMenuItemActionPerformed
 
@@ -359,6 +364,7 @@ public class MainFrame extends javax.swing.JFrame implements OnyxObserver {
     private javax.swing.JPopupMenu.Separator colorSettingsSeparator1;
     private javax.swing.JPopupMenu.Separator colorSettingsSeparator2;
     private javax.swing.JPopupMenu.Separator colorSettingsSeparator3;
+    private javax.swing.JMenu colorThemesMenu;
     private javax.swing.JTextPane dataTextPane;
     private javax.swing.JMenu editMenu;
     private javax.swing.JMenu fileMenu;
@@ -397,7 +403,8 @@ public class MainFrame extends javax.swing.JFrame implements OnyxObserver {
             }
         });
         this.dataTextPane.setContentType("text/html");
-        this.dataTextPane.setBackground(MainFrameVars.getInstance().dataPaneBackgroundColor);
+        this.dataTextPane.setBackground(GraphicsVars.getInstance().COMPONENTS_BACKGROUND_COLOR2);
+        
         final HTMLEditorKit html = new HTMLEditorKit();
         this.dataTextPane.setEditorKit(html);
         htmlEditorKit = (HTMLEditorKit) this.dataTextPane.getEditorKit();
@@ -405,11 +412,18 @@ public class MainFrame extends javax.swing.JFrame implements OnyxObserver {
         doc = this.dataTextPane.getDocument();
         final DefaultCaret caret = (DefaultCaret) this.dataTextPane.getCaret();
         caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
+        
         this.board.focus();
         this.pack();
+        
         this.setSize(MainFrameVars.getInstance().width, MainFrameVars.getInstance().height);
         this.setLocation(MainFrameVars.getInstance().x, MainFrameVars.getInstance().y);
         this.mainSplitPane.setDividerLocation(MainFrameVars.getInstance().mainSplitPaneDividerLocation);
+        
+        ColorThemeUtils.list();
+        ColorThemeUtils.appendThemes(this.colorThemesMenu, this.mainPanel, 
+            this.mainScrollPane, this.dataTextPane);        
+        
         final ImageIcon icn = new ImageIcon(getClass().getClassLoader().getResource("icons/icn.png"));
         this.setIconImage(icn.getImage());
         this.setTitle("Onyx");

@@ -58,6 +58,8 @@ public class OnyxPanel extends JPanel implements OnyxObserver {
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
+        super.setBackground(GraphicsVars.getInstance().COMPONENTS_BACKGROUND_COLOR1);
+        super.repaint();
     }
     
     @Override
