@@ -62,7 +62,8 @@ public class ColorThemeUtils {
     }
     
     public static javax.swing.JMenu appendThemes(final javax.swing.JMenu menu, 
-        final OnyxPanel mainPanel, final Component ... components) {
+        final OnyxPanel mainPanel, final javax.swing.JScrollPane scrollPane, 
+        final javax.swing.JTextPane dataOutput) {
                 
         javax.swing.JMenuItem item = null;
         GraphicsVars gv= null;
@@ -78,7 +79,9 @@ public class ColorThemeUtils {
                         GraphicsVars.setInstance(ColorThemeUtils.THEMES.get(
                             ((javax.swing.JMenuItem)e.getSource()).getText()));
                         mainPanel.repaint();
-                        for (Component c : components) c.repaint();
+                        scrollPane.repaint();
+                        dataOutput.setBackground(GraphicsVars.getInstance().COMPONENTS_BACKGROUND_COLOR2);
+                        dataOutput.repaint();
                     }
                 }
             );
