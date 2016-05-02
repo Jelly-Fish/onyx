@@ -103,7 +103,11 @@ class Onyx {
             final boolean lose = ((ConnectionSearch) SEARCH.get(STYPE.CNX)).isWin(
                     c, color);
             final OnyxMove mCNX = SEARCH.get(STYPE.CNX).search(c, board, color);
-            final OnyxMove vCNX = SEARCH.get(STYPE.VIRTUAL_CNX).search(c, board, color);
+            
+            /**
+             * FIXME : v CNX.
+             * final OnyxMove vCNX = SEARCH.get(STYPE.VIRTUAL_CNX).search(c, board, color);
+             */
                         
             // Assert game ended :
             Onyx.gameEnd = win || lose;

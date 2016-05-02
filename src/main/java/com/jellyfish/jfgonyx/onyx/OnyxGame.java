@@ -129,7 +129,7 @@ public class OnyxGame {
         if (this.initialized && this.boardInterface != null) {
             new Intmap(this.boardInterface.getPosCollection()).print(
                 this.moveCount, this.dtStamp
-            );
+            );            
         }
     }
     

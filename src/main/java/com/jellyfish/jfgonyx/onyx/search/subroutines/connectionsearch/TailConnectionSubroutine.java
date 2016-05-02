@@ -119,15 +119,23 @@ public class TailConnectionSubroutine extends AbstractSubroutine {
         OnyxPos tmp = null;
         
         for (String k : p.connections) {
+            
             if (!k.equals(kEx)) {
+                
                 tmp = c.getPosition(k);
+                
                 if (!tmp.isOccupied() && c.isValidMove(tmp, this.board, this.color)) {
                     this.keyCandidates.add(k);
+                }
+                
+                if (tmp.isOccupied() && tmp.getPiece().color.bit == this.color.bit 
+                        && !this.checkedKeys.contains(tmp.getKey())) {
+                    this.findTail(c.getPosition(k), k);
                 }
             } 
         }
         
-        for (String k : p.connections) {
+        /*for (String k : p.connections) {
             if (!k.equals(kEx)) {
                 tmp = c.getPosition(k);
                 if (tmp.isOccupied() && tmp.getPiece().color.bit == this.color.bit 
@@ -135,7 +143,7 @@ public class TailConnectionSubroutine extends AbstractSubroutine {
                     this.findTail(c.getPosition(k), k);
                 }
             }
-        }
+        }*/
         
         return p;
     }

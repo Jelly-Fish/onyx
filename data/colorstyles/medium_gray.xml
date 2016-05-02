@@ -15,33 +15,33 @@
     <alpha>255</alpha>
   </BLACK__PIECE>
   <COMPONENTS__BACKGROUND__COLOR1>
-    <red>99</red>
-    <green>136</green>
-    <blue>140</blue>
+    <red>102</red>
+    <green>102</green>
+    <blue>102</blue>
     <alpha>255</alpha>
   </COMPONENTS__BACKGROUND__COLOR1>
   <COMPONENTS__BACKGROUND__COLOR2>
-    <red>124</red>
-    <green>124</green>
-    <blue>124</blue>
+    <red>60</red>
+    <green>47</green>
+    <blue>51</blue>
     <alpha>255</alpha>
   </COMPONENTS__BACKGROUND__COLOR2>
   <BACKGROUND>
-    <red>153</red>
-    <green>178</green>
-    <blue>171</blue>
+    <red>102</red>
+    <green>102</green>
+    <blue>102</blue>
     <alpha>255</alpha>
   </BACKGROUND>
   <FULL__DIAMOND>
-    <red>102</red>
-    <green>147</green>
-    <blue>147</blue>
+    <red>153</red>
+    <green>137</green>
+    <blue>128</blue>
     <alpha>255</alpha>
   </FULL__DIAMOND>
   <DIAMOND>
-    <red>204</red>
-    <green>212</green>
-    <blue>202</blue>
+    <red>95</red>
+    <green>102</green>
+    <blue>118</blue>
     <alpha>255</alpha>
   </DIAMOND>
   <LINE>

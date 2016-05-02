@@ -32,8 +32,10 @@
 package com.jellyfish.jfgonyx.onyx.search.searchutils;
 
 import com.jellyfish.jfgonyx.constants.OnyxConst;
+import com.jellyfish.jfgonyx.helpers.HTMLDisplayHelper;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
+import com.jellyfish.jfgonyx.ui.MainFrame;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -135,7 +137,7 @@ public class Intmap {
         }
     }
     
-    private String printmtx() {
+    public String printmtx() {
         
         if (this.mtx_intmap == null) return null;
         final StringBuilder s = new StringBuilder();

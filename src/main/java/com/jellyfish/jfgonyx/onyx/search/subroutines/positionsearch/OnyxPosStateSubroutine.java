@@ -62,6 +62,10 @@ public class OnyxPosStateSubroutine extends AbstractSubroutine {
     public final boolean willEnableTake(final OnyxBoard board, final OnyxPosCollection c, 
             final OnyxConst.COLOR color) throws InvalidOnyxPositionException {
         
+        /**
+         * FIXME plz
+         */
+        
         if (this.pos == null || this.pos.isDiamondCenter()) return false;
         
         final OnyxConst.COLOR opColor = OnyxConst.COLOR.getOposite(color.bool);
