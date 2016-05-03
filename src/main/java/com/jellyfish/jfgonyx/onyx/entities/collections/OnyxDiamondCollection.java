@@ -31,7 +31,7 @@
  */
 package com.jellyfish.jfgonyx.onyx.entities.collections;
 
-import com.jellyfish.jfgonyx.constants.OnyxConst;
+import com.jellyfish.jfgonyx.onyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxDiamond;
 import java.awt.Point;
 import java.util.ArrayList;

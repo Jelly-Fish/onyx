@@ -31,7 +31,7 @@
  */
 package com.jellyfish.jfgonyx.onyx.search.subroutines.connectionsearch;
 
-import com.jellyfish.jfgonyx.constants.OnyxConst;
+import com.jellyfish.jfgonyx.onyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.OnyxGame;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;

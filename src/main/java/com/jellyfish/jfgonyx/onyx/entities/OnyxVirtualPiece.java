@@ -31,7 +31,7 @@
  */
 package com.jellyfish.jfgonyx.onyx.entities;
 
-import com.jellyfish.jfgonyx.constants.OnyxConst;
+import com.jellyfish.jfgonyx.onyx.constants.OnyxConst;
 
 /**
  *

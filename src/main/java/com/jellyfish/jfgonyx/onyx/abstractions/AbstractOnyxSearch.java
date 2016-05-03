@@ -31,7 +31,7 @@
  */
 package com.jellyfish.jfgonyx.onyx.abstractions;
 
-import com.jellyfish.jfgonyx.constants.OnyxConst;
+import com.jellyfish.jfgonyx.onyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
@@ -55,8 +55,15 @@ public class AbstractOnyxSearch {
         
         OnyxMove tmp = null;
         for (OnyxMove m : moves) {
+            
             if (MoveUtils.isNotMove(m)) continue;
+                        
+            /**
+             * [!] Only & only if tmp is not yet set with m (the current
+             * OnyxMove iterated on).
+             */
             if (MoveUtils.isNotMove(tmp)) tmp = m;
+            
             else if (m.getScore() >= tmp.getScore()) tmp = m;
         }
         
@@ -83,8 +90,14 @@ public class AbstractOnyxSearch {
         for (OnyxMove m : moves) {
             
             if (MoveUtils.isNotMove(m)) continue;
-            if (MoveUtils.isNotMove(tmp)) tmp = m;
-            if (!(new OnyxPosStateSubroutine(tmp.getPos()).willEnableTake(b, c, color)) &&
+            
+            /**
+             * [!] Only & only if tmp is not yet set with m (the current
+             * OnyxMove iterated on).
+             */
+            if (MoveUtils.isNotMove(tmp)) tmp = m; 
+            
+            if (!(new OnyxPosStateSubroutine(m.getPos()).willEnableTake(b, c, color)) &&
                     m.getScore() >= tmp.getScore()) {
                 tmp = m;
                 ++count;
@@ -97,11 +110,11 @@ public class AbstractOnyxSearch {
          * willEnableTake once again - score will be equal to first 
          * non NULL move and coparing score will be irrelevant.
          */
-        if (count == 1 && new OnyxPosStateSubroutine(tmp.getPos()).willEnableTake(b, c, color)) {
-            return null;
+        if (count == 1 && !(new OnyxPosStateSubroutine(tmp.getPos()).willEnableTake(b, c, color))) {
+            return tmp;
         }
         
-        return tmp;
+        return count > 1 ? tmp : null;
     }
     
         /**

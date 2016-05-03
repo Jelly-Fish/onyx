@@ -31,7 +31,7 @@
  */
 package com.jellyfish.jfgonyx.io;
 
-import com.jellyfish.jfgonyx.constants.OnyxConst;
+import com.jellyfish.jfgonyx.onyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.io.events.BoardDragger;
 import com.jellyfish.jfgonyx.io.events.ClickPosition;
 import com.jellyfish.jfgonyx.onyx.OnyxGame;

@@ -31,7 +31,7 @@
  */
 package com.jellyfish.jfgonyx.onyx.search.subroutines.positionsearch;
 
-import com.jellyfish.jfgonyx.constants.OnyxConst;
+import com.jellyfish.jfgonyx.onyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxDiamond;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
@@ -61,11 +61,7 @@ public class OnyxPosStateSubroutine extends AbstractSubroutine {
      */
     public final boolean willEnableTake(final OnyxBoard board, final OnyxPosCollection c, 
             final OnyxConst.COLOR color) throws InvalidOnyxPositionException {
-        
-        /**
-         * FIXME plz
-         */
-        
+
         if (this.pos == null || this.pos.isDiamondCenter()) return false;
         
         final OnyxConst.COLOR opColor = OnyxConst.COLOR.getOposite(color.bool);
@@ -94,7 +90,7 @@ public class OnyxPosStateSubroutine extends AbstractSubroutine {
             if (l == 1 && j == 1 && k > -1 && m > -1 && m != k) {
                 if ((k == 0 && m == 2) || (k == 1 && m == 3) || (k == 2 && m == 0) ||
                         (k == 3 && m == 1)) {
-                    return true;
+                   return true;
                 }
             }
 

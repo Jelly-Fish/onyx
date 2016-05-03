@@ -32,7 +32,7 @@
 package com.jellyfish.jfgonyx.io.events;
 
 import com.jellyfish.jfgonyx.vars.GraphicsVars;
-import com.jellyfish.jfgonyx.constants.OnyxConst;
+import com.jellyfish.jfgonyx.onyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.helpers.HTMLDisplayHelper;
 import com.jellyfish.jfgonyx.onyx.OnyxGame;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;

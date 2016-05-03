@@ -29,7 +29,7 @@
  * POSSIBILITY OF SUCH DAMAGE. 
  ******************************************************************************
  */
-package com.jellyfish.jfgonyx.constants;
+package com.jellyfish.jfgonyx.onyx.constants;
 
 import com.jellyfish.jfgonyx.vars.GraphicsVars;
 import java.awt.Color;

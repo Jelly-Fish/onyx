@@ -31,7 +31,7 @@
  */
 package com.jellyfish.jfgonyx.io;
 
-import com.jellyfish.jfgonyx.constants.OnyxConst;
+import com.jellyfish.jfgonyx.onyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.io.events.KeyMoveVirutalPiece;
 import com.jellyfish.jfgonyx.onyx.OnyxGame;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;

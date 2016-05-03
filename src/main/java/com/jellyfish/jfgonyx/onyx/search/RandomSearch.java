@@ -32,7 +32,7 @@
 package com.jellyfish.jfgonyx.onyx.search;
 
 import com.jellyfish.jfgonyx.onyx.interfaces.search.OnyxRandomSeachable;
-import com.jellyfish.jfgonyx.constants.OnyxConst;
+import com.jellyfish.jfgonyx.onyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.abstractions.AbstractOnyxSearch;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
