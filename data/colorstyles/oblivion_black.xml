@@ -3,45 +3,45 @@
   <BOARD__WIDTH>670</BOARD__WIDTH>
   <ZIGZAG>12</ZIGZAG>
   <WHITE__PIECE>
-    <red>241</red>
-    <green>236</green>
-    <blue>237</blue>
+    <red>156</red>
+    <green>156</green>
+    <blue>156</blue>
     <alpha>255</alpha>
   </WHITE__PIECE>
   <BLACK__PIECE>
-    <red>38</red>
-    <green>18</green>
-    <blue>27</blue>
+    <red>8</red>
+    <green>8</green>
+    <blue>8</blue>
     <alpha>255</alpha>
   </BLACK__PIECE>
   <COMPONENTS__BACKGROUND__COLOR1>
-    <red>55</red>
-    <green>37</green>
-    <blue>48</blue>
+    <red>0</red>
+    <green>0</green>
+    <blue>0</blue>
     <alpha>255</alpha>
   </COMPONENTS__BACKGROUND__COLOR1>
   <COMPONENTS__BACKGROUND__COLOR2>
-    <red>77</red>
-    <green>49</green>
-    <blue>55</blue>
+    <red>0</red>
+    <green>0</green>
+    <blue>0</blue>
     <alpha>255</alpha>
   </COMPONENTS__BACKGROUND__COLOR2>
   <BACKGROUND>
-    <red>75</red>
-    <green>55</green>
-    <blue>70</blue>
+    <red>22</red>
+    <green>22</green>
+    <blue>22</blue>
     <alpha>255</alpha>
   </BACKGROUND>
   <FULL__DIAMOND>
-    <red>153</red>
-    <green>153</green>
-    <blue>153</blue>
+    <red>28</red>
+    <green>28</green>
+    <blue>28</blue>
     <alpha>255</alpha>
   </FULL__DIAMOND>
   <DIAMOND>
-    <red>92</red>
-    <green>82</green>
-    <blue>93</blue>
+    <red>48</red>
+    <green>48</green>
+    <blue>48</blue>
     <alpha>255</alpha>
   </DIAMOND>
   <LINE>
