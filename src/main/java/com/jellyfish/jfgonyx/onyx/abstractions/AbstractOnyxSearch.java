@@ -33,10 +33,12 @@ package com.jellyfish.jfgonyx.onyx.abstractions;
 
 import com.jellyfish.jfgonyx.onyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
+import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import com.jellyfish.jfgonyx.onyx.search.searchutils.MoveUtils;
 import com.jellyfish.jfgonyx.onyx.search.subroutines.positionsearch.OnyxPosStateSubroutine;
+import com.jellyfish.jfgonyx.onyx.search.subroutines.positionsearch.TakePositionSubroutine;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
 import java.util.ArrayList;
 import java.util.List;
@@ -57,7 +59,12 @@ public class AbstractOnyxSearch {
         for (OnyxMove m : moves) {
             
             if (MoveUtils.isNotMove(m)) continue;
-                        
+            
+            /**
+             * If win move then override return.
+             */
+            if (m.isWin()) return m;  
+            
             /**
              * [!] Only & only if tmp is not yet set with m (the current
              * OnyxMove iterated on).
@@ -89,6 +96,11 @@ public class AbstractOnyxSearch {
         for (OnyxMove m : moves) {
             
             if (MoveUtils.isNotMove(m)) continue;
+            
+            /**
+             * If win move then override return.
+             */
+            if (m.isWin()) return m;  
             
             /**
              * [!] Only & only if tmp is not yet set with m (the current
@@ -143,6 +155,21 @@ public class AbstractOnyxSearch {
         }
         
         return this.trim(scoredMoves, b, c, color);
+    }
+    
+    protected final OnyxMove assertCapture(final OnyxMove tmp, final OnyxBoard b, 
+            final OnyxPosCollection c, final OnyxConst.COLOR color) throws InvalidOnyxPositionException {
+        
+        List<OnyxPos> posSet = null;
+        
+        final OnyxMove capture = new TakePositionSubroutine().getTakePos(c, b, color.bit);
+        if (MoveUtils.isMove(capture)) posSet = c.getTakePositions(capture.getPos().getKey(), color.bit, b);
+        if (MoveUtils.isMove(capture, tmp) && posSet != null && tmp.getPos().equals(capture.getPos())) {
+            tmp.setCaptured(new ArrayList<OnyxPos>());
+            tmp.getCaptured().addAll(posSet);
+        }
+        
+        return tmp;
     }
     
 }

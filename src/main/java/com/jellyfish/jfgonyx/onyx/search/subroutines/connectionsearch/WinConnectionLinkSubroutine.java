@@ -73,12 +73,6 @@ public class WinConnectionLinkSubroutine extends WinConnectionSubroutine {
             }
         }
 
-        /**
-         * FIXME : does not work if long tail starting @ high-border
-         * connecting with low-border smaller tail; yet win link exists.
-         * [?] iterate through m.pos connections for missed win link
-         * connecxion moves ?? [?]
-         */
         for (OnyxMove m : tails) {
             
             if (MoveUtils.isNotMove(m) || !m.hasPosition()) continue;
@@ -92,7 +86,7 @@ public class WinConnectionLinkSubroutine extends WinConnectionSubroutine {
                 search.connection(p, p.getKey());
                 if (search.isWin() && !borderTails.contains(p)) {
                     this.c.getPositions().get(m.getPos().getKey()).setPiece(null);
-                    return new OnyxMove(m.getPos(), OnyxConst.SCORE.WIN_LINK.getValue());
+                    return new OnyxMove(m.getPos(), OnyxConst.SCORE.WIN_LINK.getValue(), true);
                 } else if (search.isWin() && borderTails.contains(p)) {
                     
                     /**
@@ -103,7 +97,7 @@ public class WinConnectionLinkSubroutine extends WinConnectionSubroutine {
                      * is the border position.
                      */
                     this.c.getPositions().get(m.getPos().getKey()).setPiece(null);
-                    return new OnyxMove(p, OnyxConst.SCORE.WIN_LINK.getValue());
+                    return new OnyxMove(p, OnyxConst.SCORE.WIN_LINK.getValue(), true);
                 }
             }
             

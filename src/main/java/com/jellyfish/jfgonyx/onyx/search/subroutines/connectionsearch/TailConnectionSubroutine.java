@@ -135,16 +135,6 @@ public class TailConnectionSubroutine extends AbstractSubroutine {
             } 
         }
         
-        /*for (String k : p.connections) {
-            if (!k.equals(kEx)) {
-                tmp = c.getPosition(k);
-                if (tmp.isOccupied() && tmp.getPiece().color.bit == this.color.bit 
-                        && !this.checkedKeys.contains(tmp.getKey())) {
-                    this.findTail(c.getPosition(k), k);
-                }
-            }
-        }*/
-        
         return p;
     }
 

@@ -37,7 +37,6 @@ import com.jellyfish.jfgonyx.onyx.search.subroutines.positionsearch.TakePosition
 import com.jellyfish.jfgonyx.onyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.abstractions.AbstractOnyxSearch;
-import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.interfaces.search.OnyxPositionSearchable;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
@@ -70,7 +69,6 @@ public class PositionSearch extends AbstractOnyxSearch implements OnyxPositionSe
     public OnyxMove search(final OnyxPosCollection c, final OnyxBoard b, final OnyxConst.COLOR color) 
             throws NoValidOnyxPositionsFoundException {
     
-        List<OnyxPos> posSet = null;
         final List<OnyxMove> moves = new ArrayList<>();
         
         try {
@@ -83,16 +81,14 @@ public class PositionSearch extends AbstractOnyxSearch implements OnyxPositionSe
             moves.add(new CenterPositionSubroutine().getCenterPos(c, b.getDiamondCollection(), color));
                         
             OnyxMove tmp = this.trim(moves, b, c, color);    
-            
-            if (capture != null) posSet = c.getTakePositions(capture.getPos().getKey(), color.bit, b);
-            
+            tmp = this.assertCapture(tmp, b, c, color);
+
             if (MoveUtils.isNotMove(tmp) || c.getPosition(tmp.getPos().getKey()).isOccupied()) {
                 tmp = new RandomSearch().search(c, b, color);
                 if (MoveUtils.isNotMove(tmp)) throw new NoValidOnyxPositionsFoundException();
             }
             
-            if (tmp.isCapture()) return new OnyxMove(tmp.getPos(), tmp.getPiece(), posSet, tmp.getScore());
-            else return tmp;
+            return tmp;
         
         } catch (final InvalidOnyxPositionException Iopex) {
             Logger.getLogger(PositionSearch.class.getName()).log(Level.SEVERE, null, Iopex);

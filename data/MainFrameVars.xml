@@ -3,11 +3,11 @@
   <height>876</height>
   <x>-4</x>
   <y>-4</y>
-  <mainSplitPaneDividerLocation>587</mainSplitPaneDividerLocation>
+  <mainSplitPaneDividerLocation>823</mainSplitPaneDividerLocation>
   <dataPaneBackgroundColor>
-    <red>77</red>
-    <green>49</green>
-    <blue>55</blue>
+    <red>30</red>
+    <green>23</green>
+    <blue>21</blue>
     <alpha>255</alpha>
   </dataPaneBackgroundColor>
 </com.jellyfish.jfgonyx.vars.MainFrameVars>

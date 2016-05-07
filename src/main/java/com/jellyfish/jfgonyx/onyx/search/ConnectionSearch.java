@@ -47,7 +47,6 @@ import com.jellyfish.jfgonyx.onyx.search.subroutines.connectionsearch.SubTailCon
 import com.jellyfish.jfgonyx.onyx.search.subroutines.connectionsearch.TailConnectionSubroutine;
 import com.jellyfish.jfgonyx.onyx.search.subroutines.connectionsearch.WinConnectionSubroutine;
 import com.jellyfish.jfgonyx.onyx.search.subroutines.connectionsearch.WinConnectionLinkSubroutine;
-import com.jellyfish.jfgonyx.onyx.search.subroutines.positionsearch.TakePositionSubroutine;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -127,15 +126,15 @@ public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnecti
         }
         
         final OnyxMove tmp = this.trim(this.cnxTmpMoves, board, c, color);
+        if (MoveUtils.isMove(tmp)) tmp.setScore(
+            SearchUtils.calibrateTailMoves(OnyxGame.getInstance(), tmp.getScore()));
         
-        return MoveUtils.isMove(tmp) ? new OnyxMove(tmp.getPos(), tmp.getPiece(),
-            SearchUtils.calibrateTailMoves(OnyxGame.getInstance(), tmp.getScore())) : null;
+        return MoveUtils.isMove(tmp) ? tmp : null;
     }
     
     private OnyxMove getSubTailCounterMove(final OnyxPosCollection c, final OnyxBoard board, 
             final OnyxConst.COLOR color) throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
         
-        List<OnyxPos> posSet = null;
         final List<OnyxMove> moves = new ArrayList<>();
         final List<OnyxPos> pos = OnyxPositionUtils.trimBorderByColorWithExceptions(
                 OnyxPositionUtils.getSubBordersByColor(c, color), color, this.checkedKeys);
@@ -155,16 +154,8 @@ public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnecti
             moves.add(new SubTailConnectionSubroutine(c, color, board, minX, minY, maxX, maxY).getTail(p, true));
         }
         
-        final OnyxMove tmp = this.trim(moves, board, c, OnyxConst.COLOR.getOposite(color.bool));
-
-        // Take possibility - if so then apply captures.
-        final OnyxConst.COLOR opColor = OnyxConst.COLOR.getOposite(color.bool);
-        final OnyxMove capture = new TakePositionSubroutine().getTakePos(c, board, opColor.bit);
-        if (MoveUtils.isMove(capture)) posSet = c.getTakePositions(capture.getPos().getKey(), opColor.bit, board);
-        if (MoveUtils.isMove(capture, tmp) && posSet != null && tmp.getPos().equals(capture.getPos())) {
-            tmp.setCaptured(new ArrayList<OnyxPos>());
-            tmp.getCaptured().addAll(posSet);
-        }
+        OnyxMove tmp = this.trim(moves, board, c, OnyxConst.COLOR.getOposite(color.bool));
+        tmp = this.assertCapture(tmp, board, c, OnyxConst.COLOR.getOposite(color.bool));
         
         return MoveUtils.isMove(tmp) ? tmp : null;
     }
@@ -178,7 +169,6 @@ public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnecti
             final OnyxConst.COLOR color) throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {   
 
         int count = 0;
-        List<OnyxPos> posSet = null;
         final List<OnyxMove> moves = new ArrayList<>();
         OnyxMove move = null;
         
@@ -188,19 +178,9 @@ public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnecti
         
         for (OnyxMove m : moves) count = MoveUtils.isMove(m) ? ++count : count;
         
-        if (count > 0) {
-            
+        if (count > 0) {            
             move = new WinConnectionLinkSubroutine(c, opColor).connectionLink(moves);
-            
-            // Take possibility & if true apply captures :
-            final OnyxMove capture = new TakePositionSubroutine().getTakePos(c, board, color.bit);
-            if (MoveUtils.isMove(capture)) posSet = c.getTakePositions(capture.getPos().getKey(), color.bit, board);
-
-            if (MoveUtils.isMove(capture, move) && posSet != null && move.getPos().equals(capture.getPos())) {
-                move.setScore(OnyxConst.SCORE.COUNTER_WIN_LINK.getValue());
-                move.setCaptured(new ArrayList<OnyxPos>());
-                move.getCaptured().addAll(posSet);
-            }
+            move = this.assertCapture(move, board, c, color);
         }
 
         return move;

@@ -3,9 +3,9 @@
   <BOARD__WIDTH>670</BOARD__WIDTH>
   <ZIGZAG>12</ZIGZAG>
   <WHITE__PIECE>
-    <red>156</red>
-    <green>156</green>
-    <blue>156</blue>
+    <red>204</red>
+    <green>204</green>
+    <blue>204</blue>
     <alpha>255</alpha>
   </WHITE__PIECE>
   <BLACK__PIECE>
