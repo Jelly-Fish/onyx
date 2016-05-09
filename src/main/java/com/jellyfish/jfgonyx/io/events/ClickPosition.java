@@ -57,10 +57,6 @@ public class ClickPosition implements OnyxExecutable {
     @Override
     public boolean exec(final InputEvent e, final OnyxBoard board) throws InvalidOnyxPositionException {
 
-        /**
-         * FIXME : refactor + improve accurcy.
-         */
-        
         final MouseEvent mE = (MouseEvent) e;
         String k = null, oldK = null;
         final OnyxVirtualPiece v = board.getPosCollection().getVirtualPiece() == null ?

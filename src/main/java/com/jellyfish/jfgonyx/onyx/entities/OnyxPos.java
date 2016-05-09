@@ -170,10 +170,6 @@ public class OnyxPos {
 
     private OnyxPosRectangle initRectangle(final float paramX, final float paramY) {
 
-        /**
-         * FIXME : improve accuracy.
-         */
-        
         float pX = paramX, pY = paramY;
 
         if (!this.diamond.isFivePosDiamond() && !this.isDiamondCenter()) {

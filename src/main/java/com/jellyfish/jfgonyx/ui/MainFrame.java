@@ -40,6 +40,7 @@ import com.jellyfish.jfgonyx.starter.Starter;
 import com.jellyfish.jfgonyx.ui.utils.ColorThemeUtils;
 import com.jellyfish.jfgonyx.ui.utils.DataUtils;
 import com.jellyfish.jfgonyx.vars.MainFrameVars;
+import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
@@ -405,6 +406,9 @@ public class MainFrame extends javax.swing.JFrame implements OnyxObserver {
         });
         this.dataTextPane.setContentType("text/html");
         this.dataTextPane.setBackground(GraphicsVars.getInstance().COMPONENTS_BACKGROUND_COLOR2);
+        this.dataTextPane.setSelectedTextColor(Color.WHITE);
+        this.dataTextPane.setSelectionColor(
+            ColorThemeUtils.getHalfColor(GraphicsVars.getInstance().COMPONENTS_BACKGROUND_COLOR2));
         
         final HTMLEditorKit html = new HTMLEditorKit();
         this.dataTextPane.setEditorKit(html);

@@ -33,7 +33,6 @@ package com.jellyfish.jfgonyx.ui.utils;
 
 import com.jellyfish.jfgonyx.ui.OnyxPanel;
 import com.jellyfish.jfgonyx.vars.GraphicsVars;
-import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -100,6 +99,10 @@ public class ColorThemeUtils {
             s.replace(DataUtils.XML_FILE_EXTENTION, StringUtils.EMPTY) + StringUtils.SPACE;
         
         return StringUtils.capitalize(name).trim();
+    }
+    
+    public static java.awt.Color getHalfColor(final java.awt.Color color) {
+        return new java.awt.Color(color.getRed() / 2, color.getGreen() / 2, color.getBlue() / 2);
     }
     
 }
