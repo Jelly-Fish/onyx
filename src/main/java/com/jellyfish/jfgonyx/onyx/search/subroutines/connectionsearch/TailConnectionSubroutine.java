@@ -152,7 +152,7 @@ public class TailConnectionSubroutine extends AbstractSubroutine {
             score = 0f;
             pos = this.c.getPosition(k);    
             if (tmp == null) tmp = pos;
-            
+
             if (this.color.bool) {
                 
                 if (this.startPos.isLowXBorder() && pos.x >= tmp.x) {
@@ -165,7 +165,13 @@ public class TailConnectionSubroutine extends AbstractSubroutine {
                     score = lowBorderTendency ? (tmp.y > (boardLength / 2) ? (score + 1f) : score) : score;
                 }
                 
-                if (this.counterSearch) score = pos.x == tmp.x ? ++score * 2f : score;
+                /**
+                 * FIXME : not obvious - figure out best way to upgrade best move.
+                 */
+                if (this.counterSearch && pos.x == tmp.x) {
+                    score *= (1.4f + 
+                        (pos.hasNeighbour(this.c, OnyxConst.COLOR.getOposite(this.color.bool)) ? .6f : 0f));
+                }
                 
             } else if (!this.color.bool) {
 
@@ -179,7 +185,13 @@ public class TailConnectionSubroutine extends AbstractSubroutine {
                     score = lowBorderTendency ? (tmp.x > (boardLength / 2) ? (score + 1f) : score) : score;
                 }      
                 
-                if (this.counterSearch) score = pos.y == tmp.y ? ++score * 2f : score;
+                /**
+                 * FIXME : not obvious - figure out best way to upgrade best move.
+                 */
+                if (this.counterSearch && pos.y == tmp.y) {
+                    score *= (1.4f + 
+                        (pos.hasNeighbour(this.c, OnyxConst.COLOR.getOposite(this.color.bool)) ? .6f : 0f));
+                }
             }
             
             this.candidates.add(new OnyxMove(tmp, score * OnyxConst.SCORE.TAIL.getValue()));

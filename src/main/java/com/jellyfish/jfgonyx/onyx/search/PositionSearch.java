@@ -54,17 +54,7 @@ import java.util.logging.Logger;
  * @author thw
  */
 public class PositionSearch extends AbstractOnyxSearch implements OnyxPositionSearchable {
-    
-    /*
-     * Look for all possible take moves
-     * IF diamond has 2 corners set to != color
-     *   Search for neighbour diamonds with similar configuration
-     *   IF found then double take
-     * ELSE Look for counter attacks
-     *   Prevent full set diamonds where != color
-     * ELSE play neighbour != color positions
-     *   Find forward positions depending on color
-     */
+
     @Override
     public OnyxMove search(final OnyxPosCollection c, final OnyxBoard b, final OnyxConst.COLOR color) 
             throws NoValidOnyxPositionsFoundException {

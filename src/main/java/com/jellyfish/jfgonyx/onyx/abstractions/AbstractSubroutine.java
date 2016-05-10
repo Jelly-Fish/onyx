@@ -52,6 +52,7 @@ public abstract class AbstractSubroutine extends AbstractOnyxSearch {
     
         TAIL("{tail search}"),
         TAILS("{tails search}"),
+        VCNX("{virtual connection search}"),
         COUNTER_SUBTAIL("{sub-tail search}"),
         CENTER_POS("{center position search}"),
         COUNTER_POS("{counter position search}"),

@@ -106,6 +106,15 @@ public class OnyxPos {
         return this.y > ((float) (OnyxConst.BOARD_SIDE_SQUARE_COUNT + 1)) - .1f;
     }
 
+    public boolean hasNeighbour(final OnyxPosCollection c, final OnyxConst.COLOR color) {
+        
+        for (String k : this.connections) {
+            if (c.getPosition(k).isOccupied(color.bit)) return true;
+        }
+        
+        return false;
+    }
+    
     public int occursCount(final OnyxPos p, final List<OnyxPos> posSet) {
         
         int count = 0;

@@ -103,16 +103,14 @@ class Onyx {
             final boolean lose = ((ConnectionSearch) SEARCH.get(STYPE.CNX)).isWin(
                     c, color);
             final OnyxMove mCNX = SEARCH.get(STYPE.CNX).search(c, board, color);
-            
-            /**
-             * FIXME : v CNX.
-             * final OnyxMove vCNX = SEARCH.get(STYPE.VIRTUAL_CNX).search(c, board, color);
-             */
-                        
+
             // Assert game ended :
             Onyx.gameEnd = win || lose;
                         
-            // Do printing debug stuff...
+            /**
+             * FIXME refactor : get this print stuff out of search method.
+             * [START] Do printing debug stuff... 
+             */
             if (mPOSCOL != null) print(String.format(POSCOL_SEARCH_FORMAT,
                     OnyxConst.POS_MAP.get(mPOSCOL.getPos().getKey()), mPOSCOL.getScore()));
             if (mCNX != null) print(String.format(CNX_SEARCH_FORMAT,
@@ -120,6 +118,7 @@ class Onyx {
             print(win ? 
                 String.format(WIN, OnyxConst.COLOR.getOposite(color.bool).str) : 
                 StringUtils.EMPTY, HTMLDisplayHelper.GOLD);
+            /** [END] Do printing debug stuff... */
             
             if (Onyx.gameEnd) return null;
             final OnyxMove m = SearchUtils.assertByScore(mPOSCOL, mCNX);

@@ -29,59 +29,23 @@
  * POSSIBILITY OF SUCH DAMAGE. 
  ******************************************************************************
  */
-package com.jellyfish.jfgonyx.onyx.search.subroutines.connectionsearch;
+package com.jellyfish.jfgonyx.onyx.entities;
 
-import com.jellyfish.jfgonyx.onyx.abstractions.AbstractSubroutine;
-import com.jellyfish.jfgonyx.onyx.constants.OnyxConst;
-import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
-import com.jellyfish.jfgonyx.onyx.entities.OnyxTail;
-import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
-import com.jellyfish.jfgonyx.ui.OnyxBoard;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedList;
 
 /**
  * @author thw
- * @deprecated FIXME figure this out...
  */
-public class VirtualConnectionSubroutine extends AbstractSubroutine {
+public class OnyxTail {
     
-    protected final AbstractSubroutine.SUBROUTINE_TYPE type;
-    protected final OnyxPosCollection c;
-    protected final OnyxBoard board;
-    protected final OnyxConst.COLOR color;
-    private final List<OnyxTail> tails = new ArrayList<>();
+    private final LinkedList<OnyxPos> positions = new LinkedList<>();
     
-    public VirtualConnectionSubroutine(final OnyxPosCollection c, final OnyxConst.COLOR color, 
-            final OnyxBoard board) {
-        this.c = c;
-        this.color = color;
-        this.board = board;
-        this.type = AbstractSubroutine.SUBROUTINE_TYPE.VCNX;
+    public void append(final OnyxPos p) {
+        this.positions.addLast(p);
     }
     
-    /**
-     * @param sPoss start positions - low borders of color to search for.
-     */
-    public void seekTails(final OnyxPos ... sPoss) {
-        
-        OnyxTail t = null;
-        OnyxPos n = null;
-        
-        for (OnyxPos p : sPoss) {
-            
-            t = new OnyxTail();
-            do {
-                n = next(n == null ? p : n);
-                if (n != null) t.append(n);
-            } while (n != null);
-            
-            this.tails.add(t);
-        }
-    }
-    
-    private OnyxPos next(final OnyxPos p) {
-        return null;
+    public int getTailCount() {
+        return positions.size();
     }
     
 }
