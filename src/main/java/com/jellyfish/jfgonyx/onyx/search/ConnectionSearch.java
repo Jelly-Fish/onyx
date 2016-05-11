@@ -126,9 +126,7 @@ public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnecti
         }
         
         final OnyxMove tmp = this.trim(this.cnxTmpMoves, board, c, color);
-        if (MoveUtils.isMove(tmp)) tmp.setScore(
-            SearchUtils.calibrateTailMoves(OnyxGame.getInstance(), tmp.getScore()));
-        
+
         return MoveUtils.isMove(tmp) ? tmp : null;
     }
     

@@ -127,7 +127,7 @@ public class TakePositionSubroutine extends AbstractSubroutine {
         if (MoveUtils.isMove(this.move)) print(AbstractSubroutine.BEST_CANDIDATE, 
                 AbstractSubroutine.SUBROUTINE_TYPE.TAKE,
                 bitColor == 0 ? OnyxConst.COLOR.WHITE : OnyxConst.COLOR.BLACK, 
-                OnyxConst.POS_MAP.get(this.move.getPos().getKey()));
+                this.move.getPos().getKey());
         
         return this.move;
     }
