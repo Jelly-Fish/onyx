@@ -36,7 +36,7 @@ import com.jellyfish.jfgonyx.helpers.MainFrameGHelper;
 import com.jellyfish.jfgonyx.onyx.OnyxGame;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.interfaces.OnyxObserver;
-import com.jellyfish.jfgonyx.starter.Starter;
+import com.jellyfish.jfgonyx.main.Main;
 import com.jellyfish.jfgonyx.ui.utils.ColorThemeUtils;
 import com.jellyfish.jfgonyx.ui.utils.DataUtils;
 import com.jellyfish.jfgonyx.vars.MainFrameVars;
@@ -119,6 +119,10 @@ public class MainFrame extends javax.swing.JFrame implements OnyxObserver {
         changeWhitePieceColorMenuItem = new javax.swing.JMenuItem();
         changeBlackPieceColorMenuItem = new javax.swing.JMenuItem();
         colorThemesMenu = new javax.swing.JMenu();
+        settingsSeparator1 = new javax.swing.JPopupMenu.Separator();
+        changeBoardSizeMenu = new javax.swing.JMenu();
+        twelveMenuItem = new javax.swing.JMenuItem();
+        fourteenMenuItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setName("mainFrame"); // NOI18N
@@ -259,6 +263,27 @@ public class MainFrame extends javax.swing.JFrame implements OnyxObserver {
 
         colorThemesMenu.setText("Color themes");
         settingsMenu.add(colorThemesMenu);
+        settingsMenu.add(settingsSeparator1);
+
+        changeBoardSizeMenu.setText("Change board size    ");
+
+        twelveMenuItem.setText("12x12 Onyx board");
+        twelveMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                twelveMenuItemActionPerformed(evt);
+            }
+        });
+        changeBoardSizeMenu.add(twelveMenuItem);
+
+        fourteenMenuItem.setText("14x14 Onyx board");
+        fourteenMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                fourteenMenuItemActionPerformed(evt);
+            }
+        });
+        changeBoardSizeMenu.add(fourteenMenuItem);
+
+        settingsMenu.add(changeBoardSizeMenu);
 
         menuBar.add(settingsMenu);
 
@@ -288,19 +313,19 @@ public class MainFrame extends javax.swing.JFrame implements OnyxObserver {
     private void restartGameMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_restartGameMenuItemActionPerformed
         if (OnyxGame.getInstance().initialized) {
             if (OnyxGame.getInstance().engineColor.bool) {
-                Starter.restartBlack();
+                Main.restartBlack();
             } else {
-                Starter.restartWhite();
+                Main.restartWhite();
             }        
         }
     }//GEN-LAST:event_restartGameMenuItemActionPerformed
 
     private void restartUIBlackMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_restartUIBlackMenuItemActionPerformed
-        if (OnyxGame.getInstance().initialized) Starter.restartBlack();       
+        if (OnyxGame.getInstance().initialized) Main.restartBlack();       
     }//GEN-LAST:event_restartUIBlackMenuItemActionPerformed
 
     private void restartUIWhiteMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_restartUIWhiteMenuItemActionPerformed
-        if (OnyxGame.getInstance().initialized) Starter.restartWhite();
+        if (OnyxGame.getInstance().initialized) Main.restartWhite();
     }//GEN-LAST:event_restartUIWhiteMenuItemActionPerformed
 
     private void changeBackgroundColorMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changeBackgroundColorMenuItemActionPerformed
@@ -351,6 +376,24 @@ public class MainFrame extends javax.swing.JFrame implements OnyxObserver {
             "Choose a new color for black pieces", GraphicsVars.getInstance().BLACK_PIECE);
         this.board.repaint();
     }//GEN-LAST:event_changeBlackPieceColorMenuItemActionPerformed
+
+    private void twelveMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_twelveMenuItemActionPerformed
+        /**
+         * FIXME : rebuild, repaint & restart - so far manually restart...
+         */
+        GraphicsVars.getInstance().BOARD_SIDE_SQUARE_COUNT = 11;
+        GraphicsVars.getInstance().EXTRA_SQUARES = 0;
+        GraphicsVars.getInstance().resetInstance();
+    }//GEN-LAST:event_twelveMenuItemActionPerformed
+
+    private void fourteenMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fourteenMenuItemActionPerformed
+        /**
+         * FIXME : rebuild, repaint & restart - so far manually restart...
+         */
+        GraphicsVars.getInstance().BOARD_SIDE_SQUARE_COUNT = 13;
+        GraphicsVars.getInstance().EXTRA_SQUARES = 2;
+        GraphicsVars.getInstance().resetInstance();
+    }//GEN-LAST:event_fourteenMenuItemActionPerformed
     // </editor-fold>     
     
     // <editor-fold defaultstate="collapsed" desc="Main frame vars">          
@@ -358,6 +401,7 @@ public class MainFrame extends javax.swing.JFrame implements OnyxObserver {
     private javax.swing.JMenuItem changeBackgroundColorMenuItem;
     private javax.swing.JMenuItem changeBlackPieceColorMenuItem;
     private javax.swing.JMenuItem changeBoardBackgroundColorMenuItem;
+    private javax.swing.JMenu changeBoardSizeMenu;
     private javax.swing.JMenuItem changeDataTextPaneBackgroundColorMenuItem;
     private javax.swing.JMenuItem changeFivePositionsDiamondColorMenuItem;
     private javax.swing.JMenuItem changeFourSideDiamondColorMenuItem;
@@ -370,6 +414,7 @@ public class MainFrame extends javax.swing.JFrame implements OnyxObserver {
     private javax.swing.JTextPane dataTextPane;
     private javax.swing.JMenu editMenu;
     private javax.swing.JMenu fileMenu;
+    private javax.swing.JMenuItem fourteenMenuItem;
     private javax.swing.JMenu gameMenu;
     private javax.swing.JPopupMenu.Separator gameSeparator1;
     private javax.swing.JScrollPane mainScrollPane;
@@ -379,7 +424,9 @@ public class MainFrame extends javax.swing.JFrame implements OnyxObserver {
     private javax.swing.JMenuItem restartUIBlackMenuItem;
     private javax.swing.JMenuItem restartUIWhiteMenuItem;
     private javax.swing.JMenu settingsMenu;
+    private javax.swing.JPopupMenu.Separator settingsSeparator1;
     private javax.swing.JScrollPane textScrollPane;
+    private javax.swing.JMenuItem twelveMenuItem;
     // End of variables declaration//GEN-END:variables
     // </editor-fold>   
     

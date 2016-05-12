@@ -42,6 +42,7 @@ import com.jellyfish.jfgonyx.onyx.search.searchutils.MoveUtils;
 import com.jellyfish.jfgonyx.onyx.abstractions.AbstractSubroutine;
 import com.jellyfish.jfgonyx.onyx.utils.RandomUtils;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
+import com.jellyfish.jfgonyx.vars.GraphicsVars;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -67,7 +68,7 @@ public class CenterPositionSubroutine extends AbstractSubroutine {
         float side = 3f;
         int counter = 0;
         final float minS = 1.5f -.01f;
-        float s = ((OnyxConst.BOARD_SIDE_SQUARE_COUNT + 1) / 2) - .5f;
+        float s = ((GraphicsVars.getInstance().BOARD_SIDE_SQUARE_COUNT + 1) / 2) - .5f;
         final List<OnyxPos> pos = new ArrayList<>();
         OnyxPos tmp = null;
         
@@ -201,7 +202,7 @@ public class CenterPositionSubroutine extends AbstractSubroutine {
         
         int index = sI;
         float f = -1f;
-        float v = (float) ((OnyxConst.BOARD_SIDE_SQUARE_COUNT + 1) * 2);
+        float v = (float) ((GraphicsVars.getInstance().BOARD_SIDE_SQUARE_COUNT + 1) * 2);
         for (int i = sI; i < a.length; ++i) {
             f = a[i].getCenterPos().x + a[i].getCenterPos().y;
             if (f < v) {

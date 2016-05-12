@@ -95,7 +95,7 @@ public class OnyxPos {
     }
 
     public boolean isHighXBorder() {
-        return this.x > ((float) (OnyxConst.BOARD_SIDE_SQUARE_COUNT + 1)) -.1f;
+        return this.x > ((float) (GraphicsVars.getInstance().BOARD_SIDE_SQUARE_COUNT + 1)) -.1f;
     }
     
     public boolean isLowYBorder() {
@@ -103,7 +103,7 @@ public class OnyxPos {
     }
     
     public boolean isHighYBorder() {
-        return this.y > ((float) (OnyxConst.BOARD_SIDE_SQUARE_COUNT + 1)) - .1f;
+        return this.y > ((float) (GraphicsVars.getInstance().BOARD_SIDE_SQUARE_COUNT + 1)) - .1f;
     }
 
     public boolean hasNeighbour(final OnyxPosCollection c, final OnyxConst.COLOR color) {

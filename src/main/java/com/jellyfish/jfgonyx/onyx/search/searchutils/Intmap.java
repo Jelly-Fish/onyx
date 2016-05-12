@@ -31,11 +31,9 @@
  */
 package com.jellyfish.jfgonyx.onyx.search.searchutils;
 
-import com.jellyfish.jfgonyx.onyx.constants.OnyxConst;
-import com.jellyfish.jfgonyx.helpers.HTMLDisplayHelper;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
-import com.jellyfish.jfgonyx.ui.MainFrame;
+import com.jellyfish.jfgonyx.vars.GraphicsVars;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -72,7 +70,7 @@ public class Intmap {
     private final int[][] mtx_static;
     
     public Intmap(final OnyxPosCollection c) {
-        final int w = (OnyxConst.BOARD_SIDE_SQUARE_COUNT * 2) + 1;
+        final int w = (GraphicsVars.getInstance().BOARD_SIDE_SQUARE_COUNT * 2) + 1;
         this.width = w;
         this.mtx_intmap = new int[w][w];
         this.linear_static = new int[(int) Math.pow(w, 2.0)];
@@ -88,10 +86,10 @@ public class Intmap {
         final int[] bmap = new int[(int) Math.pow(this.width, 2.0)];
         int i = 0, j = 0, k = 0;
         
-        for (float y = 1.0f; y <= OnyxConst.BOARD_SIDE_SQUARE_COUNT + 1; y += .5f) {
+        for (float y = 1.0f; y <= GraphicsVars.getInstance().BOARD_SIDE_SQUARE_COUNT + 1; y += .5f) {
             l = String.format(Intmap.LINE_START_FORMAT, y); 
             l += y < 10 ? StringUtils.SPACE : StringUtils.EMPTY;
-            for (float x = 1.0f; x <= OnyxConst.BOARD_SIDE_SQUARE_COUNT + 1; x += .5f) {
+            for (float x = 1.0f; x <= GraphicsVars.getInstance().BOARD_SIDE_SQUARE_COUNT + 1; x += .5f) {
                 tmp = c.getPosition(String.format(OnyxPosCollection.KEY_FORMAT, x, y));
                 bmap[i] = tmp == null ? 3 : (tmp.isOccupied() ? tmp.getPiece().color.bit : 2);
                 l += bmap[i] > 1 ? StringUtils.SPACE + StringUtils.SPACE :

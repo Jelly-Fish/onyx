@@ -129,6 +129,31 @@
                 <Property name="text" type="java.lang.String" value="Color themes"/>
               </Properties>
             </Menu>
+            <MenuItem class="javax.swing.JPopupMenu$Separator" name="settingsSeparator1">
+            </MenuItem>
+            <Menu class="javax.swing.JMenu" name="changeBoardSizeMenu">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Change board size    "/>
+              </Properties>
+              <SubComponents>
+                <MenuItem class="javax.swing.JMenuItem" name="twelveMenuItem">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="12x12 Onyx board"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="twelveMenuItemActionPerformed"/>
+                  </Events>
+                </MenuItem>
+                <MenuItem class="javax.swing.JMenuItem" name="fourteenMenuItem">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="14x14 Onyx board"/>
+                  </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="fourteenMenuItemActionPerformed"/>
+                  </Events>
+                </MenuItem>
+              </SubComponents>
+            </Menu>
           </SubComponents>
         </Menu>
       </SubComponents>

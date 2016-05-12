@@ -38,7 +38,6 @@ import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxDiamond;
 import com.jellyfish.jfgonyx.vars.GraphicsVars;
 import com.jellyfish.jfgonyx.constants.OnyxBoardPositionOutlineConst;
-import com.jellyfish.jfgonyx.onyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
 import java.awt.BasicStroke;
 import java.awt.Graphics2D;
@@ -273,7 +272,7 @@ public class OnyxBoardGHelper {
         
         int x = 4;
         int y = GraphicsVars.getInstance().BOARD_WIDTH - GraphicsVars.getInstance().SQUARE_WIDTH - 12;
-        for (int i = 1; i <= OnyxConst.BOARD_SIDE_POS_COUNT; ++i) {
+        for (int i = 1; i <= GraphicsVars.getInstance().BOARD_SIDE_POS_COUNT; ++i) {
             value = String.valueOf(i);
             g.drawString(value, value.length() > 1 ? x : x * 2, y);
             y -= GraphicsVars.getInstance().SQUARE_WIDTH;
@@ -281,7 +280,7 @@ public class OnyxBoardGHelper {
         
         x = GraphicsVars.getInstance().BOARD_WIDTH - 20;
         y = GraphicsVars.getInstance().BOARD_WIDTH - GraphicsVars.getInstance().SQUARE_WIDTH - 4;
-        for (int i = 1; i <= OnyxConst.BOARD_SIDE_POS_COUNT; ++i) {
+        for (int i = 1; i <= GraphicsVars.getInstance().BOARD_SIDE_POS_COUNT; ++i) {
             value = String.valueOf(i);
             g.drawString(value, value.length() > 1 ? x : x + 4, y);
             y -= GraphicsVars.getInstance().SQUARE_WIDTH;
@@ -289,7 +288,7 @@ public class OnyxBoardGHelper {
         
         x = GraphicsVars.getInstance().SQUARE_WIDTH - 8;
         y = 17;
-        for (int i = 0; i < OnyxBoardPositionOutlineConst.CHAR_VALUES.length; ++i) {
+        for (int i = 0; i <= GraphicsVars.getInstance().BOARD_SIDE_SQUARE_COUNT; ++i) {
             value = OnyxBoardPositionOutlineConst.CHAR_VALUES[i];
             g.drawString(value, x, y);
             x += GraphicsVars.getInstance().SQUARE_WIDTH;
@@ -297,11 +296,11 @@ public class OnyxBoardGHelper {
         
         x = GraphicsVars.getInstance().SQUARE_WIDTH + 8;
         y = GraphicsVars.getInstance().BOARD_WIDTH - 7;
-        for (int i = 0; i < OnyxBoardPositionOutlineConst.CHAR_VALUES.length; ++i) {
+        for (int i = 0; i <= GraphicsVars.getInstance().BOARD_SIDE_SQUARE_COUNT; ++i) {
             value = OnyxBoardPositionOutlineConst.CHAR_VALUES[i];
             g.drawString(value, x, y);
             x += GraphicsVars.getInstance().SQUARE_WIDTH;
-        }
+        }        
     }
     
 }

@@ -31,8 +31,8 @@
  */
 package com.jellyfish.jfgonyx.onyx.entities.collections;
 
-import com.jellyfish.jfgonyx.onyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxDiamond;
+import com.jellyfish.jfgonyx.vars.GraphicsVars;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -50,8 +50,8 @@ public class OnyxDiamondCollection {
         boolean mod = false;
         int k = 0;
         
-        for (int i = 0; i < OnyxConst.BOARD_SIDE_SQUARE_COUNT; ++i) {
-            for (int j = 0; j < OnyxConst.BOARD_SIDE_SQUARE_COUNT; j++) {
+        for (int i = 0; i < GraphicsVars.getInstance().BOARD_SIDE_SQUARE_COUNT; ++i) {
+            for (int j = 0; j < GraphicsVars.getInstance().BOARD_SIDE_SQUARE_COUNT; j++) {
                 if ((j % 2 == 0) == mod) {
                     diamonds.put(new Point(j, i), new OnyxDiamond(j, i, true));
                 } else {

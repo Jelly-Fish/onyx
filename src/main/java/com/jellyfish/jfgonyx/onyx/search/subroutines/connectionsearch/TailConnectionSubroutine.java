@@ -40,6 +40,7 @@ import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import com.jellyfish.jfgonyx.onyx.search.searchutils.MoveUtils;
 import com.jellyfish.jfgonyx.onyx.abstractions.AbstractSubroutine;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
+import com.jellyfish.jfgonyx.vars.GraphicsVars;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -143,7 +144,7 @@ public class TailConnectionSubroutine extends AbstractSubroutine {
         final boolean lowBorderTendency = OnyxGame.getInstance().getLowBorderTendency(
             OnyxConst.COLOR.getOposite(this.startPos.getPiece().color.bool));
         
-        final float boardLength = ((float) OnyxConst.BOARD_SIDE_SQUARE_COUNT) + 1f;
+        final float boardLength = ((float) GraphicsVars.getInstance().BOARD_SIDE_SQUARE_COUNT) + 1f;
         float score = 0f;
         OnyxPos tmp = null, pos = null;
 

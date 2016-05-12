@@ -35,6 +35,7 @@ import com.jellyfish.jfgonyx.onyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
+import com.jellyfish.jfgonyx.vars.GraphicsVars;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -49,19 +50,20 @@ public class OnyxPositionUtils {
         
         final List<OnyxPos> borders = new ArrayList<>();
         if (color.bool) {
-            for (int i = 1; i <= OnyxConst.BOARD_SIDE_POS_COUNT; ++i) {
+            for (int i = 1; i <= GraphicsVars.getInstance().BOARD_SIDE_POS_COUNT; ++i) {
                 borders.add(c.getPosition(
                     String.format(OnyxPosCollection.KEY_FORMAT, 1f, (float) i)));
                 borders.add(c.getPosition(
                     String.format(OnyxPosCollection.KEY_FORMAT, 
-                        OnyxConst.BOARD_SIDE_POS_COUNT, (float) i)));
+                        GraphicsVars.getInstance().BOARD_SIDE_POS_COUNT, (float) i)));
             }
         } else if (!color.bool) {
-            for (int i = 1; i <= OnyxConst.BOARD_SIDE_POS_COUNT; ++i) {
+            for (int i = 1; i <= GraphicsVars.getInstance().BOARD_SIDE_POS_COUNT; ++i) {
                 borders.add(c.getPosition(
                     String.format(OnyxPosCollection.KEY_FORMAT, (float) i, 1f)));
                 borders.add(c.getPosition(
-                    String.format(OnyxPosCollection.KEY_FORMAT, (float) i, OnyxConst.BOARD_SIDE_POS_COUNT)));
+                    String.format(OnyxPosCollection.KEY_FORMAT, 
+                        (float) i, GraphicsVars.getInstance().BOARD_SIDE_POS_COUNT)));
             }
         }
         
@@ -74,9 +76,9 @@ public class OnyxPositionUtils {
         float j = .5f;
         String k = StringUtils.EMPTY;
         
-        while (j < OnyxConst.BOARD_SIDE_POS_COUNT) {
+        while (j < GraphicsVars.getInstance().BOARD_SIDE_POS_COUNT) {
             
-            for (float i = .5f; i < OnyxConst.BOARD_SIDE_POS_COUNT; i += .5f) {
+            for (float i = .5f; i < GraphicsVars.getInstance().BOARD_SIDE_POS_COUNT; i += .5f) {
                 k = String.format(OnyxPosCollection.KEY_FORMAT, i, j);
                 if ((c.containsPosition(k) && c.getPosition(k).isOccupied() && 
                         c.getPosition(k).getPiece().color.bit == color.bit)) {
@@ -98,7 +100,7 @@ public class OnyxPositionUtils {
         
         if (color.bool) {
             
-            for (i = 0f; i <= OnyxConst.BOARD_SIDE_POS_COUNT; ++i) {
+            for (i = 0f; i <= GraphicsVars.getInstance().BOARD_SIDE_POS_COUNT; ++i) {
                 k = String.format(OnyxPosCollection.KEY_FORMAT, i, j);
                 if ((c.containsPosition(k) && c.getPosition(k).isOccupied() && 
                         c.getPosition(k).getPiece().color.bit == color.bit)) {
@@ -106,8 +108,8 @@ public class OnyxPositionUtils {
                 }
             }
             
-            j = OnyxConst.BOARD_SIDE_POS_COUNT;
-            for (i = 0f; i <= OnyxConst.BOARD_SIDE_POS_COUNT; ++i) {
+            j = GraphicsVars.getInstance().BOARD_SIDE_POS_COUNT;
+            for (i = 0f; i <= GraphicsVars.getInstance().BOARD_SIDE_POS_COUNT; ++i) {
                 k = String.format(OnyxPosCollection.KEY_FORMAT, i, j);
                 if ((c.containsPosition(k) && c.getPosition(k).isOccupied() && 
                         c.getPosition(k).getPiece().color.bit == color.bit)) {
@@ -117,7 +119,7 @@ public class OnyxPositionUtils {
             
         } else {
             
-            for (j = 0f; j <= OnyxConst.BOARD_SIDE_POS_COUNT; ++j) {
+            for (j = 0f; j <= GraphicsVars.getInstance().BOARD_SIDE_POS_COUNT; ++j) {
                 k = String.format(OnyxPosCollection.KEY_FORMAT, i, j);
                 if ((c.containsPosition(k) && c.getPosition(k).isOccupied() && 
                         c.getPosition(k).getPiece().color.bit == color.bit)) {
@@ -125,8 +127,8 @@ public class OnyxPositionUtils {
                 }
             }
             
-            i = OnyxConst.BOARD_SIDE_POS_COUNT;
-            for (j = 0f; j <= OnyxConst.BOARD_SIDE_POS_COUNT; ++j) {
+            i = GraphicsVars.getInstance().BOARD_SIDE_POS_COUNT;
+            for (j = 0f; j <= GraphicsVars.getInstance().BOARD_SIDE_POS_COUNT; ++j) {
                 k = String.format(OnyxPosCollection.KEY_FORMAT, i, j);
                 if ((c.containsPosition(k) && c.getPosition(k).isOccupied() && 
                         c.getPosition(k).getPiece().color.bit == color.bit)) {
@@ -146,11 +148,11 @@ public class OnyxPositionUtils {
         for (OnyxPos p : pos) {
             if (p.isOccupied() && p.getPiece().color.bit == color.bit) {
                 if (color.bool) {
-                    if (p.x < 1.1f || p.x > ((float) (OnyxConst.BOARD_SIDE_SQUARE_COUNT + 1)) - .1F) {
+                    if (p.x < 1.1f || p.x > ((float) (GraphicsVars.getInstance().BOARD_SIDE_SQUARE_COUNT + 1)) - .1F) {
                         positions.add(p);
                     }
                 } else if (!color.bool) {
-                    if (p.y < 1.1f || p.y > ((float) (OnyxConst.BOARD_SIDE_SQUARE_COUNT + 1)) - .1f) {
+                    if (p.y < 1.1f || p.y > ((float) (GraphicsVars.getInstance().BOARD_SIDE_SQUARE_COUNT + 1)) - .1f) {
                         positions.add(p);
                     }
                 }

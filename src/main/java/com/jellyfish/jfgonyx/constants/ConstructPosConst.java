@@ -39,9 +39,11 @@ public class ConstructPosConst {
     
     public static enum INTPOS {
         
-        ONE(1f, 0), TWO(2f, 1), THREE(3f, 2), FOUR(4f, 3), 
-        FIVE(5f, 4), SIX(6f, 5), SEVEN(7f, 6), EIGHT(8f, 7), 
-        NINE(9f, 8), TEN(10f, 9), ELEVEN(11f, 10), TWELVE(12f, 11); // ...
+        I(1f, 0), II(2f, 1), III(3f, 2), IV(4f, 3), 
+        V(5f, 4), VI(6f, 5), VII(7f, 6), VIII(8f, 7), 
+        IX(9f, 8), X(10f, 9), XI(11f, 10), XII(12f, 11),
+        XIII(13f, 12), XIV(14f, 13), XV(15f, 14), 
+        XVI(16f, 15), XVII(17f, 16), XVIII(18f, 17); // ...
         
         private final Float fValue;
         private final int index;
@@ -72,10 +74,13 @@ public class ConstructPosConst {
     
     public static enum CHARPOS {
         
-        a('a', 1f, 0), b('b', 2f, 1), c('c', 3f, 2), d('d', 4f,  3), 
-        e('e', 5f, 4), f('e', 6f, 5), g('g', 7f, 6),
-        h('h', 8f, 7), i('i', 9f, 8), j('j', 10f, 9), 
-        k('k', 11f, 10), l('l', 12f, 11); // ...
+        a('a', 1f, 0), b('b', 2f, 1), c('c', 3f, 2), 
+        d('d', 4f,  3), e('e', 5f, 4), f('e', 6f, 5), 
+        g('g', 7f, 6), h('h', 8f, 7), i('i', 9f, 8),
+        j('j', 10f, 9), k('k', 11f, 10), l('l', 12f, 11), 
+        m('m', 13f, 12), n('n', 14f, 13), o('o', 15f, 14),
+        p('p', 16f, 15), q('q', 17f, 16), r('r', 18f, 17); 
+        // ...
         
         private final char charValue;
         private final Float fValue;

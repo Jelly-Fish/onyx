@@ -28,7 +28,7 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
  *******************************************************************************/
 
-package com.jellyfish.jfgonyx.starter;
+package com.jellyfish.jfgonyx.main;
 
 import com.jellyfish.jfgonyx.onyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.helpers.HTMLDisplayHelper;
@@ -57,7 +57,7 @@ import javax.swing.UnsupportedLookAndFeelException;
  *
  * @author thw
  */
-public class Starter {
+public class Main {
     
     private static MainFrame mainFrame = null;
     private static final String NEW_GAME = ">> New Onyx Game started @ %s<br />>> You are playing %s...";
@@ -112,7 +112,7 @@ public class Starter {
         try {
             OnyxGame.getInstance().performMove(positions, board);
         } catch (OnyxGameSyncException | NoValidOnyxPositionsFoundException | InvalidOnyxPositionException ex) {
-            Logger.getLogger(Starter.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
         new Intmap(positions).print(0, OnyxGame.getInstance().dtStamp);
         board.notifyMoves(OnyxGame.getInstance().moves, HTMLDisplayHelper.GAINSBORO);
@@ -165,7 +165,7 @@ public class Starter {
             OnyxGame.getInstance().performMove(OnyxGame.getInstance().boardInterface.getPosCollection(), 
                     (OnyxBoard) OnyxGame.getInstance().boardInterface);
         } catch (OnyxGameSyncException | NoValidOnyxPositionsFoundException | InvalidOnyxPositionException ex) {
-            Logger.getLogger(Starter.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
         
         OnyxGame.getInstance().setGameEnd(false);

@@ -32,7 +32,6 @@
 package com.jellyfish.jfgonyx.onyx.search;
 
 import com.jellyfish.jfgonyx.onyx.constants.OnyxConst;
-import com.jellyfish.jfgonyx.onyx.OnyxGame;
 import com.jellyfish.jfgonyx.onyx.abstractions.AbstractOnyxSearch;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
@@ -42,12 +41,12 @@ import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException;
 import com.jellyfish.jfgonyx.onyx.interfaces.search.OnyxConnectionSearchable;
 import com.jellyfish.jfgonyx.onyx.search.searchutils.MoveUtils;
 import com.jellyfish.jfgonyx.onyx.search.searchutils.OnyxPositionUtils;
-import com.jellyfish.jfgonyx.onyx.search.searchutils.SearchUtils;
 import com.jellyfish.jfgonyx.onyx.search.subroutines.connectionsearch.SubTailConnectionSubroutine;
 import com.jellyfish.jfgonyx.onyx.search.subroutines.connectionsearch.TailConnectionSubroutine;
 import com.jellyfish.jfgonyx.onyx.search.subroutines.connectionsearch.WinConnectionSubroutine;
 import com.jellyfish.jfgonyx.onyx.search.subroutines.connectionsearch.WinConnectionLinkSubroutine;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
+import com.jellyfish.jfgonyx.vars.GraphicsVars;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -138,7 +137,8 @@ public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnecti
                 OnyxPositionUtils.getSubBordersByColor(c, color), color, this.checkedKeys);
         pos.addAll(OnyxPositionUtils.getSubCounterBordersByColor(c, color));
         
-        float minX = OnyxConst.BOARD_SIDE_POS_COUNT, minY = OnyxConst.BOARD_SIDE_POS_COUNT,
+        float minX = GraphicsVars.getInstance().BOARD_SIDE_POS_COUNT, 
+                minY = GraphicsVars.getInstance().BOARD_SIDE_POS_COUNT,
             maxX = 0f, maxY = 0f;
         
         for (OnyxPos p : pos) {
