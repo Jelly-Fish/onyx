@@ -74,7 +74,6 @@ public class OnyxBoard extends javax.swing.JPanel implements OnyxBoardI {
         this.diamonds = diamonds;
         this.positions = positions;
         this.setSize(GraphicsVars.getInstance().BOARD_WIDTH, GraphicsVars.getInstance().BOARD_WIDTH);
-        System.out.println("board w = " + GraphicsVars.getInstance().BOARD_WIDTH);
         this.borderRectangles = initBorderRectangles();
         this.setOpaque(false);
         this.setDoubleBuffered(true);
@@ -98,7 +97,8 @@ public class OnyxBoard extends javax.swing.JPanel implements OnyxBoardI {
             new Rectangle(0, 
                 GraphicsVars.getInstance().BOARD_WIDTH - (GraphicsVars.getInstance().SQUARE_WIDTH - 10), 
                 GraphicsVars.getInstance().BOARD_WIDTH, (GraphicsVars.getInstance().SQUARE_WIDTH - 10)),
-            new Rectangle(GraphicsVars.getInstance().BOARD_WIDTH - (GraphicsVars.getInstance().SQUARE_WIDTH - 10), 0,
+            new Rectangle(GraphicsVars.getInstance().BOARD_WIDTH - 
+                (GraphicsVars.getInstance().SQUARE_WIDTH - 10), 0,
                 (GraphicsVars.getInstance().SQUARE_WIDTH - 10), GraphicsVars.getInstance().BOARD_WIDTH),
             new Rectangle(0, 0, GraphicsVars.getInstance().BOARD_WIDTH, 
                 (GraphicsVars.getInstance().SQUARE_WIDTH - 10))
@@ -127,6 +127,8 @@ public class OnyxBoard extends javax.swing.JPanel implements OnyxBoardI {
     @Override
     public void initStartLayout() {
         
+        final String separator = "-";
+        final String one = "1,0";
         final DecimalFormat df = new DecimalFormat("#.0");
         
         for (OnyxPos p : this.positions.getPositions().values()) p.setPiece(null);
@@ -135,37 +137,37 @@ public class OnyxBoard extends javax.swing.JPanel implements OnyxBoardI {
         final String max = df.format(GraphicsVars.getInstance().BOARD_SIDE_POS_COUNT);
         final String minPlus = df.format((GraphicsVars.getInstance().BOARD_SIDE_POS_COUNT / 2f) + 1f);
         
-        this.positions.getPosition("1,0-" + min).addPiece(new OnyxPiece(OnyxConst.COLOR.BLACK));      
-        OnyxGame.getInstance().appendMove(new OnyxMove(this.positions.getPosition("1,0-" + min), 
-            this.positions.getPosition("1,0-" + min).getPiece()));
+        this.positions.getPosition(one + separator + min).addPiece(new OnyxPiece(OnyxConst.COLOR.BLACK));      
+        OnyxGame.getInstance().appendMove(new OnyxMove(this.positions.getPosition(one + separator + min), 
+            this.positions.getPosition(one + separator + min).getPiece()));
         
-        this.positions.getPosition(min + "-1,0").addPiece(new OnyxPiece(OnyxConst.COLOR.WHITE));
-        OnyxGame.getInstance().appendMove(new OnyxMove(this.positions.getPosition(min + "-1,0"), 
-                this.positions.getPosition(min + "-1,0").getPiece()));
+        this.positions.getPosition(min + separator + one).addPiece(new OnyxPiece(OnyxConst.COLOR.WHITE));
+        OnyxGame.getInstance().appendMove(new OnyxMove(this.positions.getPosition(min + separator + one), 
+                this.positions.getPosition(min + separator + one).getPiece()));
         
-        this.positions.getPosition(max + "-" + minPlus).addPiece(new OnyxPiece(OnyxConst.COLOR.BLACK));
-        OnyxGame.getInstance().appendMove(new OnyxMove(this.positions.getPosition(max + "-" + minPlus), 
-                this.positions.getPosition(max + "-" + minPlus).getPiece()));
+        this.positions.getPosition(max + separator + minPlus).addPiece(new OnyxPiece(OnyxConst.COLOR.BLACK));
+        OnyxGame.getInstance().appendMove(new OnyxMove(this.positions.getPosition(max + separator + minPlus), 
+                this.positions.getPosition(max + separator + minPlus).getPiece()));
         
-        this.positions.getPosition(minPlus + "-" + max).addPiece(new OnyxPiece(OnyxConst.COLOR.WHITE));
-        OnyxGame.getInstance().appendMove(new OnyxMove(this.positions.getPosition(minPlus + "-" + max), 
-                this.positions.getPosition(minPlus + "-" + max).getPiece()));
+        this.positions.getPosition(minPlus + separator + max).addPiece(new OnyxPiece(OnyxConst.COLOR.WHITE));
+        OnyxGame.getInstance().appendMove(new OnyxMove(this.positions.getPosition(minPlus + separator + max), 
+                this.positions.getPosition(minPlus + separator + max).getPiece()));
         
-        this.positions.getPosition("1,0-" + minPlus).addPiece(new OnyxPiece(OnyxConst.COLOR.BLACK));
-        OnyxGame.getInstance().appendMove(new OnyxMove(this.positions.getPosition("1,0-" + minPlus), 
-                this.positions.getPosition("1,0-" + minPlus).getPiece()));
+        this.positions.getPosition(one + separator + minPlus).addPiece(new OnyxPiece(OnyxConst.COLOR.BLACK));
+        OnyxGame.getInstance().appendMove(new OnyxMove(this.positions.getPosition(one + separator + minPlus), 
+                this.positions.getPosition(one + separator + minPlus).getPiece()));
         
-        this.positions.getPosition(minPlus + "-1,0").addPiece(new OnyxPiece(OnyxConst.COLOR.WHITE));
-        OnyxGame.getInstance().appendMove(new OnyxMove(this.positions.getPosition(minPlus + "-1,0"), 
-                this.positions.getPosition(minPlus + "-1,0").getPiece()));
+        this.positions.getPosition(minPlus + separator + one).addPiece(new OnyxPiece(OnyxConst.COLOR.WHITE));
+        OnyxGame.getInstance().appendMove(new OnyxMove(this.positions.getPosition(minPlus + separator + one), 
+                this.positions.getPosition(minPlus + separator + one).getPiece()));
         
-        this.positions.getPosition(max + "-" + min).addPiece(new OnyxPiece(OnyxConst.COLOR.BLACK));
-        OnyxGame.getInstance().appendMove(new OnyxMove(this.positions.getPosition(max + "-" + min), 
-                this.positions.getPosition(max + "-" + min).getPiece()));
+        this.positions.getPosition(max + separator + min).addPiece(new OnyxPiece(OnyxConst.COLOR.BLACK));
+        OnyxGame.getInstance().appendMove(new OnyxMove(this.positions.getPosition(max + separator + min), 
+                this.positions.getPosition(max + separator + min).getPiece()));
         
-        this.positions.getPosition(min + "-" + max).addPiece(new OnyxPiece(OnyxConst.COLOR.WHITE));
-        OnyxGame.getInstance().appendMove(new OnyxMove(this.positions.getPosition(min + "-" + max), 
-                this.positions.getPosition(min + "-" + max).getPiece()));
+        this.positions.getPosition(min + separator + max).addPiece(new OnyxPiece(OnyxConst.COLOR.WHITE));
+        OnyxGame.getInstance().appendMove(new OnyxMove(this.positions.getPosition(min + separator + max), 
+                this.positions.getPosition(min + separator + max).getPiece()));
     }
     
     @Override

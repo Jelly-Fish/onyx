@@ -82,7 +82,7 @@ public class Main {
         start(OnyxConst.COLOR.BLACK);
     }
     
-    private static void start(final OnyxConst.COLOR color) {
+    public static void start(final OnyxConst.COLOR color) {
         
         if (color.bool) {
             startBlack();
@@ -91,7 +91,7 @@ public class Main {
         }
     }
     
-    private static void startWhite() {
+    public static void startWhite() {
         
         final OnyxPanel panel = new OnyxPanel();
         final OnyxDiamondCollection diamonds = new OnyxDiamondCollection().build();
@@ -119,7 +119,7 @@ public class Main {
         OnyxGame.getInstance().initialized = true;
     }
     
-    private static void startBlack() {
+    public static void startBlack() {
         
         final OnyxPanel panel = new OnyxPanel();
         final OnyxDiamondCollection diamonds = new OnyxDiamondCollection().build();
@@ -142,9 +142,6 @@ public class Main {
         OnyxGame.getInstance().initialized = true;
     }
     
-    /**
-     * UI playing white - blacks move first then spawn a new virtual.
-     */
     public static void restartWhite() { 
         
         final OnyxBoardI board = OnyxGame.getInstance().boardInterface;

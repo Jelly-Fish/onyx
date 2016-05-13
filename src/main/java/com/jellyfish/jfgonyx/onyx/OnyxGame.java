@@ -34,7 +34,6 @@ package com.jellyfish.jfgonyx.onyx;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.search.searchutils.Intmap;
 import com.jellyfish.jfgonyx.constants.DTStampConst;
-import com.jellyfish.jfgonyx.vars.GraphicsVars;
 import com.jellyfish.jfgonyx.onyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.helpers.HTMLDisplayHelper;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPiece;

@@ -46,7 +46,6 @@ import java.awt.Dimension;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.LinkedList;
-import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JColorChooser;
 import javax.swing.text.DefaultCaret;
@@ -311,8 +310,8 @@ public class MainFrame extends javax.swing.JFrame implements OnyxObserver {
     }//GEN-LAST:event_formComponentResized
               
     private void restartGameMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_restartGameMenuItemActionPerformed
-        if (OnyxGame.getInstance().initialized) {
-            if (OnyxGame.getInstance().engineColor.bool) {
+       if (OnyxGame.getInstance().initialized) {
+            if (!OnyxGame.getInstance().engineColor.bool) {
                 Main.restartBlack();
             } else {
                 Main.restartWhite();
@@ -378,8 +377,9 @@ public class MainFrame extends javax.swing.JFrame implements OnyxObserver {
     }//GEN-LAST:event_changeBlackPieceColorMenuItemActionPerformed
 
     private void twelveMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_twelveMenuItemActionPerformed
+       
         /**
-         * FIXME : rebuild, repaint & restart - so far manually restart...
+         * FIXME : sestart UI with new game and new CFG.
          */
         GraphicsVars.getInstance().BOARD_SIDE_SQUARE_COUNT = 11;
         GraphicsVars.getInstance().EXTRA_SQUARES = 0;
@@ -387,9 +387,10 @@ public class MainFrame extends javax.swing.JFrame implements OnyxObserver {
     }//GEN-LAST:event_twelveMenuItemActionPerformed
 
     private void fourteenMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fourteenMenuItemActionPerformed
+        
         /**
-         * FIXME : rebuild, repaint & restart - so far manually restart...
-         */
+         * FIXME : sestart UI with new game and new CFG.
+         */        
         GraphicsVars.getInstance().BOARD_SIDE_SQUARE_COUNT = 13;
         GraphicsVars.getInstance().EXTRA_SQUARES = 2;
         GraphicsVars.getInstance().resetInstance();
@@ -489,14 +490,6 @@ public class MainFrame extends javax.swing.JFrame implements OnyxObserver {
                 javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
     }
     
-    public javax.swing.JSplitPane getMainSplitPane() {
-        return this.mainSplitPane;
-    }
-    
-    public javax.swing.JTextPane getDataTextPane() {
-        return this.dataTextPane;
-    }
-    
     @Override
     public final void notifyMove(final OnyxMove m, final String color) {
         
@@ -508,6 +501,14 @@ public class MainFrame extends javax.swing.JFrame implements OnyxObserver {
     
     public static final void print(final String data, final String color) {       
         MainFrameGHelper.appendRawData(data, htmlEditorKit, doc, color);
+    }
+        
+    public javax.swing.JSplitPane getMainSplitPane() {
+        return this.mainSplitPane;
+    }
+    
+    public javax.swing.JTextPane getDataTextPane() {
+        return this.dataTextPane;
     }
     
 }
