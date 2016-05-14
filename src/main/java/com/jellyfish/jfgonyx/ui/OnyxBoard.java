@@ -63,8 +63,8 @@ public class OnyxBoard extends javax.swing.JPanel implements OnyxBoardI {
     
     private final OnyxDiamondCollection diamonds;
     private final OnyxPosCollection positions;
-    private final KeyInput keyInput;
-    private final MouseInput mouseInput;
+    private KeyInput keyInput;
+    private MouseInput mouseInput;
     private final List<OnyxObserver> observers = new ArrayList<>();
     private final Rectangle[] borderRectangles;
     
@@ -87,6 +87,12 @@ public class OnyxBoard extends javax.swing.JPanel implements OnyxBoardI {
         this.addMouseMotionListener(mouseInput);
         this.setFocusable(true);
         this.focus();
+    }
+    
+    public void dispose() {
+        this.keyInput = null;
+        this.mouseInput = null;
+        this.observers.clear();
     }
     
     private Rectangle[] initBorderRectangles() {

@@ -42,7 +42,7 @@ public class OnyxBoardPositionOutlineConst {
     
     public final static Polygon[] OUTLINE_POLYGONS = new Polygon[4];
     static { 
-        buildOutlinePolygones();
+        OnyxBoardPositionOutlineConst.buildOutlinePolygones();
     }
     
     public final static Font POS_FONT = new Font("arial", Font.BOLD, 14);

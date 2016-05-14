@@ -31,7 +31,6 @@
  */
 package com.jellyfish.jfgonyx.io.events;
 
-import com.jellyfish.jfgonyx.vars.GraphicsVars;
 import com.jellyfish.jfgonyx.onyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.helpers.HTMLDisplayHelper;
 import com.jellyfish.jfgonyx.onyx.OnyxGame;
@@ -109,7 +108,7 @@ public class KeyMoveVirutalPiece implements OnyxExecutable {
     }
     
     private boolean validateMove(final OnyxBoard board, final OnyxVirtualPiece v) throws InvalidOnyxPositionException {
-
+        
         List<OnyxPos> posSet = null;
         final String k = v.getTmpOnyxPosition().getKey();
         final OnyxPos tmpPos = board.getPosCollection().getPosition(k);

@@ -48,6 +48,7 @@ import java.awt.event.MouseEvent;
 import java.util.LinkedList;
 import javax.swing.ImageIcon;
 import javax.swing.JColorChooser;
+import javax.swing.JOptionPane;
 import javax.swing.text.DefaultCaret;
 import javax.swing.text.Document;
 import javax.swing.text.html.HTMLEditorKit;
@@ -177,7 +178,7 @@ public class MainFrame extends javax.swing.JFrame implements OnyxObserver {
         gameMenu.add(restartGameMenuItem);
         gameMenu.add(gameSeparator1);
 
-        restartUIBlackMenuItem.setText("New game playing blacks");
+        restartUIBlackMenuItem.setText("New game playing blacks    ");
         restartUIBlackMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 restartUIBlackMenuItemActionPerformed(evt);
@@ -185,7 +186,7 @@ public class MainFrame extends javax.swing.JFrame implements OnyxObserver {
         });
         gameMenu.add(restartUIBlackMenuItem);
 
-        restartUIWhiteMenuItem.setText("New game playing whites");
+        restartUIWhiteMenuItem.setText("New game playing whites    ");
         restartUIWhiteMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 restartUIWhiteMenuItemActionPerformed(evt);
@@ -266,7 +267,7 @@ public class MainFrame extends javax.swing.JFrame implements OnyxObserver {
 
         changeBoardSizeMenu.setText("Change board size    ");
 
-        twelveMenuItem.setText("12x12 Onyx board");
+        twelveMenuItem.setText("12x12 Onyx board    ");
         twelveMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 twelveMenuItemActionPerformed(evt);
@@ -274,7 +275,7 @@ public class MainFrame extends javax.swing.JFrame implements OnyxObserver {
         });
         changeBoardSizeMenu.add(twelveMenuItem);
 
-        fourteenMenuItem.setText("14x14 Onyx board");
+        fourteenMenuItem.setText("14x14 Onyx board    ");
         fourteenMenuItem.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 fourteenMenuItemActionPerformed(evt);
@@ -381,7 +382,7 @@ public class MainFrame extends javax.swing.JFrame implements OnyxObserver {
         GraphicsVars.getInstance().BOARD_SIDE_SQUARE_COUNT = 11;
         GraphicsVars.getInstance().EXTRA_SQUARES = 0;
         GraphicsVars.getInstance().resetInstance();
-        
+
         if (!OnyxGame.getInstance().engineColor.bool) {
             Main.restartBlack(true);
         } else {
@@ -390,11 +391,11 @@ public class MainFrame extends javax.swing.JFrame implements OnyxObserver {
     }//GEN-LAST:event_twelveMenuItemActionPerformed
 
     private void fourteenMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fourteenMenuItemActionPerformed
-        
+                
         GraphicsVars.getInstance().BOARD_SIDE_SQUARE_COUNT = 13;
         GraphicsVars.getInstance().EXTRA_SQUARES = 2;
         GraphicsVars.getInstance().resetInstance();
-        
+
         if (!OnyxGame.getInstance().engineColor.bool) {
             Main.restartBlack(true);
         } else {
@@ -509,6 +510,7 @@ public class MainFrame extends javax.swing.JFrame implements OnyxObserver {
         MainFrameGHelper.appendRawData(data, htmlEditorKit, doc, color);
     }
         
+    // <editor-fold defaultstate="collapsed" desc="Getters & setters">          
     public javax.swing.JSplitPane getMainSplitPane() {
         return this.mainSplitPane;
     }
@@ -524,5 +526,10 @@ public class MainFrame extends javax.swing.JFrame implements OnyxObserver {
     public void setOnyxBoard(final OnyxBoard board) {
         this.board = board;
     }
+    
+    public LinkedList<String> getMoveLabels() {
+        return this.move_labels;
+    }
+    // </editor-fold>          
     
 }

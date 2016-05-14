@@ -148,6 +148,7 @@ public class Main {
         OnyxBoard board = null;
         
         if (rebuildBoard) {
+            ((OnyxBoard) OnyxGame.getInstance().boardInterface).dispose();
             final int x = ((OnyxBoard) OnyxGame.getInstance().boardInterface).getX();
             final int y = ((OnyxBoard) OnyxGame.getInstance().boardInterface).getY();
             final OnyxDiamondCollection diamonds = new OnyxDiamondCollection().build();
@@ -165,6 +166,7 @@ public class Main {
             OnyxBoardPositionOutlineConst.buildOutlinePolygones();
             board.setLocation(x, y);
             board.paintComponent(board.getGraphics());
+            board.focus();
         } else {
             board = (OnyxBoard) OnyxGame.getInstance().boardInterface;
             board.restart();
@@ -197,6 +199,7 @@ public class Main {
         OnyxBoard board = null;
         
         if (rebuildBoard) {
+            ((OnyxBoard) OnyxGame.getInstance().boardInterface).dispose();
             final int x = ((OnyxBoard) OnyxGame.getInstance().boardInterface).getX();
             final int y = ((OnyxBoard) OnyxGame.getInstance().boardInterface).getY();
             final OnyxDiamondCollection diamonds = new OnyxDiamondCollection().build();
@@ -215,6 +218,7 @@ public class Main {
             OnyxBoardPositionOutlineConst.buildOutlinePolygones();
             board.setLocation(x, y);
             board.paintComponent(board.getGraphics());
+            board.focus();
         } else {
             board = (OnyxBoard) OnyxGame.getInstance().boardInterface;
             board.restart();
