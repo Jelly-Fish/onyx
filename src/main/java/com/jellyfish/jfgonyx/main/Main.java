@@ -145,8 +145,31 @@ public class Main {
     
     public static void restartWhite(final boolean rebuildBoard) { 
         
-        final OnyxBoardI board = OnyxGame.getInstance().boardInterface;
-        board.restart();
+        OnyxBoard board = null;
+        
+        if (rebuildBoard) {
+            final int x = ((OnyxBoard) OnyxGame.getInstance().boardInterface).getX();
+            final int y = ((OnyxBoard) OnyxGame.getInstance().boardInterface).getY();
+            final OnyxDiamondCollection diamonds = new OnyxDiamondCollection().build();
+            OnyxBoardGHelper.buildPolygons(diamonds);
+            final OnyxPosCollection positions = new OnyxPosCollection();
+            positions.init(diamonds);
+            board = new OnyxBoard(diamonds, positions);
+            board.initInput();            
+            board.setObserver(mainFrame.getOnyxPanel());
+            mainFrame.setOnyxBoard(board);
+            mainFrame.getOnyxPanel().init();
+            mainFrame.getOnyxPanel().removeAll();
+            mainFrame.getOnyxPanel().add(board);
+            mainFrame.getOnyxPanel().repaint();
+            OnyxBoardPositionOutlineConst.buildOutlinePolygones();
+            board.setLocation(x, y);
+            board.paintComponent(board.getGraphics());
+        } else {
+            board = (OnyxBoard) OnyxGame.getInstance().boardInterface;
+            board.restart();
+        }
+        
         OnyxGame.newInstance().moves.clear();        
         OnyxGame.getInstance().init(board, OnyxConst.COLOR.BLACK);
         OnyxGame.getInstance().boardInterface.initStartLayout();
@@ -174,13 +197,14 @@ public class Main {
         OnyxBoard board = null;
         
         if (rebuildBoard) {
+            final int x = ((OnyxBoard) OnyxGame.getInstance().boardInterface).getX();
+            final int y = ((OnyxBoard) OnyxGame.getInstance().boardInterface).getY();
             final OnyxDiamondCollection diamonds = new OnyxDiamondCollection().build();
             OnyxBoardGHelper.buildPolygons(diamonds);
             final OnyxPosCollection positions = new OnyxPosCollection();
             positions.init(diamonds);
             positions.spawnVirtualPiece(OnyxConst.COLOR.VIRTUAL_BLACK);
             board = new OnyxBoard(diamonds, positions);
-            board.initStartLayout();
             board.initInput();            
             board.setObserver(mainFrame.getOnyxPanel());
             mainFrame.setOnyxBoard(board);
@@ -189,13 +213,13 @@ public class Main {
             mainFrame.getOnyxPanel().add(board);
             mainFrame.getOnyxPanel().repaint();
             OnyxBoardPositionOutlineConst.buildOutlinePolygones();
+            board.setLocation(x, y);
             board.paintComponent(board.getGraphics());
         } else {
             board = (OnyxBoard) OnyxGame.getInstance().boardInterface;
             board.restart();
         }
-        
-        
+                
         OnyxGame.newInstance().moves.clear();
         OnyxGame.getInstance().init(board, OnyxConst.COLOR.WHITE);
         OnyxGame.getInstance().boardInterface.initStartLayout();

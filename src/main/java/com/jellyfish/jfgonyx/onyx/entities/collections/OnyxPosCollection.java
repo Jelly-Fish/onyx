@@ -55,11 +55,14 @@ public class OnyxPosCollection {
     public static final int MTX_WH = 24;
     public static final String KEY_FORMAT = "%.1f-%.1f";
     private final HashMap<String, OnyxPos> positions = new HashMap<>();
-
+    private static final boolean PERFORM_PRINT = false; 
+    
     public void init(final OnyxDiamondCollection c) {
         this.initPositionCollection(c);
         OnyxConnectionHelper.buildPosConnections(this);
-        OnyxConnectionHelper.print(this);
+        if (PERFORM_PRINT) {
+            OnyxConnectionHelper.print(this);
+        }
     }
     
     public void clearPieces() {
