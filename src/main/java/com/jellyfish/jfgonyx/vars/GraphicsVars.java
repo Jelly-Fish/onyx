@@ -78,7 +78,8 @@ public class GraphicsVars implements java.io.Serializable {
     }
     
     public void resetInstance() {
-        BOARD_WIDTH = DEFAULT_BOARD_WIDTH + (EXTRA_SQUARES * SQUARE_WIDTH);
+        BOARD_WIDTH = DEFAULT_BOARD_WIDTH;
+        BOARD_WIDTH += EXTRA_SQUARES * SQUARE_WIDTH;
         BOARD_SIDE_POS_COUNT = ((float) BOARD_SIDE_SQUARE_COUNT) + 1f;
     }
     

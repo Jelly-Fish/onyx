@@ -30,6 +30,7 @@
 
 package com.jellyfish.jfgonyx.main;
 
+import com.jellyfish.jfgonyx.constants.OnyxBoardPositionOutlineConst;
 import com.jellyfish.jfgonyx.onyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.helpers.HTMLDisplayHelper;
 import com.jellyfish.jfgonyx.helpers.LogHelper;
@@ -142,7 +143,7 @@ public class Main {
         OnyxGame.getInstance().initialized = true;
     }
     
-    public static void restartWhite() { 
+    public static void restartWhite(final boolean rebuildBoard) { 
         
         final OnyxBoardI board = OnyxGame.getInstance().boardInterface;
         board.restart();
@@ -168,10 +169,33 @@ public class Main {
         OnyxGame.getInstance().setGameEnd(false);
     }
     
-    public static void restartBlack() { 
-               
-        final OnyxBoardI board = OnyxGame.getInstance().boardInterface;
-        board.restart();
+    public static void restartBlack(final boolean rebuildBoard) { 
+        
+        OnyxBoard board = null;
+        
+        if (rebuildBoard) {
+            final OnyxDiamondCollection diamonds = new OnyxDiamondCollection().build();
+            OnyxBoardGHelper.buildPolygons(diamonds);
+            final OnyxPosCollection positions = new OnyxPosCollection();
+            positions.init(diamonds);
+            positions.spawnVirtualPiece(OnyxConst.COLOR.VIRTUAL_BLACK);
+            board = new OnyxBoard(diamonds, positions);
+            board.initStartLayout();
+            board.initInput();            
+            board.setObserver(mainFrame.getOnyxPanel());
+            mainFrame.setOnyxBoard(board);
+            mainFrame.getOnyxPanel().init();
+            mainFrame.getOnyxPanel().removeAll();
+            mainFrame.getOnyxPanel().add(board);
+            mainFrame.getOnyxPanel().repaint();
+            OnyxBoardPositionOutlineConst.buildOutlinePolygones();
+            board.paintComponent(board.getGraphics());
+        } else {
+            board = (OnyxBoard) OnyxGame.getInstance().boardInterface;
+            board.restart();
+        }
+        
+        
         OnyxGame.newInstance().moves.clear();
         OnyxGame.getInstance().init(board, OnyxConst.COLOR.WHITE);
         OnyxGame.getInstance().boardInterface.initStartLayout();

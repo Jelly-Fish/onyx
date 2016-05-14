@@ -41,11 +41,21 @@ import java.awt.Polygon;
 public class OnyxBoardPositionOutlineConst {
     
     public final static Polygon[] OUTLINE_POLYGONS = new Polygon[4];
-    static {
+    static { 
+        buildOutlinePolygones();
+    }
+    
+    public final static Font POS_FONT = new Font("arial", Font.BOLD, 14);
+    public final static String[] CHAR_VALUES = new String[] { 
+        "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N",
+        "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"
+    };
+    
+    public static void buildOutlinePolygones() {
         
         OnyxBoardPositionOutlineConst.OUTLINE_POLYGONS[0] =
         new Polygon(
-            new int[] { 0, GraphicsVars.getInstance().getInstance().BOARD_WIDTH, 
+            new int[] { 0, GraphicsVars.getInstance().BOARD_WIDTH, 
                 GraphicsVars.getInstance().BOARD_WIDTH - 24, 24 },
             new int[] { 0, 0, 24, 24 }, 4
         );
@@ -73,10 +83,5 @@ public class OnyxBoardPositionOutlineConst {
         );
         
     }
-    public final static Font POS_FONT = new Font("arial", Font.BOLD, 14);
-    public final static String[] CHAR_VALUES = new String[] { 
-        "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N",
-        "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"
-    };
 
 }

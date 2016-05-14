@@ -60,7 +60,7 @@ import org.apache.commons.lang3.StringUtils;
 public class MainFrame extends javax.swing.JFrame implements OnyxObserver {
 
     private final OnyxPanel mainPanel;
-    private final OnyxBoard board;
+    private OnyxBoard board;
     private final int initialWidth;
     private final int initialHeight;
     private final LinkedList<String> move_labels = new LinkedList<>();
@@ -312,19 +312,19 @@ public class MainFrame extends javax.swing.JFrame implements OnyxObserver {
     private void restartGameMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_restartGameMenuItemActionPerformed
        if (OnyxGame.getInstance().initialized) {
             if (!OnyxGame.getInstance().engineColor.bool) {
-                Main.restartBlack();
+                Main.restartBlack(false);
             } else {
-                Main.restartWhite();
+                Main.restartWhite(false);
             }        
         }
     }//GEN-LAST:event_restartGameMenuItemActionPerformed
 
     private void restartUIBlackMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_restartUIBlackMenuItemActionPerformed
-        if (OnyxGame.getInstance().initialized) Main.restartBlack();       
+        if (OnyxGame.getInstance().initialized) Main.restartBlack(false);       
     }//GEN-LAST:event_restartUIBlackMenuItemActionPerformed
 
     private void restartUIWhiteMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_restartUIWhiteMenuItemActionPerformed
-        if (OnyxGame.getInstance().initialized) Main.restartWhite();
+        if (OnyxGame.getInstance().initialized) Main.restartWhite(false);
     }//GEN-LAST:event_restartUIWhiteMenuItemActionPerformed
 
     private void changeBackgroundColorMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changeBackgroundColorMenuItemActionPerformed
@@ -377,23 +377,29 @@ public class MainFrame extends javax.swing.JFrame implements OnyxObserver {
     }//GEN-LAST:event_changeBlackPieceColorMenuItemActionPerformed
 
     private void twelveMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_twelveMenuItemActionPerformed
-       
-        /**
-         * FIXME : sestart UI with new game and new CFG.
-         */
+        
         GraphicsVars.getInstance().BOARD_SIDE_SQUARE_COUNT = 11;
         GraphicsVars.getInstance().EXTRA_SQUARES = 0;
         GraphicsVars.getInstance().resetInstance();
+        
+        if (!OnyxGame.getInstance().engineColor.bool) {
+            Main.restartBlack(true);
+        } else {
+            Main.restartWhite(true);
+        }  
     }//GEN-LAST:event_twelveMenuItemActionPerformed
 
     private void fourteenMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_fourteenMenuItemActionPerformed
         
-        /**
-         * FIXME : sestart UI with new game and new CFG.
-         */        
         GraphicsVars.getInstance().BOARD_SIDE_SQUARE_COUNT = 13;
         GraphicsVars.getInstance().EXTRA_SQUARES = 2;
         GraphicsVars.getInstance().resetInstance();
+        
+        if (!OnyxGame.getInstance().engineColor.bool) {
+            Main.restartBlack(true);
+        } else {
+            Main.restartWhite(true);
+        }  
     }//GEN-LAST:event_fourteenMenuItemActionPerformed
     // </editor-fold>     
     
@@ -509,6 +515,14 @@ public class MainFrame extends javax.swing.JFrame implements OnyxObserver {
     
     public javax.swing.JTextPane getDataTextPane() {
         return this.dataTextPane;
+    }
+    
+    public OnyxPanel getOnyxPanel() {
+        return this.mainPanel;
+    }
+    
+    public void setOnyxBoard(final OnyxBoard board) {
+        this.board = board;
     }
     
 }
