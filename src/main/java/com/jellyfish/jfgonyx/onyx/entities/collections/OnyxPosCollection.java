@@ -100,7 +100,7 @@ public class OnyxPosCollection {
         return this.getPosition(k) != null;
     }
     
-    public boolean isValidMove(final OnyxPos pos, final OnyxBoard board, final OnyxConst.COLOR color) {
+    public boolean isValidMove(final OnyxPos pos, final OnyxBoard board) {
         final boolean isCenter = board.isDiamondCenter(pos.getKey());
         return ((!pos.isOccupied() && !isCenter)) || 
             (isCenter && board.isCenterPosPlayable(pos.getKey()));        

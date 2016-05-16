@@ -37,12 +37,16 @@ import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxTail;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
+import com.jellyfish.jfgonyx.vars.GraphicsVars;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author thw
- * @deprecated FIXME figure this out...
+ * @deprecated 
  */
 public class VirtualConnectionSubroutine extends AbstractSubroutine {
     
@@ -50,38 +54,129 @@ public class VirtualConnectionSubroutine extends AbstractSubroutine {
     protected final OnyxPosCollection c;
     protected final OnyxBoard board;
     protected final OnyxConst.COLOR color;
+    protected final int opColorBit;
+    protected final float max = GraphicsVars.getInstance().BOARD_SIDE_SQUARE_COUNT + 1f;
+    private final Set<String> checkedKeys = new HashSet();
+    private boolean startLowBorder = false;
+    private boolean linked = false;
     private final List<OnyxTail> tails = new ArrayList<>();
+    private OnyxTail tmpTail;
     
     public VirtualConnectionSubroutine(final OnyxPosCollection c, final OnyxConst.COLOR color, 
             final OnyxBoard board) {
         this.c = c;
         this.color = color;
+        this.opColorBit = OnyxConst.COLOR.getOposite(color.bool).bit;
         this.board = board;
         this.type = AbstractSubroutine.SUBROUTINE_TYPE.VCNX;
     }
     
     /**
-     * @param sPoss start positions - low borders of color to search for.
+     * @param sPoss start positions - low & high borders of color to search for.
      */
-    public void seekTails(final OnyxPos ... sPoss) {
-        
-        OnyxTail t = null;
-        OnyxPos n = null;
+    public void seekTail(final List<OnyxPos> sPoss) {
         
         for (OnyxPos p : sPoss) {
-            
-            t = new OnyxTail();
-            do {
-                n = next(n == null ? p : n);
-                if (n != null) t.append(n);
-            } while (n != null);
-            
-            this.tails.add(t);
+            this.startLowBorder = p.getPiece().color.bool ? p.isLowXBorder() : p.isLowYBorder();
+            this.linked = false;
+            this.tmpTail = new OnyxTail();
+            this.buildTail(p, p.getKey());
         }
+        
+        /**
+         * FIXME : finish coding & testing this subroutine.
+         * Generates as many OnyxTails as there is position in sPoss. Must be 
+         * trimed : shortest tail is selected.
+         */        
+        final OnyxTail t = this.trimTails();
+        System.out.println("////////////////////////////////////////////////////"); 
+        for (OnyxPos p : t.getPositions()) System.out.println(OnyxConst.POS_MAP.get(p.getKey()));
     }
     
-    private OnyxPos next(final OnyxPos p) {
-        return null;
+    private void buildTail(final OnyxPos p, final String kEx) {       
+        
+        this.checkedKeys.add(p.getKey());
+        OnyxPos tmp = null;
+        
+        /**
+         * If p is diamond center ??? F***ing good question ! FIXME in such case.
+         */
+        
+        for (String k : trimConnections(p, p.connections)) {
+            
+            if (this.linked) return;
+            
+            tmp = c.getPosition(k);
+            if (tmp == null) continue;
+            
+            if (this.isTailEnd(tmp)) {                
+                this.tails.add(this.tmpTail);
+                this.linked = true;
+                return;
+            }            
+            
+            if (!k.equals(kEx) && !tmp.isOccupied(this.opColorBit) &&
+                c.isValidMove(tmp, this.board) && !this.checkedKeys.contains(k)) {                 
+                this.tmpTail.append(tmp);
+                this.buildTail(tmp, tmp.getKey());
+            }
+        }
+        
+    }
+    
+    private String[] trimConnections(final OnyxPos p, final String[] cnxs) {
+        
+        int i = -1;
+        final String[] r = new String[] { 
+            StringUtils.EMPTY, StringUtils.EMPTY, StringUtils.EMPTY, StringUtils.EMPTY
+        };
+        OnyxPos tmp = null;
+        
+        for (String cnx : cnxs) {
+            
+            tmp = c.getPosition(cnx);
+            if (tmp == null) continue;
+            
+            if ((this.startLowBorder && (this.color.bool && (tmp.y == p.y && tmp.x > p.x))) ||
+                (this.startLowBorder && (!this.color.bool && (tmp.x == p.x && tmp.y > p.y)))) {
+                r[++i] = cnx;
+            }
+            
+            if ((!this.startLowBorder && (this.color.bool && (tmp.y == p.y && tmp.x < p.x))) ||
+                (!this.startLowBorder && (!this.color.bool && (tmp.x == p.x && tmp.y < p.y)))) {
+                r[++i] = cnx;
+            }
+        }
+        
+        for (String cnx : cnxs) {
+            
+            tmp = c.getPosition(cnx);
+            if (tmp == null) continue;
+            
+            if ((this.color.bool && tmp.x == p.x) || (!this.color.bool && tmp.y == p.y)) {
+                r[++i] = cnx;
+            }
+        }
+        
+        return r;
+    }
+    
+    private OnyxTail trimTails() {
+        
+        OnyxTail tmp = null;
+        for (OnyxTail t : this.tails) {
+            if (tmp == null) tmp = t;
+            if (t.getTailCount() < tmp.getTailCount()) tmp = t;
+        }
+        
+        return tmp;
+    }
+    
+    private boolean isTailEnd(final OnyxPos p) {
+        return (this.startLowBorder && this.color.bool && p.x > this.max - .1f) ||
+            (this.startLowBorder && !this.color.bool && p.y > this.max - .1f) ||
+            (!this.startLowBorder && this.color.bool && p.x < 1.1f) ||
+            (!this.startLowBorder && !this.color.bool && p.y < 1.1f);
     }
     
 }

@@ -38,14 +38,27 @@ import java.util.LinkedList;
  */
 public class OnyxTail {
     
+    private boolean connected = false;
     private final LinkedList<OnyxPos> positions = new LinkedList<>();
     
     public void append(final OnyxPos p) {
         this.positions.addLast(p);
     }
+        
+    public LinkedList<OnyxPos> getPositions() {
+        return positions;
+    }
     
     public int getTailCount() {
         return positions.size();
+    }
+    
+    public boolean isConnected() {
+        return connected;
+    }
+
+    public void setConnected(boolean connected) {
+        this.connected = connected;
     }
     
 }

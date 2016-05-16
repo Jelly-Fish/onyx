@@ -34,20 +34,34 @@ package com.jellyfish.jfgonyx.onyx.search;
 import com.jellyfish.jfgonyx.onyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.abstractions.AbstractOnyxSearch;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
+import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException;
 import com.jellyfish.jfgonyx.onyx.interfaces.search.OnyxConnectionSearchable;
+import com.jellyfish.jfgonyx.onyx.search.searchutils.OnyxPositionUtils;
+import com.jellyfish.jfgonyx.onyx.search.subroutines.connectionsearch.VirtualConnectionSubroutine;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
+import java.util.List;
 
 /**
  * @author thw
+ * @deprecated 
  */
 public class VirtualConnetionSearch extends AbstractOnyxSearch implements OnyxConnectionSearchable {
 
     @Override
     public OnyxMove search(final OnyxPosCollection c, final OnyxBoard board, 
             final OnyxConst.COLOR color) throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
+        
+        final List<OnyxPos> pos = OnyxPositionUtils.trimAllExternalBordersByColor(
+                OnyxPositionUtils.getBordersByColor(c, color), color);
+        
+        /**
+         * FIXME : finish coding & testing subroutine.
+         */
+        new VirtualConnectionSubroutine(c, color, board).seekTail(pos);
+        
         return null;
     }
 

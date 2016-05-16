@@ -123,6 +123,9 @@ public class MainFrame extends javax.swing.JFrame implements OnyxObserver {
         changeBoardSizeMenu = new javax.swing.JMenu();
         twelveMenuItem = new javax.swing.JMenuItem();
         fourteenMenuItem = new javax.swing.JMenuItem();
+        sixteenMenuItem = new javax.swing.JMenuItem();
+        eighteenMenuItem = new javax.swing.JMenuItem();
+        twentyMenuItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setName("mainFrame"); // NOI18N
@@ -283,6 +286,30 @@ public class MainFrame extends javax.swing.JFrame implements OnyxObserver {
         });
         changeBoardSizeMenu.add(fourteenMenuItem);
 
+        sixteenMenuItem.setText("16x16 Onyx board");
+        sixteenMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sixteenMenuItemActionPerformed(evt);
+            }
+        });
+        changeBoardSizeMenu.add(sixteenMenuItem);
+
+        eighteenMenuItem.setText("18x18 Onyx board");
+        eighteenMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                eighteenMenuItemActionPerformed(evt);
+            }
+        });
+        changeBoardSizeMenu.add(eighteenMenuItem);
+
+        twentyMenuItem.setText("20x20 Onyx board");
+        twentyMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                twentyMenuItemActionPerformed(evt);
+            }
+        });
+        changeBoardSizeMenu.add(twentyMenuItem);
+
         settingsMenu.add(changeBoardSizeMenu);
 
         menuBar.add(settingsMenu);
@@ -402,6 +429,45 @@ public class MainFrame extends javax.swing.JFrame implements OnyxObserver {
             Main.restartWhite(true);
         }  
     }//GEN-LAST:event_fourteenMenuItemActionPerformed
+
+    private void sixteenMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sixteenMenuItemActionPerformed
+        
+        GraphicsVars.getInstance().BOARD_SIDE_SQUARE_COUNT = 15;
+        GraphicsVars.getInstance().EXTRA_SQUARES = 4;
+        GraphicsVars.getInstance().resetInstance();
+
+        if (!OnyxGame.getInstance().engineColor.bool) {
+            Main.restartBlack(true);
+        } else {
+            Main.restartWhite(true);
+        }  
+    }//GEN-LAST:event_sixteenMenuItemActionPerformed
+
+    private void eighteenMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_eighteenMenuItemActionPerformed
+        
+        GraphicsVars.getInstance().BOARD_SIDE_SQUARE_COUNT = 17;
+        GraphicsVars.getInstance().EXTRA_SQUARES = 6;
+        GraphicsVars.getInstance().resetInstance();
+
+        if (!OnyxGame.getInstance().engineColor.bool) {
+            Main.restartBlack(true);
+        } else {
+            Main.restartWhite(true);
+        }
+    }//GEN-LAST:event_eighteenMenuItemActionPerformed
+
+    private void twentyMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_twentyMenuItemActionPerformed
+        
+        GraphicsVars.getInstance().BOARD_SIDE_SQUARE_COUNT = 19;
+        GraphicsVars.getInstance().EXTRA_SQUARES = 8;
+        GraphicsVars.getInstance().resetInstance();
+
+        if (!OnyxGame.getInstance().engineColor.bool) {
+            Main.restartBlack(true);
+        } else {
+            Main.restartWhite(true);
+        }
+    }//GEN-LAST:event_twentyMenuItemActionPerformed
     // </editor-fold>     
     
     // <editor-fold defaultstate="collapsed" desc="Main frame vars">          
@@ -421,6 +487,7 @@ public class MainFrame extends javax.swing.JFrame implements OnyxObserver {
     private javax.swing.JMenu colorThemesMenu;
     private javax.swing.JTextPane dataTextPane;
     private javax.swing.JMenu editMenu;
+    private javax.swing.JMenuItem eighteenMenuItem;
     private javax.swing.JMenu fileMenu;
     private javax.swing.JMenuItem fourteenMenuItem;
     private javax.swing.JMenu gameMenu;
@@ -433,8 +500,10 @@ public class MainFrame extends javax.swing.JFrame implements OnyxObserver {
     private javax.swing.JMenuItem restartUIWhiteMenuItem;
     private javax.swing.JMenu settingsMenu;
     private javax.swing.JPopupMenu.Separator settingsSeparator1;
+    private javax.swing.JMenuItem sixteenMenuItem;
     private javax.swing.JScrollPane textScrollPane;
     private javax.swing.JMenuItem twelveMenuItem;
+    private javax.swing.JMenuItem twentyMenuItem;
     // End of variables declaration//GEN-END:variables
     // </editor-fold>   
     

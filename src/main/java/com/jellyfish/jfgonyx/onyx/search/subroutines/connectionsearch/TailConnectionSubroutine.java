@@ -125,7 +125,7 @@ public class TailConnectionSubroutine extends AbstractSubroutine {
                 
                 tmp = c.getPosition(k);
                 
-                if (!tmp.isOccupied() && c.isValidMove(tmp, this.board, this.color)) {
+                if (!tmp.isOccupied() && c.isValidMove(tmp, this.board)) {
                     this.keyCandidates.add(k);
                 }
                 
