@@ -107,9 +107,9 @@ class Onyx {
             /**
              * FIXME : finish coding & testing this subroutine call - so far,
              * decommented for testing.
-             * final OnyxMove vCNX = SEARCH.get(STYPE.VIRTUALCNX).search(c, board, color);
+             * 
              */            
-             
+            final OnyxMove vCNX = SEARCH.get(STYPE.VIRTUALCNX).search(c, board, color);
             // Assert game ended :
             Onyx.gameEnd = win || lose;
                         

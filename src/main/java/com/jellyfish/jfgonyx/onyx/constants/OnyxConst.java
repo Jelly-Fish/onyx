@@ -67,14 +67,17 @@ public class OnyxConst {
                 if (strX.substring(strX.indexOf(DOT) + 1, strX.length()).equals(POSITIVE_DECIMAL)) {
                     pos += OnyxBoardPositionOutlineConst.CHAR_VALUES[(int) ((fX - .5f) - 1f)] + SPLIT;
                     pos += OnyxBoardPositionOutlineConst.CHAR_VALUES[(int) ((fX + .5f) - 1f)] + SPLIT;
-                    pos += String.valueOf((int) ((fX - .5f) - 1f)) + SPLIT;
-                    pos += String.valueOf((int) ((fX + .5f) - 1f));
+                    pos += String.valueOf(Math.abs((int) ((fY - .5f) - 
+                            (GraphicsVars.getInstance().BOARD_SIDE_SQUARE_COUNT + 1f))) + 1) + SPLIT;
+                    pos += String.valueOf(Math.abs((int) ((fY + .5f) - 
+                            (GraphicsVars.getInstance().BOARD_SIDE_SQUARE_COUNT + 1f))) + 1);                    
                 } else {
                     pos += OnyxBoardPositionOutlineConst.CHAR_VALUES[(int) (fX - 1f)] + SPLIT;
-                    pos += String.valueOf((int) fY);
+                    pos += String.valueOf(Math.abs((int) (fY - 
+                        ((GraphicsVars.getInstance().BOARD_SIDE_SQUARE_COUNT + 1f) + 1f))));
                 }    
             } catch (final Exception ex) {
-                pos = ">> [!] POS_MAP convertion failed for " + key;
+                pos = ">> [!] POS_MAP convertion failed for " + key + "\n>> " + ex.getMessage();
             }
             
             return pos;

@@ -105,7 +105,6 @@ public class VirtualConnectionSubroutine extends AbstractSubroutine {
         for (String k : trimConnections(p, p.connections)) {
             
             if (this.linked) return;
-            
             tmp = c.getPosition(k);
             if (tmp == null) continue;
             
@@ -131,6 +130,8 @@ public class VirtualConnectionSubroutine extends AbstractSubroutine {
             StringUtils.EMPTY, StringUtils.EMPTY, StringUtils.EMPTY, StringUtils.EMPTY
         };
         OnyxPos tmp = null;
+        
+        if (this.linked) return r;
         
         for (String cnx : cnxs) {
             
@@ -165,8 +166,7 @@ public class VirtualConnectionSubroutine extends AbstractSubroutine {
         
         OnyxTail tmp = null;
         for (OnyxTail t : this.tails) {
-            if (tmp == null) tmp = t;
-            if (t.getTailCount() < tmp.getTailCount()) tmp = t;
+            if (tmp == null || t.getTailCount() < tmp.getTailCount()) tmp = t;
         }
         
         return tmp;
