@@ -106,6 +106,12 @@ public class OnyxPosCollection {
             (isCenter && board.isCenterPosPlayable(pos.getKey()));        
     }
     
+    public boolean isValidVirtualMove(final OnyxPos pos, final OnyxBoard board, final int opColorBit) {
+        final boolean isCenter = board.isDiamondCenter(pos.getKey());
+        return ((!pos.isOccupied(opColorBit) && !isCenter)) || 
+            (isCenter && board.isCenterPosPlayable(pos.getKey()));        
+    }
+    
     public HashMap<String, OnyxPos> getPositions() {
         return positions;
     }

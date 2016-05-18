@@ -44,6 +44,18 @@ public class OnyxTail {
     public void append(final OnyxPos p) {
         this.positions.addLast(p);
     }
+    
+    public void remove(final String posK) {
+        
+        int i = -1;
+        for (OnyxPos p : this.positions) {
+            if (p.getKey().equals(posK)) {
+                i = this.positions.indexOf(p);
+            }
+        }
+        
+        if (i > -1) this.positions.remove(i);
+    }
         
     public LinkedList<OnyxPos> getPositions() {
         return positions;

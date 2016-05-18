@@ -96,31 +96,32 @@ public class VirtualConnectionSubroutine extends AbstractSubroutine {
     private void buildTail(final OnyxPos p, final String kEx) {       
         
         this.checkedKeys.add(p.getKey());
+        final String[] cnxs = trimConnections(p, p.connections);
         OnyxPos tmp = null;
         
         /**
          * If p is diamond center ??? F***ing good question ! FIXME in such case.
          */
         
-        for (String k : trimConnections(p, p.connections)) {
+        for (int i = 0; i < cnxs.length; ++i) { //String k : cnxs) {
             
             if (this.linked) return;
-            tmp = c.getPosition(k);
+            tmp = c.getPosition(cnxs[i]);
             if (tmp == null) continue;
             
-            if (this.isTailEnd(tmp)) {                
+            if (this.isTailEnd(tmp)) {  
                 this.tails.add(this.tmpTail);
                 this.linked = true;
                 return;
             }            
             
-            if (!k.equals(kEx) && !tmp.isOccupied(this.opColorBit) &&
-                c.isValidMove(tmp, this.board) && !this.checkedKeys.contains(k)) {                 
+            if (!cnxs[i].equals(kEx) && !tmp.isOccupied(this.opColorBit) &&
+                c.isValidVirtualMove(tmp, this.board, this.opColorBit) && 
+                !this.checkedKeys.contains(cnxs[i])) {
                 this.tmpTail.append(tmp);
                 this.buildTail(tmp, tmp.getKey());
             }
-        }
-        
+        }        
     }
     
     private String[] trimConnections(final OnyxPos p, final String[] cnxs) {
