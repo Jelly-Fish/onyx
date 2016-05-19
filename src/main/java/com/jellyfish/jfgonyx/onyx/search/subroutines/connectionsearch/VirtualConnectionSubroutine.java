@@ -46,7 +46,6 @@ import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author thw
- * @deprecated 
  */
 public class VirtualConnectionSubroutine extends AbstractSubroutine {
     
@@ -82,12 +81,7 @@ public class VirtualConnectionSubroutine extends AbstractSubroutine {
             this.tmpTail = new OnyxTail();
             this.buildTail(p, p.getKey());
         }
-        
-        /**
-         * FIXME : finish coding & testing this subroutine.
-         * Generates as many OnyxTails as there is position in sPoss. Must be 
-         * trimed : shortest tail is selected.
-         */        
+    
         final OnyxTail t = this.trimTails();
         System.out.println("////////////////////////////////////////////////////"); 
         for (OnyxPos p : t.getPositions()) System.out.println(OnyxConst.POS_MAP.get(p.getKey()));
@@ -96,35 +90,32 @@ public class VirtualConnectionSubroutine extends AbstractSubroutine {
     private void buildTail(final OnyxPos p, final String kEx) {       
         
         this.checkedKeys.add(p.getKey());
-        final String[] cnxs = trimConnections(p, p.connections);
+        final String[] cnxs = p.isDiamondCenter() ? 
+            trimCnxCenterPositions(p, p.connections) : trimCnxStandardPositions(p, p.connections);
         OnyxPos tmp = null;
-        
-        /**
-         * If p is diamond center ??? F***ing good question ! FIXME in such case.
-         */
-        
-        for (int i = 0; i < cnxs.length; ++i) { //String k : cnxs) {
+
+        for (String cnx : cnxs) {
             
             if (this.linked) return;
-            tmp = c.getPosition(cnxs[i]);
+            tmp = c.getPosition(cnx);
             if (tmp == null) continue;
             
             if (this.isTailEnd(tmp)) {  
-                this.tails.add(this.tmpTail);
+                this.tails.add(this.trimTail(this.tmpTail));
                 this.linked = true;
                 return;
             }            
             
-            if (!cnxs[i].equals(kEx) && !tmp.isOccupied(this.opColorBit) &&
+            if (!cnx.equals(kEx) && !tmp.isOccupied(this.opColorBit) &&
                 c.isValidVirtualMove(tmp, this.board, this.opColorBit) && 
-                !this.checkedKeys.contains(cnxs[i])) {
+                !this.checkedKeys.contains(cnx)) {
                 this.tmpTail.append(tmp);
                 this.buildTail(tmp, tmp.getKey());
             }
         }        
     }
     
-    private String[] trimConnections(final OnyxPos p, final String[] cnxs) {
+    private String[] trimCnxStandardPositions(final OnyxPos p, final String[] cnxs) {
         
         int i = -1;
         final String[] r = new String[] { 
@@ -163,11 +154,20 @@ public class VirtualConnectionSubroutine extends AbstractSubroutine {
         return r;
     }
     
+    private String[] trimCnxCenterPositions(final OnyxPos p, final String[] cnxs) {
+        
+        final String[] r = new String[] { 
+            StringUtils.EMPTY, StringUtils.EMPTY, StringUtils.EMPTY, StringUtils.EMPTY
+        };
+        throw new UnsupportedOperationException();
+        //return r;
+    }
+    
     private OnyxTail trimTails() {
         
         OnyxTail tmp = null;
         for (OnyxTail t : this.tails) {
-            if (tmp == null || t.getTailCount() < tmp.getTailCount()) tmp = t;
+            if (tmp == null || t.lenght() < tmp.lenght()) tmp = t;
         }
         
         return tmp;
@@ -178,6 +178,32 @@ public class VirtualConnectionSubroutine extends AbstractSubroutine {
             (this.startLowBorder && !this.color.bool && p.y > this.max - .1f) ||
             (!this.startLowBorder && this.color.bool && p.x < 1.1f) ||
             (!this.startLowBorder && !this.color.bool && p.y < 1.1f);
+    }
+
+    /**
+     * Remove/trim all position that are dead sub-tail affluents - mainstream 
+     * tail must not contain any sub-tail excrescences/growths inherited from
+     * left to right hesitations be main algo buildTail method.
+     * @param t OnyxTail to trim.
+     * @return OnyxTail param tail trimed.
+     */
+    private OnyxTail trimTail(final OnyxTail t) {
+    
+        /**
+         * FIXME : still not working >> discards last/first position.
+         */
+        
+        final List<OnyxPos> poss = new ArrayList<>();
+        int count = 0;
+        
+        for (OnyxPos p : t.getPositions()) {
+            for (String k : p.connections) if (t.contains(k)) ++count;
+            if (count < 2) poss.add(p);
+        }
+        
+        for (OnyxPos p : poss) t.getPositions().remove(p);
+        
+        return t;
     }
     
 }

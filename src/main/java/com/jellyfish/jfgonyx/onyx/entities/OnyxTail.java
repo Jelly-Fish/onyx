@@ -56,12 +56,23 @@ public class OnyxTail {
         
         if (i > -1) this.positions.remove(i);
     }
+    
+    public void remove(final int i) {
+        if (i > -1 && this.positions.size() < i) this.positions.remove(i);
+    }
         
     public LinkedList<OnyxPos> getPositions() {
         return positions;
     }
     
-    public int getTailCount() {
+    public boolean contains(final String k) {
+        for (OnyxPos p : this.positions) {
+            if (k.equals(p.getKey())) return true;
+        }
+        return false;
+    }
+    
+    public int lenght() {
         return positions.size();
     }
     

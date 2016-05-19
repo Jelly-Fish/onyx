@@ -46,7 +46,6 @@ import java.util.List;
 
 /**
  * @author thw
- * @deprecated 
  */
 public class VirtualConnetionSearch extends AbstractOnyxSearch implements OnyxConnectionSearchable {
 
