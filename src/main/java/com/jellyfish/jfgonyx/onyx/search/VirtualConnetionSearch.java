@@ -35,6 +35,7 @@ import com.jellyfish.jfgonyx.onyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.abstractions.AbstractOnyxSearch;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
+import com.jellyfish.jfgonyx.onyx.entities.OnyxTail;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException;
@@ -55,17 +56,33 @@ public class VirtualConnetionSearch extends AbstractOnyxSearch implements OnyxCo
         
         final List<OnyxPos> pos = OnyxPositionUtils.trimAllExternalBordersByColor(
                 OnyxPositionUtils.getBordersByColor(c, color), color);
+        final VirtualConnectionSubroutine vCnx = new VirtualConnectionSubroutine(c, color, board);
+        vCnx.buildTails(pos);
+        final OnyxTail t = vCnx.getTail();
         
         /**
-         * FIXME : finish coding & testing subroutine.
+         * FIXME : t = shortest tail found for param color.
+         * Now take advantage of result :
+         * Either run again for oponent color and cross results.
+         * Or, search for counter or best tail moves within OnyxTail t
+         * returned by VirtualConnectionSubroutine.getTail() meth.
+         * Or ... ? WTF ?!?
+         * 
+         * So far print for futher developement & testing, then return null : 
+         * search result is not digested by Onyx.search
+         * @see Onyx search meth.
          */
-        new VirtualConnectionSubroutine(c, color, board).seekTail(pos);
         
         return null;
     }
 
+    /**
+     * @throws com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException if used.
+     * @deprecated for this search routine : goal is not to seek win move.
+     */
     @Override
-    public boolean isWin(final OnyxPosCollection c, final OnyxConst.COLOR color) throws NoValidOnyxPositionsFoundException {
+    public boolean isWin(final OnyxPosCollection c, final OnyxConst.COLOR color) 
+        throws NoValidOnyxPositionsFoundException {
         throw new UnsupportedOperationException();
     }
     

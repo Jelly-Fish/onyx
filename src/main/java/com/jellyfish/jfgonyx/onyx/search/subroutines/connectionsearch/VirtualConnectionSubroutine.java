@@ -59,8 +59,8 @@ public class VirtualConnectionSubroutine extends AbstractSubroutine {
     private boolean startLowBorder = false;
     private boolean linked = false;
     private final List<OnyxTail> tails = new ArrayList<>();
-    private OnyxTail tmpTail;
-    
+    private OnyxTail tail;
+
     public VirtualConnectionSubroutine(final OnyxPosCollection c, final OnyxConst.COLOR color, 
             final OnyxBoard board) {
         this.c = c;
@@ -73,25 +73,25 @@ public class VirtualConnectionSubroutine extends AbstractSubroutine {
     /**
      * @param sPoss start positions - low & high borders of color to search for.
      */
-    public void seekTail(final List<OnyxPos> sPoss) {
+    public void buildTails(final List<OnyxPos> sPoss) {
         
         for (OnyxPos p : sPoss) {
             this.startLowBorder = p.getPiece().color.bool ? p.isLowXBorder() : p.isLowYBorder();
             this.linked = false;
-            this.tmpTail = new OnyxTail();
+            this.tail = new OnyxTail();
             this.buildTail(p, p.getKey());
         }
     
-        final OnyxTail t = this.trimTails();
-        System.out.println("////////////////////////////////////////////////////"); 
-        for (OnyxPos p : t.getPositions()) System.out.println(OnyxConst.POS_MAP.get(p.getKey()));
+        this.tail = this.trimTails();
+        
+        if (this.tail != null) print(AbstractSubroutine.VTAIL_CANDIDATE_FORMAT, 
+            this.type, this.color, this.tail.lenght(), this.tail.toString());
     }
     
     private void buildTail(final OnyxPos p, final String kEx) {       
         
         this.checkedKeys.add(p.getKey());
-        final String[] cnxs = p.isDiamondCenter() ? 
-            trimCnxCenterPositions(p, p.connections) : trimCnxStandardPositions(p, p.connections);
+        final String[] cnxs = p.isDiamondCenter() ? p.connections : trimCnxPositions(p, p.connections);
         OnyxPos tmp = null;
 
         for (String cnx : cnxs) {
@@ -101,7 +101,7 @@ public class VirtualConnectionSubroutine extends AbstractSubroutine {
             if (tmp == null) continue;
             
             if (this.isTailEnd(tmp)) {  
-                this.tails.add(this.trimTail(this.tmpTail));
+                this.tails.add(this.trimTail(this.tail));
                 this.linked = true;
                 return;
             }            
@@ -109,13 +109,13 @@ public class VirtualConnectionSubroutine extends AbstractSubroutine {
             if (!cnx.equals(kEx) && !tmp.isOccupied(this.opColorBit) &&
                 c.isValidVirtualMove(tmp, this.board, this.opColorBit) && 
                 !this.checkedKeys.contains(cnx)) {
-                this.tmpTail.append(tmp);
+                this.tail.append(tmp);
                 this.buildTail(tmp, tmp.getKey());
             }
         }        
     }
     
-    private String[] trimCnxStandardPositions(final OnyxPos p, final String[] cnxs) {
+    private String[] trimCnxPositions(final OnyxPos p, final String[] cnxs) {
         
         int i = -1;
         final String[] r = new String[] { 
@@ -154,15 +154,6 @@ public class VirtualConnectionSubroutine extends AbstractSubroutine {
         return r;
     }
     
-    private String[] trimCnxCenterPositions(final OnyxPos p, final String[] cnxs) {
-        
-        final String[] r = new String[] { 
-            StringUtils.EMPTY, StringUtils.EMPTY, StringUtils.EMPTY, StringUtils.EMPTY
-        };
-        throw new UnsupportedOperationException();
-        //return r;
-    }
-    
     private OnyxTail trimTails() {
         
         OnyxTail tmp = null;
@@ -188,15 +179,12 @@ public class VirtualConnectionSubroutine extends AbstractSubroutine {
      * @return OnyxTail param tail trimed.
      */
     private OnyxTail trimTail(final OnyxTail t) {
-    
-        /**
-         * FIXME : still not working >> discards last/first position.
-         */
-        
+
         final List<OnyxPos> poss = new ArrayList<>();
         int count = 0;
         
         for (OnyxPos p : t.getPositions()) {
+            if (t.isTailEnd(p.getKey()) || t.isTailStart(p.getKey())) continue;
             for (String k : p.connections) if (t.contains(k)) ++count;
             if (count < 2) poss.add(p);
         }
@@ -205,5 +193,10 @@ public class VirtualConnectionSubroutine extends AbstractSubroutine {
         
         return t;
     }
+    
+    public OnyxTail getTail() {
+        return tail;
+    }
+    
     
 }

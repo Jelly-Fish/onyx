@@ -97,19 +97,14 @@ class Onyx {
         
         try {
             
-            final OnyxMove mPOSCOL = SEARCH.get(STYPE.POSCOL).search(c, board, color);
+            final OnyxMove posSearchRes = SEARCH.get(STYPE.POSCOL).search(c, board, color);
             final boolean win = ((ConnectionSearch) SEARCH.get(STYPE.CNX)).isWin(
                     c, OnyxConst.COLOR.getOposite(color.bool));
             final boolean lose = ((ConnectionSearch) SEARCH.get(STYPE.CNX)).isWin(
                     c, color);
-            final OnyxMove mCNX = SEARCH.get(STYPE.CNX).search(c, board, color);
+            final OnyxMove cnxSearchRes = SEARCH.get(STYPE.CNX).search(c, board, color);       
+            final OnyxMove virtualCnxRes = SEARCH.get(STYPE.VIRTUALCNX).search(c, board, color);
             
-            /**
-             * FIXME : finish coding & testing this subroutine call - so far,
-             * decommented for testing.
-             * 
-             */            
-            final OnyxMove vCNX = SEARCH.get(STYPE.VIRTUALCNX).search(c, board, color);
             // Assert game ended :
             Onyx.gameEnd = win || lose;
                         
@@ -117,17 +112,17 @@ class Onyx {
              * FIXME refactor : get this print stuff out of search method.
              * [START] Do printing debug stuff... 
              */
-            if (mPOSCOL != null) print(String.format(POSCOL_SEARCH_FORMAT,
-                    OnyxConst.POS_MAP.get(mPOSCOL.getPos().getKey()), mPOSCOL.getScore()));
-            if (mCNX != null) print(String.format(CNX_SEARCH_FORMAT,
-                OnyxConst.POS_MAP.get(mCNX.getPos().getKey()), mCNX.getScore()));
+            if (posSearchRes != null) print(String.format(POSCOL_SEARCH_FORMAT,
+                    OnyxConst.POS_MAP.get(posSearchRes.getPos().getKey()), posSearchRes.getScore()));
+            if (cnxSearchRes != null) print(String.format(CNX_SEARCH_FORMAT,
+                OnyxConst.POS_MAP.get(cnxSearchRes.getPos().getKey()), cnxSearchRes.getScore()));
             print(win ? 
                 String.format(WIN, OnyxConst.COLOR.getOposite(color.bool).str) : 
                 StringUtils.EMPTY, HTMLDisplayHelper.GOLD);
             /** [END] Do printing debug stuff... */
             
             if (Onyx.gameEnd) return null;
-            final OnyxMove m = SearchUtils.assertByScore(mPOSCOL, mCNX);
+            final OnyxMove m = SearchUtils.assertByScore(posSearchRes, cnxSearchRes);
             if (m.isCapture()) c.performTake(m.getPos().getKey(), color.bit, board);
             
             return m;

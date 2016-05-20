@@ -31,7 +31,9 @@
  */
 package com.jellyfish.jfgonyx.onyx.entities;
 
+import com.jellyfish.jfgonyx.onyx.constants.OnyxConst;
 import java.util.LinkedList;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author thw
@@ -42,6 +44,10 @@ public class OnyxTail {
     private final LinkedList<OnyxPos> positions = new LinkedList<>();
     
     public void append(final OnyxPos p) {
+        this.positions.addLast(p);
+    }
+    
+    public void appendTailEnd(final OnyxPos p) {
         this.positions.addLast(p);
     }
     
@@ -59,6 +65,14 @@ public class OnyxTail {
     
     public void remove(final int i) {
         if (i > -1 && this.positions.size() < i) this.positions.remove(i);
+    }
+    
+    public boolean isTailStart(final String k) {
+        return this.positions.getFirst().getKey().equals(k);
+    }
+    
+    public boolean isTailEnd(final String k) {
+        return this.positions.getLast().getKey().equals(k);
     }
         
     public LinkedList<OnyxPos> getPositions() {
@@ -82,6 +96,13 @@ public class OnyxTail {
 
     public void setConnected(boolean connected) {
         this.connected = connected;
+    }
+    
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("tail start to end: ");     
+        for (OnyxPos p : this.positions) sb.append(OnyxConst.POS_MAP.get(p.getKey())).append(",");
+        return sb.toString().substring(0, sb.length() - 1);
     }
     
 }

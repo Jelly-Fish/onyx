@@ -47,6 +47,7 @@ public abstract class AbstractSubroutine extends AbstractOnyxSearch {
     public final static String BEST_CANDIDATE_TAIL_FORMAT = "Candidate for %s %s start @ %s : [%s] score: %f";
     public final static String BEST_CANDIDATE_COUNTER_FORMAT = "Candidate for %s %s : [%s] score: %f";
     public final static String BEST_CANDIDATE = "Candidate for %s %s : [%s]";
+    public final static String VTAIL_CANDIDATE_FORMAT = "Virtual tail result for %s %s tail lenght [%s] : \n[%s]";
     
     public static enum SUBROUTINE_TYPE {
     
@@ -110,9 +111,15 @@ public abstract class AbstractSubroutine extends AbstractOnyxSearch {
     
     public final void print(final String f, final AbstractSubroutine.SUBROUTINE_TYPE t,
             final OnyxConst.COLOR color, final String k) {
-        
         if (k == null) return;
         MainFrame.print(String.format(f, t.getDesc(), color.str, OnyxConst.POS_MAP.get(k)),
+            HTMLDisplayHelper.GRAY);
+    }
+    
+    public final void print(final String f, final AbstractSubroutine.SUBROUTINE_TYPE t,
+            final OnyxConst.COLOR color, final int posCount, final String data) {
+        if (data == null) return;
+        MainFrame.print(String.format(f, t.getDesc(), color.str, posCount, data),
             HTMLDisplayHelper.GRAY);
     }
     
