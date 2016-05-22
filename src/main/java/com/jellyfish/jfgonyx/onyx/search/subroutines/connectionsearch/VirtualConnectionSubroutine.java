@@ -100,13 +100,15 @@ public class VirtualConnectionSubroutine extends AbstractSubroutine {
             tmp = c.getPosition(cnx);
             if (tmp == null) continue;
             
-            if (this.isTailEnd(tmp)) {  
-                this.tails.add(this.trimTail(this.tail));
+            if (this.isTailEnd(tmp)) { 
+                this.tail.append(tmp);
+                this.tails.add(new VirtualConnectionTailTrimSubroutine(this.tail).trim());
                 this.linked = true;
                 return;
             }            
             
             if (!cnx.equals(kEx) && !tmp.isOccupied(this.opColorBit) &&
+                !this.tail.contains(tmp.getKey()) &&
                 c.isValidVirtualMove(tmp, this.board, this.opColorBit) && 
                 !this.checkedKeys.contains(cnx)) {
                 this.tail.append(tmp);
@@ -150,7 +152,7 @@ public class VirtualConnectionSubroutine extends AbstractSubroutine {
                 r[++i] = cnx;
             }
         }
-        
+                
         return r;
     }
     
@@ -158,6 +160,7 @@ public class VirtualConnectionSubroutine extends AbstractSubroutine {
         
         OnyxTail tmp = null;
         for (OnyxTail t : this.tails) {
+            if (t.lenght() < GraphicsVars.getInstance().BOARD_SIDE_SQUARE_COUNT) continue;
             if (tmp == null || t.lenght() < tmp.lenght()) tmp = t;
         }
         
@@ -169,29 +172,6 @@ public class VirtualConnectionSubroutine extends AbstractSubroutine {
             (this.startLowBorder && !this.color.bool && p.y > this.max - .1f) ||
             (!this.startLowBorder && this.color.bool && p.x < 1.1f) ||
             (!this.startLowBorder && !this.color.bool && p.y < 1.1f);
-    }
-
-    /**
-     * Remove/trim all position that are dead sub-tail affluents - mainstream 
-     * tail must not contain any sub-tail excrescences/growths inherited from
-     * left to right hesitations be main algo buildTail method.
-     * @param t OnyxTail to trim.
-     * @return OnyxTail param tail trimed.
-     */
-    private OnyxTail trimTail(final OnyxTail t) {
-
-        final List<OnyxPos> poss = new ArrayList<>();
-        int count = 0;
-        
-        for (OnyxPos p : t.getPositions()) {
-            if (t.isTailEnd(p.getKey()) || t.isTailStart(p.getKey())) continue;
-            for (String k : p.connections) if (t.contains(k)) ++count;
-            if (count < 2) poss.add(p);
-        }
-        
-        for (OnyxPos p : poss) t.getPositions().remove(p);
-        
-        return t;
     }
     
     public OnyxTail getTail() {

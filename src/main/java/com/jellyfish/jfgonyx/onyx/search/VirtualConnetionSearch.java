@@ -54,24 +54,52 @@ public class VirtualConnetionSearch extends AbstractOnyxSearch implements OnyxCo
     public OnyxMove search(final OnyxPosCollection c, final OnyxBoard board, 
             final OnyxConst.COLOR color) throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
         
+        /**
+         * FIXME : still to improve.
+         */
+        
+        final OnyxConst.COLOR opColor = OnyxConst.COLOR.getOposite(color.bool);
         final List<OnyxPos> pos = OnyxPositionUtils.trimAllExternalBordersByColor(
                 OnyxPositionUtils.getBordersByColor(c, color), color);
-        final VirtualConnectionSubroutine vCnx = new VirtualConnectionSubroutine(c, color, board);
+        final List<OnyxPos> opPos = OnyxPositionUtils.trimAllExternalBordersByColor(
+                OnyxPositionUtils.getBordersByColor(c, opColor), opColor);
+        VirtualConnectionSubroutine vCnx = new VirtualConnectionSubroutine(c, color, board);
         vCnx.buildTails(pos);
-        final OnyxTail t = vCnx.getTail();
+        final OnyxTail onyxTail = vCnx.getTail();
+        vCnx = new VirtualConnectionSubroutine(c, opColor, board);
+        vCnx.buildTails(opPos);
+        final OnyxTail oponentTail = vCnx.getTail();       
         
-        /**
-         * FIXME : t = shortest tail found for param color.
-         * Now take advantage of result :
-         * Either run again for oponent color and cross results.
-         * Or, search for counter or best tail moves within OnyxTail t
-         * returned by VirtualConnectionSubroutine.getTail() meth.
-         * Or ... ? WTF ?!?
-         * 
-         * So far print for futher developement & testing, then return null : 
-         * search result is not digested by Onyx.search
-         * @see Onyx search meth.
-         */
+        final OnyxPos res = this.crossTailSearches(onyxTail, oponentTail, board, c, color);
+        
+        if (res != null) {
+            return assertCapture(new OnyxMove(res, 666.66f), board, c, color);
+        }
+        
+        return null;
+    }
+    
+    /**
+     * @param sT tail to search position for.
+     * @param oT oponent tail.
+     * @param b onyx board.
+     * @param c position collection.
+     * @param color color to serach for.
+     * @return first OnyxPos found that belongs to both sT & oT tails.
+     */
+    private OnyxPos crossTailSearches(final OnyxTail sT, final OnyxTail oT, final OnyxBoard b,
+            final OnyxPosCollection c, final OnyxConst.COLOR color) throws InvalidOnyxPositionException {
+        
+        if (sT == null || oT == null) return null;
+        
+        for (OnyxPos pOT : oT.getPositions()) {
+            for (OnyxPos sOT : sT.getPositions()) {
+                if (sOT.getKey().equals(pOT.getKey()) && !sOT.isOccupied()) {
+                    //  && !sOT.posHelper.willEnableTake(b, c, color)
+                    return sOT;
+                }
+            }
+        }
         
         return null;
     }

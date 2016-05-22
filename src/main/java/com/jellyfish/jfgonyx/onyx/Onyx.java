@@ -60,6 +60,7 @@ class Onyx {
     private static final String ERR = "Something got messy :X >> %s";
     private static final String POSCOL_SEARCH_FORMAT = "SEARCH.ONYXPOSCOL -> [%s] score -> [%.1f]";
     private static final String CNX_SEARCH_FORMAT = "SEARCH.CNX -> [%s] score -> [%.3f]";
+    private static final String VCNX_SEARCH_FORMAT = "SEARCH.VCNX -> [%s] score -> [%.3f]";
     private static final String WIN = "%s's WIN ! WuHu !!!";
             
     private final static HashMap<STYPE, OnyxAbstractSearchable> SEARCH = new HashMap<>();
@@ -116,13 +117,15 @@ class Onyx {
                     OnyxConst.POS_MAP.get(posSearchRes.getPos().getKey()), posSearchRes.getScore()));
             if (cnxSearchRes != null) print(String.format(CNX_SEARCH_FORMAT,
                 OnyxConst.POS_MAP.get(cnxSearchRes.getPos().getKey()), cnxSearchRes.getScore()));
+            if (virtualCnxRes != null) print(String.format(VCNX_SEARCH_FORMAT,
+                OnyxConst.POS_MAP.get(virtualCnxRes.getPos().getKey()), virtualCnxRes.getScore()));
             print(win ? 
                 String.format(WIN, OnyxConst.COLOR.getOposite(color.bool).str) : 
                 StringUtils.EMPTY, HTMLDisplayHelper.GOLD);
             /** [END] Do printing debug stuff... */
             
             if (Onyx.gameEnd) return null;
-            final OnyxMove m = SearchUtils.assertByScore(posSearchRes, cnxSearchRes);
+            final OnyxMove m = SearchUtils.assertByScore(posSearchRes, cnxSearchRes, virtualCnxRes);
             if (m.isCapture()) c.performTake(m.getPos().getKey(), color.bit, board);
             
             return m;
