@@ -119,10 +119,14 @@ public class VirtualConnectionSubroutine extends AbstractSubroutine {
     
     private String[] trimCnxPositions(final OnyxPos p, final String[] cnxs) {
         
-        int i = -1;
-        final String[] r = new String[] { 
-            StringUtils.EMPTY, StringUtils.EMPTY, StringUtils.EMPTY, StringUtils.EMPTY
-        };
+        /**
+         * FIXME :clean up this f***ing mess.
+         * Do NOT base search on param[1] final String[] cnxs order.
+         */
+        
+        final OnyxPos poss[] = new OnyxPos[3]; 
+        final String[] r = new String[3];
+        int i = -1;        
         OnyxPos tmp = null;
         
         if (this.linked) return r;
@@ -132,27 +136,26 @@ public class VirtualConnectionSubroutine extends AbstractSubroutine {
             tmp = c.getPosition(cnx);
             if (tmp == null) continue;
             
-            if ((this.startLowBorder && (this.color.bool && (tmp.y == p.y && tmp.x > p.x))) ||
-                (this.startLowBorder && (!this.color.bool && (tmp.x == p.x && tmp.y > p.y)))) {
-                r[++i] = cnx;
-            }
-            
-            if ((!this.startLowBorder && (this.color.bool && (tmp.y == p.y && tmp.x < p.x))) ||
-                (!this.startLowBorder && (!this.color.bool && (tmp.x == p.x && tmp.y < p.y)))) {
-                r[++i] = cnx;
+            if (((this.startLowBorder && (this.color.bool && (tmp.y == p.y && tmp.x > p.x))) ||
+                (this.startLowBorder && (!this.color.bool && (tmp.x == p.x && tmp.y > p.y)))) ||
+                ((!this.startLowBorder && (this.color.bool && (tmp.y == p.y && tmp.x < p.x))) ||
+                (!this.startLowBorder && (!this.color.bool && (tmp.x == p.x && tmp.y < p.y))))) {
+                poss[++i] = tmp;
             }
         }
         
         for (String cnx : cnxs) {
-            
             tmp = c.getPosition(cnx);
             if (tmp == null) continue;
-            
-            if ((this.color.bool && tmp.x == p.x) || (!this.color.bool && tmp.y == p.y)) {
-                r[++i] = cnx;
-            }
+            if ((this.color.bool && tmp.x == p.x) || (!this.color.bool && tmp.y == p.y)) poss[++i] = tmp;
         }
-                
+        
+        r[0] = poss[0] != null ? poss[0].getKey() : StringUtils.EMPTY;
+        r[1] = this.color.bool && poss[2] != null ? poss[2].getKey() : 
+            poss[1] != null ? poss[1].getKey() : StringUtils.EMPTY; 
+        r[2] = this.color.bool && poss[1] != null ? poss[1].getKey() : 
+            poss[2] != null ? poss[2].getKey() : StringUtils.EMPTY; 
+
         return r;
     }
     

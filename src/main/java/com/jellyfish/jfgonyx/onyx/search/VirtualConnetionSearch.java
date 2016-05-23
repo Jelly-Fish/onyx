@@ -56,6 +56,9 @@ public class VirtualConnetionSearch extends AbstractOnyxSearch implements OnyxCo
         
         /**
          * FIXME : still to improve.
+         * crossTailSearches method must take advantage on oponent tail search.
+         * When comparing tails, if oponent tail pos if present if Onyx tail
+         * position collection then Override with scoring.
          */
         
         final OnyxConst.COLOR opColor = OnyxConst.COLOR.getOposite(color.bool);
@@ -95,7 +98,6 @@ public class VirtualConnetionSearch extends AbstractOnyxSearch implements OnyxCo
         for (OnyxPos pOT : oT.getPositions()) {
             for (OnyxPos sOT : sT.getPositions()) {
                 if (sOT.getKey().equals(pOT.getKey()) && !sOT.isOccupied()) {
-                    //  && !sOT.posHelper.willEnableTake(b, c, color)
                     return sOT;
                 }
             }
