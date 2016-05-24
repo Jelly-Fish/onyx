@@ -110,8 +110,9 @@ public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnecti
      * @param board onyx board instance.
      * @return best onyx connection search move as a non win end of tail position move.
      * @throws com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException
+     * @throws com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException
      */
-    private OnyxMove getTailMove(final OnyxPosCollection c, final OnyxBoard board, 
+    protected OnyxMove getTailMove(final OnyxPosCollection c, final OnyxBoard board, 
             final OnyxConst.COLOR color) throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
         
         final List<OnyxPos> pos = OnyxPositionUtils.trimAllExternalBordersByColor(

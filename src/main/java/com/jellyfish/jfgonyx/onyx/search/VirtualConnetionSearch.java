@@ -32,7 +32,6 @@
 package com.jellyfish.jfgonyx.onyx.search;
 
 import com.jellyfish.jfgonyx.onyx.constants.OnyxConst;
-import com.jellyfish.jfgonyx.onyx.abstractions.AbstractOnyxSearch;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxTail;
@@ -42,13 +41,14 @@ import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException;
 import com.jellyfish.jfgonyx.onyx.interfaces.search.OnyxConnectionSearchable;
 import com.jellyfish.jfgonyx.onyx.search.searchutils.OnyxPositionUtils;
 import com.jellyfish.jfgonyx.onyx.search.subroutines.connectionsearch.VirtualConnectionSubroutine;
+import com.jellyfish.jfgonyx.onyx.search.subroutines.positionsearch.OnyxPosStateSubroutine;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
 import java.util.List;
 
 /**
  * @author thw
  */
-public class VirtualConnetionSearch extends AbstractOnyxSearch implements OnyxConnectionSearchable {
+public class VirtualConnetionSearch extends ConnectionSearch implements OnyxConnectionSearchable {
 
     @Override
     public OnyxMove search(final OnyxPosCollection c, final OnyxBoard board, 
@@ -73,7 +73,8 @@ public class VirtualConnetionSearch extends AbstractOnyxSearch implements OnyxCo
         vCnx.buildTails(opPos);
         final OnyxTail oponentTail = vCnx.getTail();       
         
-        final OnyxPos res = this.crossTailSearches(onyxTail, oponentTail, board, c, color);
+        final OnyxPos res = this.crossTailSearch(onyxTail, oponentTail, board, 
+                c, color, this.getTailMove(c, board, opColor));
         
         if (res != null) {
             return assertCapture(new OnyxMove(res, 666.66f), board, c, color);
@@ -83,27 +84,40 @@ public class VirtualConnetionSearch extends AbstractOnyxSearch implements OnyxCo
     }
     
     /**
-     * @param sT tail to search position for.
-     * @param oT oponent tail.
-     * @param b onyx board.
-     * @param c position collection.
-     * @param color color to serach for.
-     * @return first OnyxPos found that belongs to both sT & oT tails.
+     * @param sT tail to search position for
+     * @param oT oponent tail
+     * @param b onyx board
+     * @param c position collection
+     * @param color color to serach for
+     * @param opTailMove oponent tail best move (depending on quality of
+     * super class's search...)
+     * @return first OnyxPos found that belongs to both sT & oT tails
      */
-    private OnyxPos crossTailSearches(final OnyxTail sT, final OnyxTail oT, final OnyxBoard b,
-            final OnyxPosCollection c, final OnyxConst.COLOR color) throws InvalidOnyxPositionException {
-        
+    private OnyxPos crossTailSearch(final OnyxTail sT, final OnyxTail oT, final OnyxBoard b,
+            final OnyxPosCollection c, final OnyxConst.COLOR color, final OnyxMove opTailMove) throws InvalidOnyxPositionException {
+
         if (sT == null || oT == null) return null;
+        OnyxPos pos = null;
         
         for (OnyxPos pOT : oT.getPositions()) {
             for (OnyxPos sOT : sT.getPositions()) {
-                if (sOT.getKey().equals(pOT.getKey()) && !sOT.isOccupied()) {
-                    return sOT;
-                }
+                if (new OnyxPosStateSubroutine(sOT).willEnableTake(b, c, color) 
+                    || sOT.isOccupied()) continue;
+                if (sOT.getKey().equals(opTailMove.getPos().getKey())) pos = sOT;
+                if (sOT.getKey().equals(pOT.getKey())) pos = sOT;               
             }
         }
         
-        return null;
+        if (pos == null) {
+            for (OnyxPos sOT : sT.getPositions()) {
+                if (!sOT.isOccupied()) {
+                    pos = sOT;
+                    break;
+                }
+            }
+        }
+                
+        return pos;
     }
 
     /**
