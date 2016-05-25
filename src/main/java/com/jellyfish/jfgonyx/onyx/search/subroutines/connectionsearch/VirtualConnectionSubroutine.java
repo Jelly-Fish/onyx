@@ -82,9 +82,13 @@ public class VirtualConnectionSubroutine extends AbstractSubroutine {
             this.buildTail(p, p.getKey());
         }
     
+        /** FIXME : bebug purpose, print all tails... */
+        this.printAllTails();
+        /** END DEBUG */
+        
         this.tail = this.trimTails();
         
-        if (this.tail != null) print(AbstractSubroutine.VTAIL_CANDIDATE_FORMAT, 
+        if (this.tail != null) print(AbstractSubroutine.VTAIL_CANDIDATE_RES, 
             this.type, this.color, this.tail.lenght(), this.tail.toString());
     }
     
@@ -119,11 +123,6 @@ public class VirtualConnectionSubroutine extends AbstractSubroutine {
     
     private String[] trimCnxPositions(final OnyxPos p, final String[] cnxs) {
         
-        /**
-         * FIXME :clean up this f***ing mess.
-         * Do NOT base search on param[1] final String[] cnxs order.
-         */
-        
         final OnyxPos poss[] = new OnyxPos[3]; 
         final String[] r = new String[3];
         int i = -1;        
@@ -148,7 +147,7 @@ public class VirtualConnectionSubroutine extends AbstractSubroutine {
             tmp = c.getPosition(cnx);
             if (tmp == null) continue;
             if ((this.color.bool && tmp.x == p.x) || (!this.color.bool && tmp.y == p.y)) poss[++i] = tmp;
-        }
+        }        
         
         r[0] = poss[0] != null ? poss[0].getKey() : StringUtils.EMPTY;
         r[1] = this.color.bool && poss[2] != null ? poss[2].getKey() : 
@@ -179,6 +178,14 @@ public class VirtualConnectionSubroutine extends AbstractSubroutine {
     
     public OnyxTail getTail() {
         return tail;
+    }
+
+    private void printAllTails() {
+        
+        for (OnyxTail t : this.tails) {
+            if (t != null) print(AbstractSubroutine.VTAIL_CANDIDATE_FORMAT, 
+                this.type, this.color, this.tail.lenght(), this.tail.toString());
+        }
     }
     
     

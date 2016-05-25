@@ -47,7 +47,8 @@ public abstract class AbstractSubroutine extends AbstractOnyxSearch {
     public final static String BEST_CANDIDATE_TAIL_FORMAT = "Candidate for %s %s start @ %s : [%s] score: %f";
     public final static String BEST_CANDIDATE_COUNTER_FORMAT = "Candidate for %s %s : [%s] score: %f";
     public final static String BEST_CANDIDATE = "Candidate for %s %s : [%s]";
-    public final static String VTAIL_CANDIDATE_FORMAT = "Virtual tail result for %s %s tail lenght [%s] : \n[%s]";
+    public final static String VTAIL_CANDIDATE_FORMAT = "VXNX tail for %s %s lenght [%s] : <br />[%s]";
+    public final static String VTAIL_CANDIDATE_RES = "Virtual tail result for %s %s tail lenght [%s] : <br />[%s]";
     
     public static enum SUBROUTINE_TYPE {
     
