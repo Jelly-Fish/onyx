@@ -42,7 +42,6 @@ import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException;
 import com.jellyfish.jfgonyx.onyx.exceptions.OnyxGameSyncException;
 import com.jellyfish.jfgonyx.onyx.interfaces.OnyxBoardI;
-import com.jellyfish.jfgonyx.onyx.search.searchutils.Intmap;
 import com.jellyfish.jfgonyx.ui.MainFrame;
 import com.jellyfish.jfgonyx.ui.OnyxPanel;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
@@ -110,12 +109,13 @@ public class Main {
         board.setObserver(mainFrame);
         OnyxGame.getInstance().init((OnyxBoardI) board, OnyxConst.COLOR.BLACK);
         OnyxGame.getInstance().initMove(OnyxConst.COLOR.BLACK);
+       
         try {
             OnyxGame.getInstance().performMove(positions, board);
         } catch (OnyxGameSyncException | NoValidOnyxPositionsFoundException | InvalidOnyxPositionException ex) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
         }
-        new Intmap(positions).print(0, OnyxGame.getInstance().dtStamp);
+        
         board.notifyMoves(OnyxGame.getInstance().moves, HTMLDisplayHelper.GAINSBORO);
         OnyxGame.getInstance().initialized = true;
     }
@@ -138,7 +138,6 @@ public class Main {
                 OnyxConst.COLOR.BLACK.str), HTMLDisplayHelper.GOLD);
         board.setObserver(mainFrame);
         OnyxGame.getInstance().init((OnyxBoardI) board, OnyxConst.COLOR.WHITE);
-        new Intmap(positions).print(0, OnyxGame.getInstance().dtStamp);
         board.notifyMoves(OnyxGame.getInstance().moves, HTMLDisplayHelper.GAINSBORO);
         OnyxGame.getInstance().initialized = true;
     }
@@ -175,8 +174,6 @@ public class Main {
         OnyxGame.newInstance().moves.clear();        
         OnyxGame.getInstance().init(board, OnyxConst.COLOR.BLACK);
         OnyxGame.getInstance().boardInterface.initStartLayout();
-        new Intmap(OnyxGame.getInstance().boardInterface.getPosCollection()
-            ).print(0, OnyxGame.getInstance().dtStamp);
         MainFrame.print(String.format(RESTART_GAME, LogHelper.getDTFullStamp(), 
                 OnyxConst.COLOR.WHITE.str), HTMLDisplayHelper.GOLD);
         OnyxGame.getInstance().boardInterface.notifyMoves(OnyxGame.getInstance().moves, 
@@ -227,8 +224,6 @@ public class Main {
         OnyxGame.newInstance().moves.clear();
         OnyxGame.getInstance().init(board, OnyxConst.COLOR.WHITE);
         OnyxGame.getInstance().boardInterface.initStartLayout();
-        new Intmap(OnyxGame.getInstance().boardInterface.getPosCollection()
-            ).print(0, OnyxGame.getInstance().dtStamp);
         MainFrame.print(String.format(RESTART_GAME, LogHelper.getDTFullStamp(), 
                 OnyxConst.COLOR.BLACK.str), HTMLDisplayHelper.GOLD);
         OnyxGame.getInstance().boardInterface.notifyMoves(OnyxGame.getInstance().moves, 

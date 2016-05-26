@@ -31,8 +31,6 @@
  */
 package com.jellyfish.jfgonyx.onyx.search;
 
-import com.jellyfish.jfgonyx.onyx.search.subroutines.positionsearch.NeighbourPositionSubroutine;
-import com.jellyfish.jfgonyx.onyx.search.subroutines.positionsearch.CounterPositionSubroutine;
 import com.jellyfish.jfgonyx.onyx.search.subroutines.positionsearch.TakePositionSubroutine;
 import com.jellyfish.jfgonyx.onyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
@@ -42,8 +40,7 @@ import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException;
 import com.jellyfish.jfgonyx.onyx.search.searchutils.MoveUtils;
-import com.jellyfish.jfgonyx.onyx.search.subroutines.positionsearch.AttackPositionSubroutine;
-import com.jellyfish.jfgonyx.onyx.search.subroutines.positionsearch.CenterPositionSubroutine;
+import com.jellyfish.jfgonyx.onyx.search.subroutines.positionsearch.CounterPositionSubroutine;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
 import java.util.ArrayList;
 import java.util.List;
@@ -66,10 +63,7 @@ public class PositionSearch extends AbstractOnyxSearch implements OnyxPositionSe
             final OnyxMove capture = new TakePositionSubroutine().getTakePos(c, b, color.bit);
             moves.add(capture);
             moves.add(new CounterPositionSubroutine().getCounterPos(c, b, color));
-            moves.add(new NeighbourPositionSubroutine().getNeighbourPos(c, b, color.bit));
-            moves.add(new AttackPositionSubroutine().getAttackPos(c, b, color.bit));
-            moves.add(new CenterPositionSubroutine().getCenterPos(c, b.getDiamondCollection(), color));
-                        
+       
             OnyxMove tmp = this.trim(moves, b, c, color);    
             tmp = this.assertCapture(tmp, b, c, color);
 

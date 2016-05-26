@@ -41,12 +41,10 @@ import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException;
 import com.jellyfish.jfgonyx.onyx.interfaces.search.OnyxConnectionSearchable;
 import com.jellyfish.jfgonyx.onyx.search.searchutils.MoveUtils;
 import com.jellyfish.jfgonyx.onyx.search.searchutils.OnyxPositionUtils;
-import com.jellyfish.jfgonyx.onyx.search.subroutines.connectionsearch.SubTailConnectionSubroutine;
 import com.jellyfish.jfgonyx.onyx.search.subroutines.connectionsearch.TailConnectionSubroutine;
 import com.jellyfish.jfgonyx.onyx.search.subroutines.connectionsearch.WinConnectionSubroutine;
 import com.jellyfish.jfgonyx.onyx.search.subroutines.connectionsearch.WinConnectionLinkSubroutine;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
-import com.jellyfish.jfgonyx.vars.GraphicsVars;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -69,14 +67,8 @@ public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnecti
             throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
         
         this.init();
-        
-        final OnyxMove tail = this.getTailMove(c, board, color);
-        this.cnxMoves.add(tail);
         this.cnxMoves.add(this.searchWinMove(c, color));
         this.cnxMoves.add(this.searchCounterWinLink(c, board, color));
-        final OnyxMove counterTail = 
-                this.getSubTailCounterMove(c, board, OnyxConst.COLOR.getOposite(color.bool));
-        this.cnxMoves.add(counterTail);
                 
         return this.trim(this.cnxMoves, board, c, color);
     }
@@ -127,35 +119,6 @@ public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnecti
         
         final OnyxMove tmp = this.trim(this.cnxTmpMoves, board, c, color);
 
-        return MoveUtils.isMove(tmp) ? tmp : null;
-    }
-    
-    private OnyxMove getSubTailCounterMove(final OnyxPosCollection c, final OnyxBoard board, 
-            final OnyxConst.COLOR color) throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
-        
-        final List<OnyxMove> moves = new ArrayList<>();
-        final List<OnyxPos> pos = OnyxPositionUtils.trimBorderByColorWithExceptions(
-                OnyxPositionUtils.getSubBordersByColor(c, color), color, this.checkedKeys);
-        pos.addAll(OnyxPositionUtils.getSubCounterBordersByColor(c, color));
-        
-        float minX = GraphicsVars.getInstance().BOARD_SIDE_POS_COUNT, 
-                minY = GraphicsVars.getInstance().BOARD_SIDE_POS_COUNT,
-            maxX = 0f, maxY = 0f;
-        
-        for (OnyxPos p : pos) {
-            minX = p.x < minX ? p.x : minX;
-            minY = p.y < minY ? p.y : minY;
-            maxX = p.x > maxX ? p.x : maxX;
-            maxY = p.y > maxY ? p.y : maxY;
-        }
-        
-        for (OnyxPos p : pos) {
-            moves.add(new SubTailConnectionSubroutine(c, color, board, minX, minY, maxX, maxY).getTail(p, true));
-        }
-        
-        OnyxMove tmp = this.trim(moves, board, c, OnyxConst.COLOR.getOposite(color.bool));
-        tmp = this.assertCapture(tmp, board, c, OnyxConst.COLOR.getOposite(color.bool));
-        
         return MoveUtils.isMove(tmp) ? tmp : null;
     }
     

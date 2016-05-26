@@ -67,7 +67,6 @@ class Onyx {
     static {
         SEARCH.put(STYPE.POSCOL, new PositionSearch());
         SEARCH.put(STYPE.RANDOM, new RandomSearch());
-        SEARCH.put(STYPE.INTMAP, new IntmapSearch());
         SEARCH.put(STYPE.CNX, new ConnectionSearch());
         SEARCH.put(STYPE.VIRTUALCNX, new VirtualConnetionSearch());
     }
@@ -79,7 +78,6 @@ class Onyx {
         
         RANDOM("Random dumb search :X"), 
         POSCOL("Use onyx position collection for take or counter position searches."),
-        INTMAP("Integer map search."), 
         CNX("Connection search style building & taking advantage of position trees."),
         VIRTUALCNX("Virtual best links simulation.");
         

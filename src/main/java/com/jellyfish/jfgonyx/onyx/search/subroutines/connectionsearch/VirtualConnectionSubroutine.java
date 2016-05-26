@@ -183,7 +183,7 @@ public class VirtualConnectionSubroutine extends AbstractSubroutine {
     private void printAllTails() {
         
         for (OnyxTail t : this.tails) {
-            if (t != null) print(AbstractSubroutine.VTAIL_CANDIDATE_FORMAT, 
+            if (t != null && t.lenght() > 0) print(AbstractSubroutine.VTAIL_CANDIDATE_FORMAT, 
                 this.type, this.color, this.tail.lenght(), this.tail.toString());
         }
     }

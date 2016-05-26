@@ -33,7 +33,6 @@ package com.jellyfish.jfgonyx.onyx.search.subroutines.positionsearch;
 
 import com.jellyfish.jfgonyx.onyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.OnyxGame;
-import com.jellyfish.jfgonyx.onyx.entities.OnyxDiamond;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
@@ -42,6 +41,7 @@ import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException;
 import com.jellyfish.jfgonyx.onyx.search.searchutils.MoveUtils;
 import com.jellyfish.jfgonyx.onyx.search.searchutils.OnyxPositionUtils;
 import com.jellyfish.jfgonyx.onyx.abstractions.AbstractSubroutine;
+import com.jellyfish.jfgonyx.onyx.entities.OnyxDiamond;
 import com.jellyfish.jfgonyx.onyx.search.subroutines.connectionsearch.TailConnectionSubroutine;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
 import java.util.ArrayList;
@@ -49,7 +49,6 @@ import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 
 /**
- *
  * @author thw
  */
 public class CounterPositionSubroutine extends AbstractSubroutine {
@@ -67,7 +66,6 @@ public class CounterPositionSubroutine extends AbstractSubroutine {
             final OnyxConst.COLOR color) throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
         
         final List<OnyxMove> candidates = new ArrayList<>();
-        candidates.add(this.smallLock(c, b, color.bit));
         candidates.add(this.counterPos(c, b, color));
         candidates.add(this.bigLock(c, b, color));
         
@@ -99,43 +97,6 @@ public class CounterPositionSubroutine extends AbstractSubroutine {
         OnyxGame.getInstance().updateTailTendency(tmp);
 
         return new OnyxMove(tmp.getPos(), tmp.getPiece(), tmp.getScore());
-    }
-    
-    /**
-     * Lock diamond by playing this position.
-     * @param c onyx position collection.
-     * @param b onyx board.
-     * @param bit color to search for as bit value.
-     * @return Onyx move to play to counter such a position.
-     */
-    private OnyxMove smallLock(final OnyxPosCollection c, final OnyxBoard b, final int bit) {
-        
-        int i, j;
-        OnyxPos pos = null;
-        String key = StringUtils.EMPTY;
-                
-        for (OnyxDiamond d : b.getDiamondCollection().getDiamonds().values()) {
-            
-            i = 0; j = 0;
-            for (String k : d.getCornerKeys()) {
-                pos = c.getPosition(k);
-                if (pos.isOccupied()) {
-                    if (pos.getPiece().color.bit == bit) {
-                        ++i;
-                    } else if (pos.getPiece().color.bit != bit) {
-                        ++j;
-                    }
-                } else {
-                    key = k;
-                }
-            }
-            
-            if (i == 2 && j == 1 && !c.getPosition(key).isOccupied()) {
-                return new OnyxMove(c.getPosition(key), OnyxConst.SCORE.SMALL_LOCK.getValue());
-            }
-        }        
-        
-        return null;
     }
     
     /**
