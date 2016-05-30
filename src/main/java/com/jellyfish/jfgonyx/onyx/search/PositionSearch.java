@@ -60,12 +60,10 @@ public class PositionSearch extends AbstractOnyxSearch implements OnyxPositionSe
         
         try {
             
-            final OnyxMove capture = new TakePositionSubroutine().getTakePos(c, b, color.bit);
-            moves.add(capture);
+            moves.add(new TakePositionSubroutine().getTakePos(c, b, color.bit));
             moves.add(new CounterPositionSubroutine().getCounterPos(c, b, color));
        
-            OnyxMove tmp = this.trim(moves, b, c, color);    
-            tmp = this.assertCapture(tmp, b, c, color);
+            OnyxMove tmp = this.initCaptures(this.trim(moves, b, c, color), b, c, color);
 
             if (MoveUtils.isNotMove(tmp) || c.getPosition(tmp.getPos().getKey()).isOccupied()) {
                 tmp = new RandomSearch().search(c, b, color);

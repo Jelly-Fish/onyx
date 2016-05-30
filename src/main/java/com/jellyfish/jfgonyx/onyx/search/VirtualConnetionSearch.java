@@ -77,7 +77,7 @@ public class VirtualConnetionSearch extends ConnectionSearch implements OnyxConn
                 c, color, this.getTailMove(c, board, opColor));
         
         if (res != null) {
-            return assertCapture(new OnyxMove(res, OnyxConst.SCORE.VTAIL.getValue()), board, c, color);
+            return initCaptures(new OnyxMove(res, OnyxConst.SCORE.VTAIL.getValue()), board, c, color);
         }
         
         return null;

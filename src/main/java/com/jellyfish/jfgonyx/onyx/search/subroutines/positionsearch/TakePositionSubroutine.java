@@ -124,10 +124,10 @@ public class TakePositionSubroutine extends AbstractSubroutine {
         
         if (i > -1) this.move = new OnyxMove(posSet.get(i), posSet.get(i).getPiece(), 
                 posSet, OnyxConst.SCORE.TAKE.getValue());
-        if (MoveUtils.isMove(this.move)) print(AbstractSubroutine.BEST_CANDIDATE, 
+        if (MoveUtils.isMove(this.move)) print(AbstractSubroutine.BEST_TAKE_CANDIDATE, 
                 AbstractSubroutine.SUBROUTINE_TYPE.TAKE,
-                bitColor == 0 ? OnyxConst.COLOR.WHITE : OnyxConst.COLOR.BLACK, 
-                this.move.getPos().getKey());
+                bitColor == 0 ? OnyxConst.COLOR.WHITE.str : OnyxConst.COLOR.BLACK.str, 
+                this.move.getPos().getKey(), this.move.getScore());
         
         return this.move;
     }

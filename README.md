@@ -1,2 +1,2 @@
 # onyx
-Onyx abstract board game in Java
+Onyx v0.1 abstract board game in Java

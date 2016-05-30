@@ -134,7 +134,7 @@ public class AbstractOnyxSearch {
         return count > 1 ? tmp : null;
     }
     
-        /**
+    /**
      * Trim overload - discards NULL, OnyxPos NULL & moves that will result
      * in take opotunities for color oponent.
      * @param moves moves to trim.
@@ -157,7 +157,7 @@ public class AbstractOnyxSearch {
         return this.trim(scoredMoves, b, c, color);
     }
     
-    protected final OnyxMove assertCapture(final OnyxMove tmp, final OnyxBoard b, 
+    protected final OnyxMove initCaptures(final OnyxMove tmp, final OnyxBoard b, 
             final OnyxPosCollection c, final OnyxConst.COLOR color) throws InvalidOnyxPositionException {
         
         List<OnyxPos> posSet = null;

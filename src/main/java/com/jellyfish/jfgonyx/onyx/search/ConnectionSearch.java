@@ -69,11 +69,11 @@ public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnecti
         this.init();
         this.cnxMoves.add(this.searchWinMove(c, color));
         this.cnxMoves.add(this.searchCounterWinLink(c, board, color));
-                
+        
         return this.trim(this.cnxMoves, board, c, color);
     }
     
-    private void init() {
+    private void init() {        
         this.cnxTmpMoves.clear();
         this.checkedKeys.clear();
         this.cnxMoves.clear();
@@ -142,7 +142,7 @@ public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnecti
         
         if (count > 0) {            
             move = new WinConnectionLinkSubroutine(c, opColor).connectionLink(moves);
-            move = this.assertCapture(move, board, c, color);
+            move = this.initCaptures(move, board, c, color);
         }
 
         return move;
