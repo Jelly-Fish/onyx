@@ -82,9 +82,9 @@ public class VirtualConnectionSubroutine extends AbstractSubroutine {
             this.buildTail(p, p.getKey());
         }
     
-        /** FIXME : bebug purpose, print all tails... */
+        /** FIXME : bebug purpose, print all tails...
         this.printAllTails();
-        /** END DEBUG */
+        ** END DEBUG */
         
         this.tail = this.trimTails();
         

@@ -112,7 +112,7 @@ public class AbstractOnyxSearch {
              * If score is > COUNTER_WIN_LINK - 1f then Override previous conditions.
              * @see OnyxConst
              */
-            if ((!(new OnyxPosStateSubroutine(m.getPos()).willEnableTake(b, c, color)) &&
+            if (((tmp.isCapture() || !(new OnyxPosStateSubroutine(m.getPos()).willEnableTake(b, c, color))) &&
                     m.getScore() >= tmp.getScore()) || 
                     m.getScore() > OnyxConst.SCORE.COUNTER_WIN_LINK.getValue() - 1f) {
                 tmp = m;
@@ -126,8 +126,9 @@ public class AbstractOnyxSearch {
          * willEnableTake once again - score will be equal to first 
          * non NULL move and coparing score will be irrelevant.
          */
-        if (count == 1 && (!(new OnyxPosStateSubroutine(tmp.getPos()).willEnableTake(b, c, color)) ||
-                tmp.getScore() > OnyxConst.SCORE.COUNTER_WIN_LINK.getValue() - 1f)) {
+        if (count == 1 && ((tmp.isCapture() || 
+            !(new OnyxPosStateSubroutine(tmp.getPos()).willEnableTake(b, c, color))) ||
+            tmp.getScore() > OnyxConst.SCORE.COUNTER_WIN_LINK.getValue() - 1f)) {
             return MoveUtils.isMove(tmp) ? tmp : null;
         }
         
