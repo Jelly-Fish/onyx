@@ -37,7 +37,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
  * @author thw
  */
 class VirtualConnectionTailTrimSubroutine {

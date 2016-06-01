@@ -43,6 +43,7 @@ import com.jellyfish.jfgonyx.onyx.search.searchutils.OnyxPositionUtils;
 import com.jellyfish.jfgonyx.onyx.search.subroutines.connectionsearch.VirtualConnectionSubroutine;
 import com.jellyfish.jfgonyx.onyx.search.subroutines.positionsearch.OnyxPosStateSubroutine;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -97,24 +98,30 @@ public class VirtualConnetionSearch extends ConnectionSearch implements OnyxConn
             final OnyxPosCollection c, final OnyxConst.COLOR color, final OnyxMove opTailMove) throws InvalidOnyxPositionException {
 
         if (sT == null || oT == null) return null;
+        final List<OnyxPos> poss = new ArrayList<>();
         OnyxPos pos = null;
         
         for (OnyxPos pOT : oT.getPositions()) {
             for (OnyxPos sOT : sT.getPositions()) {
                 if (new OnyxPosStateSubroutine(sOT).willEnableTake(b, c, color) 
                     || sOT.isOccupied()) continue;
-                if (sOT.getKey().equals(opTailMove.getPos().getKey())) pos = sOT;
-                if (sOT.getKey().equals(pOT.getKey())) pos = sOT;               
+                if (sOT.getKey().equals(opTailMove.getPos().getKey()) ||
+                    sOT.getKey().equals(pOT.getKey())) poss.add(sOT);             
             }
         }
         
-        if (pos == null) {
+        if (poss == null) {
             for (OnyxPos sOT : sT.getPositions()) {
                 if (!sOT.isOccupied()) {
                     pos = sOT;
                     break;
                 }
             }
+        }
+        
+        for (OnyxPos p : poss) {
+            if (!color.bool && p.x > pos.x) pos = p;
+            if (color.bool && p.y > pos.y) pos = p;
         }
                 
         return pos;

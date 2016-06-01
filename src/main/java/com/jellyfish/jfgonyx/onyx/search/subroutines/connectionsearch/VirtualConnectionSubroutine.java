@@ -31,6 +31,7 @@
  */
 package com.jellyfish.jfgonyx.onyx.search.subroutines.connectionsearch;
 
+import com.jellyfish.jfgonyx.helpers.HTMLDisplayHelper;
 import com.jellyfish.jfgonyx.onyx.abstractions.AbstractSubroutine;
 import com.jellyfish.jfgonyx.onyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
@@ -82,17 +83,20 @@ public class VirtualConnectionSubroutine extends AbstractSubroutine {
             this.buildTail(p, p.getKey());
         }
     
-        /** FIXME : bebug purpose, print all tails...
+        /** FIXME : bebug purpose, print all tails - remove when done. */
         this.printAllTails();
-        ** END DEBUG */
         
         this.tail = this.trimTails();
         
         if (this.tail != null) print(AbstractSubroutine.VTAIL_CANDIDATE_RES, 
-            this.type, this.color, this.tail.lenght(), this.tail.toString());
+            this.type, HTMLDisplayHelper.FAINT_GOLD, this.color, this.tail.lenght(), this.tail.toString());
     }
     
     private void buildTail(final OnyxPos p, final String kEx) {       
+        
+        /**
+         * FIXME : complete rethinking...
+         */
         
         this.checkedKeys.add(p.getKey());
         final String[] cnxs = p.isDiamondCenter() ? p.connections : trimCnxPositions(p, p.connections);
@@ -147,7 +151,7 @@ public class VirtualConnectionSubroutine extends AbstractSubroutine {
             tmp = c.getPosition(cnx);
             if (tmp == null) continue;
             if ((this.color.bool && tmp.x == p.x) || (!this.color.bool && tmp.y == p.y)) poss[++i] = tmp;
-        }        
+        }      
         
         r[0] = poss[0] != null ? poss[0].getKey() : StringUtils.EMPTY;
         r[1] = this.color.bool && poss[2] != null ? poss[2].getKey() : 
@@ -184,7 +188,8 @@ public class VirtualConnectionSubroutine extends AbstractSubroutine {
         
         for (OnyxTail t : this.tails) {
             if (t != null && t.lenght() > 0) print(AbstractSubroutine.VTAIL_CANDIDATE_FORMAT, 
-                this.type, this.color, this.tail.lenght(), this.tail.toString());
+                this.type, HTMLDisplayHelper.GAINSBORO, this.color, this.tail.lenght(), 
+                this.tail.toString());
         }
     }
     
