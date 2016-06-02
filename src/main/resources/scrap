@@ -360,3 +360,113 @@ public boolean isSubjectToTake(final OnyxBoard board, final OnyxPosCollection c,
     if (n == 0) {
         // Blah bla...
     }
+
+////////////////////////////////////////////////////////////////////////////////
+
+    @Deprecated
+    private String[] sortCnxPositions2(final OnyxPos p) {
+        
+        final String[] cnxs = p.connections;
+        final OnyxPos poss[] = new OnyxPos[7]; 
+        final LinkedList<String> r = new LinkedList<>();
+        int i = -1;
+        OnyxPos tmp = null;
+        
+        /**
+         * If the tail is linked (reached oposite border depending on low
+         * border start TRUE/FALSE) then return all recusive calls.
+         */
+        if (this.linked) return r.toArray(new String[r.size()]);
+        
+        /**
+         * Forward position - only one forward position must be found depending
+         * on color and tail start side (start @ low border TRUE/FALSE) :
+         * poss[0] = that position.
+         */
+        for (String cnx : cnxs) {
+            
+            tmp = c.getPosition(cnx);
+            if (tmp == null) continue;
+                        
+            if (((this.startLowBorder && (this.color.bool && (tmp.y == p.y && tmp.x > p.x))) ||
+                (this.startLowBorder && (!this.color.bool && (tmp.x == p.x && tmp.y > p.y)))) ||
+                ((!this.startLowBorder && (this.color.bool && (tmp.y == p.y && tmp.x < p.x))) ||
+                (!this.startLowBorder && (!this.color.bool && (tmp.x == p.x && tmp.y < p.y))))) {
+                poss[++i] = tmp;
+            }
+        }
+        
+        if (poss[0] != null) r.addLast(poss[0].getKey());
+        
+        /**
+         * Right & left moves - only two moves can found as this method is only
+         * used for non-diamond-center position - after iteration, found 
+         * positions 1 & 2 go to poss[1 OR 2] indexes depending on color.
+         */
+        for (String cnx : cnxs) {            
+            tmp = c.getPosition(cnx);
+            if (tmp == null) continue;            
+            if ((this.color.bool && tmp.x == p.x) || (!this.color.bool && tmp.y == p.y)) poss[++i] = tmp;
+        }              
+        
+        if (this.color.bool && poss[2] != null) r.addLast(poss[2].getKey());
+        else if (poss[1] != null) r.addLast(poss[1].getKey());
+        
+        if (this.color.bool && poss[1] != null) r.addLast(poss[1].getKey());
+        else if (poss[2] != null) r.addLast(poss[2].getKey());
+                
+        /**
+         * Forward up & down moves - max of two moves are possible - if target
+         * position is a diamond center with occupied neighbour positions then
+         * discard - after iteration, found positions 1 & 2 go to poss[3 & 4] 
+         * indexes depending on color.
+         */
+        for (String cnx : cnxs) {
+            
+            tmp = c.getPosition(cnx);
+            if (tmp == null || (tmp.isDiamondCenter() && tmp.hasNeighbour(this.c, this.color))) continue;  
+            
+            if (((this.startLowBorder && (this.color.bool && (tmp.y != p.y && tmp.x > p.x))) ||
+                (this.startLowBorder && (!this.color.bool && (tmp.x != p.x && tmp.y > p.y)))) ||
+                ((!this.startLowBorder && (this.color.bool && (tmp.y != p.y && tmp.x < p.x))) ||
+                (!this.startLowBorder && (!this.color.bool && (tmp.x != p.x && tmp.y < p.y))))) {
+                poss[++i] = tmp;
+            }
+        }
+        
+        if (this.color.bool && poss[4] != null) r.addLast(poss[4].getKey());
+        else if (poss[3] != null) r.addLast(poss[3].getKey());
+        
+        if (this.color.bool && poss[3] != null) r.addLast(poss[3].getKey());
+        else if (poss[4] != null) r.addLast(poss[4].getKey());
+
+        /**
+         * Return/backwards up & down moves - max of two moves are possible - if target
+         * position is a diamond center with occupied neighbour positions then
+         * discard - after iteration, found positions 1 & 2 go to poss[5 & 6] 
+         * indexes depending on color.
+         */
+        for (String cnx : cnxs) {
+            
+            tmp = c.getPosition(cnx);
+            if (tmp == null || (tmp.isDiamondCenter() && tmp.hasNeighbour(this.c, this.color))) continue;  
+            
+            if (((this.startLowBorder && (this.color.bool && (tmp.y != p.y && tmp.x < p.x))) ||
+                (this.startLowBorder && (!this.color.bool && (tmp.x != p.x && tmp.y < p.y)))) ||
+                ((!this.startLowBorder && (this.color.bool && (tmp.y != p.y && tmp.x > p.x))) ||
+                (!this.startLowBorder && (!this.color.bool && (tmp.x != p.x && tmp.y > p.y))))) {
+                poss[++i] = tmp;
+            }
+        }
+        
+        if (this.color.bool && poss[6] != null) r.addLast(poss[6].getKey());
+        else if (poss[5] != null) r.addLast(poss[5].getKey());
+        
+        if (this.color.bool && poss[3] != null) r.addLast(poss[3].getKey());
+        else if (poss[4] != null) r.addLast(poss[4].getKey());
+
+        /**
+         * Finally return linked list to array.
+         */
+        return r.toArray(new String[r.size()]);
+    }

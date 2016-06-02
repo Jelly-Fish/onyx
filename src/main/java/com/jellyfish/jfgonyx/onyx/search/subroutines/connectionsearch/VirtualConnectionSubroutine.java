@@ -31,7 +31,6 @@
  */
 package com.jellyfish.jfgonyx.onyx.search.subroutines.connectionsearch;
 
-import com.jellyfish.jfgonyx.helpers.HTMLDisplayHelper;
 import com.jellyfish.jfgonyx.onyx.abstractions.AbstractSubroutine;
 import com.jellyfish.jfgonyx.onyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
@@ -41,6 +40,7 @@ import com.jellyfish.jfgonyx.ui.OnyxBoard;
 import com.jellyfish.jfgonyx.vars.GraphicsVars;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import org.apache.commons.lang3.StringUtils;
@@ -83,23 +83,20 @@ public class VirtualConnectionSubroutine extends AbstractSubroutine {
             this.buildTail(p, p.getKey());
         }
     
-        /** FIXME : bebug purpose, print all tails - remove when done. */
+        /** FIXME : bebug purpose, print all tails...
         this.printAllTails();
+        ** END DEBUG */
         
         this.tail = this.trimTails();
         
         if (this.tail != null) print(AbstractSubroutine.VTAIL_CANDIDATE_RES, 
-            this.type, HTMLDisplayHelper.FAINT_GOLD, this.color, this.tail.lenght(), this.tail.toString());
+            this.type, this.color, this.tail.lenght(), this.tail.toString());
     }
     
     private void buildTail(final OnyxPos p, final String kEx) {       
         
-        /**
-         * FIXME : complete rethinking...
-         */
-        
         this.checkedKeys.add(p.getKey());
-        final String[] cnxs = p.isDiamondCenter() ? p.connections : trimCnxPositions(p, p.connections);
+        final String[] cnxs = p.isDiamondCenter() ? p.connections : sortCnxPositions1(p, p.connections);
         OnyxPos tmp = null;
 
         for (String cnx : cnxs) {
@@ -125,7 +122,7 @@ public class VirtualConnectionSubroutine extends AbstractSubroutine {
         }        
     }
     
-    private String[] trimCnxPositions(final OnyxPos p, final String[] cnxs) {
+    private String[] sortCnxPositions1(final OnyxPos p, final String[] cnxs) {
         
         final OnyxPos poss[] = new OnyxPos[3]; 
         final String[] r = new String[3];
@@ -151,7 +148,7 @@ public class VirtualConnectionSubroutine extends AbstractSubroutine {
             tmp = c.getPosition(cnx);
             if (tmp == null) continue;
             if ((this.color.bool && tmp.x == p.x) || (!this.color.bool && tmp.y == p.y)) poss[++i] = tmp;
-        }      
+        }        
         
         r[0] = poss[0] != null ? poss[0].getKey() : StringUtils.EMPTY;
         r[1] = this.color.bool && poss[2] != null ? poss[2].getKey() : 
@@ -160,6 +157,114 @@ public class VirtualConnectionSubroutine extends AbstractSubroutine {
             poss[2] != null ? poss[2].getKey() : StringUtils.EMPTY; 
 
         return r;
+    }
+    
+    @Deprecated
+    private String[] sortCnxPositions2(final OnyxPos p) {
+        
+        final String[] cnxs = p.connections;
+        final OnyxPos poss[] = new OnyxPos[7]; 
+        final LinkedList<String> r = new LinkedList<>();
+        int i = -1;
+        OnyxPos tmp = null;
+        
+        /**
+         * If the tail is linked (reached oposite border depending on low
+         * border start TRUE/FALSE) then return all recusive calls.
+         */
+        if (this.linked) return r.toArray(new String[r.size()]);
+        
+        /**
+         * Forward position - only one forward position must be found depending
+         * on color and tail start side (start @ low border TRUE/FALSE) :
+         * poss[0] = that position.
+         */
+        for (String cnx : cnxs) {
+            
+            tmp = c.getPosition(cnx);
+            if (tmp == null) continue;
+                        
+            if (((this.startLowBorder && (this.color.bool && (tmp.y == p.y && tmp.x > p.x))) ||
+                (this.startLowBorder && (!this.color.bool && (tmp.x == p.x && tmp.y > p.y)))) ||
+                ((!this.startLowBorder && (this.color.bool && (tmp.y == p.y && tmp.x < p.x))) ||
+                (!this.startLowBorder && (!this.color.bool && (tmp.x == p.x && tmp.y < p.y))))) {
+                poss[++i] = tmp;
+            }
+        }
+        
+        if (poss[0] != null) r.addLast(poss[0].getKey());
+        
+        /**
+         * Right & left moves - only two moves can found as this method is only
+         * used for non-diamond-center position - after iteration, found 
+         * positions 1 & 2 go to poss[1 OR 2] indexes depending on color.
+         */
+        for (String cnx : cnxs) {            
+            tmp = c.getPosition(cnx);
+            if (tmp == null) continue;            
+            if ((this.color.bool && tmp.x == p.x) || (!this.color.bool && tmp.y == p.y)) poss[++i] = tmp;
+        }              
+        
+        if (this.color.bool && poss[2] != null) r.addLast(poss[2].getKey());
+        else if (poss[1] != null) r.addLast(poss[1].getKey());
+        
+        if (this.color.bool && poss[1] != null) r.addLast(poss[1].getKey());
+        else if (poss[2] != null) r.addLast(poss[2].getKey());
+                
+        /**
+         * Forward up & down moves - max of two moves are possible - if target
+         * position is a diamond center with occupied neighbour positions then
+         * discard - after iteration, found positions 1 & 2 go to poss[3 & 4] 
+         * indexes depending on color.
+         */
+        for (String cnx : cnxs) {
+            
+            tmp = c.getPosition(cnx);
+            if (tmp == null || (tmp.isDiamondCenter() && tmp.hasNeighbour(this.c, this.color))) continue;  
+            
+            if (((this.startLowBorder && (this.color.bool && (tmp.y != p.y && tmp.x > p.x))) ||
+                (this.startLowBorder && (!this.color.bool && (tmp.x != p.x && tmp.y > p.y)))) ||
+                ((!this.startLowBorder && (this.color.bool && (tmp.y != p.y && tmp.x < p.x))) ||
+                (!this.startLowBorder && (!this.color.bool && (tmp.x != p.x && tmp.y < p.y))))) {
+                poss[++i] = tmp;
+            }
+        }
+        
+        if (this.color.bool && poss[4] != null) r.addLast(poss[4].getKey());
+        else if (poss[3] != null) r.addLast(poss[3].getKey());
+        
+        if (this.color.bool && poss[3] != null) r.addLast(poss[3].getKey());
+        else if (poss[4] != null) r.addLast(poss[4].getKey());
+
+        /**
+         * Return/backwards up & down moves - max of two moves are possible - if target
+         * position is a diamond center with occupied neighbour positions then
+         * discard - after iteration, found positions 1 & 2 go to poss[5 & 6] 
+         * indexes depending on color.
+         */
+        for (String cnx : cnxs) {
+            
+            tmp = c.getPosition(cnx);
+            if (tmp == null || (tmp.isDiamondCenter() && tmp.hasNeighbour(this.c, this.color))) continue;  
+            
+            if (((this.startLowBorder && (this.color.bool && (tmp.y != p.y && tmp.x < p.x))) ||
+                (this.startLowBorder && (!this.color.bool && (tmp.x != p.x && tmp.y < p.y)))) ||
+                ((!this.startLowBorder && (this.color.bool && (tmp.y != p.y && tmp.x > p.x))) ||
+                (!this.startLowBorder && (!this.color.bool && (tmp.x != p.x && tmp.y > p.y))))) {
+                poss[++i] = tmp;
+            }
+        }
+        
+        if (this.color.bool && poss[6] != null) r.addLast(poss[6].getKey());
+        else if (poss[5] != null) r.addLast(poss[5].getKey());
+        
+        if (this.color.bool && poss[3] != null) r.addLast(poss[3].getKey());
+        else if (poss[4] != null) r.addLast(poss[4].getKey());
+
+        /**
+         * Finally return linked list to array.
+         */
+        return r.toArray(new String[r.size()]);
     }
     
     private OnyxTail trimTails() {
@@ -188,8 +293,7 @@ public class VirtualConnectionSubroutine extends AbstractSubroutine {
         
         for (OnyxTail t : this.tails) {
             if (t != null && t.lenght() > 0) print(AbstractSubroutine.VTAIL_CANDIDATE_FORMAT, 
-                this.type, HTMLDisplayHelper.GAINSBORO, this.color, this.tail.lenght(), 
-                this.tail.toString());
+                this.type, this.color, this.tail.lenght(), this.tail.toString());
         }
     }
     

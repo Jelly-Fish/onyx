@@ -33,13 +33,13 @@ package com.jellyfish.jfgonyx.onyx.entities;
 
 import com.jellyfish.jfgonyx.onyx.constants.OnyxConst;
 import java.util.LinkedList;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author thw
  */
 public class OnyxTail {
     
-    private static final String SEPARATOR = ",";
     private boolean connected = false;
     private final LinkedList<OnyxPos> positions = new LinkedList<>();
     
@@ -101,7 +101,7 @@ public class OnyxTail {
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("tail start to end: ");     
-        for (OnyxPos p : this.positions) sb.append(OnyxConst.POS_MAP.get(p.getKey())).append(SEPARATOR);
+        for (OnyxPos p : this.positions) sb.append(OnyxConst.POS_MAP.get(p.getKey())).append(",");
         return sb.toString().substring(0, sb.length() - 1);
     }
     
