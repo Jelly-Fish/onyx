@@ -81,14 +81,14 @@ public class TailConnectionSubroutine extends AbstractSubroutine {
      */
     public OnyxMove getTail(final OnyxPos p, final boolean counterSearch) throws InvalidOnyxPositionException {
         
-        this.startPos = p;
+        startPos = p;
         this.counterSearch = counterSearch;
-        this.tail = this.findTail(p, p.getKey());
-        this.score();
-        this.candidate = this.trim(this.candidates, this.board, this.c, this.color);
-        if (MoveUtils.isMove(this.candidate)) print(AbstractSubroutine.BEST_CANDIDATE_TAIL_FORMAT, 
-                p.getKey(), this.type, this.color.str, this.candidate);
-        return this.candidate;
+        tail = findTail(p, p.getKey());
+        score();
+        candidate = trim(candidates, board, c, color);
+        if (MoveUtils.isMove(candidate)) print(AbstractSubroutine.BEST_CANDIDATE_TAIL_FORMAT, 
+                p.getKey(), type, color.str, candidate);
+        return candidate;
     }
     
     /**
@@ -101,22 +101,22 @@ public class TailConnectionSubroutine extends AbstractSubroutine {
      */
     public List<OnyxMove> getTails(final OnyxPos p, final boolean counterSearch) throws InvalidOnyxPositionException {
         
-        this.startPos = p;
+        startPos = p;
         this.counterSearch = counterSearch;
-        this.tail = this.findTail(p, p.getKey());
-        this.score();
-        this.addStartPositionToCandidates();
-        this.candidate = this.trim(this.candidates, this.board, this.c, this.color);
-        if (MoveUtils.isMove(this.candidate)) print(AbstractSubroutine.BEST_CANDIDATE_TAIL_FORMAT, 
-                p.getKey(), AbstractSubroutine.SUBROUTINE_TYPE.TAILS, this.color.str, this.candidates);
+        tail = findTail(p, p.getKey());
+        score();
+        addStartPositionToCandidates();
+        candidate = trim(candidates, board, c, color);
+        if (MoveUtils.isMove(candidate)) print(AbstractSubroutine.BEST_CANDIDATE_TAIL_FORMAT, 
+                p.getKey(), AbstractSubroutine.SUBROUTINE_TYPE.TAILS, color.str, candidates);
         
-        return this.candidates;
+        return candidates;
     }
 
     private OnyxPos findTail(final OnyxPos p, final String kEx) {       
         
-        ++this.links;
-        this.checkedKeys.add(p.getKey());
+        ++links;
+        checkedKeys.add(p.getKey());
         OnyxPos tmp = null;
         
         for (String k : p.connections) {
@@ -125,13 +125,13 @@ public class TailConnectionSubroutine extends AbstractSubroutine {
                 
                 tmp = c.getPosition(k);
                 
-                if (!tmp.isOccupied() && c.isValidMove(tmp, this.board)) {
-                    this.keyCandidates.add(k);
+                if (!tmp.isOccupied() && c.isValidMove(tmp, board)) {
+                    keyCandidates.add(k);
                 }
                 
-                if (tmp.isOccupied() && tmp.getPiece().color.bit == this.color.bit 
-                        && !this.checkedKeys.contains(tmp.getKey())) {
-                    this.findTail(c.getPosition(k), k);
+                if (tmp.isOccupied() && tmp.getPiece().color.bit == color.bit 
+                        && !checkedKeys.contains(tmp.getKey())) {
+                    findTail(c.getPosition(k), k);
                 }
             } 
         }
@@ -142,25 +142,25 @@ public class TailConnectionSubroutine extends AbstractSubroutine {
     protected void score() {
 
         final boolean lowBorderTendency = OnyxGame.getInstance().getLowBorderTendency(
-            OnyxConst.COLOR.getOposite(this.startPos.getPiece().color.bool));
+            OnyxConst.COLOR.getOposite(startPos.getPiece().color.bool));
         
         final float boardLength = ((float) GraphicsVars.getInstance().BOARD_SIDE_SQUARE_COUNT) + 1f;
         float score = 0f;
         OnyxPos tmp = null, pos = null;
 
-        for (String k : this.keyCandidates) {
+        for (String k : keyCandidates) {
             
             score = 0f;
-            pos = this.c.getPosition(k);    
+            pos = c.getPosition(k);    
             if (tmp == null) tmp = pos;
 
-            if (this.color.bool) {
+            if (color.bool) {
                 
-                if (this.startPos.isLowXBorder() && pos.x >= tmp.x) {
+                if (startPos.isLowXBorder() && pos.x >= tmp.x) {
                     score = pos.x;
                     tmp = pos;
                     score = lowBorderTendency ? (tmp.y > (boardLength / 2) ? (score + 1f) : score) : score;
-                } else if (this.startPos.isHighXBorder() && pos.x <= tmp.x) {
+                } else if (startPos.isHighXBorder() && pos.x <= tmp.x) {
                     score = boardLength - pos.x;
                     tmp = pos;
                     score = lowBorderTendency ? (tmp.y > (boardLength / 2) ? (score + 1f) : score) : score;
@@ -169,18 +169,18 @@ public class TailConnectionSubroutine extends AbstractSubroutine {
                 /**
                  * FIXME : not obvious - figure out best way to upgrade best move.
                  */
-                if (this.counterSearch && pos.x == tmp.x) {
+                if (counterSearch && pos.x == tmp.x) {
                     score *= (1.4f + 
-                        (pos.hasNeighbour(this.c, OnyxConst.COLOR.getOposite(this.color.bool)) ? .6f : 0f));
+                        (pos.hasNeighbour(c, OnyxConst.COLOR.getOposite(color.bool)) ? .6f : 0f));
                 }
                 
-            } else if (!this.color.bool) {
+            } else if (!color.bool) {
 
-                if (this.startPos.isLowYBorder() && pos.y >= tmp.y) {
+                if (startPos.isLowYBorder() && pos.y >= tmp.y) {
                     score = pos.y;
                     tmp = pos;
                     score = lowBorderTendency ? (tmp.x > (boardLength / 2) ? (score + 1f) : score) : score;
-                } else if (this.startPos.isHighYBorder() && pos.y <= tmp.y) {
+                } else if (startPos.isHighYBorder() && pos.y <= tmp.y) {
                     score = boardLength - pos.y;
                     tmp = pos;
                     score = lowBorderTendency ? (tmp.x > (boardLength / 2) ? (score + 1f) : score) : score;
@@ -189,19 +189,19 @@ public class TailConnectionSubroutine extends AbstractSubroutine {
                 /**
                  * FIXME : not obvious - figure out best way to upgrade best move.
                  */
-                if (this.counterSearch && pos.y == tmp.y) {
+                if (counterSearch && pos.y == tmp.y) {
                     score *= (1.4f + 
-                        (pos.hasNeighbour(this.c, OnyxConst.COLOR.getOposite(this.color.bool)) ? .6f : 0f));
+                        (pos.hasNeighbour(c, OnyxConst.COLOR.getOposite(color.bool)) ? .6f : 0f));
                 }
             }
             
-            this.candidates.add(new OnyxMove(tmp, score * OnyxConst.SCORE.TAIL.getValue()));
+            candidates.add(new OnyxMove(tmp, score * OnyxConst.SCORE.TAIL.getValue()));
         }
     }
     
     private void addStartPositionToCandidates() {
-        for (OnyxMove m : this.candidates) {
-            if (MoveUtils.isMove(m)) m.setTailStartPos(this.startPos);
+        for (OnyxMove m : candidates) {
+            if (MoveUtils.isMove(m)) m.setTailStartPos(startPos);
         }
     }
     

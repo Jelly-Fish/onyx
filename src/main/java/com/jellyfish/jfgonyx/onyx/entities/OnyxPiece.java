@@ -53,7 +53,7 @@ public class OnyxPiece {
     }
 
     public boolean isVirtual() {
-        return this.virtual;
+        return virtual;
     }
     
     public boolean isEngineMove() {

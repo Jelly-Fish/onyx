@@ -108,7 +108,7 @@ public class TakePositionSubroutine extends AbstractSubroutine {
         }
         
         if (posSet.size() <= 0) return null;
-        if (posSet.size() == 1) this.move = new OnyxMove(posSet.get(0), 
+        if (posSet.size() == 1) move = new OnyxMove(posSet.get(0), 
                 posSet.get(0).getPiece(), posSet, OnyxConst.SCORE.TAKE.getValue());
         
         count = 0;
@@ -122,14 +122,14 @@ public class TakePositionSubroutine extends AbstractSubroutine {
             }            
         }
         
-        if (i > -1) this.move = new OnyxMove(posSet.get(i), posSet.get(i).getPiece(), 
+        if (i > -1) move = new OnyxMove(posSet.get(i), posSet.get(i).getPiece(), 
                 posSet, OnyxConst.SCORE.TAKE.getValue());
-        if (MoveUtils.isMove(this.move)) print(AbstractSubroutine.BEST_TAKE_CANDIDATE, 
+        if (MoveUtils.isMove(move)) print(AbstractSubroutine.BEST_TAKE_CANDIDATE, 
                 AbstractSubroutine.SUBROUTINE_TYPE.TAKE,
                 bitColor == 0 ? OnyxConst.COLOR.WHITE.str : OnyxConst.COLOR.BLACK.str, 
-                this.move.getPos().getKey(), this.move.getScore());
+                move.getPos().getKey(), move.getScore());
         
-        return this.move;
+        return move;
     }
     
 }

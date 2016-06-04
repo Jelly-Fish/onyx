@@ -64,19 +64,19 @@ public class KeyMoveVirutalPiece implements OnyxExecutable {
 
         switch (((KeyEvent) e).getKeyCode()) {
             case KeyEvent.VK_LEFT:
-                this.move(x, y, x - .5f, y - .5f, board, v, KeyEvent.VK_LEFT);
+                move(x, y, x - .5f, y - .5f, board, v, KeyEvent.VK_LEFT);
                 break;
             case KeyEvent.VK_UP:
-                this.move(x, y, x + .5f, y - .5f, board, v, KeyEvent.VK_UP);
+                move(x, y, x + .5f, y - .5f, board, v, KeyEvent.VK_UP);
                 break;
             case KeyEvent.VK_RIGHT:
-                this.move(x, y, x + .5f, y + .5f, board, v, KeyEvent.VK_RIGHT);
+                move(x, y, x + .5f, y + .5f, board, v, KeyEvent.VK_RIGHT);
                 break;
             case KeyEvent.VK_DOWN:
-                this.move(x, y, x - .5f, y + .5f, board, v, KeyEvent.VK_DOWN);
+                move(x, y, x - .5f, y + .5f, board, v, KeyEvent.VK_DOWN);
                 break;
             case KeyEvent.VK_ENTER:
-                moved = this.validateMove(board, v);
+                moved = validateMove(board, v);
                 break;
             default:
                 break;
@@ -102,8 +102,8 @@ public class KeyMoveVirutalPiece implements OnyxExecutable {
         
         String k = String.format(OnyxPosCollection.KEY_FORMAT, nX, nY);
         final String oldK = String.format(OnyxPosCollection.KEY_FORMAT, x, y);
-        if (!this.applyMove(k, oldK, v, board)) {
-            this.applyMove(this.forwardMove(nX, nY, keyEvt), oldK, v, board);
+        if (!applyMove(k, oldK, v, board)) {
+            applyMove(forwardMove(nX, nY, keyEvt), oldK, v, board);
         }
     }
     

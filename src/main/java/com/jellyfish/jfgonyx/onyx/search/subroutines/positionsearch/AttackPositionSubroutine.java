@@ -70,22 +70,22 @@ public class AttackPositionSubroutine extends AbstractSubroutine {
             }
             
             if (iPos[0] + iPos[2] == 2 && iPos[1] + iPos[3] == 0 && !c.getPosition(keys[1]).isOccupied()) {
-                this.move = new OnyxMove(c.getPosition(keys[1]), OnyxConst.SCORE.ATTACK.getValue());
+                move = new OnyxMove(c.getPosition(keys[1]), OnyxConst.SCORE.ATTACK.getValue());
                 break;
             }
             
             if (iPos[1] + iPos[3] == 2 && iPos[0] + iPos[2] == 0 && !c.getPosition(keys[0]).isOccupied()) {
-                this.move = new OnyxMove(c.getPosition(keys[0]), OnyxConst.SCORE.ATTACK.getValue());
+                move = new OnyxMove(c.getPosition(keys[0]), OnyxConst.SCORE.ATTACK.getValue());
                 break;
             }
         }
         
-        if (MoveUtils.isMove(this.move)) print(AbstractSubroutine.BEST_CANDIDATE, 
+        if (MoveUtils.isMove(move)) print(AbstractSubroutine.BEST_CANDIDATE, 
                 AbstractSubroutine.SUBROUTINE_TYPE.ATTACK, 
                 bitColor == 0 ? OnyxConst.COLOR.WHITE : OnyxConst.COLOR.BLACK, 
-                this.move.getPos().getKey());
+                move.getPos().getKey());
         
-        return this.move;
+        return move;
     }
     
 }

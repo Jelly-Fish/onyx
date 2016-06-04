@@ -74,7 +74,7 @@ public class CenterPositionSubroutine extends AbstractSubroutine {
         
         while (!found || s > minS) { 
             
-            for (String k : this.getKeys(c, s, side)) {
+            for (String k : getKeys(c, s, side)) {
                 
                 tmp = c.getPosition(k);
                 if (tmp != null && !tmp.isOccupied() && tmp.isDiamondCenter()) {
@@ -94,7 +94,7 @@ public class CenterPositionSubroutine extends AbstractSubroutine {
             }
             
             if (pos.size() > 0) {
-                this.move = new OnyxMove(pos.get(pos.size() == 1 ? 0 : RandomUtils.randInt(0, pos.size() - 1)), 
+                move = new OnyxMove(pos.get(pos.size() == 1 ? 0 : RandomUtils.randInt(0, pos.size() - 1)), 
                     OnyxConst.SCORE.CENTER.getValue() - side);
                 break;
             }
@@ -103,9 +103,9 @@ public class CenterPositionSubroutine extends AbstractSubroutine {
             ++side;
         }
         
-        if (MoveUtils.isMove(this.move)) {
+        if (MoveUtils.isMove(move)) {
             print(AbstractSubroutine.BEST_CANDIDATE, AbstractSubroutine.SUBROUTINE_TYPE.CENTER_POS, 
-                color, this.move.getPos().getKey());
+                color, move.getPos().getKey());
         }
 
         return move;
@@ -169,12 +169,12 @@ public class CenterPositionSubroutine extends AbstractSubroutine {
             }
         }
 
-        final OnyxDiamond[] r = this.sortByCenterPosValue(d);
+        final OnyxDiamond[] r = sortByCenterPosValue(d);
         
         if (r == null || r.length == 0) return null;
         i = r.length / 2;
         
-        this.move = new OnyxMove(r[i].getCenterPos(), OnyxConst.SCORE.CENTER.getValue());
+        move = new OnyxMove(r[i].getCenterPos(), OnyxConst.SCORE.CENTER.getValue());
         
         return move;
     }
@@ -188,7 +188,7 @@ public class CenterPositionSubroutine extends AbstractSubroutine {
         for (OnyxDiamond d : set) r[++i] = d;
         
         for (i = 0; i < r.length; ++i) {
-            j = this.getLowValue(r, i);
+            j = getLowValue(r, i);
             tmp = r[i];
             r[i] = r[j];
             r[j] = tmp;

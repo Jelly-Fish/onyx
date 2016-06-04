@@ -78,25 +78,25 @@ public class MouseInput implements MouseListener, MouseMotionListener {
     @Override
     public void mousePressed(MouseEvent e) {
         
-        this.mouseDown = true;
-        this.mouseDownOnBorder = this.board.collidesWithBorders(new Point(e.getX(), e.getY()));
-        if (this.mouseDownOnBorder) this.board.setCursor(this.GRAB_CURSOR);
-        BoardDragger.getInstance().update(e, this.board);
+        mouseDown = true;
+        mouseDownOnBorder = board.collidesWithBorders(new Point(e.getX(), e.getY()));
+        if (mouseDownOnBorder) board.setCursor(GRAB_CURSOR);
+        BoardDragger.getInstance().update(e, board);
     }
 
     @Override
     public void mouseReleased(MouseEvent e) { 
-        this.mouseDown = false;
-        this.mouseDownOnBorder = false;
-        this.board.setCursor(this.HAND_CURSOR);
+        mouseDown = false;
+        mouseDownOnBorder = false;
+        board.setCursor(HAND_CURSOR);
     }
     
     @Override
     public void mouseDragged(MouseEvent e) { 
         
-        if (this.mouseDownOnBorder) {
+        if (mouseDownOnBorder) {
             try {
-                ops.get(MouseInput.EVENT.DRAG_BOARD).exec(e, this.board);
+                ops.get(MouseInput.EVENT.DRAG_BOARD).exec(e, board);
             } catch (final InvalidOnyxPositionException Iopex) {
                 Logger.getLogger(MouseInput.class.getName()).log(Level.SEVERE, null, Iopex);
             }
@@ -108,12 +108,12 @@ public class MouseInput implements MouseListener, MouseMotionListener {
         
         if (OnyxGame.getInstance().isGameEnd()) return;
         
-        final OnyxConst.COLOR c = this.board.getPosCollection().getVirtualPiece().color;
+        final OnyxConst.COLOR c = board.getPosCollection().getVirtualPiece().color;
         OnyxGame.getInstance().initMove(OnyxConst.COLOR.getOposite(c.bool));
         
         try {
-            if (ops.get(MouseInput.EVENT.SELECT_POS).exec(e, this.board)) {
-                OnyxGame.getInstance().performMove(this.board.getPosCollection(), this.board);
+            if (ops.get(MouseInput.EVENT.SELECT_POS).exec(e, board)) {
+                OnyxGame.getInstance().performMove(board.getPosCollection(), board);
             }
         } catch (final OnyxGameSyncException | NoValidOnyxPositionsFoundException | 
                 InvalidOnyxPositionException ex) {

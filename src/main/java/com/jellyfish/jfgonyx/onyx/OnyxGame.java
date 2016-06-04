@@ -91,63 +91,63 @@ public class OnyxGame {
     public void performMove(final OnyxPosCollection c, final OnyxBoard board) 
             throws OnyxGameSyncException, NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
         
-        this.checkInit();
-        final OnyxMove m = this.requestMove(c, board);
+        checkInit();
+        final OnyxMove m = requestMove(c, board);
         if (m != null && !Onyx.gameEnd) {
-            this.appendMove(m);
-            this.appendNewVirtual(c, board);
+            appendMove(m);
+            appendNewVirtual(c, board);
             board.notifyMove(m, HTMLDisplayHelper.HOT_PINK);
         }
-        this.closeMove();
+        closeMove();
     }
     
     public void closeMove() {
-        this.colorToPlay = null;
-        this.initMoveRequest();
+        colorToPlay = null;
+        initMoveRequest();
     }
       
     /**
      * @param color the color to play next or to search move for and append to board.
      */
     public void initMove(final OnyxConst.COLOR color) {
-        this.colorToPlay = color;
-        this.initMoveRequest();
+        colorToPlay = color;
+        initMoveRequest();
     }
     
     public void appendMove(final OnyxPos pos, final OnyxPiece piece, final List<OnyxPos> captured) {
-        this.moves.put(this.moves.size() + 1, 
+        moves.put(moves.size() + 1, 
             new OnyxMove(pos, piece,  captured.size() * OnyxConst.SCORE.TAKE.getValue())
         );
     }
     
     public void appendMove(final OnyxMove move) {
-        this.moves.put(this.moves.size() + 1, move);
-        ++this.moveCount;
+        moves.put(moves.size() + 1, move);
+        ++moveCount;
     }
     
     private OnyxMove requestMove(final OnyxPosCollection c, final OnyxBoard board) 
             throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
         
-        final OnyxMove m = Onyx.search(c, board, this.colorToPlay);
+        final OnyxMove m = Onyx.search(c, board, colorToPlay);
         if (Onyx.gameEnd) return null;
         if (m == null) throw new NoValidOnyxPositionsFoundException();
         else board.getPosCollection().clearOutlines();
-        c.getPosition(m.getPos().getKey()).setPiece(new OnyxPiece(this.colorToPlay, true));
+        c.getPosition(m.getPos().getKey()).setPiece(new OnyxPiece(colorToPlay, true));
         return m;
     }
     
     private void appendNewVirtual(final OnyxPosCollection c, final OnyxBoard board) 
             throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
         
-        if (this.isGameEnd() || Onyx.isLose(c, this.colorToPlay)) return;
-        final OnyxMove m = Onyx.getNewVirtual(c, board, this.colorToPlay);
+        if (isGameEnd() || Onyx.isLose(c, colorToPlay)) return;
+        final OnyxMove m = Onyx.getNewVirtual(c, board, colorToPlay);
         c.getPosition(m.getPos().getKey()).setVirtualPiece(
-            new OnyxVirtualPiece(OnyxConst.COLOR.getVirtualOposite(this.colorToPlay.bool))
+            new OnyxVirtualPiece(OnyxConst.COLOR.getVirtualOposite(colorToPlay.bool))
         );
     }
             
     private void initMoveRequest() {
-        this.requestInitialized = this.colorToPlay != null;
+        requestInitialized = colorToPlay != null;
     }
     
     /**
@@ -156,9 +156,9 @@ public class OnyxGame {
      */
     private void checkInit() throws OnyxGameSyncException {
         
-        if (this.colorToPlay == null) throw new OnyxGameSyncException();
-        if (!this.requestInitialized) throw new OnyxGameSyncException(
-                String.format(OnyxGameSyncException.WRONG_TURN_MSG, this.colorToPlay.str));
+        if (colorToPlay == null) throw new OnyxGameSyncException();
+        if (!requestInitialized) throw new OnyxGameSyncException(
+                String.format(OnyxGameSyncException.WRONG_TURN_MSG, colorToPlay.str));
     }
     
     /**
@@ -194,7 +194,7 @@ public class OnyxGame {
     }
     
     public int getMoveCount() {
-        return this.moveCount;
+        return moveCount;
     }
     
     public static OnyxGame getInstance() {

@@ -119,10 +119,9 @@ public abstract class AbstractSubroutine extends AbstractOnyxSearch {
     }
     
     public final void print(final String f, final AbstractSubroutine.SUBROUTINE_TYPE t,
-            final OnyxConst.COLOR color, final int posCount, final String data) {
+            final String displayColor, final OnyxConst.COLOR color, final int posCount, final String data) {
         if (data == null) return;
-        MainFrame.print(String.format(f, t.getDesc(), color.str, posCount, data),
-            HTMLDisplayHelper.GRAY);
+        MainFrame.print(String.format(f, t.getDesc(), color.str, posCount, data), displayColor);
     }
     
     public final void print(final String f, final String color) {

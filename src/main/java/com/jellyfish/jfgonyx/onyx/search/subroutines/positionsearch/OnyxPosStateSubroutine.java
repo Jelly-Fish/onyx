@@ -62,20 +62,20 @@ public class OnyxPosStateSubroutine extends AbstractSubroutine {
     public final boolean willEnableTake(final OnyxBoard board, final OnyxPosCollection c, 
             final OnyxConst.COLOR color) throws InvalidOnyxPositionException {
 
-        if (this.pos == null || this.pos.isDiamondCenter()) return false;
+        if (pos == null || pos.isDiamondCenter()) return false;
         
         final OnyxConst.COLOR opColor = OnyxConst.COLOR.getOposite(color.bool);
         String[] keys = null;
         int k = -1, l = 0, j = 0, m = -1; 
 
-        for (OnyxDiamond d : board.getDiamondCollection().getDiamondsByPosKey(this.pos.getKey())) {
+        for (OnyxDiamond d : board.getDiamondCollection().getDiamondsByPosKey(pos.getKey())) {
 
             if (d.isFivePosDiamond() && d.getCenterPos().isOccupied()) continue;
             
             keys = d.getCornerKeys();
             for (int i = 0; i < keys.length; ++i) {
                 
-                if (this.pos.getKey().equals(c.getPosition(keys[i]).getKey())) {
+                if (pos.getKey().equals(c.getPosition(keys[i]).getKey())) {
                     m = i;
                 } else {
                     
@@ -112,20 +112,20 @@ public class OnyxPosStateSubroutine extends AbstractSubroutine {
     public final boolean isSubjectToTake(final OnyxBoard board, final OnyxPosCollection c, 
             final OnyxConst.COLOR color) throws InvalidOnyxPositionException {
         
-        if (this.pos.isDiamondCenter()) return false;
+        if (pos.isDiamondCenter()) return false;
         
         final OnyxConst.COLOR oC = OnyxConst.COLOR.getOposite(color.bool);
         String[] keys = null;
         int k = -1, l = 0, j = 0, m = -1; 
 
-        for (OnyxDiamond d : board.getDiamondCollection().getDiamondsByPosKey(this.pos.getKey())) {
+        for (OnyxDiamond d : board.getDiamondCollection().getDiamondsByPosKey(pos.getKey())) {
 
             if (d.isFivePosDiamond() && d.getCenterPos().isOccupied()) continue;
             
             keys = d.getCornerKeys();
             for (int i = 0; i < keys.length; ++i) {
                 
-                if (this.pos.getKey().equals(c.getPosition(keys[i]).getKey())) {
+                if (pos.getKey().equals(c.getPosition(keys[i]).getKey())) {
                     m = i;
                 } else {
                     

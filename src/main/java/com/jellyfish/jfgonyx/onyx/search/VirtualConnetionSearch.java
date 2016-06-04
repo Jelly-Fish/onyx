@@ -62,9 +62,9 @@ public class VirtualConnetionSearch extends ConnectionSearch implements OnyxConn
          */
         
         final OnyxConst.COLOR opColor = OnyxConst.COLOR.getOposite(color.bool);
-        final List<OnyxPos> pos = OnyxPositionUtils.trimAllExternalBordersByColor(
+        final List<OnyxPos> pos = OnyxPositionUtils.getAllExternalBordersByColor(
                 OnyxPositionUtils.getBordersByColor(c, color), color);
-        final List<OnyxPos> opPos = OnyxPositionUtils.trimAllExternalBordersByColor(
+        final List<OnyxPos> opPos = OnyxPositionUtils.getAllExternalBordersByColor(
                 OnyxPositionUtils.getBordersByColor(c, opColor), opColor);
         VirtualConnectionSubroutine vCnx = new VirtualConnectionSubroutine(c, color, board);
         vCnx.buildTails(pos);
@@ -73,8 +73,8 @@ public class VirtualConnetionSearch extends ConnectionSearch implements OnyxConn
         vCnx.buildTails(opPos);
         final OnyxTail oponentTail = vCnx.getTail();       
         
-        final OnyxPos res = this.crossTailSearch(onyxTail, oponentTail, board, 
-                c, color, this.getTailMove(c, board, opColor));
+        final OnyxPos res = crossTailSearch(onyxTail, oponentTail, board, 
+                c, color, getTailMove(c, board, opColor));
         
         if (res != null) {
             return initCaptures(new OnyxMove(res, OnyxConst.SCORE.VTAIL.getValue()), board, c, color);

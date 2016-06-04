@@ -65,50 +65,50 @@ public class OnyxPos {
     }
     
     private void init() {
-        this.posHelper = new OnyxPosStateSubroutine(this);
+        posHelper = new OnyxPosStateSubroutine(this);
     }
     
     public boolean isOccupied() {
-        return !(this.piece == null);
+        return !(piece == null);
     }
     
     public boolean isOccupied(final int bit) {
-        return this.isOccupied() && this.piece.color.bit == bit;
+        return isOccupied() && piece.color.bit == bit;
     }
     
     public boolean isVirtuallyOccupied() {
-        return this.vPiece != null;
+        return vPiece != null;
     }
     
     public boolean isDiamondCenter() {
         
         try {
-            final String k = this.diamond.getCenterPos().getKey();
-            return k.equals(this.getKey());
+            final String k = diamond.getCenterPos().getKey();
+            return k.equals(getKey());
         } catch (final InvalidOnyxPositionException Iopex) {
             return false;
         }
     }
         
     public boolean isLowXBorder() {
-        return this.x < 1.1f;
+        return x < 1.1f;
     }
 
     public boolean isHighXBorder() {
-        return this.x > ((float) (GraphicsVars.getInstance().BOARD_SIDE_SQUARE_COUNT + 1)) -.1f;
+        return x > ((float) (GraphicsVars.getInstance().BOARD_SIDE_SQUARE_COUNT + 1)) -.1f;
     }
     
     public boolean isLowYBorder() {
-        return this.y > 0f && this.y < 2f;
+        return y > 0f && y < 2f;
     }
     
     public boolean isHighYBorder() {
-        return this.y > ((float) (GraphicsVars.getInstance().BOARD_SIDE_SQUARE_COUNT + 1)) - .1f;
+        return y > ((float) (GraphicsVars.getInstance().BOARD_SIDE_SQUARE_COUNT + 1)) - .1f;
     }
 
     public boolean hasNeighbour(final OnyxPosCollection c, final OnyxConst.COLOR color) {
         
-        for (String k : this.connections) {
+        for (String k : connections) {
             if (c.getPosition(k).isOccupied(color.bit)) return true;
         }
         
@@ -126,11 +126,11 @@ public class OnyxPos {
     }
     
     public void addPiece(final OnyxPiece p) {
-        this.piece = p;
+        piece = p;
     }
     
     public String getKey() {
-        return String.format(OnyxPosCollection.KEY_FORMAT, this.x, this.y);
+        return String.format(OnyxPosCollection.KEY_FORMAT, x, y);
     }
     
     @Override
@@ -141,8 +141,8 @@ public class OnyxPos {
     @Override
     public int hashCode() {
         int hash = 5;
-        hash = 23 * hash + Float.floatToIntBits(this.x);
-        hash = 23 * hash + Float.floatToIntBits(this.y);
+        hash = 23 * hash + Float.floatToIntBits(x);
+        hash = 23 * hash + Float.floatToIntBits(y);
         return hash;
     }
 
@@ -170,7 +170,7 @@ public class OnyxPos {
     }
         
     public OnyxPiece getPiece() {
-        return this.piece;
+        return piece;
     }
 
     public void setPiece(final OnyxPiece piece) {

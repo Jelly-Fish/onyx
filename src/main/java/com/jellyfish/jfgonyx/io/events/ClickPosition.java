@@ -60,9 +60,9 @@ public class ClickPosition implements OnyxExecutable {
         final MouseEvent mE = (MouseEvent) e;
         String k = null, oldK = null;
         final OnyxVirtualPiece v = board.getPosCollection().getVirtualPiece() == null ?
-            this.vBackup : board.getPosCollection().getVirtualPiece();
+            vBackup : board.getPosCollection().getVirtualPiece();
         
-        this.vBackup = v;
+        vBackup = v;
         
         for (OnyxPos p : board.getPosCollection().getPositions().values()) {
 
@@ -81,7 +81,7 @@ public class ClickPosition implements OnyxExecutable {
                     } 
                     
                     if (v.getTmpOnyxPosition().getKey().equals(k)) {
-                        this.validateMove(board, v);
+                        validateMove(board, v);
                         board.repaint();
                         return true;
                     }

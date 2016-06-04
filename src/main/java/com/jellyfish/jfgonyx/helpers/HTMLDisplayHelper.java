@@ -32,7 +32,6 @@
 package com.jellyfish.jfgonyx.helpers;
 
 /**
- *
  * @author thw
  */
 public class HTMLDisplayHelper {
@@ -52,6 +51,7 @@ public class HTMLDisplayHelper {
     public static final String GAINSBORO = "rgb(220,220,220)";
     public static final String LIME_GREEN = "rgb(50,205,50)";
     public static final String GOLD = "rgb(255,215,0)";
+    public static final String COPPER_YELLOW_DARK = "rgb(186,186,39)";
     
     static String buildHTML(final String data, final String color) {
         return String.format(SPAN, String.format(FONT_STYLE, FONT_FAMILY, FONT_SIZE, color), data);

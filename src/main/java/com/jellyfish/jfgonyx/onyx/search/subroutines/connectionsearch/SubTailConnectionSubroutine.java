@@ -64,10 +64,10 @@ public class SubTailConnectionSubroutine extends TailConnectionSubroutine {
     @Override
     protected final void score() {
         
-        final OnyxPos p = this.getCounterPos(this.tail);
-        this.candidate = p != null ? 
-                new OnyxMove(p, ((float) this.links) * OnyxConst.SCORE.SUB_TAIL.getValue()) : null;
-        this.candidates.add(candidate);
+        final OnyxPos p = getCounterPos(tail);
+        candidate = p != null ? 
+                new OnyxMove(p, ((float) links) * OnyxConst.SCORE.SUB_TAIL.getValue()) : null;
+        candidates.add(candidate);
     }
     
     private OnyxPos getCounterPos(final OnyxPos t) {
@@ -77,12 +77,12 @@ public class SubTailConnectionSubroutine extends TailConnectionSubroutine {
         
         for (String k : t.connections) {
             
-            tmp = this.c.getPosition(k);
+            tmp = c.getPosition(k);
             
             if (!tmp.isOccupied() && !tmp.isDiamondCenter()) {
                 
-                if ((this.color.bool && this.isAtTailEnd(tmp) && t.y == tmp.y) || 
-                    (!this.color.bool && this.isAtTailEnd(tmp) && t.x == tmp.x)) {
+                if ((color.bool && isAtTailEnd(tmp) && t.y == tmp.y) || 
+                    (!color.bool && isAtTailEnd(tmp) && t.x == tmp.x)) {
                     return tmp;
                 }
             }
@@ -99,10 +99,10 @@ public class SubTailConnectionSubroutine extends TailConnectionSubroutine {
          * and start position + found tail posiion).
          */
         
-        if (this.color.bool) {
-            return t.x <= this.minX || t.x >= this.maxX;
-        } else if (!this.color.bool) {
-            return t.y <= this.minY || t.y >= this.maxY;
+        if (color.bool) {
+            return t.x <= minX || t.x >= maxX;
+        } else if (!color.bool) {
+            return t.y <= minY || t.y >= maxY;
         }
         
         return false;

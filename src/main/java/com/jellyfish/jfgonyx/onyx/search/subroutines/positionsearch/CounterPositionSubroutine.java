@@ -66,32 +66,32 @@ public class CounterPositionSubroutine extends AbstractSubroutine {
             final OnyxConst.COLOR color) throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
         
         final List<OnyxMove> candidates = new ArrayList<>();
-        candidates.add(this.counterPos(c, b, color));
-        candidates.add(this.bigLock(c, b, color));
+        candidates.add(counterPos(c, b, color));
+        candidates.add(bigLock(c, b, color));
         
-        this.move = trim(candidates, b, c, color, .1f);
+        move = trim(candidates, b, c, color, .1f);
         
-        if (MoveUtils.isMove(this.move) && this.move.hasPosition()) {
+        if (MoveUtils.isMove(move) && move.hasPosition()) {
             print(AbstractSubroutine.BEST_CANDIDATE_COUNTER_FORMAT, 
                 AbstractSubroutine.SUBROUTINE_TYPE.COUNTER_POS, color.str, 
-                this.move.getPos().getKey(), this.move.getScore());
+                move.getPos().getKey(), move.getScore());
         }
         
-        return this.move;
+        return move;
     }
     
     private OnyxMove counterPos(final OnyxPosCollection c, final OnyxBoard b, 
             final OnyxConst.COLOR color) throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
         
         final OnyxConst.COLOR opColor = OnyxConst.COLOR.getOposite(color.bool);
-        final List<OnyxPos> pos = OnyxPositionUtils.trimAllExternalBordersByColor(
+        final List<OnyxPos> pos = OnyxPositionUtils.getAllExternalBordersByColor(
                 OnyxPositionUtils.getBordersByColor(c, opColor), opColor);
         final List<OnyxMove> cnx = new ArrayList<>();
         OnyxMove tmp = null;
         
         for (OnyxPos p : pos) cnx.addAll(new TailConnectionSubroutine(c, opColor, b).getTails(p, true));
         
-        tmp = this.trim(cnx, b, c, opColor, .01f);
+        tmp = trim(cnx, b, c, opColor, .01f);
         if (MoveUtils.isNotMove(tmp) || !tmp.hasPosition()) return null;
         
         OnyxGame.getInstance().updateTailTendency(tmp);

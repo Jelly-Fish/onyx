@@ -45,14 +45,12 @@ import javax.swing.JPanel;
  */
 public class OnyxPanel extends JPanel implements OnyxObserver {
 
-    private final Font font = new Font("consolas", Font.BOLD, 14);
     private final LinkedList<String> move_labels = new LinkedList<>();
-    private final String label_format = "%d: %s";
     
     public OnyxPanel() {
         super();
-        this.setDoubleBuffered(true);
-        this.setBackground(GraphicsVars.getInstance().COMPONENTS_BACKGROUND_COLOR1);
+        setDoubleBuffered(true);
+        setBackground(GraphicsVars.getInstance().COMPONENTS_BACKGROUND_COLOR1);
     }
     
     @Override
@@ -64,16 +62,16 @@ public class OnyxPanel extends JPanel implements OnyxObserver {
     
     @Override
     public void notifyMove(final OnyxMove m, final String color) {
-        this.move_labels.add(m.toString());
-        this.repaint();
+        move_labels.add(m.toString());
+        repaint();
     }
     
     public void init() {
         
-        this.move_labels.clear();
+        move_labels.clear();
         for (OnyxMove m : OnyxGame.getInstance().getMoves().values()) {
             if (m.getPos().isOccupied()) {
-                this.move_labels.add(m.toString());
+                move_labels.add(m.toString());
             }
         }
     }

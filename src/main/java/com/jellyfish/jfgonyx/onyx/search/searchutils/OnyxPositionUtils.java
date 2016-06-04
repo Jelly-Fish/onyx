@@ -141,7 +141,7 @@ public class OnyxPositionUtils {
         return borders;
     }
 
-    public static List<OnyxPos> trimAllExternalBordersByColor(final List<OnyxPos> pos, 
+    public static List<OnyxPos> getAllExternalBordersByColor(final List<OnyxPos> pos, 
             final OnyxConst.COLOR color) {
         
         final List<OnyxPos> positions = new ArrayList<>();
@@ -162,7 +162,7 @@ public class OnyxPositionUtils {
         return positions;
     }
     
-    public static List<OnyxPos> trimByBorderStartPositionsAndColor(final List<OnyxPos> pos, 
+    public static List<OnyxPos> getByBorderStartPositionsAndColor(final List<OnyxPos> pos, 
             final OnyxConst.COLOR color) {
         
         final List<OnyxPos> positions = new ArrayList<>();
@@ -179,7 +179,7 @@ public class OnyxPositionUtils {
         return positions;
     }
     
-    public static List<OnyxPos> trimBorderByColorWithExceptions(final List<OnyxPos> pos, 
+    public static List<OnyxPos> getBorderByColorWithExceptions(final List<OnyxPos> pos, 
             final OnyxConst.COLOR color, final Set<String> exceptions) {
 
         final List<OnyxPos> positions = new ArrayList<>();

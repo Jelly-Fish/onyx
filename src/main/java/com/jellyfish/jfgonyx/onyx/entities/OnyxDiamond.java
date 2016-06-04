@@ -74,20 +74,20 @@ public class OnyxDiamond {
     }
     
     public boolean isFivePosDiamond() {
-        return this.positions.length == 5;
+        return positions.length == 5;
     }
     
     public OnyxPos getCenterPos() throws InvalidOnyxPositionException {
         
-        if (this.isFivePosDiamond()) {
-            return this.positions[4];
+        if (isFivePosDiamond()) {
+            return positions[4];
         }
         throw new InvalidOnyxPositionException();
     }
 
     public boolean contains(final OnyxPos p) {
         
-        for (OnyxPos pos : this.positions) {
+        for (OnyxPos pos : positions) {
             if (pos.equals(p)) {
                 return true;
             }
@@ -98,32 +98,32 @@ public class OnyxDiamond {
     
     public String[] getCornerKeys() {
         return new String[] { 
-            this.positions[0].getKey(), this.positions[1].getKey(),
-            this.positions[2].getKey(), this.positions[3].getKey()
+            positions[0].getKey(), positions[1].getKey(),
+            positions[2].getKey(), positions[3].getKey()
         };
     }
     
     public String[] getAllKeys() {
-        if (!this.isFivePosDiamond()) return this.getCornerKeys();
+        if (!isFivePosDiamond()) return getCornerKeys();
         else return new String[] { 
-            this.positions[0].getKey(), this.positions[1].getKey(),
-            this.positions[2].getKey(), this.positions[3].getKey(),
-            this.positions[4].getKey()
+            positions[0].getKey(), positions[1].getKey(),
+            positions[2].getKey(), positions[3].getKey(),
+            positions[4].getKey()
         };
     }
     
     @Override
     public String toString() {
         return String.format("1=%s 2=%s 3=%s 4=%s c=%s", positions[0].toString(),
-                positions[1].toString(), positions[2].toString(),
-                positions[3].toString(), (positions.length == 5 ? positions[4].toString() : "null"));
+            positions[1].toString(), positions[2].toString(),
+            positions[3].toString(), (positions.length == 5 ? positions[4].toString() : "null"));
     }
 
     @Override
     public int hashCode() {
         int hash = 5;
-        hash = 11 * hash + Arrays.deepHashCode(this.positions);
-        hash = 11 * hash + (this.onPairLine ? 1 : 0);
+        hash = 11 * hash + Arrays.deepHashCode(positions);
+        hash = 11 * hash + (onPairLine ? 1 : 0);
         return hash;
     }
 
@@ -136,17 +136,17 @@ public class OnyxDiamond {
             return false;
         }
         final OnyxDiamond other = (OnyxDiamond) obj;
-        if (!Arrays.deepEquals(this.positions, other.positions)) {
+        if (!Arrays.deepEquals(positions, other.positions)) {
             return false;
         }
-        return this.onPairLine == other.onPairLine;
+        return onPairLine == other.onPairLine;
     }
      
     public Polygon getPolygon() {
         return polygon;
     }
 
-    public void setPolygon(Polygon polygon) {
+    public void setPolygon(final Polygon polygon) {
         this.polygon = polygon;
     }
 

@@ -90,23 +90,23 @@ public class OnyxMove {
     }
     
     public boolean isCapture() {
-        return this.captured != null && this.captured.size() > 0;
+        return captured != null && captured.size() > 0;
     }
     
     public boolean hasPosition() {
-        return this.pos != null;
+        return pos != null;
     }
     
     public boolean hasTailStart() {
-        return this.tailStart != null;
+        return tailStart != null;
     }
     
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append(OnyxConst.POS_MAP.get(this.pos.getKey()));
-        if (this.isCapture()) {
-            sb.append(this.captured.size() == 2 ? TAKE : this.captured.size() == 4 ? 
+        sb.append(OnyxConst.POS_MAP.get(pos.getKey()));
+        if (isCapture()) {
+            sb.append(captured.size() == 2 ? TAKE : captured.size() == 4 ? 
                     TAKE + TAKE : StringUtils.EMPTY);
         }
         return sb.toString();
@@ -117,7 +117,7 @@ public class OnyxMove {
     }
     
     public void setCaptured(List<OnyxPos> captured) {
-        this.captured = captured;
+        captured = captured;
     }
 
     public OnyxPos getPos() {
@@ -137,7 +137,7 @@ public class OnyxMove {
     }
     
     public void setScore(final float s) {
-        this.score = s;
+        score = s;
     }
     
     public OnyxPos getTailStartPos() {

@@ -66,24 +66,24 @@ public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnecti
     public OnyxMove search(final OnyxPosCollection c, final OnyxBoard board, final OnyxConst.COLOR color) 
             throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
         
-        this.init();
-        this.cnxMoves.add(this.searchWinMove(c, color));
-        this.cnxMoves.add(this.searchCounterWinLink(c, board, color));
+        init();
+        cnxMoves.add(searchWinMove(c, color));
+        cnxMoves.add(searchCounterWinLink(c, board, color));
         
-        return this.trim(this.cnxMoves, board, c, color);
+        return trim(cnxMoves, board, c, color);
     }
     
     private void init() {        
-        this.cnxTmpMoves.clear();
-        this.checkedKeys.clear();
-        this.cnxMoves.clear();
+        cnxTmpMoves.clear();
+        checkedKeys.clear();
+        cnxMoves.clear();
     }
     
     @Override
     public boolean isWin(final OnyxPosCollection c, final OnyxConst.COLOR color) 
             throws NoValidOnyxPositionsFoundException {
         
-        final List<OnyxPos> borders = OnyxPositionUtils.trimByBorderStartPositionsAndColor(
+        final List<OnyxPos> borders = OnyxPositionUtils.getByBorderStartPositionsAndColor(
                 OnyxPositionUtils.getBordersByColor(c, color), color);
         
         WinConnectionSubroutine search = null;
@@ -107,17 +107,17 @@ public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnecti
     protected OnyxMove getTailMove(final OnyxPosCollection c, final OnyxBoard board, 
             final OnyxConst.COLOR color) throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
         
-        final List<OnyxPos> pos = OnyxPositionUtils.trimAllExternalBordersByColor(
+        final List<OnyxPos> pos = OnyxPositionUtils.getAllExternalBordersByColor(
                 OnyxPositionUtils.getBordersByColor(c, color), color);
         TailConnectionSubroutine sub;
         
         for (OnyxPos p : pos) {
             sub = new TailConnectionSubroutine(c, color, board);
-            this.cnxTmpMoves.add(sub.getTail(p, false));
-            this.checkedKeys.addAll(sub.getCheckedKeys());
+            cnxTmpMoves.add(sub.getTail(p, false));
+            checkedKeys.addAll(sub.getCheckedKeys());
         }
         
-        final OnyxMove tmp = this.trim(this.cnxTmpMoves, board, c, color);
+        final OnyxMove tmp = trim(cnxTmpMoves, board, c, color);
 
         return MoveUtils.isMove(tmp) ? tmp : null;
     }
@@ -135,14 +135,14 @@ public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnecti
         OnyxMove move = null;
         
         final OnyxConst.COLOR opColor = OnyxConst.COLOR.getOposite(color.bool);
-        moves.add(this.getTailMove(c, board, opColor));
-        moves.add(this.searchWinMove(c, moves, opColor));
+        moves.add(getTailMove(c, board, opColor));
+        moves.add(searchWinMove(c, moves, opColor));
         
         for (OnyxMove m : moves) count = MoveUtils.isMove(m) ? ++count : count;
         
         if (count > 0) {            
             move = new WinConnectionLinkSubroutine(c, opColor).connectionLink(moves);
-            move = this.initCaptures(move, board, c, color);
+            move = initCaptures(move, board, c, color);
         }
 
         return move;
@@ -156,7 +156,7 @@ public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnecti
      */
     private OnyxMove searchWinMove(final OnyxPosCollection c, final OnyxConst.COLOR color) 
         throws NoValidOnyxPositionsFoundException {      
-        return new WinConnectionLinkSubroutine(c, color).connectionLink(this.cnxTmpMoves);
+        return new WinConnectionLinkSubroutine(c, color).connectionLink(cnxTmpMoves);
     }
 
     /**

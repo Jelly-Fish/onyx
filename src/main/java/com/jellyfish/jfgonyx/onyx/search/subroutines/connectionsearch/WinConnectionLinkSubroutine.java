@@ -54,8 +54,8 @@ public class WinConnectionLinkSubroutine extends WinConnectionSubroutine {
     public OnyxMove connectionLink(final List<OnyxMove> tails) {       
         
         final List<OnyxPos> borderTails = new ArrayList<>();
-        final List<OnyxPos> borders = OnyxPositionUtils.trimByBorderStartPositionsAndColor(
-                OnyxPositionUtils.getBordersByColor(this.c, this.color), this.color);
+        final List<OnyxPos> borders = OnyxPositionUtils.getByBorderStartPositionsAndColor(
+                OnyxPositionUtils.getBordersByColor(c, color), color);
         OnyxPiece tmp = null;
         WinConnectionSubroutine search = null;
        
@@ -66,8 +66,8 @@ public class WinConnectionLinkSubroutine extends WinConnectionSubroutine {
          * local final List<OnyxPos> borders.
          */
         for (OnyxMove m : tails) {
-            if ((this.color.bool && MoveUtils.isMove(m) && m.getPos().x < 1.1f) || 
-                (!this.color.bool && MoveUtils.isMove(m) && m.getPos().y < 1.1f)) {
+            if ((color.bool && MoveUtils.isMove(m) && m.getPos().x < 1.1f) || 
+                (!color.bool && MoveUtils.isMove(m) && m.getPos().y < 1.1f)) {
                 borders.add(m.getPos());
                 borderTails.add(m.getPos());
             }
@@ -77,15 +77,15 @@ public class WinConnectionLinkSubroutine extends WinConnectionSubroutine {
             
             if (MoveUtils.isNotMove(m) || !m.hasPosition()) continue;
 
-            tmp = new OnyxPiece(this.color);
-            this.c.getPositions().get(m.getPos().getKey()).setPiece(tmp);
+            tmp = new OnyxPiece(color);
+            c.getPositions().get(m.getPos().getKey()).setPiece(tmp);
 
             for (OnyxPos p : borders) {
                 
-                search = new WinConnectionSubroutine(this.c, this.color, false);
+                search = new WinConnectionSubroutine(c, color, false);
                 search.connection(p, p.getKey());
                 if (search.isWin() && !borderTails.contains(p)) {
-                    this.c.getPositions().get(m.getPos().getKey()).setPiece(null);
+                    c.getPositions().get(m.getPos().getKey()).setPiece(null);
                     return new OnyxMove(m.getPos(), OnyxConst.SCORE.WIN_LINK.getValue(), true);
                 } else if (search.isWin() && borderTails.contains(p)) {
                     
@@ -96,12 +96,12 @@ public class WinConnectionLinkSubroutine extends WinConnectionSubroutine {
                      * position to return is not in tail list (tails here) but
                      * is the border position.
                      */
-                    this.c.getPositions().get(m.getPos().getKey()).setPiece(null);
+                    c.getPositions().get(m.getPos().getKey()).setPiece(null);
                     return new OnyxMove(p, OnyxConst.SCORE.WIN_LINK.getValue(), true);
                 }
             }
             
-            this.c.getPositions().get(m.getPos().getKey()).setPiece(null);
+            c.getPositions().get(m.getPos().getKey()).setPiece(null);
         }
         
         return null;

@@ -50,8 +50,8 @@ class VirtualConnectionTailTrimSubroutine {
     }
     
     OnyxTail trim() {
-        this.trimTail();
-        return this.tail;
+        trimTail();
+        return tail;
     }
     
     /**
@@ -65,19 +65,19 @@ class VirtualConnectionTailTrimSubroutine {
         int count = 0;
         boolean trimed = false;
         
-        for (OnyxPos p : this.tail.getPositions()) {
-            if (this.tail.isTailEnd(p.getKey()) || this.tail.isTailStart(p.getKey())) continue;
-            for (String k : p.connections) if (this.tail.contains(k)) ++count;
+        for (OnyxPos p : tail.getPositions()) {
+            if (tail.isTailEnd(p.getKey()) || tail.isTailStart(p.getKey())) continue;
+            for (String k : p.connections) if (tail.contains(k)) ++count;
             if (count < 2) {
-                this.discarded.add(p);
+                discarded.add(p);
                 trimed = true;
             }
             count = 0;
         }
         
-        for (OnyxPos p : this.discarded) this.tail.getPositions().remove(p);
+        for (OnyxPos p : discarded) tail.getPositions().remove(p);
         
-        if (trimed) this.trimTail();
+        if (trimed) trimTail();
     }
     
 }

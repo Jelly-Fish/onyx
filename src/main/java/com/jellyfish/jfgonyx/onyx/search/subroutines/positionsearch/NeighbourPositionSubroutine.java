@@ -70,15 +70,15 @@ public class NeighbourPositionSubroutine extends AbstractSubroutine {
                         
                         if (!c.getPosition(cnxK).isDiamondCenter() && !c.getPosition(cnxK).isOccupied()) {
                             
-                            this.move = new OnyxMove(c.getPosition(cnxK), OnyxConst.SCORE.NEIGHBOUR.getValue());
+                            move = new OnyxMove(c.getPosition(cnxK), OnyxConst.SCORE.NEIGHBOUR.getValue());
                             
-                            if (MoveUtils.isMove(this.move)) {
+                            if (MoveUtils.isMove(move)) {
                                 
                                 print(AbstractSubroutine.BEST_CANDIDATE, 
                                     AbstractSubroutine.SUBROUTINE_TYPE.NEIGHBOUR, 
                                     bitColor == 0 ? OnyxConst.COLOR.WHITE : OnyxConst.COLOR.BLACK, 
-                                    this.move.getPos().getKey());
-                                return this.move;
+                                    move.getPos().getKey());
+                                return move;
                             }
                         }
                     }
