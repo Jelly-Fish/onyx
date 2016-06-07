@@ -116,8 +116,8 @@ public class OnyxMove {
         return captured;
     }
     
-    public void setCaptured(List<OnyxPos> captured) {
-        captured = captured;
+    public void setCaptured(final List<OnyxPos> captured) {
+        this.captured = captured;
     }
 
     public OnyxPos getPos() {
