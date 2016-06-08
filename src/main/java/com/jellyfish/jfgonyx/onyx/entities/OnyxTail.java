@@ -39,9 +39,14 @@ import java.util.LinkedList;
  */
 public class OnyxTail {
     
-    private boolean connected = false;
+    private boolean connected;
     private final LinkedList<OnyxPos> positions = new LinkedList<>();
-    
+    private final OnyxPos tailStartPos;
+
+    public OnyxTail(final OnyxPos tailStartPos) {
+        this.tailStartPos = tailStartPos;
+    }   
+        
     public void append(final OnyxPos p) {
         positions.addLast(p);
     }
@@ -99,7 +104,8 @@ public class OnyxTail {
     
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("tail start to end: ");     
+        final StringBuilder sb = new StringBuilder(
+            String.format("tail start @%s to end: ", OnyxConst.POS_MAP.get(this.tailStartPos.getKey())));     
         for (OnyxPos p : positions) sb.append(OnyxConst.POS_MAP.get(p.getKey())).append(",");
         return sb.toString().substring(0, sb.length() - 1);
     }

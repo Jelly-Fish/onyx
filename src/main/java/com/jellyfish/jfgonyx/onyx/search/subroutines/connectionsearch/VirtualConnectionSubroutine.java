@@ -76,14 +76,15 @@ public class VirtualConnectionSubroutine extends AbstractSubroutine {
      */
     public void buildTails(final List<OnyxPos> sPoss) {
 
-        for (OnyxPos p : sPoss) {            
+        for (OnyxPos p : sPoss) {
             initTailSearch(p);
             buildTail(p, p.getKey(), true);
             buildTail(p, p.getKey(), false);
         }
         
-        /** FIXME : bebug purpose, print all tails. this.printAllTails(); END DEBUG */        
-                
+        /** FIXME : bebug purpose, print all tails. END DEBUG */        
+        this.printAllTails();       
+        
         tail = trimTails();
         
         if (tail != null) print(AbstractSubroutine.VTAIL_CANDIDATE_RES, type, 
@@ -94,11 +95,11 @@ public class VirtualConnectionSubroutine extends AbstractSubroutine {
         startLowBorder = p.getPiece().color.bool ? p.isLowXBorder() : p.isLowYBorder();
         linked = false;
         checkedKeys.clear();
-        tail = new OnyxTail();
+        tail = new OnyxTail(p);
     }
     
     private void buildTail(final OnyxPos p, final String kEx, final boolean rFirst) {       
-        
+                
         if (linked) return;
         
         checkedKeys.add(p.getKey());
@@ -120,10 +121,8 @@ public class VirtualConnectionSubroutine extends AbstractSubroutine {
                 return;
             }            
             
-            if (!cnx.equals(kEx) && !tmp.isOccupied(opColorBit) &&
-                !tail.contains(tmp.getKey()) &&
-                c.isValidVirtualMove(tmp, board, opColorBit) && 
-                !checkedKeys.contains(cnx)) {
+            if (!cnx.equals(kEx) && !tmp.isOccupied(opColorBit) && !tail.contains(tmp.getKey()) &&
+                c.isValidVirtualMove(tmp, board, opColorBit) && !checkedKeys.contains(cnx)) {
                 tail.append(tmp);
                 buildTail(tmp, tmp.getKey(), rFirst);
             }
@@ -222,9 +221,9 @@ public class VirtualConnectionSubroutine extends AbstractSubroutine {
     
     private void printAllTails() {
         
-        for (OnyxTail t : this.tails) {
-            if (t != null && t.lenght() > 0) print(AbstractSubroutine.VTAIL_CANDIDATE_FORMAT, this.type, 
-                HTMLDisplayHelper.GAINSBORO, this.color, this.tail.lenght(), this.tail.toString());
+        for (OnyxTail t : tails) {
+            if (t != null && t.lenght() > 0) print(AbstractSubroutine.VTAIL_CANDIDATE_FORMAT, type, 
+                HTMLDisplayHelper.GAINSBORO, color, tail.lenght(), tail.toString());
         }
     }
     
