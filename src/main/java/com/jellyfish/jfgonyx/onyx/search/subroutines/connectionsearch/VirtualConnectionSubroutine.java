@@ -87,8 +87,10 @@ public class VirtualConnectionSubroutine extends AbstractSubroutine {
         
         tail = trimTails();
         
-        if (tail != null) print(AbstractSubroutine.VTAIL_CANDIDATE_RES, type, 
+        if (tail != null) {
+            print(AbstractSubroutine.VTAIL_CANDIDATE_RES, type, 
             HTMLDisplayHelper.COPPER_YELLOW_DARK, color, tail.lenght(), tail.toString());
+        }
     }
     
     private void initTailSearch(final OnyxPos p) {
@@ -222,8 +224,10 @@ public class VirtualConnectionSubroutine extends AbstractSubroutine {
     private void printAllTails() {
         
         for (OnyxTail t : tails) {
-            if (t != null && t.lenght() > 0) print(AbstractSubroutine.VTAIL_CANDIDATE_FORMAT, type, 
-                HTMLDisplayHelper.GAINSBORO, color, tail.lenght(), tail.toString());
+            if (t != null && t.lenght() > 0) {
+                print(AbstractSubroutine.VTAIL_CANDIDATE_FORMAT, type, 
+                HTMLDisplayHelper.GAINSBORO, color, t.lenght(), t.toString());
+            }
         }
     }
     

@@ -110,9 +110,9 @@ public class VirtualConnetionSearch extends ConnectionSearch implements OnyxConn
         
         if (pos == null) {
             for (OnyxPos sOT : sT.getPositions()) {
-                if (!sOT.isOccupied()) {
+                if (!sOT.isOccupied() && sOT.hasNeighbour(c, color)) {
                     pos = sOT;
-                    break;
+                    break;                  
                 }
             }
         }
