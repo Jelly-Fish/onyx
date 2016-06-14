@@ -63,18 +63,27 @@ public class VirtualConnetionSearch extends ConnectionSearch implements OnyxConn
         
         final OnyxConst.COLOR opColor = OnyxConst.COLOR.getOposite(color.bool);
         final List<OnyxPos> pos = OnyxPositionUtils.getAllExternalBordersByColor(
-                OnyxPositionUtils.getBordersByColor(c, color), color);
+                OnyxPositionUtils.getBordersByColor(c, color), color);        
         final List<OnyxPos> opPos = OnyxPositionUtils.getAllExternalBordersByColor(
                 OnyxPositionUtils.getBordersByColor(c, opColor), opColor);
+        
+        /**
+         * FIXME, sus out...
+         *
+        final OnyxPos opPosSearchTailMove = getTailMove(c, board, opColor).getPos();
+        opPos.add(opPosSearchTailMove);
+         */
+        
         VirtualConnectionSubroutine vCnx = new VirtualConnectionSubroutine(c, color, board);
         vCnx.buildTails(pos);
         final OnyxTail onyxTail = vCnx.getTail();
+        
         vCnx = new VirtualConnectionSubroutine(c, opColor, board);
         vCnx.buildTails(opPos);
         final OnyxTail oponentTail = vCnx.getTail();       
         
         final OnyxPos res = crossTailSearch(onyxTail, oponentTail, board, 
-                c, color, getTailMove(c, board, opColor));
+                c, color, opColor, getTailMove(c, board, opColor));
         
         if (res != null) {
             return initCaptures(new OnyxMove(res, OnyxConst.SCORE.VTAIL.getValue()), board, c, color);
@@ -84,17 +93,19 @@ public class VirtualConnetionSearch extends ConnectionSearch implements OnyxConn
     }
     
     /**
-     * @param sT tail to search position for
-     * @param oT oponent tail
-     * @param b onyx board
-     * @param c position collection
-     * @param color color to serach for
+     * @param sT tail to search position for.
+     * @param oT oponent tail.
+     * @param b onyx board.
+     * @param c position collection.
+     * @param color color to serach for.
+     * @param opColor oponent color for oponent neighbour positions.
      * @param opTailMove oponent tail best move (depending on quality of
-     * super class's search...)
-     * @return first OnyxPos found that belongs to both sT & oT tails
+     * super class's search...).
+     * @return first OnyxPos found that belongs to both sT & oT tails.
      */
     private OnyxPos crossTailSearch(final OnyxTail sT, final OnyxTail oT, final OnyxBoard b,
-            final OnyxPosCollection c, final OnyxConst.COLOR color, final OnyxMove opTailMove) throws InvalidOnyxPositionException {
+        final OnyxPosCollection c, final OnyxConst.COLOR color, final OnyxConst.COLOR opColor,
+        final OnyxMove opTailMove) throws InvalidOnyxPositionException {
 
         if (sT == null || oT == null) return null;
         OnyxPos pos = null;
@@ -104,7 +115,11 @@ public class VirtualConnetionSearch extends ConnectionSearch implements OnyxConn
                 if (new OnyxPosStateSubroutine(sOT).willEnableTake(b, c, color) 
                     || sOT.isOccupied()) continue;
                 if (sOT.getKey().equals(opTailMove.getPos().getKey())) pos = sOT;
-                if (sOT.getKey().equals(pOT.getKey())) pos = sOT;               
+                if (sOT.getKey().equals(pOT.getKey())) pos = sOT;
+                if (sOT.getKey().equals(pOT.getKey()) && sOT.hasNeighbour(c, opColor) &&
+                    sOT.hasNeighbour(c, color)) {
+                    pos = sOT;
+                }
             }
         }
         

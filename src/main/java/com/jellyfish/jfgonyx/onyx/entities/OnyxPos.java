@@ -36,6 +36,8 @@ import com.jellyfish.jfgonyx.vars.GraphicsVars;
 import com.jellyfish.jfgonyx.onyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import com.jellyfish.jfgonyx.onyx.search.subroutines.positionsearch.OnyxPosStateSubroutine;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -113,6 +115,17 @@ public class OnyxPos {
         }
         
         return false;
+    }
+    
+    public List<OnyxPos> getOccupiedNeighbours(final OnyxPosCollection c, final int bitColor) {
+        
+        final List<OnyxPos> n = new ArrayList<>();
+        
+        for (String k : this.connections) {
+            if (c.getPosition(k).isOccupied(bitColor)) n.add(c.getPosition(k));
+        }
+        
+        return n;
     }
     
     public int occursCount(final OnyxPos p, final List<OnyxPos> posSet) {

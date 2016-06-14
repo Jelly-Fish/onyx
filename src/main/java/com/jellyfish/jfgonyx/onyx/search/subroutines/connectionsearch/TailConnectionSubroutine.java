@@ -79,15 +79,16 @@ public class TailConnectionSubroutine extends AbstractSubroutine {
      * @return OnyxMove instances.
      * @throws com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException
      */
-    public OnyxMove getTail(final OnyxPos p, final boolean counterSearch) throws InvalidOnyxPositionException {
+    public OnyxMove getTailMove(final OnyxPos p, final boolean counterSearch) throws InvalidOnyxPositionException {
         
         startPos = p;
         this.counterSearch = counterSearch;
-        tail = findTail(p, p.getKey());
+        tail = findTailMove(p, p.getKey());
         score();
         candidate = trim(candidates, board, c, color);
         if (MoveUtils.isMove(candidate)) print(AbstractSubroutine.BEST_CANDIDATE_TAIL_FORMAT, 
                 p.getKey(), type, color.str, candidate);
+        
         return candidate;
     }
     
@@ -99,11 +100,11 @@ public class TailConnectionSubroutine extends AbstractSubroutine {
      * @throws com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException
      * @see OnyxMove
      */
-    public List<OnyxMove> getTails(final OnyxPos p, final boolean counterSearch) throws InvalidOnyxPositionException {
+    public List<OnyxMove> getTailMoves(final OnyxPos p, final boolean counterSearch) throws InvalidOnyxPositionException {
         
         startPos = p;
         this.counterSearch = counterSearch;
-        tail = findTail(p, p.getKey());
+        tail = findTailMove(p, p.getKey());
         score();
         addStartPositionToCandidates();
         candidate = trim(candidates, board, c, color);
@@ -113,7 +114,7 @@ public class TailConnectionSubroutine extends AbstractSubroutine {
         return candidates;
     }
 
-    private OnyxPos findTail(final OnyxPos p, final String kEx) {       
+    private OnyxPos findTailMove(final OnyxPos p, final String kEx) {       
         
         ++links;
         checkedKeys.add(p.getKey());
@@ -125,13 +126,11 @@ public class TailConnectionSubroutine extends AbstractSubroutine {
                 
                 tmp = c.getPosition(k);
                 
-                if (!tmp.isOccupied() && c.isValidMove(tmp, board)) {
-                    keyCandidates.add(k);
-                }
+                if (!tmp.isOccupied() && c.isValidMove(tmp, board)) keyCandidates.add(k);
                 
                 if (tmp.isOccupied() && tmp.getPiece().color.bit == color.bit 
                         && !checkedKeys.contains(tmp.getKey())) {
-                    findTail(c.getPosition(k), k);
+                    findTailMove(c.getPosition(k), k);
                 }
             } 
         }

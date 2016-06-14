@@ -89,7 +89,7 @@ public class CounterPositionSubroutine extends AbstractSubroutine {
         final List<OnyxMove> cnx = new ArrayList<>();
         OnyxMove tmp = null;
         
-        for (OnyxPos p : pos) cnx.addAll(new TailConnectionSubroutine(c, opColor, b).getTails(p, true));
+        for (OnyxPos p : pos) cnx.addAll(new TailConnectionSubroutine(c, opColor, b).getTailMoves(p, true));
         
         tmp = trim(cnx, b, c, opColor, .01f);
         if (MoveUtils.isNotMove(tmp) || !tmp.hasPosition()) return null;

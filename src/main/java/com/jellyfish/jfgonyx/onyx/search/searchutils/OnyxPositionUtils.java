@@ -94,6 +94,10 @@ public class OnyxPositionUtils {
     
     public static List<OnyxPos> getSubCounterBordersByColor(final OnyxPosCollection c, final OnyxConst.COLOR color) {
         
+        /**
+         * FIXME refatcor
+         */
+        
         final List<OnyxPos> borders = new ArrayList<>();
         float i = 0f, j = 0f;
         String k = StringUtils.EMPTY;
@@ -103,7 +107,7 @@ public class OnyxPositionUtils {
             for (i = 0f; i <= GraphicsVars.getInstance().BOARD_SIDE_POS_COUNT; ++i) {
                 k = String.format(OnyxPosCollection.KEY_FORMAT, i, j);
                 if ((c.containsPosition(k) && c.getPosition(k).isOccupied() && 
-                        c.getPosition(k).getPiece().color.bit == color.bit)) {
+                    c.getPosition(k).getPiece().color.bit == color.bit)) {
                     borders.add(c.getPosition(k));
                 }
             }
@@ -112,7 +116,7 @@ public class OnyxPositionUtils {
             for (i = 0f; i <= GraphicsVars.getInstance().BOARD_SIDE_POS_COUNT; ++i) {
                 k = String.format(OnyxPosCollection.KEY_FORMAT, i, j);
                 if ((c.containsPosition(k) && c.getPosition(k).isOccupied() && 
-                        c.getPosition(k).getPiece().color.bit == color.bit)) {
+                    c.getPosition(k).getPiece().color.bit == color.bit)) {
                     borders.add(c.getPosition(k));
                 }
             }
@@ -122,7 +126,7 @@ public class OnyxPositionUtils {
             for (j = 0f; j <= GraphicsVars.getInstance().BOARD_SIDE_POS_COUNT; ++j) {
                 k = String.format(OnyxPosCollection.KEY_FORMAT, i, j);
                 if ((c.containsPosition(k) && c.getPosition(k).isOccupied() && 
-                        c.getPosition(k).getPiece().color.bit == color.bit)) {
+                    c.getPosition(k).getPiece().color.bit == color.bit)) {
                     borders.add(c.getPosition(k));
                 }
             }
@@ -131,7 +135,7 @@ public class OnyxPositionUtils {
             for (j = 0f; j <= GraphicsVars.getInstance().BOARD_SIDE_POS_COUNT; ++j) {
                 k = String.format(OnyxPosCollection.KEY_FORMAT, i, j);
                 if ((c.containsPosition(k) && c.getPosition(k).isOccupied() && 
-                        c.getPosition(k).getPiece().color.bit == color.bit)) {
+                    c.getPosition(k).getPiece().color.bit == color.bit)) {
                     borders.add(c.getPosition(k));
                 }
             }
