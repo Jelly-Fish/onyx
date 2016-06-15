@@ -221,6 +221,10 @@ public class VirtualConnectionSubroutine extends AbstractSubroutine {
         return tail;
     }    
     
+    public List<OnyxTail> getTails() {
+        return tails;
+    }
+    
     private void printAllTails() {
         
         for (OnyxTail t : tails) {

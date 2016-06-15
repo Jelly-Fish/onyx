@@ -40,8 +40,8 @@ import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException;
 import com.jellyfish.jfgonyx.onyx.interfaces.search.OnyxConnectionSearchable;
 import com.jellyfish.jfgonyx.onyx.search.searchutils.OnyxPositionUtils;
+import com.jellyfish.jfgonyx.onyx.search.subroutines.connectionsearch.CrossTailSearchResultsSubroutine;
 import com.jellyfish.jfgonyx.onyx.search.subroutines.connectionsearch.VirtualConnectionSubroutine;
-import com.jellyfish.jfgonyx.onyx.search.subroutines.positionsearch.OnyxPosStateSubroutine;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
 import java.util.List;
 
@@ -68,71 +68,29 @@ public class VirtualConnetionSearch extends ConnectionSearch implements OnyxConn
                 OnyxPositionUtils.getBordersByColor(c, opColor), opColor);
         
         /**
-         * FIXME, sus out...
+         * FIXME, sus out - the OnyxPos returned is not occupied...
          *
         final OnyxPos opPosSearchTailMove = getTailMove(c, board, opColor).getPos();
         opPos.add(opPosSearchTailMove);
          */
         
-        VirtualConnectionSubroutine vCnx = new VirtualConnectionSubroutine(c, color, board);
+        final VirtualConnectionSubroutine vCnx = new VirtualConnectionSubroutine(c, color, board);
         vCnx.buildTails(pos);
         final OnyxTail onyxTail = vCnx.getTail();
         
-        vCnx = new VirtualConnectionSubroutine(c, opColor, board);
-        vCnx.buildTails(opPos);
-        final OnyxTail oponentTail = vCnx.getTail();       
+        final VirtualConnectionSubroutine opVCnx = new VirtualConnectionSubroutine(c, opColor, board);
+        opVCnx.buildTails(opPos);
+        final OnyxTail oponentTail = opVCnx.getTail();       
         
-        final OnyxPos res = crossTailSearch(onyxTail, oponentTail, board, 
-                c, color, opColor, getTailMove(c, board, opColor));
+        final OnyxPos res = new CrossTailSearchResultsSubroutine().crossTailSearch(
+            onyxTail, opVCnx.getTails(), oponentTail, board, c, color, opColor, 
+            getTailMove(c, board, opColor));
         
         if (res != null) {
             return initCaptures(new OnyxMove(res, OnyxConst.SCORE.VTAIL.getValue()), board, c, color);
         }
         
         return null;
-    }
-    
-    /**
-     * @param sT tail to search position for.
-     * @param oT oponent tail.
-     * @param b onyx board.
-     * @param c position collection.
-     * @param color color to serach for.
-     * @param opColor oponent color for oponent neighbour positions.
-     * @param opTailMove oponent tail best move (depending on quality of
-     * super class's search...).
-     * @return first OnyxPos found that belongs to both sT & oT tails.
-     */
-    private OnyxPos crossTailSearch(final OnyxTail sT, final OnyxTail oT, final OnyxBoard b,
-        final OnyxPosCollection c, final OnyxConst.COLOR color, final OnyxConst.COLOR opColor,
-        final OnyxMove opTailMove) throws InvalidOnyxPositionException {
-
-        if (sT == null || oT == null) return null;
-        OnyxPos pos = null;
-        
-        for (OnyxPos pOT : oT.getPositions()) {
-            for (OnyxPos sOT : sT.getPositions()) {
-                if (new OnyxPosStateSubroutine(sOT).willEnableTake(b, c, color) 
-                    || sOT.isOccupied()) continue;
-                if (sOT.getKey().equals(opTailMove.getPos().getKey())) pos = sOT;
-                if (sOT.getKey().equals(pOT.getKey())) pos = sOT;
-                if (sOT.getKey().equals(pOT.getKey()) && sOT.hasNeighbour(c, opColor) &&
-                    sOT.hasNeighbour(c, color)) {
-                    pos = sOT;
-                }
-            }
-        }
-        
-        if (pos == null) {
-            for (OnyxPos sOT : sT.getPositions()) {
-                if (!sOT.isOccupied() && sOT.hasNeighbour(c, color)) {
-                    pos = sOT;
-                    break;                  
-                }
-            }
-        }
-                
-        return pos;
     }
 
     /**
