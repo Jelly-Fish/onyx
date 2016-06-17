@@ -91,8 +91,9 @@ public class OnyxConst {
         WIN_LINK(999.999f), 
         COUNTER_WIN_LINK(998.999f), 
         TAKE(600.0f), 
-        NEIGHBOUR(1f), 
-        TAIL(13.37f),
+        NEIGHBOUR(1f),
+        /** previously TAIL = 13.37f FIXME : calibrate. */
+        TAIL(21.37f),
         VTAIL(202.101f),
         SUB_TAIL(39.77f),
         RANDOM(1f), 

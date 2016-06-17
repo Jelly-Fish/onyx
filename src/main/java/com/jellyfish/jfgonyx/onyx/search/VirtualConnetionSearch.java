@@ -40,7 +40,7 @@ import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException;
 import com.jellyfish.jfgonyx.onyx.interfaces.search.OnyxConnectionSearchable;
 import com.jellyfish.jfgonyx.onyx.search.searchutils.OnyxPositionUtils;
-import com.jellyfish.jfgonyx.onyx.search.subroutines.connectionsearch.CrossTailSearchResultsSubroutine;
+import com.jellyfish.jfgonyx.onyx.search.subroutines.connectionsearch.VirtualTailCrossSearchResultsSubroutine;
 import com.jellyfish.jfgonyx.onyx.search.subroutines.connectionsearch.VirtualConnectionSubroutine;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
 import java.util.List;
@@ -82,9 +82,8 @@ public class VirtualConnetionSearch extends ConnectionSearch implements OnyxConn
         opVCnx.buildTails(opPos);
         final OnyxTail oponentTail = opVCnx.getTail();       
         
-        final OnyxPos res = new CrossTailSearchResultsSubroutine().crossTailSearch(
-            onyxTail, opVCnx.getTails(), oponentTail, board, c, color, opColor, 
-            getTailMove(c, board, opColor));
+        final OnyxPos res = new VirtualTailCrossSearchResultsSubroutine().crossTailSearch(
+            onyxTail, opVCnx.getTails(), oponentTail, board, c, color, opColor);
         
         if (res != null) {
             return initCaptures(new OnyxMove(res, OnyxConst.SCORE.VTAIL.getValue()), board, c, color);

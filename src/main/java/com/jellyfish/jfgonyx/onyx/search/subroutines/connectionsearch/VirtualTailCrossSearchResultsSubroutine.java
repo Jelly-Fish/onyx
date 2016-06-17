@@ -20,7 +20,7 @@ import java.util.List;
  *
  * @author thw
  */
-public class CrossTailSearchResultsSubroutine extends AbstractSubroutine {
+public class VirtualTailCrossSearchResultsSubroutine extends AbstractSubroutine {
     
     /**
      * @param sT tail to search position for.
@@ -31,22 +31,20 @@ public class CrossTailSearchResultsSubroutine extends AbstractSubroutine {
      * @param c position collection.
      * @param color color to serach for.
      * @param opColor oponent color for oponent neighbour positions.
-     * @param opTailMove oponent tail best move (depending on quality of
-     * super class's search...).
      * @return first OnyxPos found that belongs to both sT & oT tails.
      * @throws com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException
      */
     public OnyxPos crossTailSearch(final OnyxTail sT, final List<OnyxTail> sTails, final OnyxTail oT, 
-        final OnyxBoard b, final OnyxPosCollection c, final OnyxConst.COLOR color, final OnyxConst.COLOR opColor,
-        final OnyxMove opTailMove) throws InvalidOnyxPositionException {
+        final OnyxBoard b, final OnyxPosCollection c, final OnyxConst.COLOR color, 
+        final OnyxConst.COLOR opColor) throws InvalidOnyxPositionException {
 
         if (sT == null || oT == null) return null;
         
-        OnyxPos pos = this.crossTails(sT, oT, b, c, color, opColor, true, opTailMove);   
+        OnyxPos pos = this.crossTails(sT, oT, b, c, color, opColor);   
         
         if (pos == null) {
             for (OnyxTail t : sTails) {
-                pos = this.crossTails(sT, oT, b, c, color, opColor, false, opTailMove);  
+                pos = this.crossTails(t, oT, b, c, color, opColor);  
                 if (pos != null) break;
             }
         }
@@ -64,8 +62,8 @@ public class CrossTailSearchResultsSubroutine extends AbstractSubroutine {
     }
     
     private OnyxPos crossTails(final OnyxTail sT, final OnyxTail oT, 
-        final OnyxBoard b, final OnyxPosCollection c, final OnyxConst.COLOR color, final OnyxConst.COLOR opColor,
-        final boolean checkOpTailMove, final OnyxMove opTailMove) throws InvalidOnyxPositionException {
+        final OnyxBoard b, final OnyxPosCollection c, final OnyxConst.COLOR color, 
+        final OnyxConst.COLOR opColor) throws InvalidOnyxPositionException {
         
         if (sT == null || oT == null) return null;
         OnyxPos pos = null;
@@ -77,10 +75,6 @@ public class CrossTailSearchResultsSubroutine extends AbstractSubroutine {
                 if (new OnyxPosStateSubroutine(sOT).willEnableTake(b, c, color) 
                     || sOT.isOccupied()) {
                     continue;
-                }
-                
-                if (checkOpTailMove && sOT.getKey().equals(opTailMove.getPos().getKey())) {
-                    pos = sOT;
                 }
                 
                 if (sOT.getKey().equals(pOT.getKey())) pos = sOT;
