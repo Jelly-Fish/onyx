@@ -189,8 +189,7 @@ public class TailConnectionSubroutine extends AbstractSubroutine {
                  * FIXME : not obvious - figure out best way to upgrade best move.
                  */
                 if (counterSearch && pos.y == tmp.y) {
-                    score *= (1.4f + 
-                        (pos.hasNeighbour(c, OnyxConst.COLOR.getOposite(color.bool)) ? .6f : 0f));
+                    score *= (1.4f + (pos.hasNeighbour(c, OnyxConst.COLOR.getOposite(color.bool)) ? .6f : 0f));
                 }
             }
             
