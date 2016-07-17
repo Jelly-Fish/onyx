@@ -39,6 +39,7 @@ import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import com.jellyfish.jfgonyx.onyx.search.searchutils.MoveUtils;
 import com.jellyfish.jfgonyx.onyx.abstractions.AbstractSubroutine;
+import com.jellyfish.jfgonyx.onyx.search.searchutils.OnyxPositionUtils;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
 import com.jellyfish.jfgonyx.vars.GraphicsVars;
 import java.util.ArrayList;
@@ -107,9 +108,12 @@ public class TailConnectionSubroutine extends AbstractSubroutine {
         tail = findTailMove(p, p.getKey());
         score();
         addStartPositionToCandidates();
-        candidate = trim(candidates, board, c, color);
-        if (MoveUtils.isMove(candidate)) print(AbstractSubroutine.BEST_CANDIDATE_TAIL_FORMAT, 
+        
+        if (counterSearch) {
+            candidate = trim(candidates, board, c, color);
+            if (MoveUtils.isMove(candidate)) print(AbstractSubroutine.BEST_CANDIDATE_TAIL_FORMAT, 
                 p.getKey(), AbstractSubroutine.SUBROUTINE_TYPE.TAILS, color.str, candidates);
+        }
         
         return candidates;
     }
@@ -193,7 +197,8 @@ public class TailConnectionSubroutine extends AbstractSubroutine {
                 }
             }
             
-            candidates.add(new OnyxMove(tmp, score * OnyxConst.SCORE.TAIL.getValue()));
+            if (OnyxPositionUtils.isPosition(tmp)) candidates.add(
+                    new OnyxMove(tmp, score * OnyxConst.SCORE.TAIL.getValue()));
         }
     }
     

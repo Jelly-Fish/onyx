@@ -37,8 +37,9 @@ import com.jellyfish.jfgonyx.onyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import com.jellyfish.jfgonyx.onyx.search.subroutines.positionsearch.OnyxPosStateSubroutine;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Onyx position definition.
@@ -150,29 +151,33 @@ public class OnyxPos {
     public String toString() {
         return String.format(OnyxPosCollection.KEY_FORMAT, x, y);
     }
-    
+
     @Override
     public int hashCode() {
-        int hash = 5;
-        hash = 23 * hash + Float.floatToIntBits(x);
-        hash = 23 * hash + Float.floatToIntBits(y);
+        int hash = 3;
+        hash = 53 * hash + Float.floatToIntBits(this.x);
+        hash = 53 * hash + Float.floatToIntBits(this.y);
+        hash = 53 * hash + this.gX;
+        hash = 53 * hash + this.gY;
+        hash = 53 * hash + Objects.hashCode(this.piece);
+        hash = 53 * hash + Objects.hashCode(this.vPiece);
+        hash = 53 * hash + Objects.hashCode(this.diamond);
+        hash = 53 * hash + Arrays.deepHashCode(this.connections);
+        hash = 53 * hash + Objects.hashCode(this.posHelper);
+        hash = 53 * hash + Objects.hashCode(this.rectangle);
         return hash;
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (getClass() != obj.getClass()) {
-            return false;
-        }
+        
+        if (obj == null) return false;        
+        if (getClass() != obj.getClass()) return false;        
         final OnyxPos other = (OnyxPos) obj;
-        if (Float.floatToIntBits(this.x) != Float.floatToIntBits(other.x)) {
-            return false;
-        }
-        return Float.floatToIntBits(this.y) == Float.floatToIntBits(other.y);
-    } 
+        if (this.x == other.x && this.y == other.y) return true;
+        
+        return false;
+    }   
     
     public OnyxVirtualPiece getVirtualPiece() {
         return vPiece;

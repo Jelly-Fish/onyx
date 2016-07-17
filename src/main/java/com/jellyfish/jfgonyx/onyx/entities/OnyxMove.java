@@ -33,6 +33,7 @@ package com.jellyfish.jfgonyx.onyx.entities;
 
 import com.jellyfish.jfgonyx.onyx.constants.OnyxConst;
 import java.util.List;
+import java.util.Objects;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -103,13 +104,41 @@ public class OnyxMove {
     
     @Override
     public String toString() {
+        
         StringBuilder sb = new StringBuilder();
         sb.append(OnyxConst.POS_MAP.get(pos.getKey()));
         if (isCapture()) {
             sb.append(captured.size() == 2 ? TAKE : captured.size() == 4 ? 
                     TAKE + TAKE : StringUtils.EMPTY);
         }
+        
         return sb.toString();
+    }
+            
+    @Override
+    public int hashCode() {
+        
+        int hash = 7;
+        hash = 79 * hash + Objects.hashCode(this.pos);
+        hash = 79 * hash + Objects.hashCode(this.tailStart);
+        hash = 79 * hash + Objects.hashCode(this.piece);
+        hash = 79 * hash + Objects.hashCode(this.captured);
+        hash = 79 * hash + (this.win ? 1 : 0);
+        hash = 79 * hash + Float.floatToIntBits(this.score);
+        
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        
+        if (obj == null) return false;        
+        if (getClass() != obj.getClass()) return false;
+        
+        final OnyxMove other = (OnyxMove) obj;
+        if (!Objects.equals(this.pos, other.pos)) return false;
+        
+        return true;
     }
     
     public List<OnyxPos> getCaptured() {

@@ -52,7 +52,7 @@ public class WinConnectionLinkSubroutine extends WinConnectionSubroutine {
     }
     
     public OnyxMove connectionLink(final List<OnyxMove> tails) {       
-        
+                
         final List<OnyxPos> borderTails = new ArrayList<>();
         final List<OnyxPos> borders = OnyxPositionUtils.getByBorderStartPositionsAndColor(
                 OnyxPositionUtils.getBordersByColor(c, color), color);
@@ -90,7 +90,7 @@ public class WinConnectionLinkSubroutine extends WinConnectionSubroutine {
                 } else if (search.isWin() && borderTails.contains(p)) {
                     
                     /**
-                     * If border tail (meaning the tails that on a low border
+                     * If border tail (meaning the tail is on a low border
                      * (y OR x strictly smaller than 1.1f)) then the tmp position
                      * must be set to null to remove link simulation BUT the 
                      * position to return is not in tail list (tails here) but

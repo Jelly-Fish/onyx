@@ -236,5 +236,9 @@ public class OnyxPositionUtils {
         
         return candidates;
     }
+
+    public static boolean isPosition(final OnyxPos tmp) {
+        return tmp != null && StringUtils.isNotBlank(tmp.getKey());
+    }
     
 }
