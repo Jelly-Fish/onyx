@@ -38,7 +38,7 @@ import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException;
-import com.jellyfish.jfgonyx.onyx.search.searchutils.MoveUtils;
+import com.jellyfish.jfgonyx.onyx.search.searchutils.OnyxMoveUtils;
 import com.jellyfish.jfgonyx.onyx.search.searchutils.OnyxPositionUtils;
 import com.jellyfish.jfgonyx.onyx.abstractions.AbstractSubroutine;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxDiamond;
@@ -71,7 +71,7 @@ public class CounterPositionSubroutine extends AbstractSubroutine {
         
         move = trim(candidates, b, c, color, .1f);
         
-        if (MoveUtils.isMove(move) && move.hasPosition()) {
+        if (OnyxMoveUtils.isMove(move) && move.hasPosition()) {
             print(AbstractSubroutine.BEST_CANDIDATE_COUNTER_FORMAT, 
                 AbstractSubroutine.SUBROUTINE_TYPE.COUNTER_POS, color.str, 
                 move.getPos().getKey(), move.getScore());
@@ -92,7 +92,7 @@ public class CounterPositionSubroutine extends AbstractSubroutine {
         for (OnyxPos p : pos) cnx.addAll(new TailConnectionSubroutine(c, opColor, b).getTailMoves(p, true));
         
         tmp = trim(cnx, b, c, opColor, .01f);
-        if (MoveUtils.isNotMove(tmp) || !tmp.hasPosition()) return null;
+        if (OnyxMoveUtils.isNotMove(tmp) || !tmp.hasPosition()) return null;
         
         OnyxGame.getInstance().updateTailTendency(tmp);
 

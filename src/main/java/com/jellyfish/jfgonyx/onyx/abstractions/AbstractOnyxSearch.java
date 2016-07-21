@@ -36,7 +36,7 @@ import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
-import com.jellyfish.jfgonyx.onyx.search.searchutils.MoveUtils;
+import com.jellyfish.jfgonyx.onyx.search.searchutils.OnyxMoveUtils;
 import com.jellyfish.jfgonyx.onyx.search.subroutines.positionsearch.OnyxPosStateSubroutine;
 import com.jellyfish.jfgonyx.onyx.search.subroutines.positionsearch.TakePositionSubroutine;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
@@ -58,7 +58,7 @@ public class AbstractOnyxSearch {
         OnyxMove tmp = null;
         for (OnyxMove m : moves) {
             
-            if (MoveUtils.isNotMove(m)) continue;
+            if (OnyxMoveUtils.isNotMove(m)) continue;
             
             /**
              * If win move then override return.
@@ -69,7 +69,7 @@ public class AbstractOnyxSearch {
              * [!] Only & only if tmp is not yet set with m (the current
              * OnyxMove iterated on).
              */
-            if (MoveUtils.isNotMove(tmp)) tmp = m;
+            if (OnyxMoveUtils.isNotMove(tmp)) tmp = m;
             else if (m.getScore() >= tmp.getScore()) tmp = m;
         }
         
@@ -95,7 +95,7 @@ public class AbstractOnyxSearch {
         
         for (OnyxMove m : moves) {
             
-            if (MoveUtils.isNotMove(m)) continue;
+            if (OnyxMoveUtils.isNotMove(m)) continue;
             
             /**
              * If win move then override return.
@@ -106,7 +106,7 @@ public class AbstractOnyxSearch {
              * [!] Only & only if tmp is not yet set with m (the current
              * OnyxMove iterated on).
              */
-            if (MoveUtils.isNotMove(tmp)) tmp = m; 
+            if (OnyxMoveUtils.isNotMove(tmp)) tmp = m; 
             
             /**
              * If score is > COUNTER_WIN_LINK - 1f then Override previous conditions.
@@ -129,7 +129,7 @@ public class AbstractOnyxSearch {
         if (count == 1 && ((tmp.isCapture() || 
             !(new OnyxPosStateSubroutine(tmp.getPos()).willEnableTake(b, c, color))) ||
             tmp.getScore() > OnyxConst.SCORE.COUNTER_WIN_LINK.getValue() - 1f)) {
-            return MoveUtils.isMove(tmp) ? tmp : null;
+            return OnyxMoveUtils.isMove(tmp) ? tmp : null;
         }
         
         return count > 1 ? tmp : null;
@@ -152,7 +152,7 @@ public class AbstractOnyxSearch {
         
         final List<OnyxMove> scoredMoves = new ArrayList<>();
         for (OnyxMove m : moves) {
-            if (MoveUtils.isMove(m) && m.getScore() > minScore) scoredMoves.add(m);
+            if (OnyxMoveUtils.isMove(m) && m.getScore() > minScore) scoredMoves.add(m);
         }
         
         return this.trim(scoredMoves, b, c, color);
@@ -164,8 +164,8 @@ public class AbstractOnyxSearch {
         List<OnyxPos> posSet = null;
         
         final OnyxMove capture = new TakePositionSubroutine().getTakePos(c, b, color.bit);
-        if (MoveUtils.isMove(capture)) posSet = c.getTakePositions(capture.getPos().getKey(), color.bit, b);
-        if (MoveUtils.isMove(capture, tmp) && posSet != null && tmp.getPos().equals(capture.getPos())) {
+        if (OnyxMoveUtils.isMove(capture)) posSet = c.getTakePositions(capture.getPos().getKey(), color.bit, b);
+        if (OnyxMoveUtils.isMove(capture, tmp) && posSet != null && tmp.getPos().equals(capture.getPos())) {
             tmp.setCaptured(new ArrayList<OnyxPos>());
             tmp.getCaptured().addAll(posSet);
         }

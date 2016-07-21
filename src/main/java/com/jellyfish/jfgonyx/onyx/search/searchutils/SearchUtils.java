@@ -46,7 +46,7 @@ public class SearchUtils {
         int r = -1;
         float score = -1f;
         for (int i = 0; i < moves.length; i++) {
-            if ((MoveUtils.isMove(moves[i])) && (r < 0 || moves[i].getScore() > score)) {
+            if ((OnyxMoveUtils.isMove(moves[i])) && (r < 0 || moves[i].getScore() > score)) {
                 r = i;
                 score = moves[i].getScore();
             }

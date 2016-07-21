@@ -39,7 +39,7 @@ import com.jellyfish.jfgonyx.onyx.interfaces.search.OnyxPositionSearchable;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException;
-import com.jellyfish.jfgonyx.onyx.search.searchutils.MoveUtils;
+import com.jellyfish.jfgonyx.onyx.search.searchutils.OnyxMoveUtils;
 import com.jellyfish.jfgonyx.onyx.search.subroutines.positionsearch.CounterPositionSubroutine;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
 import java.util.ArrayList;
@@ -65,9 +65,9 @@ public class PositionSearch extends AbstractOnyxSearch implements OnyxPositionSe
        
             OnyxMove tmp = initCaptures(trim(moves, b, c, color), b, c, color);
 
-            if (MoveUtils.isNotMove(tmp) || c.getPosition(tmp.getPos().getKey()).isOccupied()) {
+            if (OnyxMoveUtils.isNotMove(tmp) || c.getPosition(tmp.getPos().getKey()).isOccupied()) {
                 tmp = new RandomSearch().search(c, b, color);
-                if (MoveUtils.isNotMove(tmp)) throw new NoValidOnyxPositionsFoundException();
+                if (OnyxMoveUtils.isNotMove(tmp)) throw new NoValidOnyxPositionsFoundException();
             }
             
             return tmp;

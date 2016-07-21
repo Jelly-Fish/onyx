@@ -36,7 +36,7 @@ import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPiece;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
-import com.jellyfish.jfgonyx.onyx.search.searchutils.MoveUtils;
+import com.jellyfish.jfgonyx.onyx.search.searchutils.OnyxMoveUtils;
 import com.jellyfish.jfgonyx.onyx.search.searchutils.OnyxPositionUtils;
 import java.util.ArrayList;
 import java.util.List;
@@ -66,8 +66,8 @@ public class WinConnectionLinkSubroutine extends WinConnectionSubroutine {
          * local final List<OnyxPos> borders.
          */
         for (OnyxMove m : tails) {
-            if ((color.bool && MoveUtils.isMove(m) && m.getPos().x < 1.1f) || 
-                (!color.bool && MoveUtils.isMove(m) && m.getPos().y < 1.1f)) {
+            if ((color.bool && OnyxMoveUtils.isMove(m) && m.getPos().x < 1.1f) || 
+                (!color.bool && OnyxMoveUtils.isMove(m) && m.getPos().y < 1.1f)) {
                 borders.add(m.getPos());
                 borderTails.add(m.getPos());
             }
@@ -75,7 +75,7 @@ public class WinConnectionLinkSubroutine extends WinConnectionSubroutine {
 
         for (OnyxMove m : tails) {
             
-            if (MoveUtils.isNotMove(m) || !m.hasPosition()) continue;
+            if (OnyxMoveUtils.isNotMove(m) || !m.hasPosition()) continue;
 
             tmp = new OnyxPiece(color);
             c.getPositions().get(m.getPos().getKey()).setPiece(tmp);

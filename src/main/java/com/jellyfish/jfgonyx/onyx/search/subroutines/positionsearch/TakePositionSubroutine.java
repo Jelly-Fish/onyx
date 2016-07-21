@@ -37,7 +37,7 @@ import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
-import com.jellyfish.jfgonyx.onyx.search.searchutils.MoveUtils;
+import com.jellyfish.jfgonyx.onyx.search.searchutils.OnyxMoveUtils;
 import com.jellyfish.jfgonyx.onyx.abstractions.AbstractSubroutine;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
 import java.util.ArrayList;
@@ -124,7 +124,7 @@ public class TakePositionSubroutine extends AbstractSubroutine {
         
         if (i > -1) move = new OnyxMove(posSet.get(i), posSet.get(i).getPiece(), 
                 posSet, OnyxConst.SCORE.TAKE.getValue());
-        if (MoveUtils.isMove(move)) print(AbstractSubroutine.BEST_TAKE_CANDIDATE, 
+        if (OnyxMoveUtils.isMove(move)) print(AbstractSubroutine.BEST_TAKE_CANDIDATE, 
                 AbstractSubroutine.SUBROUTINE_TYPE.TAKE,
                 bitColor == 0 ? OnyxConst.COLOR.WHITE.str : OnyxConst.COLOR.BLACK.str, 
                 move.getPos().getKey(), move.getScore());

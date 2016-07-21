@@ -38,7 +38,7 @@ import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxDiamondCollection;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
-import com.jellyfish.jfgonyx.onyx.search.searchutils.MoveUtils;
+import com.jellyfish.jfgonyx.onyx.search.searchutils.OnyxMoveUtils;
 import com.jellyfish.jfgonyx.onyx.abstractions.AbstractSubroutine;
 import com.jellyfish.jfgonyx.onyx.utils.RandomUtils;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
@@ -103,7 +103,7 @@ public class CenterPositionSubroutine extends AbstractSubroutine {
             ++side;
         }
         
-        if (MoveUtils.isMove(move)) {
+        if (OnyxMoveUtils.isMove(move)) {
             print(AbstractSubroutine.BEST_CANDIDATE, AbstractSubroutine.SUBROUTINE_TYPE.CENTER_POS, 
                 color, move.getPos().getKey());
         }

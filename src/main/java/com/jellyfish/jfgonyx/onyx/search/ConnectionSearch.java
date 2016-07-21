@@ -39,7 +39,7 @@ import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException;
 import com.jellyfish.jfgonyx.onyx.interfaces.search.OnyxConnectionSearchable;
-import com.jellyfish.jfgonyx.onyx.search.searchutils.MoveUtils;
+import com.jellyfish.jfgonyx.onyx.search.searchutils.OnyxMoveUtils;
 import com.jellyfish.jfgonyx.onyx.search.searchutils.OnyxPositionUtils;
 import com.jellyfish.jfgonyx.onyx.search.subroutines.connectionsearch.TailConnectionSubroutine;
 import com.jellyfish.jfgonyx.onyx.search.subroutines.connectionsearch.WinConnectionSubroutine;
@@ -115,13 +115,13 @@ public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnecti
         for (OnyxPos p : pos) {
             sub = new TailConnectionSubroutine(c, color, board);
             tmp = sub.getTailMove(p, false);
-            if (MoveUtils.isMove(tmp) && !cnxTmpMoves.contains(tmp)) cnxTmpMoves.add(tmp);
+            if (OnyxMoveUtils.isMove(tmp) && !cnxTmpMoves.contains(tmp)) cnxTmpMoves.add(tmp);
             checkedKeys.addAll(sub.getCheckedKeys());
         }
         
         tmp = trim(cnxTmpMoves, board, c, color);
 
-        return MoveUtils.isMove(tmp) ? tmp : null;
+        return OnyxMoveUtils.isMove(tmp) ? tmp : null;
     }
     
     /**
@@ -140,7 +140,7 @@ public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnecti
         moves.add(getTailMove(c, board, opColor));
         moves.add(searchWinMove(c, moves, opColor));
         
-        for (OnyxMove m : moves) count = MoveUtils.isMove(m) ? ++count : count;
+        for (OnyxMove m : moves) count = OnyxMoveUtils.isMove(m) ? ++count : count;
         
         if (count > 0) {            
             move = new WinConnectionLinkSubroutine(c, opColor).connectionLink(moves);
@@ -168,7 +168,7 @@ public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnecti
         for (OnyxPos p : pos) {
             tmpMoves = new TailConnectionSubroutine(c, color, board).getTailMoves(p, false);
             for (OnyxMove m : tmpMoves) {
-                if (!moves.contains(m) && MoveUtils.isMove(m)) moves.add(m);
+                if (!moves.contains(m) && OnyxMoveUtils.isMove(m)) moves.add(m);
             }
         }        
         

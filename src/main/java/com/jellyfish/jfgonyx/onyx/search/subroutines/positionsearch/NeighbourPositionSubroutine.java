@@ -37,7 +37,7 @@ import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
 import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException;
-import com.jellyfish.jfgonyx.onyx.search.searchutils.MoveUtils;
+import com.jellyfish.jfgonyx.onyx.search.searchutils.OnyxMoveUtils;
 import com.jellyfish.jfgonyx.onyx.abstractions.AbstractSubroutine;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
 
@@ -72,7 +72,7 @@ public class NeighbourPositionSubroutine extends AbstractSubroutine {
                             
                             move = new OnyxMove(c.getPosition(cnxK), OnyxConst.SCORE.NEIGHBOUR.getValue());
                             
-                            if (MoveUtils.isMove(move)) {
+                            if (OnyxMoveUtils.isMove(move)) {
                                 
                                 print(AbstractSubroutine.BEST_CANDIDATE, 
                                     AbstractSubroutine.SUBROUTINE_TYPE.NEIGHBOUR, 

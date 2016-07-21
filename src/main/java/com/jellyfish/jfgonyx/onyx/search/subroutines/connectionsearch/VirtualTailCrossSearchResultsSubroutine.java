@@ -5,14 +5,17 @@
  */
 package com.jellyfish.jfgonyx.onyx.search.subroutines.connectionsearch;
 
+import com.jellyfish.jfgonyx.onyx.OnyxGame;
 import com.jellyfish.jfgonyx.onyx.abstractions.AbstractSubroutine;
 import com.jellyfish.jfgonyx.onyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxTail;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
+import com.jellyfish.jfgonyx.onyx.search.searchutils.OnyxPositionUtils;
 import com.jellyfish.jfgonyx.onyx.search.subroutines.positionsearch.OnyxPosStateSubroutine;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
+import com.jellyfish.jfgonyx.vars.OnyxGameVars;
 import java.util.List;
 
 /**
@@ -66,7 +69,7 @@ public class VirtualTailCrossSearchResultsSubroutine extends AbstractSubroutine 
         
         for (OnyxTail t : sTails) {
             pos = this.crossMainTails(t, oT, b, c, color, opColor);  
-            if (pos != null) break;
+            if (OnyxPositionUtils.isPosition(pos)) break;
         }
         
         return pos;
@@ -91,7 +94,7 @@ public class VirtualTailCrossSearchResultsSubroutine extends AbstractSubroutine 
         for (OnyxTail sT : sTails) {
             for (OnyxTail oT : opTails) {
                 pos = this.crossMainTails(sT, oT, b, c, color, opColor);
-                if (pos != null) break;
+                if (OnyxPositionUtils.isPosition(pos)) break;
             }            
         }
         
@@ -127,16 +130,15 @@ public class VirtualTailCrossSearchResultsSubroutine extends AbstractSubroutine 
                     continue;
                 }
                 
-                if (pos == null && sOT.getKey().equals(pOT.getKey())) pos = sOT;
-                
-                if (sOT.getKey().equals(pOT.getKey()) && (sOT.hasNeighbour(c, opColor) ||
-                    sOT.hasNeighbour(c, color))) {
-                    pos = sOT;
-                }
-                
-                if (sOT.getKey().equals(pOT.getKey()) && sOT.hasNeighbour(c, opColor) &&
-                    sOT.hasNeighbour(c, color)) {
-                    pos = sOT;
+                if (OnyxGame.getInstance().getMoveCount() > OnyxGameVars.getInstance().ONYX_GAMESTART_MOVE_COUNT) {
+                    if (sOT.getKey().equals(pOT.getKey()) && sOT.hasNeighbour(c, color)) {
+                        pos = sOT;
+                    }
+                } else {
+                    if (sOT.getKey().equals(pOT.getKey()) && (sOT.hasNeighbour(c, opColor) ||
+                        sOT.hasNeighbour(c, color))) {
+                        pos = sOT;
+                    }
                 }
             }
         }

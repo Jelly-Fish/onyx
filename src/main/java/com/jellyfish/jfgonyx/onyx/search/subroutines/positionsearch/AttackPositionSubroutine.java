@@ -36,7 +36,7 @@ import com.jellyfish.jfgonyx.onyx.entities.OnyxDiamond;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
-import com.jellyfish.jfgonyx.onyx.search.searchutils.MoveUtils;
+import com.jellyfish.jfgonyx.onyx.search.searchutils.OnyxMoveUtils;
 import com.jellyfish.jfgonyx.onyx.abstractions.AbstractSubroutine;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
 
@@ -80,7 +80,7 @@ public class AttackPositionSubroutine extends AbstractSubroutine {
             }
         }
         
-        if (MoveUtils.isMove(move)) print(AbstractSubroutine.BEST_CANDIDATE, 
+        if (OnyxMoveUtils.isMove(move)) print(AbstractSubroutine.BEST_CANDIDATE, 
                 AbstractSubroutine.SUBROUTINE_TYPE.ATTACK, 
                 bitColor == 0 ? OnyxConst.COLOR.WHITE : OnyxConst.COLOR.BLACK, 
                 move.getPos().getKey());

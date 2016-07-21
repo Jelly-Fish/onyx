@@ -53,14 +53,7 @@ public class VirtualConnetionSearch extends ConnectionSearch implements OnyxConn
     @Override
     public OnyxMove search(final OnyxPosCollection c, final OnyxBoard board, 
             final OnyxConst.COLOR color) throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
-        
-        /**
-         * FIXME : still to improve.
-         * crossTailSearches method must take advantage on oponent tail search.
-         * When comparing tails, if oponent tail pos if present if Onyx tail
-         * position collection then Override with scoring.
-         */
-        
+
         final OnyxConst.COLOR opColor = OnyxConst.COLOR.getOposite(color.bool);
         final List<OnyxPos> pos = OnyxPositionUtils.getAllExternalBordersByColor(
                 OnyxPositionUtils.getBordersByColor(c, color), color);        
@@ -68,10 +61,7 @@ public class VirtualConnetionSearch extends ConnectionSearch implements OnyxConn
                 OnyxPositionUtils.getBordersByColor(c, opColor), opColor);
         
         /**
-         * FIXME, sus out - the OnyxPos returned is not occupied...
-         *
-        final OnyxPos opPosSearchTailMove = getTailMove(c, board, opColor).getPos();
-        opPos.add(opPosSearchTailMove);
+         * FIXME : border positions are discarded.
          */
         
         final VirtualConnectionSubroutine vCnx = new VirtualConnectionSubroutine(c, color, board);

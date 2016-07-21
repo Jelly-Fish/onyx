@@ -36,14 +36,14 @@ import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
 /**
  * @author thw
  */
-public class MoveUtils {
+public class OnyxMoveUtils {
     
     public static boolean isMove(final OnyxMove m) {
         return m != null && m.getPos() != null;
     }
     
     public static boolean isMove(final OnyxMove ... moves) {
-        for (OnyxMove m : moves) if (MoveUtils.isNotMove(m)) return false;
+        for (OnyxMove m : moves) if (OnyxMoveUtils.isNotMove(m)) return false;
         return true;
     }
     

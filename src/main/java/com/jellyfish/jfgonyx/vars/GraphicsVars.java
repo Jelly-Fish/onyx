@@ -39,12 +39,6 @@ import java.awt.Color;
 public class GraphicsVars implements java.io.Serializable {
     
     private static GraphicsVars instance;
-    
-    private GraphicsVars() { 
-        BOARD_WIDTH += EXTRA_SQUARES * SQUARE_WIDTH;
-        BOARD_SIDE_POS_COUNT = ((float) BOARD_SIDE_SQUARE_COUNT) + 1f;
-    }
-    
     private static final int DEFAULT_BOARD_WIDTH = 670;
     
     public int EXTRA_SQUARES = 2;
@@ -67,7 +61,12 @@ public class GraphicsVars implements java.io.Serializable {
     public Color ONYX_ENGINE_MOVE_OUTLINE = Color.RED;
     public int TRANSLATION = 16;
     public int CENTER_TRANSLATION = 32;
-        
+    
+    private GraphicsVars() { 
+        BOARD_WIDTH += EXTRA_SQUARES * SQUARE_WIDTH;
+        BOARD_SIDE_POS_COUNT = ((float) BOARD_SIDE_SQUARE_COUNT) + 1f;
+    }
+
     public static GraphicsVars getInstance() {       
         if (instance == null) instance = new GraphicsVars();
         return instance;
