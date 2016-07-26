@@ -31,6 +31,11 @@
  */
 package com.jellyfish.jfgonyx.ui.utils;
 
+import com.jellyfish.jfgonyx.constants.OnyxBoardPositionOutlineConst;
+import com.jellyfish.jfgonyx.helpers.OnyxBoardGHelper;
+import com.jellyfish.jfgonyx.main.Main;
+import com.jellyfish.jfgonyx.onyx.OnyxGame;
+import com.jellyfish.jfgonyx.ui.OnyxBoard;
 import com.jellyfish.jfgonyx.ui.OnyxPanel;
 import com.jellyfish.jfgonyx.vars.GraphicsVars;
 import java.awt.event.ActionEvent;
@@ -62,7 +67,7 @@ public class ColorThemeUtils {
     
     public static javax.swing.JMenu appendThemes(final javax.swing.JMenu menu, 
         final OnyxPanel mainPanel, final javax.swing.JScrollPane scrollPane, 
-        final javax.swing.JTextPane dataOutput) {
+        final javax.swing.JTextPane dataOutput, final OnyxBoard board) {
                 
         javax.swing.JMenuItem item = null;
         GraphicsVars gv= null;

@@ -48,7 +48,6 @@ import java.awt.event.MouseEvent;
 import java.util.LinkedList;
 import javax.swing.ImageIcon;
 import javax.swing.JColorChooser;
-import javax.swing.JOptionPane;
 import javax.swing.text.DefaultCaret;
 import javax.swing.text.Document;
 import javax.swing.text.html.HTMLEditorKit;
@@ -551,7 +550,7 @@ public class MainFrame extends javax.swing.JFrame implements OnyxObserver {
         
         ColorThemeUtils.list();
         ColorThemeUtils.appendThemes(this.colorThemesMenu, this.mainPanel, 
-            this.mainScrollPane, this.dataTextPane);        
+            this.mainScrollPane, this.dataTextPane, this.board);        
         
         final ImageIcon icn = new ImageIcon(getClass().getClassLoader().getResource("icons/icn.png"));
         this.setIconImage(icn.getImage());

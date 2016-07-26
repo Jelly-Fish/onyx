@@ -31,7 +31,6 @@
  */
 package com.jellyfish.jfgonyx.onyx.entities.collections;
 
-import com.jellyfish.jfgonyx.vars.GraphicsVars;
 import com.jellyfish.jfgonyx.onyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.helpers.OnyxConnectionHelper;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxDiamond;

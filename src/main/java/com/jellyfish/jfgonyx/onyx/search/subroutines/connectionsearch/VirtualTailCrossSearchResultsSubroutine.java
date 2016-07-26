@@ -135,8 +135,7 @@ public class VirtualTailCrossSearchResultsSubroutine extends AbstractSubroutine 
                         pos = sOT;
                     }
                 } else {
-                    if (sOT.getKey().equals(pOT.getKey()) && (sOT.hasNeighbour(c, opColor) ||
-                        sOT.hasNeighbour(c, color))) {
+                    if (sOT.getKey().equals(pOT.getKey())) {
                         pos = sOT;
                     }
                 }
