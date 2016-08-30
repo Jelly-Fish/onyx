@@ -75,11 +75,8 @@ public class VirtualConnetionSearch extends ConnectionSearch implements OnyxConn
         final OnyxPos res = new VirtualTailCrossSearchResultsSubroutine().crossTailSearch(
             onyxTail, vCnx.getTails(), oponentTail, opVCnx.getTails(), board, c, color, opColor);
         
-        if (res != null) {
-            return initCaptures(new OnyxMove(res, OnyxConst.SCORE.VTAIL.getValue()), board, c, color);
-        }
-        
-        return null;
+        return res == null ? null : 
+           initCaptures(new OnyxMove(res, OnyxConst.SCORE.VTAIL.getValue()), board, c, color); 
     }
 
     /**

@@ -42,8 +42,10 @@ import com.jellyfish.jfgonyx.onyx.search.searchutils.OnyxMoveUtils;
 import com.jellyfish.jfgonyx.onyx.search.searchutils.OnyxPositionUtils;
 import com.jellyfish.jfgonyx.onyx.abstractions.AbstractSubroutine;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxDiamond;
+import com.jellyfish.jfgonyx.onyx.search.subroutines.connectionsearch.SubTailConnectionSubroutine;
 import com.jellyfish.jfgonyx.onyx.search.subroutines.connectionsearch.TailConnectionSubroutine;
 import com.jellyfish.jfgonyx.ui.OnyxBoard;
+import com.jellyfish.jfgonyx.vars.GraphicsVars;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
@@ -88,8 +90,13 @@ public class CounterPositionSubroutine extends AbstractSubroutine {
                 OnyxPositionUtils.getBordersByColor(c, opColor), opColor);
         final List<OnyxMove> cnx = new ArrayList<>();
         OnyxMove tmp = null;
-        
+
         for (OnyxPos p : pos) cnx.addAll(new TailConnectionSubroutine(c, opColor, b).getTailMoves(p, true));
+        for (OnyxPos p : pos) {
+            cnx.addAll(new SubTailConnectionSubroutine(c, opColor, b, 1f, 1f, 
+            GraphicsVars.getInstance().BOARD_SIDE_POS_COUNT - 1f, 
+            GraphicsVars.getInstance().BOARD_SIDE_POS_COUNT - 1f).getTailMoves(p, true));
+        }
         
         tmp = trim(cnx, b, c, opColor, .01f);
         if (OnyxMoveUtils.isNotMove(tmp) || !tmp.hasPosition()) return null;

@@ -133,6 +133,7 @@ public class OnyxGame {
         if (m == null) throw new NoValidOnyxPositionsFoundException();
         else board.getPosCollection().clearOutlines();
         c.getPosition(m.getPos().getKey()).setPiece(new OnyxPiece(colorToPlay, true));
+        
         return m;
     }
     

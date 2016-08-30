@@ -122,7 +122,7 @@ class Onyx {
                 StringUtils.EMPTY, HTMLDisplayHelper.GOLD);
             /** [END] Do printing debug stuff... */
             
-            if (Onyx.gameEnd) return null;
+            if (Onyx.gameEnd) return null;            
             final OnyxMove m = SearchUtils.assertByScore(posSearchRes, cnxSearchRes, virtualCnxRes);
             if (m.isCapture()) c.performTake(m.getPos().getKey(), color.bit, board);
             
@@ -145,10 +145,10 @@ class Onyx {
         return SEARCH.get(STYPE.RANDOM).search(c, board, color);
     }
     
-    static boolean isLose(final OnyxPosCollection c, final OnyxConst.COLOR color) throws NoValidOnyxPositionsFoundException {
-        final boolean lose = ((ConnectionSearch) SEARCH.get(STYPE.CNX)).isWin(c, color);
-        Onyx.gameEnd = lose;
-        return lose;
+    static boolean isLose(final OnyxPosCollection c, final OnyxConst.COLOR color) 
+            throws NoValidOnyxPositionsFoundException {
+        Onyx.gameEnd = ((ConnectionSearch) SEARCH.get(STYPE.CNX)).isWin(c, color);
+        return Onyx.gameEnd;
     }
     
     private static void print(final String s) {

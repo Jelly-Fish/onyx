@@ -54,7 +54,6 @@ import javax.swing.text.html.HTMLEditorKit;
 import org.apache.commons.lang3.StringUtils;
 
 /**
- *
  * @author thw
  */
 public class MainFrame extends javax.swing.JFrame implements OnyxObserver {
