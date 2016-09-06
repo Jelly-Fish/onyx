@@ -6,7 +6,7 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
     
-    <name>jfgonyxv1.0</name>
+    <name>jfgonyxv2.0</name>
     <url>http://maven.apache.org</url>
     <build>
         <plugins>
