@@ -29,14 +29,13 @@
  * POSSIBILITY OF SUCH DAMAGE. 
  ******************************************************************************
  */
-package com.jellyfish.jfgonyx.helpers;
+package com.jellyfish.jfgonyx.onyx.utils;
 
 import com.jellyfish.jfgonyx.onyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
 import static com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection.KEY_FORMAT;
-import com.jellyfish.jfgonyx.ui.MainFrame;
-import com.jellyfish.jfgonyx.vars.GraphicsVars;
+import com.jellyfish.jfgonyx.onyx.vars.GraphicsVars;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -162,44 +161,6 @@ public class OnyxConnectionHelper {
                 System.out.println(String.format(PRINT_FORMAT_CNX, i, OnyxConst.POS_MAP.get(p.connections[i])));
             }
         }
-    }
-    
-    public static final void print(final OnyxPosCollection c) {
-        
-        int posCount = 0;
-        final StringBuilder sb = new StringBuilder(FILLER);
-        sb.append(BACKSLASH_N);
-        sb.append(PRINT_FORMAT_TITLE);
-        sb.append(BACKSLASH_N);
-        
-        for (OnyxPos p : c.getPositions().values()) {
-            ++posCount;
-            final String k = p.getKey();
-            final int count = p.connections.length;
-            sb.append(String.format(PRINT_FORMAT_HEAD, 
-                OnyxConst.POS_MAP.get(p.getKey()), count)).append(BACKSLASH_N);
-            for (int i = 0; i < count; ++i) {
-                sb.append(String.format(PRINT_FORMAT_CNX, i,
-                    OnyxConst.POS_MAP.get(p.connections[i]))).append(BACKSLASH_N);
-            }
-        }
-        
-        sb.append(String.format(PRINT_FORMAT_TAIL, posCount));
-        sb.append(BACKSLASH_N);
-        sb.append(FILLER);
-        
-        try {
-            FileWriter f = new FileWriter(FILE_PATH, false);
-            f.write(sb.toString());
-            f.close();
-            MainFrame.print(LogHelper.getDTFullStamp() + StringUtils.SPACE + sb.toString(), HTMLDisplayHelper.WHITE);
-        } catch (final IOException iOex) {
-            Logger.getLogger(OnyxConnectionHelper.class.getName()).log(Level.SEVERE, null, iOex);
-        } catch (final Exception ex) {
-            Logger.getLogger(OnyxConnectionHelper.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        
     }
     
 }

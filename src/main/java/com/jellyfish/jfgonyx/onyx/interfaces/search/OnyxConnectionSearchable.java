@@ -31,6 +31,7 @@
  */
 package com.jellyfish.jfgonyx.onyx.interfaces.search;
 
+import com.jellyfish.jfgonyx.onyx.OnyxGame;
 import com.jellyfish.jfgonyx.onyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxDiamond;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
@@ -38,7 +39,6 @@ import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException;
-import com.jellyfish.jfgonyx.ui.OnyxBoard;
 
 /**
  *
@@ -48,17 +48,16 @@ public interface OnyxConnectionSearchable extends OnyxAbstractSearchable {
     
     /**
      * @param color the color for move, all equal colors will be discarded.
-     * @param board the Onyx board with all diamonds.
+     * @param game
      * @throws com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException
      * @throws com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException
      * @see OnyxPos position definition.
      * @see OnyxDiamond Onyx diamond definition.
-     * @param c collection of unique Onyx positions - positions are independent from OnyxDiamond instances.
      * @return Best OnyxMove instance.
      * @see OnyxPosCollection OnyxPos instaces mapped to string key coordinates.
      */
     @Override
-    OnyxMove search(final OnyxPosCollection c, final OnyxBoard board, final OnyxConst.COLOR color) 
+    OnyxMove search(final OnyxGame game, final OnyxConst.COLOR color) 
             throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException;
     
     /**

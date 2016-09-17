@@ -31,6 +31,7 @@
  */
 package com.jellyfish.jfgonyx.onyx.search;
 
+import com.jellyfish.jfgonyx.onyx.OnyxGame;
 import com.jellyfish.jfgonyx.onyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.abstractions.AbstractOnyxSearch;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
@@ -44,7 +45,6 @@ import com.jellyfish.jfgonyx.onyx.search.searchutils.OnyxPositionUtils;
 import com.jellyfish.jfgonyx.onyx.search.subroutines.connectionsearch.TailConnectionSubroutine;
 import com.jellyfish.jfgonyx.onyx.search.subroutines.connectionsearch.WinConnectionSubroutine;
 import com.jellyfish.jfgonyx.onyx.search.subroutines.connectionsearch.WinConnectionLinkSubroutine;
-import com.jellyfish.jfgonyx.ui.OnyxBoard;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -63,14 +63,14 @@ public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnecti
     private final List<OnyxMove> cnxMoves = new ArrayList<>();
     
     @Override
-    public OnyxMove search(final OnyxPosCollection c, final OnyxBoard board, final OnyxConst.COLOR color) 
+    public OnyxMove search(final OnyxGame game, final OnyxConst.COLOR color) 
             throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
         
         init();
-        cnxMoves.add(searchWinMove(c, board, color));
-        cnxMoves.add(searchCounterWinLink(c, board, color));
+        cnxMoves.add(searchWinMove(game, color));
+        cnxMoves.add(searchCounterWinLink(game, color));
         
-        return trim(cnxMoves, board, c, color);
+        return trim(cnxMoves, game, color);
     }
     
     private void init() {        
@@ -97,29 +97,28 @@ public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnecti
     }
 
     /**
-     * @param c collection of unique Onyx positions - positions are independent from OnyxDiamond instances.
+     * @param game
      * @param color the color to check for win position.
-     * @param board onyx board instance.
      * @return best onyx connection search move as a non win end of tail position move.
      * @throws com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException
      * @throws com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException
      */
-    protected OnyxMove getTailMove(final OnyxPosCollection c, final OnyxBoard board, 
+    protected OnyxMove getTailMove(final OnyxGame game, 
             final OnyxConst.COLOR color) throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
         
         OnyxMove tmp = null;
         final List<OnyxPos> pos = OnyxPositionUtils.getAllExternalBordersByColor(
-                OnyxPositionUtils.getBordersByColor(c, color), color);
+                OnyxPositionUtils.getBordersByColor(game.getPosCollection(), color), color);
         TailConnectionSubroutine sub;
         
         for (OnyxPos p : pos) {
-            sub = new TailConnectionSubroutine(c, color, board);
+            sub = new TailConnectionSubroutine(color, game);
             tmp = sub.getTailMove(p, false);
             if (OnyxMoveUtils.isMove(tmp) && !cnxTmpMoves.contains(tmp)) cnxTmpMoves.add(tmp);
             checkedKeys.addAll(sub.getCheckedKeys());
         }
         
-        tmp = trim(cnxTmpMoves, board, c, color);
+        tmp = trim(cnxTmpMoves, game, color);
 
         return OnyxMoveUtils.isMove(tmp) ? tmp : null;
     }
@@ -129,22 +128,22 @@ public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnecti
      * @param color the color to check for win position.
      * @return winning onyx connection or null.
      */
-    private OnyxMove searchCounterWinLink(final OnyxPosCollection c, final OnyxBoard board, 
-            final OnyxConst.COLOR color) throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {   
+    private OnyxMove searchCounterWinLink(final OnyxGame game, final OnyxConst.COLOR color) 
+        throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {   
 
         int count = 0;
         final List<OnyxMove> moves = new ArrayList<>();
         OnyxMove move = null;
         
         final OnyxConst.COLOR opColor = OnyxConst.COLOR.getOposite(color.bool);
-        moves.add(getTailMove(c, board, opColor));
-        moves.add(searchWinMove(c, moves, opColor));
+        moves.add(getTailMove(game, opColor));
+        moves.add(searchWinMove(game.getPosCollection(), moves, opColor));
         
         for (OnyxMove m : moves) count = OnyxMoveUtils.isMove(m) ? ++count : count;
         
         if (count > 0) {            
-            move = new WinConnectionLinkSubroutine(c, opColor).connectionLink(moves);
-            move = initCaptures(move, board, c, color);
+            move = new WinConnectionLinkSubroutine(game.getPosCollection(), opColor).connectionLink(moves);
+            move = initCaptures(move, game, color);
         }
 
         return move;
@@ -157,22 +156,22 @@ public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnecti
      * @return winning onyx connection or null.
      * @throws NoValidOnyxPositionsFoundException 
      */
-    private OnyxMove searchWinMove(final OnyxPosCollection c, final OnyxBoard board, final OnyxConst.COLOR color) 
+    private OnyxMove searchWinMove(final OnyxGame game, final OnyxConst.COLOR color) 
         throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {    
 
         List<OnyxMove> tmpMoves = null;
         final List<OnyxMove> moves = new ArrayList<>();
         final List<OnyxPos> pos = OnyxPositionUtils.getAllExternalBordersByColor(
-                OnyxPositionUtils.getBordersByColor(c, color), color);
+                OnyxPositionUtils.getBordersByColor(game.getPosCollection(), color), color);
 
         for (OnyxPos p : pos) {
-            tmpMoves = new TailConnectionSubroutine(c, color, board).getTailMoves(p, false);
+            tmpMoves = new TailConnectionSubroutine(color, game).getTailMoves(p, false);
             for (OnyxMove m : tmpMoves) {
                 if (!moves.contains(m) && OnyxMoveUtils.isMove(m)) moves.add(m);
             }
         }        
         
-        return new WinConnectionLinkSubroutine(c, color).connectionLink(moves);
+        return new WinConnectionLinkSubroutine(game.getPosCollection(), color).connectionLink(moves);
     }
 
     /**

@@ -31,6 +31,7 @@
  */
 package com.jellyfish.jfgonyx.onyx.search;
 
+import com.jellyfish.jfgonyx.onyx.OnyxGame;
 import com.jellyfish.jfgonyx.onyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
@@ -42,7 +43,6 @@ import com.jellyfish.jfgonyx.onyx.interfaces.search.OnyxConnectionSearchable;
 import com.jellyfish.jfgonyx.onyx.search.searchutils.OnyxPositionUtils;
 import com.jellyfish.jfgonyx.onyx.search.subroutines.connectionsearch.VirtualTailCrossSearchResultsSubroutine;
 import com.jellyfish.jfgonyx.onyx.search.subroutines.connectionsearch.VirtualConnectionSubroutine;
-import com.jellyfish.jfgonyx.ui.OnyxBoard;
 import java.util.List;
 
 /**
@@ -51,42 +51,32 @@ import java.util.List;
 public class VirtualConnetionSearch extends ConnectionSearch implements OnyxConnectionSearchable {
 
     @Override
-    public OnyxMove search(final OnyxPosCollection c, final OnyxBoard board, 
+    public OnyxMove search(final OnyxGame game, 
             final OnyxConst.COLOR color) throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
 
         final OnyxConst.COLOR opColor = OnyxConst.COLOR.getOposite(color.bool);
         final List<OnyxPos> pos = OnyxPositionUtils.getAllExternalBordersByColor(
-                OnyxPositionUtils.getBordersByColor(c, color), color);        
+                OnyxPositionUtils.getBordersByColor(game.getPosCollection(), color), color);        
         final List<OnyxPos> opPos = OnyxPositionUtils.getAllExternalBordersByColor(
-                OnyxPositionUtils.getBordersByColor(c, opColor), opColor);
+                OnyxPositionUtils.getBordersByColor(game.getPosCollection(), opColor), opColor);
         
         /**
          * FIXME : border positions are discarded.
          */
         
-        final VirtualConnectionSubroutine vCnx = new VirtualConnectionSubroutine(c, color, board);
+        final VirtualConnectionSubroutine vCnx = new VirtualConnectionSubroutine(color, game);
         vCnx.buildTails(pos);
         final OnyxTail onyxTail = vCnx.getTail();
         
-        final VirtualConnectionSubroutine opVCnx = new VirtualConnectionSubroutine(c, opColor, board);
+        final VirtualConnectionSubroutine opVCnx = new VirtualConnectionSubroutine(opColor, game);
         opVCnx.buildTails(opPos);
         final OnyxTail oponentTail = opVCnx.getTail();       
         
         final OnyxPos res = new VirtualTailCrossSearchResultsSubroutine().crossTailSearch(
-            onyxTail, vCnx.getTails(), oponentTail, opVCnx.getTails(), board, c, color, opColor);
+            onyxTail, vCnx.getTails(), oponentTail, opVCnx.getTails(), game, color, opColor);
         
         return res == null ? null : 
-           initCaptures(new OnyxMove(res, OnyxConst.SCORE.VTAIL.getValue()), board, c, color); 
-    }
-
-    /**
-     * @throws com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException if used.
-     * @deprecated for this search routine : goal is not to seek win move.
-     */
-    @Override
-    public boolean isWin(final OnyxPosCollection c, final OnyxConst.COLOR color) 
-        throws NoValidOnyxPositionsFoundException {
-        throw new UnsupportedOperationException();
+           initCaptures(new OnyxMove(res, OnyxConst.SCORE.VTAIL.getValue()), game, color); 
     }
     
 }

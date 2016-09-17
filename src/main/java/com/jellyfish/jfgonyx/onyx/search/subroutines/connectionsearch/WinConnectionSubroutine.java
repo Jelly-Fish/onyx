@@ -35,7 +35,7 @@ import com.jellyfish.jfgonyx.onyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
 import com.jellyfish.jfgonyx.onyx.abstractions.AbstractSubroutine;
-import com.jellyfish.jfgonyx.vars.GraphicsVars;
+import com.jellyfish.jfgonyx.onyx.vars.GraphicsVars;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -91,7 +91,6 @@ public class WinConnectionSubroutine extends AbstractSubroutine {
     }
    
     public boolean isWin() {
-        if (win && display) print(WIN, color.str.toUpperCase());
         return win;
     }
     

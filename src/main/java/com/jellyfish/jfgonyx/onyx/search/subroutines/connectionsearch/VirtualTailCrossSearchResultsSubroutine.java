@@ -14,8 +14,7 @@ import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import com.jellyfish.jfgonyx.onyx.search.searchutils.OnyxPositionUtils;
 import com.jellyfish.jfgonyx.onyx.search.subroutines.positionsearch.OnyxPosStateSubroutine;
-import com.jellyfish.jfgonyx.ui.OnyxBoard;
-import com.jellyfish.jfgonyx.vars.OnyxGameVars;
+import com.jellyfish.jfgonyx.onyx.vars.OnyxGameVars;
 import java.util.List;
 
 /**
@@ -30,22 +29,20 @@ public class VirtualTailCrossSearchResultsSubroutine extends AbstractSubroutine 
      * @param oT oponent tail.
      * @param opTails result of virtual tail search : contains all tail
      * candidates from oponent tail search.
-     * @param b onyx board.
-     * @param c position collection.
+     * @param game
      * @param color color to serach for.
      * @param opColor oponent color for oponent neighbour positions.
      * @return first OnyxPos found that belongs to both sT & oT tails.
      * @throws com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException
      */
     public OnyxPos crossTailSearch(final OnyxTail sT, final List<OnyxTail> sTails, 
-        final OnyxTail oT, final List<OnyxTail> opTails, final OnyxBoard b, 
-        final OnyxPosCollection c, final OnyxConst.COLOR color, final OnyxConst.COLOR opColor) throws InvalidOnyxPositionException {
+        final OnyxTail oT, final List<OnyxTail> opTails, final OnyxGame game, final OnyxConst.COLOR color, final OnyxConst.COLOR opColor) throws InvalidOnyxPositionException {
 
         if (sT == null || oT == null) return null;
         
-        OnyxPos pos = this.crossMainTails(sT, oT, b, c, color, opColor);   
-        if (pos == null) pos = this.crossWithAllOnyxTails(opTails, oT, b, c, color, opColor);
-        if (pos == null) pos = this.crossAllTails(sTails, opTails, b, c, color, opColor);
+        OnyxPos pos = this.crossMainTails(sT, oT, game, game.getPosCollection(), color, opColor);   
+        if (pos == null) pos = this.crossWithAllOnyxTails(opTails, oT, game, game.getPosCollection(), color, opColor);
+        if (pos == null) pos = this.crossAllTails(sTails, opTails, game, game.getPosCollection(), color, opColor);
                 
         return pos;
     }
@@ -62,13 +59,13 @@ public class VirtualTailCrossSearchResultsSubroutine extends AbstractSubroutine 
      * @throws InvalidOnyxPositionException 
      */
     private OnyxPos crossWithAllOnyxTails(final List<OnyxTail> sTails, final OnyxTail oT, 
-        final OnyxBoard b, final OnyxPosCollection c, final OnyxConst.COLOR color, 
+        final OnyxGame game, final OnyxPosCollection c, final OnyxConst.COLOR color, 
         final OnyxConst.COLOR opColor) throws InvalidOnyxPositionException {
         
         OnyxPos pos = null;
         
         for (OnyxTail t : sTails) {
-            pos = this.crossMainTails(t, oT, b, c, color, opColor);  
+            pos = this.crossMainTails(t, oT, game, c, color, opColor);  
             if (OnyxPositionUtils.isPosition(pos)) break;
         }
         
@@ -86,14 +83,14 @@ public class VirtualTailCrossSearchResultsSubroutine extends AbstractSubroutine 
      * @throws InvalidOnyxPositionException
      */
     private OnyxPos crossAllTails(final List<OnyxTail> sTails, final List<OnyxTail> opTails, 
-        final OnyxBoard b, final OnyxPosCollection c, final OnyxConst.COLOR color, 
+        final OnyxGame game, final OnyxPosCollection c, final OnyxConst.COLOR color, 
         final OnyxConst.COLOR opColor) throws InvalidOnyxPositionException {
         
         OnyxPos pos = null;
         
         for (OnyxTail sT : sTails) {
             for (OnyxTail oT : opTails) {
-                pos = this.crossMainTails(sT, oT, b, c, color, opColor);
+                pos = this.crossMainTails(sT, oT, game, c, color, opColor);
                 if (OnyxPositionUtils.isPosition(pos)) break;
             }            
         }
@@ -115,7 +112,7 @@ public class VirtualTailCrossSearchResultsSubroutine extends AbstractSubroutine 
      * @throws InvalidOnyxPositionException 
      */
     private OnyxPos crossMainTails(final OnyxTail sT, final OnyxTail oT, 
-        final OnyxBoard b, final OnyxPosCollection c, final OnyxConst.COLOR color, 
+        final OnyxGame game, final OnyxPosCollection c, final OnyxConst.COLOR color, 
         final OnyxConst.COLOR opColor) throws InvalidOnyxPositionException {
         
         if (sT == null || oT == null) return null;
@@ -125,12 +122,12 @@ public class VirtualTailCrossSearchResultsSubroutine extends AbstractSubroutine 
             
             for (OnyxPos sOT : sT.getPositions()) {
                 
-                if (new OnyxPosStateSubroutine(sOT).willEnableTake(b, c, color) 
+                if (new OnyxPosStateSubroutine(sOT).willEnableTake(game.getDiamondCollection(), c, color) 
                     || sOT.isOccupied()) {
                     continue;
                 }
                 
-                if (OnyxGame.getInstance().getMoveCount() > OnyxGameVars.getInstance().ONYX_GAMESTART_MOVE_COUNT) {
+                if (game.getMoveCount() > OnyxGameVars.getInstance().ONYX_GAMESTART_MOVE_COUNT) {
                     if (sOT.getKey().equals(pOT.getKey()) && sOT.hasNeighbour(c, color)) {
                         pos = sOT;
                     }

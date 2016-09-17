@@ -31,15 +31,14 @@
  */
 package com.jellyfish.jfgonyx.onyx.abstractions;
 
+import com.jellyfish.jfgonyx.onyx.OnyxGame;
 import com.jellyfish.jfgonyx.onyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
-import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import com.jellyfish.jfgonyx.onyx.search.searchutils.OnyxMoveUtils;
 import com.jellyfish.jfgonyx.onyx.search.subroutines.positionsearch.OnyxPosStateSubroutine;
 import com.jellyfish.jfgonyx.onyx.search.subroutines.positionsearch.TakePositionSubroutine;
-import com.jellyfish.jfgonyx.ui.OnyxBoard;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -80,15 +79,14 @@ public class AbstractOnyxSearch {
      * Trim overload - discards NULL, OnyxPos NULL & moves that will result
      * in take opotunities for color oponent.
      * @param moves moves to trim.
-     * @param b onyx board instance.
-     * @param c onyx position collection instance.
+     * @param game
      * @param color depending on color, if move will enable a take for oponent color
      * then discard that move.
      * @return move with highest scoring.
      * @throws com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException
      */
-    protected final OnyxMove trim(final List<OnyxMove> moves, final OnyxBoard b, 
-            final OnyxPosCollection c, final OnyxConst.COLOR color) throws InvalidOnyxPositionException {
+    protected final OnyxMove trim(final List<OnyxMove> moves, final OnyxGame game, 
+            final OnyxConst.COLOR color) throws InvalidOnyxPositionException {
         
         int count = 0;
         OnyxMove tmp = null;
@@ -112,7 +110,8 @@ public class AbstractOnyxSearch {
              * If score is > COUNTER_WIN_LINK - 1f then Override previous conditions.
              * @see OnyxConst
              */
-            if (((tmp.isCapture() || !(new OnyxPosStateSubroutine(m.getPos()).willEnableTake(b, c, color))) &&
+            if (((tmp.isCapture() || !(new OnyxPosStateSubroutine(m.getPos()).willEnableTake(
+                game.getDiamondCollection(), game.getPosCollection(), color))) &&
                     m.getScore() >= tmp.getScore()) || 
                     m.getScore() > OnyxConst.SCORE.COUNTER_WIN_LINK.getValue() - 1f) {
                 tmp = m;
@@ -127,8 +126,10 @@ public class AbstractOnyxSearch {
          * non NULL move and coparing score will be irrelevant.
          */
         if (count == 1 && ((tmp.isCapture() || 
-            !(new OnyxPosStateSubroutine(tmp.getPos()).willEnableTake(b, c, color))) ||
+            !(new OnyxPosStateSubroutine(tmp.getPos()).willEnableTake(
+            game.getDiamondCollection(), game.getPosCollection(), color))) ||
             tmp.getScore() > OnyxConst.SCORE.COUNTER_WIN_LINK.getValue() - 1f)) {
+            
             return OnyxMoveUtils.isMove(tmp) ? tmp : null;
         }
         
@@ -139,32 +140,33 @@ public class AbstractOnyxSearch {
      * Trim overload - discards NULL, OnyxPos NULL & moves that will result
      * in take opotunities for color oponent.
      * @param moves moves to trim.
-     * @param b onyx board instance.
-     * @param c onyx position collection instance.
+     * @param game
      * @param color depending on color, if move will enable a take for oponent color
      * @param minScore minimum score to qualify.
      * then discard that move.
      * @return move with highest scoring.
      * @throws com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException
      */
-    protected final OnyxMove trim(final List<OnyxMove> moves, final OnyxBoard b, 
-            final OnyxPosCollection c, final OnyxConst.COLOR color, final float minScore) throws InvalidOnyxPositionException {
+    protected final OnyxMove trim(final List<OnyxMove> moves, final OnyxGame game,
+            final OnyxConst.COLOR color, final float minScore) throws InvalidOnyxPositionException {
         
         final List<OnyxMove> scoredMoves = new ArrayList<>();
         for (OnyxMove m : moves) {
             if (OnyxMoveUtils.isMove(m) && m.getScore() > minScore) scoredMoves.add(m);
         }
         
-        return this.trim(scoredMoves, b, c, color);
+        return this.trim(scoredMoves, game, color);
     }
     
-    protected final OnyxMove initCaptures(final OnyxMove tmp, final OnyxBoard b, 
-            final OnyxPosCollection c, final OnyxConst.COLOR color) throws InvalidOnyxPositionException {
+    protected final OnyxMove initCaptures(final OnyxMove tmp, final OnyxGame game, 
+            final OnyxConst.COLOR color) throws InvalidOnyxPositionException {
         
         List<OnyxPos> posSet = null;
         
-        final OnyxMove capture = new TakePositionSubroutine().getTakePos(c, b, color.bit);
-        if (OnyxMoveUtils.isMove(capture)) posSet = c.getTakePositions(capture.getPos().getKey(), color.bit, b);
+        final OnyxMove capture = new TakePositionSubroutine().getTakePos(game, color.bit);
+        if (OnyxMoveUtils.isMove(capture)) posSet = 
+            game.getPosCollection().getTakePositions(capture.getPos().getKey(), 
+                color.bit, game.getDiamondCollection(), game.getPosCollection());
         if (OnyxMoveUtils.isMove(capture, tmp) && posSet != null && tmp.getPos().equals(capture.getPos())) {
             tmp.setCaptured(new ArrayList<OnyxPos>());
             tmp.getCaptured().addAll(posSet);

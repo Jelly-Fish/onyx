@@ -31,8 +31,7 @@
  */
 package com.jellyfish.jfgonyx.onyx.constants;
 
-import com.jellyfish.jfgonyx.constants.OnyxBoardPositionOutlineConst;
-import com.jellyfish.jfgonyx.vars.GraphicsVars;
+import com.jellyfish.jfgonyx.onyx.vars.GraphicsVars;
 import java.awt.Color;
 import org.apache.commons.lang3.StringUtils;
 
@@ -41,6 +40,8 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class OnyxConst {
     
+    public static Color WHITE_PIECE = Color.WHITE;
+    public static Color BLACK_PIECE = Color.BLACK;
     public static final String KEY_SEPARATOR = "/";
     private static final String SPLIT = "-";
     private static final String DOT = ".";
@@ -117,8 +118,8 @@ public class OnyxConst {
  
     public static enum COLOR {
         
-        WHITE("white", GraphicsVars.getInstance().WHITE_PIECE, false, 0), 
-        BLACK("black", GraphicsVars.getInstance().BLACK_PIECE, true, 1),
+        WHITE("white", OnyxConst.WHITE_PIECE, false, 0), 
+        BLACK("black", OnyxConst.BLACK_PIECE, true, 1),
         VIRTUAL_WHITE("virtual white", new Color(1f,1f,1f,.8f), false, 0), 
         VIRTUAL_BLACK("virtual black", new Color(0f,0f,0f,.8f), true, 1);
         

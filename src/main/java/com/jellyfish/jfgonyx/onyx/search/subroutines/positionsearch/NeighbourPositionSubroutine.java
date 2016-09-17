@@ -31,15 +31,14 @@
  */
 package com.jellyfish.jfgonyx.onyx.search.subroutines.positionsearch;
 
+import com.jellyfish.jfgonyx.onyx.OnyxGame;
 import com.jellyfish.jfgonyx.onyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxDiamond;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
-import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
 import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException;
 import com.jellyfish.jfgonyx.onyx.search.searchutils.OnyxMoveUtils;
 import com.jellyfish.jfgonyx.onyx.abstractions.AbstractSubroutine;
-import com.jellyfish.jfgonyx.ui.OnyxBoard;
 
 /**
  *
@@ -48,38 +47,31 @@ import com.jellyfish.jfgonyx.ui.OnyxBoard;
 public class NeighbourPositionSubroutine extends AbstractSubroutine {
     
     /**
-     * @param c Onyx position collection.
-     * @param b Onyx board instance.
+     * @param game
      * @param bitColor the color to play's bit value (0=white, 1=black).
      * @return Neighbor move found or NULL if no such position has been found.
      * @throws com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException
      */
-    public final OnyxMove getNeighbourPos(final OnyxPosCollection c, final OnyxBoard b, 
+    public final OnyxMove getNeighbourPos(final OnyxGame game, 
             final int bitColor) throws NoValidOnyxPositionsFoundException {
         
         OnyxPos pos = null;
         
-        for (OnyxDiamond d : b.getDiamondCollection().getDiamonds().values()) {
+        for (OnyxDiamond d : game.getDiamondCollection().getDiamonds().values()) {
             
             for (String k : d.getCornerKeys()) {
                 
-                pos = c.getPosition(k);
+                pos = game.getPosCollection().getPosition(k);
                 if (pos.isOccupied() && pos.getPiece().color.bit == bitColor) {
                     
                     for (String cnxK : pos.connections) {
                         
-                        if (!c.getPosition(cnxK).isDiamondCenter() && !c.getPosition(cnxK).isOccupied()) {
+                        if (!game.getPosCollection().getPosition(cnxK).isDiamondCenter() && 
+                            !game.getPosCollection().getPosition(cnxK).isOccupied()) {
                             
-                            move = new OnyxMove(c.getPosition(cnxK), OnyxConst.SCORE.NEIGHBOUR.getValue());
-                            
-                            if (OnyxMoveUtils.isMove(move)) {
-                                
-                                print(AbstractSubroutine.BEST_CANDIDATE, 
-                                    AbstractSubroutine.SUBROUTINE_TYPE.NEIGHBOUR, 
-                                    bitColor == 0 ? OnyxConst.COLOR.WHITE : OnyxConst.COLOR.BLACK, 
-                                    move.getPos().getKey());
-                                return move;
-                            }
+                            move = new OnyxMove(game.getPosCollection().getPosition(cnxK), 
+                                OnyxConst.SCORE.NEIGHBOUR.getValue());                            
+                            if (OnyxMoveUtils.isMove(move)) return move;
                         }
                     }
                 }

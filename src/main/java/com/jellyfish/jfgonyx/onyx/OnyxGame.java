@@ -31,52 +31,67 @@
  */
 package com.jellyfish.jfgonyx.onyx;
 
-import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
-import com.jellyfish.jfgonyx.constants.DTStampConst;
 import com.jellyfish.jfgonyx.onyx.constants.OnyxConst;
-import com.jellyfish.jfgonyx.helpers.HTMLDisplayHelper;
+import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPiece;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
-import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxVirtualPiece;
+import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxDiamondCollection;
+import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException;
 import com.jellyfish.jfgonyx.onyx.exceptions.OnyxGameSyncException;
-import com.jellyfish.jfgonyx.onyx.interfaces.OnyxBoardI;
-import com.jellyfish.jfgonyx.ui.OnyxBoard;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * @author thw
  */
 public class OnyxGame {
     
+    private final OnyxDiamondCollection diamonds;
+    private final OnyxPosCollection positions;
     public boolean initialized = false;
     public HashMap<Integer, OnyxMove> moves = new HashMap<>(); 
     public boolean wait = false;
-    public OnyxBoardI boardInterface = null;
-    public String dtStamp;
-    public OnyxConst.COLOR engineColor = null;
-    
-    private static OnyxGame instance = null;
+    public OnyxConst.COLOR engineColor = null;    
     private OnyxConst.COLOR colorToPlay = null;
     private boolean requestInitialized = false;
     private int moveCount = 0;
 
-    private OnyxGame() { 
+    /**
+     * Construct.
+     * @param engineColor engine color.
+     */
+    public OnyxGame(final OnyxConst.COLOR engineColor) { 
+        
         Onyx.gameEnd = false;
         Onyx.whitePlayingLowBorder = false;
         Onyx.blackPlayingLowBorder = false;
-    }
-    
-    public void init(final OnyxBoardI boardInterface, final OnyxConst.COLOR engineColor) {
+        this.diamonds = new OnyxDiamondCollection().build();
+        this.positions = new OnyxPosCollection(this.diamonds);
         this.wait = false;
         this.requestInitialized = false;
         this.colorToPlay = null;
-        this.boardInterface = boardInterface;
-        this.dtStamp = DTStampConst.sdf.format(new java.util.Date());
         this.engineColor = engineColor;
+        this.init(engineColor);
+    }
+    
+    final void init(final OnyxConst.COLOR engineColor) {        
+       
+        initialized = true;  
+        
+        if (!engineColor.bool) {            
+            initMove(OnyxConst.COLOR.getOposite(engineColor.bool));            
+            try {
+                performMove(positions);
+            } catch (OnyxGameSyncException | NoValidOnyxPositionsFoundException | InvalidOnyxPositionException ex) {
+                initialized = false;
+                Logger.getLogger(OnyxGame.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
     
     /**
@@ -84,19 +99,17 @@ public class OnyxGame {
      * @throws com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException
      * @see OnyxGame openRequest.
      * @param c OnyxPos collection.
-     * @param board OnyxBoard instance.
      * @throws OnyxGameSyncException
      * @throws NoValidOnyxPositionsFoundException 
      */
-    public void performMove(final OnyxPosCollection c, final OnyxBoard board) 
+    public void performMove(final OnyxPosCollection c) 
             throws OnyxGameSyncException, NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
         
         checkInit();
-        final OnyxMove m = requestMove(c, board);
+        final OnyxMove m = requestMove();
         if (m != null && !Onyx.gameEnd) {
             appendMove(m);
-            appendNewVirtual(c, board);
-            board.notifyMove(m, HTMLDisplayHelper.HOT_PINK);
+            appendNewVirtual(c);
         }
         closeMove();
     }
@@ -107,7 +120,7 @@ public class OnyxGame {
     }
       
     /**
-     * @param color the color to play next or to search move for and append to board.
+     * @param color the color to play next or to search move for and append to this.
      */
     public void initMove(final OnyxConst.COLOR color) {
         colorToPlay = color;
@@ -125,23 +138,23 @@ public class OnyxGame {
         ++moveCount;
     }
     
-    private OnyxMove requestMove(final OnyxPosCollection c, final OnyxBoard board) 
+    private OnyxMove requestMove() 
             throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
         
-        final OnyxMove m = Onyx.search(c, board, colorToPlay);
+        final OnyxMove m = Onyx.search(this, colorToPlay);
         if (Onyx.gameEnd) return null;
         if (m == null) throw new NoValidOnyxPositionsFoundException();
-        else board.getPosCollection().clearOutlines();
-        c.getPosition(m.getPos().getKey()).setPiece(new OnyxPiece(colorToPlay, true));
+        else positions.clearOutlines();
+        positions.getPosition(m.getPos().getKey()).setPiece(new OnyxPiece(colorToPlay, true));
         
         return m;
     }
     
-    private void appendNewVirtual(final OnyxPosCollection c, final OnyxBoard board) 
+    private void appendNewVirtual(final OnyxPosCollection c) 
             throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
         
         if (isGameEnd() || Onyx.isLose(c, colorToPlay)) return;
-        final OnyxMove m = Onyx.getNewVirtual(c, board, colorToPlay);
+        final OnyxMove m = Onyx.getNewVirtual(c, this, colorToPlay);
         c.getPosition(m.getPos().getKey()).setVirtualPiece(
             new OnyxVirtualPiece(OnyxConst.COLOR.getVirtualOposite(colorToPlay.bool))
         );
@@ -194,22 +207,16 @@ public class OnyxGame {
         return moves;
     }
     
+    public OnyxDiamondCollection getDiamondCollection() {
+        return diamonds;
+    }
+
+    public OnyxPosCollection getPosCollection() {
+        return positions;
+    }
+    
     public int getMoveCount() {
         return moveCount;
-    }
-    
-    public static OnyxGame getInstance() {
-        
-        if (OnyxGame.instance == null) {
-            OnyxGame.instance = new OnyxGame();
-        }
-        
-        return OnyxGame.instance;
-    }
-    
-    public static OnyxGame newInstance() {
-        OnyxGame.instance = new OnyxGame();
-        return OnyxGame.instance;
     }
     
 }

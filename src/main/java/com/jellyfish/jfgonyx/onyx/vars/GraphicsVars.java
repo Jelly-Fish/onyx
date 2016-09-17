@@ -29,51 +29,58 @@
  * POSSIBILITY OF SUCH DAMAGE. 
  ******************************************************************************
  */
-package com.jellyfish.jfgonyx.ui;
+package com.jellyfish.jfgonyx.onyx.vars;
 
-import com.jellyfish.jfgonyx.vars.GraphicsVars;
-import com.jellyfish.jfgonyx.onyx.OnyxGame;
-import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
-import com.jellyfish.jfgonyx.onyx.interfaces.OnyxObserver;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.util.LinkedList;
-import javax.swing.JPanel;
+import java.awt.Color;
 
 /**
  * @author thw
  */
-public class OnyxPanel extends JPanel implements OnyxObserver {
+public class GraphicsVars implements java.io.Serializable {
+    
+    private static GraphicsVars instance;
+    private static final int DEFAULT_BOARD_WIDTH = 670;
+    
+    public int EXTRA_SQUARES = 2;
+    public int BOARD_SIDE_SQUARE_COUNT = 13;
+    public float BOARD_SIDE_POS_COUNT = 11.0f;
+    public int SQUARE_WIDTH = 50;
+    public int BOARD_WIDTH = 670;
+    public int ZIGZAG = 12;
+    public Color WHITE_PIECE = Color.WHITE;
+    public Color BLACK_PIECE = Color.BLACK;
+    public Color COMPONENTS_BACKGROUND_COLOR1 = new Color(172,172,162);
+    public Color COMPONENTS_BACKGROUND_COLOR2 = new Color(124,124,124);
+    public Color BACKGROUND = new Color(210,160,48);
+    public Color FULL_DIAMOND = new Color(169,125,16);
+    public Color DIAMOND = new Color(212,170,54);
+    public Color LINE = new Color(12,12,12);
+    public Color WHITE_OUTLINE = new Color(16,16,16);
+    public Color BLACK_OUTLINE = new Color(64,64,64);
+    public Color VIRTUAL_OUTLINE = Color.CYAN;
+    public Color ONYX_ENGINE_MOVE_OUTLINE = Color.RED;
+    public int TRANSLATION = 16;
+    public int CENTER_TRANSLATION = 32;
+    
+    private GraphicsVars() { 
+        BOARD_WIDTH += EXTRA_SQUARES * SQUARE_WIDTH;
+        BOARD_SIDE_POS_COUNT = ((float) BOARD_SIDE_SQUARE_COUNT) + 1f;
+    }
 
-    private final LinkedList<String> move_labels = new LinkedList<>();
-    
-    public OnyxPanel() {
-        super();
-        setDoubleBuffered(true);
-        setBackground(GraphicsVars.getInstance().COMPONENTS_BACKGROUND_COLOR1);
+    public static GraphicsVars getInstance() {       
+        if (instance == null) instance = new GraphicsVars();
+        return instance;
     }
     
-    @Override
-    public void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        super.setBackground(GraphicsVars.getInstance().COMPONENTS_BACKGROUND_COLOR1);
-        super.repaint();
+    public static void setInstance(final GraphicsVars gv) {
+        instance = gv;
+        instance.resetInstance();
     }
     
-    @Override
-    public void notifyMove(final OnyxMove m, final String color) {
-        move_labels.add(m.toString());
-        repaint();
-    }
-    
-    public void init() {
-        
-        move_labels.clear();
-        for (OnyxMove m : OnyxGame.getInstance().getMoves().values()) {
-            if (m.getPos().isOccupied()) {
-                move_labels.add(m.toString());
-            }
-        }
+    public void resetInstance() {
+        BOARD_WIDTH = DEFAULT_BOARD_WIDTH;
+        BOARD_WIDTH += EXTRA_SQUARES * SQUARE_WIDTH;
+        BOARD_SIDE_POS_COUNT = ((float) BOARD_SIDE_SQUARE_COUNT) + 1f;
     }
     
 }

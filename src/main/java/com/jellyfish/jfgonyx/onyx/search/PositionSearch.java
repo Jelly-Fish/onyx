@@ -31,6 +31,7 @@
  */
 package com.jellyfish.jfgonyx.onyx.search;
 
+import com.jellyfish.jfgonyx.onyx.OnyxGame;
 import com.jellyfish.jfgonyx.onyx.search.subroutines.positionsearch.TakePositionSubroutine;
 import com.jellyfish.jfgonyx.onyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
@@ -41,7 +42,6 @@ import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException;
 import com.jellyfish.jfgonyx.onyx.search.searchutils.OnyxMoveUtils;
 import com.jellyfish.jfgonyx.onyx.search.subroutines.positionsearch.CounterPositionSubroutine;
-import com.jellyfish.jfgonyx.ui.OnyxBoard;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -53,20 +53,21 @@ import java.util.logging.Logger;
 public class PositionSearch extends AbstractOnyxSearch implements OnyxPositionSearchable {
 
     @Override
-    public OnyxMove search(final OnyxPosCollection c, final OnyxBoard b, final OnyxConst.COLOR color) 
+    public OnyxMove search(final OnyxGame game, final OnyxConst.COLOR color) 
             throws NoValidOnyxPositionsFoundException {
     
         final List<OnyxMove> moves = new ArrayList<>();
         
         try {
             
-            moves.add(new TakePositionSubroutine().getTakePos(c, b, color.bit));
-            moves.add(new CounterPositionSubroutine().getCounterPos(c, b, color));
+            moves.add(new TakePositionSubroutine().getTakePos(game, color.bit));
+            moves.add(new CounterPositionSubroutine().getCounterPos(game, color));
        
-            OnyxMove tmp = initCaptures(trim(moves, b, c, color), b, c, color);
+            OnyxMove tmp = initCaptures(trim(moves, game, color), game, color);
 
-            if (OnyxMoveUtils.isNotMove(tmp) || c.getPosition(tmp.getPos().getKey()).isOccupied()) {
-                tmp = new RandomSearch().search(c, b, color);
+            if (OnyxMoveUtils.isNotMove(tmp) || game.getPosCollection().getPosition(
+                tmp.getPos().getKey()).isOccupied()) {
+                tmp = new RandomSearch().search(game, color);
                 if (OnyxMoveUtils.isNotMove(tmp)) throw new NoValidOnyxPositionsFoundException();
             }
             

@@ -32,12 +32,12 @@
 package com.jellyfish.jfgonyx.onyx.entities.collections;
 
 import com.jellyfish.jfgonyx.onyx.constants.OnyxConst;
-import com.jellyfish.jfgonyx.helpers.OnyxConnectionHelper;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxDiamond;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
-import com.jellyfish.jfgonyx.onyx.entities.OnyxVirtualPiece;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
-import com.jellyfish.jfgonyx.ui.OnyxBoard;
+import com.jellyfish.jfgonyx.onyx.utils.OnyxConnectionHelper;
+import com.jellyfish.jfgonyx.onyx.entities.OnyxVirtualPiece;
+import com.jellyfish.jfgonyx.onyx.utils.OnyxUtils;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -54,14 +54,14 @@ public class OnyxPosCollection {
     public static final int MTX_WH = 24;
     public static final String KEY_FORMAT = "%.1f-%.1f";
     private final HashMap<String, OnyxPos> positions = new HashMap<>();
-    private static final boolean PERFORM_PRINT = false; 
     
-    public void init(final OnyxDiamondCollection c) {
+    public OnyxPosCollection(final OnyxDiamondCollection diamonds) {
+        this.init(diamonds);
+    }
+    
+    private final void init(final OnyxDiamondCollection c) {
         this.initPositionCollection(c);
         OnyxConnectionHelper.buildPosConnections(this);
-        if (PERFORM_PRINT) {
-            OnyxConnectionHelper.print(this);
-        }
     }
     
     public void clearPieces() {
@@ -99,16 +99,16 @@ public class OnyxPosCollection {
         return this.getPosition(k) != null;
     }
     
-    public boolean isValidMove(final OnyxPos pos, final OnyxBoard board) {
-        final boolean isCenter = board.isDiamondCenter(pos.getKey());
+    public boolean isValidMove(final OnyxPos pos, final OnyxDiamondCollection dc) {
+        final boolean isCenter = OnyxUtils.isDiamondCenter(pos.getKey(), dc);
         return ((!pos.isOccupied() && !isCenter)) || 
-            (isCenter && board.isCenterPosPlayable(pos.getKey()));        
+            (isCenter && OnyxUtils.isCenterPosPlayable(pos.getKey(), this, dc));        
     }
     
-    public boolean isValidVirtualMove(final OnyxPos pos, final OnyxBoard board, final int opColorBit) {
-        final boolean isCenter = board.isDiamondCenter(pos.getKey());
+    public boolean isValidVirtualMove(final OnyxPos pos, final OnyxDiamondCollection dc, final int opColorBit) {
+        final boolean isCenter = OnyxUtils.isDiamondCenter(pos.getKey(), dc);
         return ((!pos.isOccupied(opColorBit) && !isCenter)) || 
-            (isCenter && board.isCenterPosPlayable(pos.getKey()));        
+            (isCenter && OnyxUtils.isCenterPosPlayable(pos.getKey(), this, dc));        
     }
     
     public HashMap<String, OnyxPos> getPositions() {
@@ -133,27 +133,28 @@ public class OnyxPosCollection {
         return this.getVirtualPiece() != null;
     }
     
-    public List<OnyxPos> performTake(final String key, final int bitColor, final OnyxBoard board) throws InvalidOnyxPositionException {
+    public List<OnyxPos> performTake(final String key, final int bitColor, final OnyxDiamondCollection dc, 
+            final OnyxPosCollection pc) throws InvalidOnyxPositionException {
         
         if (StringUtils.isBlank(key)) throw new InvalidOnyxPositionException();
 
         List<OnyxPos> captured = new ArrayList<>();
         String[] keys = null;
         int i, j, lI;
-        for (OnyxDiamond d : board.getDiamondCollection().getDiamondsByPosKey(key)) {
+        for (OnyxDiamond d : dc.getDiamondsByPosKey(key)) {
             
             if (d.isFivePosDiamond() && 
-                board.getPosCollection().getPosition(d.getCenterPos().getKey()).isOccupied()) {
+                pc.getPosition(d.getCenterPos().getKey()).isOccupied()) {
                 continue;
             }
             
             lI = 0; i = 0; j = 0;
             keys = d.getCornerKeys();
             for (int index = 0; index < keys.length; ++index) {
-                if (!key.equals(keys[index]) && board.getPosCollection().positions.containsKey(keys[index])) {
+                if (!key.equals(keys[index]) && pc.positions.containsKey(keys[index])) {
 
-                    if (board.getPosCollection().getPosition(keys[index]).isOccupied() &&
-                        board.getPosCollection().getPosition(keys[index]).getPiece().color.bit != bitColor) {
+                    if (pc.getPosition(keys[index]).isOccupied() &&
+                        pc.getPosition(keys[index]).getPiece().color.bit != bitColor) {
                         if (i == 1) {
                             if (lI == 0 && index == 2) ++i;
                             if (lI == 1 && index == 3) ++i;
@@ -161,8 +162,8 @@ public class OnyxPosCollection {
                             ++i;
                             lI = index;
                         }
-                    } else if (board.getPosCollection().getPosition(keys[index]).isOccupied() &&
-                        board.getPosCollection().getPosition(keys[index]).getPiece().color.bit == bitColor) {
+                    } else if (pc.getPosition(keys[index]).isOccupied() &&
+                        pc.getPosition(keys[index]).getPiece().color.bit == bitColor) {
                         ++j;
                     }
                 }
@@ -170,11 +171,11 @@ public class OnyxPosCollection {
             
             if (i == 2 && j == 1) {
                 for (String k : keys) {
-                    if (board.getPosCollection().positions.containsKey(k) &&
+                    if (pc.positions.containsKey(k) &&
                             !key.equals(k) && 
-                            board.getPosCollection().positions.get(k).isOccupied() &&
-                            board.getPosCollection().positions.get(k).getPiece().color.bit != bitColor) {
-                        captured.add(board.getPosCollection().getPosition(k));
+                            pc.positions.get(k).isOccupied() &&
+                            pc.positions.get(k).getPiece().color.bit != bitColor) {
+                        captured.add(pc.getPosition(k));
                     }
                 }
             }
@@ -183,44 +184,45 @@ public class OnyxPosCollection {
         final List<OnyxPos> posSet = new ArrayList<>();
         for (OnyxPos p : captured) {
             posSet.add(p);
-            board.getPosCollection().getPosition(p.getKey()).setPiece(null);
+            pc.getPosition(p.getKey()).setPiece(null);
         }
         
         return posSet;
     }
 
-    public List<OnyxPos> getTakePositions(final String key, final int bitColor, final OnyxBoard board) throws InvalidOnyxPositionException {
+    public List<OnyxPos> getTakePositions(final String key, final int bitColor, final OnyxDiamondCollection dc,
+            final OnyxPosCollection pc) throws InvalidOnyxPositionException {
 
         final List<OnyxPos> posSet = new ArrayList<>();
         String[] keys = null;
         int i, j, lI;
-        for (OnyxDiamond d : board.getDiamondCollection().getDiamondsByPosKey(key)) {
+        for (OnyxDiamond d : dc.getDiamondsByPosKey(key)) {
             
             posSet.clear();
             if (d.isFivePosDiamond() && 
-                board.getPosCollection().getPosition(d.getCenterPos().getKey()).isOccupied()) {
+                pc.getPosition(d.getCenterPos().getKey()).isOccupied()) {
                 continue;
             }
             
             lI = 0; i = 0; j = 0;
             keys = d.getCornerKeys();
             for (int index = 0; index < keys.length; ++index) {
-                if (!key.equals(keys[index]) && board.getPosCollection().positions.containsKey(keys[index])) {
+                if (!key.equals(keys[index]) && pc.positions.containsKey(keys[index])) {
 
-                    if (board.getPosCollection().getPosition(keys[index]).isOccupied() &&
-                        board.getPosCollection().getPosition(keys[index]).getPiece().color.bit != bitColor) {
+                    if (pc.getPosition(keys[index]).isOccupied() &&
+                        pc.getPosition(keys[index]).getPiece().color.bit != bitColor) {
                         if (i == 1) {
                             if ((lI == 0 && index == 2) || (lI == 1 && index == 3)) {
                                 ++i;
-                                posSet.add(board.getPosCollection().getPosition(keys[index]));
+                                posSet.add(pc.getPosition(keys[index]));
                             }
                         } else if (i == 0) {
                             ++i;
                             lI = index;
-                            posSet.add(board.getPosCollection().getPosition(keys[index]));
+                            posSet.add(pc.getPosition(keys[index]));
                         }
-                    } else if (board.getPosCollection().getPosition(keys[index]).isOccupied() &&
-                        board.getPosCollection().getPosition(keys[index]).getPiece().color.bit == bitColor) {
+                    } else if (pc.getPosition(keys[index]).isOccupied() &&
+                        pc.getPosition(keys[index]).getPiece().color.bit == bitColor) {
                         ++j;
                     }
                 }

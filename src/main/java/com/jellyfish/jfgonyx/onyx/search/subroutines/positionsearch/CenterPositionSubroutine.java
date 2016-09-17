@@ -32,7 +32,6 @@
 package com.jellyfish.jfgonyx.onyx.search.subroutines.positionsearch;
 
 import com.jellyfish.jfgonyx.onyx.constants.OnyxConst;
-import com.jellyfish.jfgonyx.onyx.entities.OnyxDiamond;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxDiamondCollection;
@@ -41,8 +40,7 @@ import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import com.jellyfish.jfgonyx.onyx.search.searchutils.OnyxMoveUtils;
 import com.jellyfish.jfgonyx.onyx.abstractions.AbstractSubroutine;
 import com.jellyfish.jfgonyx.onyx.utils.RandomUtils;
-import com.jellyfish.jfgonyx.ui.OnyxBoard;
-import com.jellyfish.jfgonyx.vars.GraphicsVars;
+import com.jellyfish.jfgonyx.onyx.vars.GraphicsVars;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -102,11 +100,6 @@ public class CenterPositionSubroutine extends AbstractSubroutine {
             s -= 1f;
             ++side;
         }
-        
-        if (OnyxMoveUtils.isMove(move)) {
-            print(AbstractSubroutine.BEST_CANDIDATE, AbstractSubroutine.SUBROUTINE_TYPE.CENTER_POS, 
-                color, move.getPos().getKey());
-        }
 
         return move;
     }
@@ -143,75 +136,6 @@ public class CenterPositionSubroutine extends AbstractSubroutine {
         }
         
         return keys;
-    }
-    
-    /**
-     * Get playable diamond center position nearest to board center.
-     * @param c position collection.
-     * @param b onyx board.
-     * @return Best OnyxMove instance or null.
-     * @throws com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException if a position is invalid.
-     */
-    @Deprecated
-    public final OnyxMove getCenterPos(final OnyxPosCollection c, final OnyxBoard b) throws InvalidOnyxPositionException {
-
-        final Set<OnyxDiamond> d = new HashSet<>();
-        int i = 0;
-        
-        for (OnyxDiamond dmd : b.getDiamondCollection().getDiamonds().values()) {
-            
-            if (dmd.isFivePosDiamond()) {
-                i = 0;
-                for (String k : dmd.getAllKeys()) {
-                    if (!c.getPosition(k).isOccupied()) ++i;
-                }
-                if (i == 5) d.add(dmd);
-            }
-        }
-
-        final OnyxDiamond[] r = sortByCenterPosValue(d);
-        
-        if (r == null || r.length == 0) return null;
-        i = r.length / 2;
-        
-        move = new OnyxMove(r[i].getCenterPos(), OnyxConst.SCORE.CENTER.getValue());
-        
-        return move;
-    }
-    
-    @Deprecated
-    public final OnyxDiamond[] sortByCenterPosValue(final Set<OnyxDiamond> set) throws InvalidOnyxPositionException {
-       
-        int i = -1, j = 0;
-        OnyxDiamond tmp = null;
-        final OnyxDiamond[] r = new OnyxDiamond[set.size()];
-        for (OnyxDiamond d : set) r[++i] = d;
-        
-        for (i = 0; i < r.length; ++i) {
-            j = getLowValue(r, i);
-            tmp = r[i];
-            r[i] = r[j];
-            r[j] = tmp;
-        }
-        
-        return r;
-    }
-    
-    @Deprecated
-    private int getLowValue(final OnyxDiamond[] a, final int sI) throws InvalidOnyxPositionException {
-        
-        int index = sI;
-        float f = -1f;
-        float v = (float) ((GraphicsVars.getInstance().BOARD_SIDE_SQUARE_COUNT + 1) * 2);
-        for (int i = sI; i < a.length; ++i) {
-            f = a[i].getCenterPos().x + a[i].getCenterPos().y;
-            if (f < v) {
-                index = i;
-                v = f;
-            }
-        }
-        
-        return index;
     }
     
 }

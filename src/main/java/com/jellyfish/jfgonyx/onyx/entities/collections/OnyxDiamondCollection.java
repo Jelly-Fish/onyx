@@ -32,7 +32,7 @@
 package com.jellyfish.jfgonyx.onyx.entities.collections;
 
 import com.jellyfish.jfgonyx.onyx.entities.OnyxDiamond;
-import com.jellyfish.jfgonyx.vars.GraphicsVars;
+import com.jellyfish.jfgonyx.onyx.vars.GraphicsVars;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.HashMap;

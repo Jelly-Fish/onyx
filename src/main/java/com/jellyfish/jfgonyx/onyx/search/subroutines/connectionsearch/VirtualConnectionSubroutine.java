@@ -31,14 +31,13 @@
  */
 package com.jellyfish.jfgonyx.onyx.search.subroutines.connectionsearch;
 
-import com.jellyfish.jfgonyx.helpers.HTMLDisplayHelper;
+import com.jellyfish.jfgonyx.onyx.OnyxGame;
 import com.jellyfish.jfgonyx.onyx.abstractions.AbstractSubroutine;
 import com.jellyfish.jfgonyx.onyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxTail;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
-import com.jellyfish.jfgonyx.ui.OnyxBoard;
-import com.jellyfish.jfgonyx.vars.GraphicsVars;
+import com.jellyfish.jfgonyx.onyx.vars.GraphicsVars;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -52,7 +51,7 @@ public class VirtualConnectionSubroutine extends AbstractSubroutine {
     
     protected final AbstractSubroutine.SUBROUTINE_TYPE type;
     protected final OnyxPosCollection c;
-    protected final OnyxBoard board;
+    protected final OnyxGame game;
     protected final OnyxConst.COLOR color;
     protected final int opColorBit;
     protected final float max = GraphicsVars.getInstance().BOARD_SIDE_SQUARE_COUNT + 1f;
@@ -62,12 +61,12 @@ public class VirtualConnectionSubroutine extends AbstractSubroutine {
     private final List<OnyxTail> tails = new ArrayList<>();
     private OnyxTail tail;
 
-    public VirtualConnectionSubroutine(final OnyxPosCollection c, final OnyxConst.COLOR color, 
-            final OnyxBoard board) {
-        this.c = c;
+    public VirtualConnectionSubroutine(final OnyxConst.COLOR color, 
+            final OnyxGame game) {
+        this.c = game.getPosCollection();
         this.color = color;
         this.opColorBit = OnyxConst.COLOR.getOposite(color.bool).bit;
-        this.board = board;
+        this.game = game;
         this.type = AbstractSubroutine.SUBROUTINE_TYPE.VCNX;
     }
     
@@ -82,15 +81,7 @@ public class VirtualConnectionSubroutine extends AbstractSubroutine {
             buildTail(p, p.getKey(), false);
         }
         
-        /** FIXME : bebug purpose, print all tails. END DEBUG */        
-        this.printAllTails();       
-        
         tail = trimTails();
-        
-        if (tail != null) {
-            print(AbstractSubroutine.VTAIL_CANDIDATE_RES, type, 
-            HTMLDisplayHelper.COPPER_YELLOW_DARK, color, tail.lenght(), tail.toString());
-        }
     }
     
     private void initTailSearch(final OnyxPos p) {
@@ -124,7 +115,7 @@ public class VirtualConnectionSubroutine extends AbstractSubroutine {
             }            
             
             if (!cnx.equals(kEx) && !tmp.isOccupied(opColorBit) && !tail.contains(tmp.getKey()) &&
-                c.isValidVirtualMove(tmp, board, opColorBit) && !checkedKeys.contains(cnx)) {
+                c.isValidVirtualMove(tmp, game.getDiamondCollection(), opColorBit) && !checkedKeys.contains(cnx)) {
                 tail.append(tmp);
                 buildTail(tmp, tmp.getKey(), rFirst);
             }
@@ -223,16 +214,6 @@ public class VirtualConnectionSubroutine extends AbstractSubroutine {
     
     public List<OnyxTail> getTails() {
         return tails;
-    }
-    
-    private void printAllTails() {
-        
-        for (OnyxTail t : tails) {
-            if (t != null && t.lenght() > 0) {
-                print(AbstractSubroutine.VTAIL_CANDIDATE_FORMAT, type, 
-                HTMLDisplayHelper.GAINSBORO, color, t.lenght(), t.toString());
-            }
-        }
     }
     
 }

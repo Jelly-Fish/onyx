@@ -31,19 +31,19 @@
  */
 package com.jellyfish.jfgonyx.onyx.interfaces.search;
 
+import com.jellyfish.jfgonyx.onyx.OnyxGame;
 import com.jellyfish.jfgonyx.onyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException;
-import com.jellyfish.jfgonyx.ui.OnyxBoard;
 
 /**
  * @author thw
  */
 public abstract interface OnyxAbstractSearchable {
     
-    OnyxMove search(final OnyxPosCollection c, final OnyxBoard board, final OnyxConst.COLOR color) 
+    OnyxMove search(final OnyxGame game, final OnyxConst.COLOR color) 
             throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException;
  
     boolean isWin(final OnyxPosCollection c, final OnyxConst.COLOR color) 

@@ -31,6 +31,7 @@
  */
 package com.jellyfish.jfgonyx.onyx.search.subroutines.positionsearch;
 
+import com.jellyfish.jfgonyx.onyx.OnyxGame;
 import com.jellyfish.jfgonyx.onyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxDiamond;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
@@ -38,7 +39,6 @@ import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
 import com.jellyfish.jfgonyx.onyx.search.searchutils.OnyxMoveUtils;
 import com.jellyfish.jfgonyx.onyx.abstractions.AbstractSubroutine;
-import com.jellyfish.jfgonyx.ui.OnyxBoard;
 
 /**
  *
@@ -48,18 +48,18 @@ public class AttackPositionSubroutine extends AbstractSubroutine {
 
     /**
      * @param c Onyx position collection.
-     * @param b Onyx board instance.
+     * @param game
      * @param bitColor the color to play's bit value (0=white, 1=black).
      * @return Strongest counter attack move found (to allow take on next move) 
      * or NULL if no such position has been found.
      */
-    public final OnyxMove getAttackPos(final OnyxPosCollection c, final OnyxBoard b, final int bitColor) {
+    public final OnyxMove getAttackPos(final OnyxPosCollection c, final OnyxGame game, final int bitColor) {
 
         int[] iPos = null; 
         OnyxPos tmp = null;
         String[] keys = null;
         
-        for (OnyxDiamond d : b.getDiamondCollection().getDiamonds().values()) {
+        for (OnyxDiamond d : game.getDiamondCollection().getDiamonds().values()) {
             
             iPos = new int[] { 0, 0, 0, 0 };
             keys = d.getCornerKeys();
@@ -79,11 +79,6 @@ public class AttackPositionSubroutine extends AbstractSubroutine {
                 break;
             }
         }
-        
-        if (OnyxMoveUtils.isMove(move)) print(AbstractSubroutine.BEST_CANDIDATE, 
-                AbstractSubroutine.SUBROUTINE_TYPE.ATTACK, 
-                bitColor == 0 ? OnyxConst.COLOR.WHITE : OnyxConst.COLOR.BLACK, 
-                move.getPos().getKey());
         
         return move;
     }

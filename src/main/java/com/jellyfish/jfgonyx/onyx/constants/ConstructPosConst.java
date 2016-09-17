@@ -29,7 +29,7 @@
  * POSSIBILITY OF SUCH DAMAGE. 
  ******************************************************************************
  */
-package com.jellyfish.jfgonyx.constants;
+package com.jellyfish.jfgonyx.onyx.constants;
 
 /**
  * Position constants for build and then drawing purposes only.

@@ -31,8 +31,9 @@
  */
 package com.jellyfish.jfgonyx.onyx.entities;
 
+import com.jellyfish.jfgonyx.game.entities.OnyxPosRectangle;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
-import com.jellyfish.jfgonyx.vars.GraphicsVars;
+import com.jellyfish.jfgonyx.onyx.vars.GraphicsVars;
 import com.jellyfish.jfgonyx.onyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import com.jellyfish.jfgonyx.onyx.search.subroutines.positionsearch.OnyxPosStateSubroutine;

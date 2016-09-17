@@ -37,7 +37,7 @@ import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import com.jellyfish.jfgonyx.onyx.abstractions.AbstractSubroutine;
-import com.jellyfish.jfgonyx.ui.OnyxBoard;
+import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxDiamondCollection;
 
 /**
  * @author thw
@@ -53,13 +53,13 @@ public class OnyxPosStateSubroutine extends AbstractSubroutine {
     /**
      * Is this position, if played occupied/played, will result in a take for
      * oponent Color.
-     * @param board Onyx board instance.
+     * @param dc diamond collection.
      * @param c onyx position collection instance.
      * @param color the color that is potentially will enable a take move if played.
      * @return true if position will enable take for oponent.
      * @throws com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException
      */
-    public final boolean willEnableTake(final OnyxBoard board, final OnyxPosCollection c, 
+    public final boolean willEnableTake(final OnyxDiamondCollection dc, final OnyxPosCollection c, 
             final OnyxConst.COLOR color) throws InvalidOnyxPositionException {
 
         if (pos == null || pos.isDiamondCenter()) return false;
@@ -68,7 +68,7 @@ public class OnyxPosStateSubroutine extends AbstractSubroutine {
         String[] keys = null;
         int k = -1, l = 0, j = 0, m = -1; 
 
-        for (OnyxDiamond d : board.getDiamondCollection().getDiamondsByPosKey(pos.getKey())) {
+        for (OnyxDiamond d : dc.getDiamondsByPosKey(pos.getKey())) {
 
             if (d.isFivePosDiamond() && d.getCenterPos().isOccupied()) continue;
             
@@ -103,13 +103,13 @@ public class OnyxPosStateSubroutine extends AbstractSubroutine {
     /**
      * Is this position, if not occupied/played, will result in a take 
      * oportunity for oponent Color.
-     * @param board Onyx board instance.
+     * @param dc diamond collection.
      * @param c onyx position collection instance.
      * @param color the color that is potentially subject to take move.
      * @return true if position is subject to take.
      * @throws com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException
      */
-    public final boolean isSubjectToTake(final OnyxBoard board, final OnyxPosCollection c, 
+    public final boolean isSubjectToTake(final OnyxDiamondCollection dc, final OnyxPosCollection c, 
             final OnyxConst.COLOR color) throws InvalidOnyxPositionException {
         
         if (pos.isDiamondCenter()) return false;
@@ -118,7 +118,7 @@ public class OnyxPosStateSubroutine extends AbstractSubroutine {
         String[] keys = null;
         int k = -1, l = 0, j = 0, m = -1; 
 
-        for (OnyxDiamond d : board.getDiamondCollection().getDiamondsByPosKey(pos.getKey())) {
+        for (OnyxDiamond d : dc.getDiamondsByPosKey(pos.getKey())) {
 
             if (d.isFivePosDiamond() && d.getCenterPos().isOccupied()) continue;
             

@@ -39,7 +39,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>com.jellyfish.jfgonyx.starter.Starter</mainClass>
+                            <mainClass>com.jellyfish.jfgonyx.main.Main</mainClass>
                         </manifest>
                     </archive>
                     <descriptorRefs>

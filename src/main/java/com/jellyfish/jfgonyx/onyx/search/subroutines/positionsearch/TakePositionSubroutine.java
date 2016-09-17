@@ -31,15 +31,13 @@
  */
 package com.jellyfish.jfgonyx.onyx.search.subroutines.positionsearch;
 
+import com.jellyfish.jfgonyx.onyx.OnyxGame;
 import com.jellyfish.jfgonyx.onyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxDiamond;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
-import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
-import com.jellyfish.jfgonyx.onyx.search.searchutils.OnyxMoveUtils;
 import com.jellyfish.jfgonyx.onyx.abstractions.AbstractSubroutine;
-import com.jellyfish.jfgonyx.ui.OnyxBoard;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,60 +47,60 @@ import java.util.List;
 public class TakePositionSubroutine extends AbstractSubroutine {
     
     /**
-     * @param c Onyx position collection.
-     * @param b Onyx board instance.
+     * @param game
      * @param bitColor the color to play's bit value (0=white, 1=black).
      * @return Strongest take move key found or NULL if no such position has been found.
      * @throws com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException
      */
-    public final OnyxMove getTakePos(final OnyxPosCollection c, final OnyxBoard b, 
+    public final OnyxMove getTakePos(final OnyxGame game, 
             final int bitColor) throws InvalidOnyxPositionException {
         
         int count, i;
         OnyxPos[] positions = new OnyxPos[4];
         final List<OnyxPos> posSet = new ArrayList<>();
         
-        for (OnyxDiamond d : b.getDiamondCollection().getDiamonds().values()) {
+        for (OnyxDiamond d : game.getDiamondCollection().getDiamonds().values()) {
             
-            if (d.isFivePosDiamond() && c.getPosition(d.getCenterPos().getKey()).isOccupied()) {
+            if (d.isFivePosDiamond() && game.getPosCollection().getPosition(
+                d.getCenterPos().getKey()).isOccupied()) {
                 continue;
             }
             
             count = 0;
             i = 0;
             for (String k : d.getCornerKeys()) {
-                positions[i] = c.getPosition(k);
-                count = c.getPosition(positions[i].getKey()).isOccupied() ? ++count : count;
+                positions[i] = game.getPosCollection().getPosition(k);
+                count = game.getPosCollection().getPosition(positions[i].getKey()).isOccupied() ? ++count : count;
                 ++i;
             }
             
-            if (c.getPosition(positions[0].getKey()).isOccupied() && 
-                    c.getPosition(positions[2].getKey()).isOccupied() &&
-                    c.getPosition(positions[0].getKey()).getPiece().color.bit != bitColor && 
-                    c.getPosition(positions[2].getKey()).getPiece().color.bit != bitColor) { 
+            if (game.getPosCollection().getPosition(positions[0].getKey()).isOccupied() && 
+                    game.getPosCollection().getPosition(positions[2].getKey()).isOccupied() &&
+                    game.getPosCollection().getPosition(positions[0].getKey()).getPiece().color.bit != bitColor && 
+                    game.getPosCollection().getPosition(positions[2].getKey()).getPiece().color.bit != bitColor) { 
                 
-                if (c.getPosition(positions[3].getKey()).isOccupied() && 
-                        c.getPosition(positions[3].getKey()).getPiece().color.bit == bitColor &&
-                        !c.getPosition(positions[1].getKey()).isOccupied()) {
+                if (game.getPosCollection().getPosition(positions[3].getKey()).isOccupied() && 
+                        game.getPosCollection().getPosition(positions[3].getKey()).getPiece().color.bit == bitColor &&
+                        !game.getPosCollection().getPosition(positions[1].getKey()).isOccupied()) {
                     posSet.add(positions[1]);
-                } else if (c.getPosition(positions[1].getKey()).isOccupied() && 
-                        c.getPosition(positions[1].getKey()).getPiece().color.bit == bitColor &&
-                        !c.getPosition(positions[3].getKey()).isOccupied()) {
-                    posSet.add(c.getPosition(positions[3].getKey()));
+                } else if (game.getPosCollection().getPosition(positions[1].getKey()).isOccupied() && 
+                        game.getPosCollection().getPosition(positions[1].getKey()).getPiece().color.bit == bitColor &&
+                        !game.getPosCollection().getPosition(positions[3].getKey()).isOccupied()) {
+                    posSet.add(game.getPosCollection().getPosition(positions[3].getKey()));
                 }
-            } else if (c.getPosition(positions[1].getKey()).isOccupied() && 
-                    c.getPosition(positions[3].getKey()).isOccupied() &&
-                    c.getPosition(positions[1].getKey()).getPiece().color.bit != bitColor && 
-                    c.getPosition(positions[3].getKey()).getPiece().color.bit != bitColor) {
+            } else if (game.getPosCollection().getPosition(positions[1].getKey()).isOccupied() && 
+                    game.getPosCollection().getPosition(positions[3].getKey()).isOccupied() &&
+                    game.getPosCollection().getPosition(positions[1].getKey()).getPiece().color.bit != bitColor && 
+                    game.getPosCollection().getPosition(positions[3].getKey()).getPiece().color.bit != bitColor) {
                 
-                if (c.getPosition(positions[2].getKey()).isOccupied() && 
-                    c.getPosition(positions[2].getKey()).getPiece().color.bit == bitColor &&
-                        !c.getPosition(positions[0].getKey()).isOccupied()) {
-                    posSet.add(c.getPosition(positions[0].getKey()));
-                } else if (c.getPosition(positions[0].getKey()).isOccupied() && 
-                        c.getPosition(positions[0].getKey()).getPiece().color.bit == bitColor &&
-                        !c.getPosition(positions[2].getKey()).isOccupied()) {
-                    posSet.add(c.getPosition(positions[2].getKey()));
+                if (game.getPosCollection().getPosition(positions[2].getKey()).isOccupied() && 
+                    game.getPosCollection().getPosition(positions[2].getKey()).getPiece().color.bit == bitColor &&
+                        !game.getPosCollection().getPosition(positions[0].getKey()).isOccupied()) {
+                    posSet.add(game.getPosCollection().getPosition(positions[0].getKey()));
+                } else if (game.getPosCollection().getPosition(positions[0].getKey()).isOccupied() && 
+                        game.getPosCollection().getPosition(positions[0].getKey()).getPiece().color.bit == bitColor &&
+                        !game.getPosCollection().getPosition(positions[2].getKey()).isOccupied()) {
+                    posSet.add(game.getPosCollection().getPosition(positions[2].getKey()));
                 }
             }
         }
@@ -124,10 +122,6 @@ public class TakePositionSubroutine extends AbstractSubroutine {
         
         if (i > -1) move = new OnyxMove(posSet.get(i), posSet.get(i).getPiece(), 
                 posSet, OnyxConst.SCORE.TAKE.getValue());
-        if (OnyxMoveUtils.isMove(move)) print(AbstractSubroutine.BEST_TAKE_CANDIDATE, 
-                AbstractSubroutine.SUBROUTINE_TYPE.TAKE,
-                bitColor == 0 ? OnyxConst.COLOR.WHITE.str : OnyxConst.COLOR.BLACK.str, 
-                move.getPos().getKey(), move.getScore());
         
         return move;
     }

@@ -32,20 +32,19 @@
 package com.jellyfish.jfgonyx.onyx;
 
 import com.jellyfish.jfgonyx.onyx.constants.OnyxConst;
-import com.jellyfish.jfgonyx.helpers.HTMLDisplayHelper;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException;
 import com.jellyfish.jfgonyx.onyx.interfaces.search.OnyxAbstractSearchable;
-import com.jellyfish.jfgonyx.onyx.search.*;
+import com.jellyfish.jfgonyx.onyx.search.ConnectionSearch;
+import com.jellyfish.jfgonyx.onyx.search.PositionSearch;
+import com.jellyfish.jfgonyx.onyx.search.RandomSearch;
+import com.jellyfish.jfgonyx.onyx.search.VirtualConnetionSearch;
 import com.jellyfish.jfgonyx.onyx.search.searchutils.SearchUtils;
-import com.jellyfish.jfgonyx.ui.MainFrame;
-import com.jellyfish.jfgonyx.ui.OnyxBoard;
 import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author thw
@@ -92,71 +91,47 @@ class Onyx {
         }
     }
        
-    static OnyxMove search(final OnyxPosCollection c, final OnyxBoard board, final OnyxConst.COLOR color) {
+    static OnyxMove search(final OnyxGame game, final OnyxConst.COLOR color) {
         
         try {
             
-            final OnyxMove posSearchRes = SEARCH.get(STYPE.POSCOL).search(c, board, color);
+            final OnyxMove posSearchRes = SEARCH.get(STYPE.POSCOL).search(game, color);
             final boolean win = ((ConnectionSearch) SEARCH.get(STYPE.CNX)).isWin(
-                    c, OnyxConst.COLOR.getOposite(color.bool));
+                game.getPosCollection(), OnyxConst.COLOR.getOposite(color.bool));
             final boolean lose = ((ConnectionSearch) SEARCH.get(STYPE.CNX)).isWin(
-                    c, color);
-            final OnyxMove cnxSearchRes = SEARCH.get(STYPE.CNX).search(c, board, color);       
-            final OnyxMove virtualCnxRes = SEARCH.get(STYPE.VIRTUALCNX).search(c, board, color);
+                game.getPosCollection(), color);
+            final OnyxMove cnxSearchRes = SEARCH.get(STYPE.CNX).search(game, color);       
+            final OnyxMove virtualCnxRes = SEARCH.get(STYPE.VIRTUALCNX).search(game, color);
             
             // Assert game ended :
             Onyx.gameEnd = win || lose;
-                        
-            /**
-             * FIXME refactor : get this print stuff out of search method.
-             * [START] Do printing debug stuff... 
-             */
-            if (posSearchRes != null) print(String.format(POSCOL_SEARCH_FORMAT,
-                    OnyxConst.POS_MAP.get(posSearchRes.getPos().getKey()), posSearchRes.getScore()));
-            if (cnxSearchRes != null) print(String.format(CNX_SEARCH_FORMAT,
-                OnyxConst.POS_MAP.get(cnxSearchRes.getPos().getKey()), cnxSearchRes.getScore()));
-            if (virtualCnxRes != null) print(String.format(VCNX_SEARCH_FORMAT,
-                OnyxConst.POS_MAP.get(virtualCnxRes.getPos().getKey()), virtualCnxRes.getScore()));
-            print(win ? 
-                String.format(WIN, OnyxConst.COLOR.getOposite(color.bool).str) : 
-                StringUtils.EMPTY, HTMLDisplayHelper.GOLD);
-            /** [END] Do printing debug stuff... */
             
             if (Onyx.gameEnd) return null;            
             final OnyxMove m = SearchUtils.assertByScore(posSearchRes, cnxSearchRes, virtualCnxRes);
-            if (m.isCapture()) c.performTake(m.getPos().getKey(), color.bit, board);
+            if (m.isCapture()) game.getPosCollection().performTake(
+                m.getPos().getKey(), color.bit, game.getDiamondCollection(), game.getPosCollection());
             
             return m;
             
         } catch (final NoValidOnyxPositionsFoundException nVOPFEx) {
             Logger.getLogger(Onyx.class.getName()).log(Level.SEVERE, null, nVOPFEx);
-            print(String.format(ERR, nVOPFEx.getMessage()));
         } catch (final InvalidOnyxPositionException iOPEx) {
             Logger.getLogger(Onyx.class.getName()).log(Level.SEVERE, null, iOPEx + 
                     String.format(InvalidOnyxPositionException.DEFAULT_MSG, color.str));
-            print(String.format(ERR, iOPEx.getMessage()));
         }
         
         return null;
     }
     
-    static OnyxMove getNewVirtual(final OnyxPosCollection c, final OnyxBoard board, final OnyxConst.COLOR color) 
+    static OnyxMove getNewVirtual(final OnyxPosCollection c, final OnyxGame game, final OnyxConst.COLOR color) 
             throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
-        return SEARCH.get(STYPE.RANDOM).search(c, board, color);
+        return SEARCH.get(STYPE.RANDOM).search(game, color);
     }
     
     static boolean isLose(final OnyxPosCollection c, final OnyxConst.COLOR color) 
             throws NoValidOnyxPositionsFoundException {
         Onyx.gameEnd = ((ConnectionSearch) SEARCH.get(STYPE.CNX)).isWin(c, color);
         return Onyx.gameEnd;
-    }
-    
-    private static void print(final String s) {
-        if (!StringUtils.isBlank(s)) MainFrame.print(s, HTMLDisplayHelper.GAINSBORO);
-    }
-    
-    private static void print(final String s, final String style) {
-        if (!StringUtils.isBlank(s)) MainFrame.print(s, style);
     }
         
 }

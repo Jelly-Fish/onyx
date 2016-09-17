@@ -31,27 +31,26 @@
  */
 package com.jellyfish.jfgonyx.onyx.search;
 
-import com.jellyfish.jfgonyx.onyx.interfaces.search.OnyxRandomSeachable;
+import com.jellyfish.jfgonyx.onyx.OnyxGame;
+import com.jellyfish.jfgonyx.onyx.abstractions.AbstractOnyxSearch;
 import com.jellyfish.jfgonyx.onyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
-import com.jellyfish.jfgonyx.onyx.abstractions.AbstractOnyxSearch;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException;
-import com.jellyfish.jfgonyx.ui.OnyxBoard;
+import com.jellyfish.jfgonyx.onyx.interfaces.search.OnyxRandomSeachable;
 
 /**
- *
  * @author thw
  */
 public class RandomSearch extends AbstractOnyxSearch implements OnyxRandomSeachable {
     
     @Override
-    public OnyxMove search(final OnyxPosCollection c, final OnyxBoard board, final OnyxConst.COLOR color)
+    public OnyxMove search(final OnyxGame game, final OnyxConst.COLOR color)
             throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
         
-        for (OnyxPos p : c.getPositions().values()) {
+        for (OnyxPos p : game.getPosCollection().getPositions().values()) {
             if (!p.isOccupied() && !p.isDiamondCenter()) {
                 return new OnyxMove(p, OnyxConst.SCORE.RANDOM.getValue());
             }

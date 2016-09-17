@@ -31,7 +31,8 @@
  */
 package com.jellyfish.jfgonyx.onyx.entities;
 
-import com.jellyfish.jfgonyx.constants.ConstructPosConst;
+import com.jellyfish.jfgonyx.onyx.constants.ConstructPosConst;
+import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import java.awt.Polygon;
 import java.util.Arrays;

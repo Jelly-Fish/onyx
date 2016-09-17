@@ -29,7 +29,7 @@
  * POSSIBILITY OF SUCH DAMAGE. 
  ******************************************************************************
  */
-package com.jellyfish.jfgonyx.onyx.entities;
+package com.jellyfish.jfgonyx.game.entities;
 
 /**
  * @author thw

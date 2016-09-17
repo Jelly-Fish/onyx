@@ -31,13 +31,13 @@
  */
 package com.jellyfish.jfgonyx.onyx.search.subroutines.connectionsearch;
 
+import com.jellyfish.jfgonyx.onyx.OnyxGame;
 import com.jellyfish.jfgonyx.onyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
 import com.jellyfish.jfgonyx.onyx.abstractions.AbstractSubroutine;
 import com.jellyfish.jfgonyx.onyx.search.searchutils.OnyxPositionUtils;
-import com.jellyfish.jfgonyx.ui.OnyxBoard;
 
 /**
  * Find sub tails meaning tails that do not start on borders.
@@ -51,9 +51,9 @@ public class SubTailConnectionSubroutine extends TailConnectionSubroutine {
      */
     private final float minX, minY, maxX, maxY;    
     
-    public SubTailConnectionSubroutine(final OnyxPosCollection c, final OnyxConst.COLOR color, 
-            final OnyxBoard board, final float minX, final float minY, final float maxX, final float maxY) {
-        super(c, color, board);
+    public SubTailConnectionSubroutine(final OnyxConst.COLOR color, 
+            final OnyxGame game, final float minX, final float minY, final float maxX, final float maxY) {
+        super(color, game);
         this.type = AbstractSubroutine.SUBROUTINE_TYPE.COUNTER_SUBTAIL;
         this.minX = minX;
         this.minY = minY;
