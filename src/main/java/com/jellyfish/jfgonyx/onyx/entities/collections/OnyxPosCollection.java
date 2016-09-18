@@ -59,7 +59,7 @@ public class OnyxPosCollection {
         this.init(diamonds);
     }
     
-    private final void init(final OnyxDiamondCollection c) {
+    final void init(final OnyxDiamondCollection c) {
         this.initPositionCollection(c);
         OnyxConnectionHelper.buildPosConnections(this);
     }

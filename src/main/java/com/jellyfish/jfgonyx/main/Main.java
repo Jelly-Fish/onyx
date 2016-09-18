@@ -55,7 +55,7 @@ public class Main {
         }
         //</editor-fold>
         
-        new OnyxGame(OnyxConst.COLOR.WHITE);
+        OnyxGame game = new OnyxGame(OnyxConst.COLOR.WHITE);
     }
     
 }

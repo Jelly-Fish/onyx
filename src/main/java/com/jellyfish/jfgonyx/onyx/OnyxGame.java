@@ -41,6 +41,8 @@ import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException;
 import com.jellyfish.jfgonyx.onyx.exceptions.OnyxGameSyncException;
+import com.jellyfish.jfgonyx.onyx.vars.GraphicsVars;
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
@@ -67,20 +69,28 @@ public class OnyxGame {
      */
     public OnyxGame(final OnyxConst.COLOR engineColor) { 
         
-        Onyx.gameEnd = false;
-        Onyx.whitePlayingLowBorder = false;
-        Onyx.blackPlayingLowBorder = false;
-        this.diamonds = new OnyxDiamondCollection().build();
-        this.positions = new OnyxPosCollection(this.diamonds);
-        this.wait = false;
-        this.requestInitialized = false;
-        this.colorToPlay = null;
-        this.engineColor = engineColor;
-        this.init(engineColor);
+            Onyx.gameEnd = false;
+            Onyx.whitePlayingLowBorder = false;
+            Onyx.blackPlayingLowBorder = false;
+            this.diamonds = new OnyxDiamondCollection().build();
+            this.positions = new OnyxPosCollection(this.diamonds);
+            this.wait = false;
+            this.requestInitialized = false;
+            this.colorToPlay = null;
+            this.engineColor = engineColor;
+            
+        try {
+            this.initStartLayout();        
+            this.init(engineColor);
+        } catch (final OnyxGameSyncException OGSEx) {
+            Logger.getLogger(OnyxGame.class.getName()).log(Level.SEVERE, null, OGSEx);
+            System.exit(0);
+        }
     }
     
-    final void init(final OnyxConst.COLOR engineColor) {        
-       
+    final void init(final OnyxConst.COLOR engineColor) throws OnyxGameSyncException {
+        
+        if (initialized) throw new OnyxGameSyncException(OnyxGameSyncException.DEFAULT_MSG);
         initialized = true;  
         
         if (!engineColor.bool) {            
@@ -91,7 +101,56 @@ public class OnyxGame {
                 initialized = false;
                 Logger.getLogger(OnyxGame.class.getName()).log(Level.SEVERE, null, ex);
             }
+        } else {
+            positions.spawnVirtualPiece(OnyxConst.COLOR.VIRTUAL_BLACK);
         }
+    }
+    
+    final void initStartLayout() throws OnyxGameSyncException {
+        
+        if (initialized) throw new OnyxGameSyncException(OnyxGameSyncException.DEFAULT_MSG);
+        
+        final String separator = "-";
+        final String one = "1,0";
+        final DecimalFormat df = new DecimalFormat("#.0");
+        
+        for (OnyxPos p : positions.getPositions().values()) p.setPiece(null);
+
+        final String min = df.format(GraphicsVars.getInstance().BOARD_SIDE_POS_COUNT / 2f);
+        final String max = df.format(GraphicsVars.getInstance().BOARD_SIDE_POS_COUNT);
+        final String minPlus = df.format((GraphicsVars.getInstance().BOARD_SIDE_POS_COUNT / 2f) + 1f);
+        
+        positions.getPosition(one + separator + min).addPiece(new OnyxPiece(OnyxConst.COLOR.BLACK));      
+        this.appendMove(new OnyxMove(positions.getPosition(one + separator + min), 
+            positions.getPosition(one + separator + min).getPiece()));
+        
+        positions.getPosition(min + separator + one).addPiece(new OnyxPiece(OnyxConst.COLOR.WHITE));
+        this.appendMove(new OnyxMove(positions.getPosition(min + separator + one), 
+                positions.getPosition(min + separator + one).getPiece()));
+        
+        positions.getPosition(max + separator + minPlus).addPiece(new OnyxPiece(OnyxConst.COLOR.BLACK));
+        this.appendMove(new OnyxMove(positions.getPosition(max + separator + minPlus), 
+                positions.getPosition(max + separator + minPlus).getPiece()));
+        
+        positions.getPosition(minPlus + separator + max).addPiece(new OnyxPiece(OnyxConst.COLOR.WHITE));
+        this.appendMove(new OnyxMove(positions.getPosition(minPlus + separator + max), 
+                positions.getPosition(minPlus + separator + max).getPiece()));
+        
+        positions.getPosition(one + separator + minPlus).addPiece(new OnyxPiece(OnyxConst.COLOR.BLACK));
+        this.appendMove(new OnyxMove(positions.getPosition(one + separator + minPlus), 
+                positions.getPosition(one + separator + minPlus).getPiece()));
+        
+        positions.getPosition(minPlus + separator + one).addPiece(new OnyxPiece(OnyxConst.COLOR.WHITE));
+        this.appendMove(new OnyxMove(positions.getPosition(minPlus + separator + one), 
+                positions.getPosition(minPlus + separator + one).getPiece()));
+        
+        positions.getPosition(max + separator + min).addPiece(new OnyxPiece(OnyxConst.COLOR.BLACK));
+        this.appendMove(new OnyxMove(positions.getPosition(max + separator + min), 
+                positions.getPosition(max + separator + min).getPiece()));
+        
+        positions.getPosition(min + separator + max).addPiece(new OnyxPiece(OnyxConst.COLOR.WHITE));
+        this.appendMove(new OnyxMove(positions.getPosition(min + separator + max), 
+                positions.getPosition(min + separator + max).getPiece()));
     }
     
     /**
@@ -102,7 +161,7 @@ public class OnyxGame {
      * @throws OnyxGameSyncException
      * @throws NoValidOnyxPositionsFoundException 
      */
-    public void performMove(final OnyxPosCollection c) 
+    final void performMove(final OnyxPosCollection c) 
             throws OnyxGameSyncException, NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
         
         checkInit();
@@ -114,7 +173,7 @@ public class OnyxGame {
         closeMove();
     }
     
-    public void closeMove() {
+    private void closeMove() {
         colorToPlay = null;
         initMoveRequest();
     }
@@ -138,7 +197,7 @@ public class OnyxGame {
         ++moveCount;
     }
     
-    private OnyxMove requestMove() 
+    public OnyxMove requestMove() 
             throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
         
         final OnyxMove m = Onyx.search(this, colorToPlay);
