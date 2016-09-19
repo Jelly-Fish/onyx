@@ -32,6 +32,10 @@ package com.jellyfish.jfgonyx.main;
 
 import com.jellyfish.jfgonyx.onyx.OnyxGame;
 import com.jellyfish.jfgonyx.onyx.constants.OnyxConst;
+import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
+import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
@@ -43,9 +47,9 @@ public class Main {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
-        
-        // <editor-fold defaultstate="collapsed" desc="UI Manager">    
+    public static void main(String[] args) {       
+            
+        // <editor-fold defaultstate="collapsed" desc="UI Manager">
         try {
             // Set System L&F
             UIManager.setLookAndFeel(
@@ -55,7 +59,16 @@ public class Main {
         }
         //</editor-fold>
         
-        OnyxGame game = new OnyxGame(OnyxConst.COLOR.WHITE);
+        try {    
+            OnyxGame game = new OnyxGame(OnyxConst.COLOR.WHITE);
+            game.moveTmp(String.format(OnyxConst.POS_KEY_FORMAT, 1f, 1f));
+            game.playMove();
+            game.initMove(OnyxConst.COLOR.WHITE);
+            game.appendMove(game.requestMove());
+        } catch (final InvalidOnyxPositionException | NoValidOnyxPositionsFoundException e) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, e);
+        }
+        
     }
     
 }

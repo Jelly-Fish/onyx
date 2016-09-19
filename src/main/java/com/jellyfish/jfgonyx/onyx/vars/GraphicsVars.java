@@ -42,7 +42,7 @@ public class GraphicsVars implements java.io.Serializable {
     private static final int DEFAULT_BOARD_WIDTH = 670;
     
     public int EXTRA_SQUARES = 2;
-    public int BOARD_SIDE_SQUARE_COUNT = 13;
+    public int BOARD_SIDE_SQUARE_COUNT = 11;
     public float BOARD_SIDE_POS_COUNT = 11.0f;
     public int SQUARE_WIDTH = 50;
     public int BOARD_WIDTH = 670;

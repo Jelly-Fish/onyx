@@ -40,6 +40,7 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class OnyxConst {
     
+    public static final String POS_KEY_FORMAT = "%.1f-%.1f";
     public static Color WHITE_PIECE = Color.WHITE;
     public static Color BLACK_PIECE = Color.BLACK;
     public static final String KEY_SEPARATOR = "/";

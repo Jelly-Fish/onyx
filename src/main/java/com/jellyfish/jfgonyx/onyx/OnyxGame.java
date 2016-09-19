@@ -88,7 +88,7 @@ public class OnyxGame {
         }
     }
     
-    final void init(final OnyxConst.COLOR engineColor) throws OnyxGameSyncException {
+    private void init(final OnyxConst.COLOR engineColor) throws OnyxGameSyncException {
         
         if (initialized) throw new OnyxGameSyncException(OnyxGameSyncException.DEFAULT_MSG);
         initialized = true;  
@@ -106,7 +106,7 @@ public class OnyxGame {
         }
     }
     
-    final void initStartLayout() throws OnyxGameSyncException {
+    private void initStartLayout() throws OnyxGameSyncException {
         
         if (initialized) throw new OnyxGameSyncException(OnyxGameSyncException.DEFAULT_MSG);
         
@@ -151,6 +151,53 @@ public class OnyxGame {
         positions.getPosition(min + separator + max).addPiece(new OnyxPiece(OnyxConst.COLOR.WHITE));
         this.appendMove(new OnyxMove(positions.getPosition(min + separator + max), 
                 positions.getPosition(min + separator + max).getPiece()));
+        
+        System.out.println("END init start layout.");
+    }
+    
+    public boolean playMove() throws InvalidOnyxPositionException {
+        
+        List<OnyxPos> posSet = null;
+        final OnyxVirtualPiece vp = positions.getVirtualPiece();
+        final String k = vp.getTmpOnyxPosition().getKey();
+        final OnyxPos tmpPos = positions.getPosition(k);
+        if (diamonds.isDiamondCenter(k) && !isCenterPosPlayable(k)) return false;
+        if (tmpPos.isOccupied()) return false;
+        
+        positions.getPosition(k).setPiece(
+            new OnyxPiece(vp.color.bool ? OnyxConst.COLOR.BLACK : OnyxConst.COLOR.WHITE)
+        );
+        
+        posSet = positions.getTakePositions(k, vp.color.bit, diamonds, positions);
+                
+        positions.getPosition(k).setVirtualPiece(null);
+        OnyxMove m = null;
+        if (posSet != null && !isGameEnd()) {
+            posSet = positions.performTake(k, vp.color.bit, diamonds, positions);
+            m = new OnyxMove(positions.getPosition(k), positions.getPosition(k).getPiece(), posSet, 
+                posSet.size() * OnyxConst.SCORE.TAKE.getValue());
+        } else {
+            m = new OnyxMove(positions.getPosition(k), positions.getPosition(k).getPiece());
+        }
+        
+        appendMove(m);
+        
+        return true;
+    }
+    
+    public boolean moveTmp(final String k) throws InvalidOnyxPositionException {
+                      
+        final String virtualK = positions.getVirtualPiece().getTmpOnyxPosition().getKey();
+        
+        if (positions.getPositions().containsKey(k)) {
+            positions.getVirtualPiece().setTmpOnyxPosition(positions.getPositions().get(k));
+            positions.getPosition(k).setVirtualPiece(positions.getVirtualPiece());
+            positions.getPosition(virtualK).setVirtualPiece(null);
+            
+            return true;
+        }
+        
+        return false;
     }
     
     /**
@@ -161,7 +208,7 @@ public class OnyxGame {
      * @throws OnyxGameSyncException
      * @throws NoValidOnyxPositionsFoundException 
      */
-    final void performMove(final OnyxPosCollection c) 
+    private void performMove(final OnyxPosCollection c) 
             throws OnyxGameSyncException, NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
         
         checkInit();
@@ -186,13 +233,14 @@ public class OnyxGame {
         initMoveRequest();
     }
     
-    public void appendMove(final OnyxPos pos, final OnyxPiece piece, final List<OnyxPos> captured) {
+    private void appendMove(final OnyxPos pos, final OnyxPiece piece, final List<OnyxPos> captured) {
         moves.put(moves.size() + 1, 
             new OnyxMove(pos, piece,  captured.size() * OnyxConst.SCORE.TAKE.getValue())
         );
     }
     
     public void appendMove(final OnyxMove move) {
+        System.out.println("Onyx response: " + move.toString());
         moves.put(moves.size() + 1, move);
         ++moveCount;
     }
@@ -232,6 +280,21 @@ public class OnyxGame {
         if (colorToPlay == null) throw new OnyxGameSyncException();
         if (!requestInitialized) throw new OnyxGameSyncException(
                 String.format(OnyxGameSyncException.WRONG_TURN_MSG, colorToPlay.str));
+    }
+    
+    public boolean isCenterPosPlayable(final String k) {
+        
+        int counter = 0;
+        if (k == null || !positions.containsPosition(k) || 
+                !diamonds.isDiamondCenter(k)) {
+            return false;
+        }
+        
+        for (String cK : positions.getPosition(k).connections) {
+            counter = positions.getPosition(cK).isOccupied() ? ++counter : counter;
+        }
+        
+        return counter == 0;
     }
     
     /**

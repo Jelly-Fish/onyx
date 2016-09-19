@@ -32,11 +32,14 @@
 package com.jellyfish.jfgonyx.onyx.entities.collections;
 
 import com.jellyfish.jfgonyx.onyx.entities.OnyxDiamond;
+import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import com.jellyfish.jfgonyx.onyx.vars.GraphicsVars;
 import java.awt.Point;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * @author thw
@@ -81,4 +84,20 @@ public class OnyxDiamondCollection {
         return diamonds;
     }
       
+    public boolean isDiamondCenter(final String k) {
+        
+        for (OnyxDiamond d : diamonds.values()) {
+            try {
+                if (d.getCenterPos().getKey().equals(k)) {
+                    return true;
+                }
+            } catch (final InvalidOnyxPositionException IOPEx) { 
+                Logger.getLogger(OnyxDiamondCollection.class.getName()).log(Level.SEVERE, IOPEx.getMessage());
+                return false;
+            }
+        }
+        
+        return false;
+    }
+    
 }
