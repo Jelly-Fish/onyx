@@ -156,6 +156,8 @@ public class OnyxGameImpl implements OnyxGame {
         positions.getPosition(min + separator + max).addPiece(new OnyxPiece(OnyxConst.COLOR.WHITE));
         this.appendMove(new OnyxMove(positions.getPosition(min + separator + max), 
                 positions.getPosition(min + separator + max).getPiece()));
+        
+        System.out.println("END Start layout.");
     }
     // </editor-fold> 
     
@@ -228,7 +230,17 @@ public class OnyxGameImpl implements OnyxGame {
         moves.put(moves.size() + 1, move);
         ++moveCount;
     }
-// </editor-fold> 
+    
+    @Override
+    public void appendNewVirtual() throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
+        
+        if (isGameEnd() || Onyx.isLose(positions, colorToPlay)) return;
+        final OnyxMove m = Onyx.getNewVirtual(positions, this, colorToPlay);
+        positions.getPosition(m.getPos().getKey()).setVirtualPiece(
+            new OnyxVirtualPiece(OnyxConst.COLOR.getVirtualOposite(colorToPlay.bool))
+        );
+    }
+    // </editor-fold> 
     
     // <editor-fold defaultstate="collapsed" desc="private methods"> 
     /**
@@ -246,7 +258,7 @@ public class OnyxGameImpl implements OnyxGame {
         final OnyxMove m = requestMove(colorToPlay);
         if (m != null && !Onyx.gameEnd) {
             appendMove(m);
-            appendNewVirtual(c);
+            appendNewVirtual();
         }
         closeMove();
     }
@@ -263,17 +275,7 @@ public class OnyxGameImpl implements OnyxGame {
         colorToPlay = color;
         initMoveRequest();
     }
-            
-    private void appendNewVirtual(final OnyxPosCollection c) 
-            throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
-        
-        if (isGameEnd() || Onyx.isLose(c, colorToPlay)) return;
-        final OnyxMove m = Onyx.getNewVirtual(c, this, colorToPlay);
-        c.getPosition(m.getPos().getKey()).setVirtualPiece(
-            new OnyxVirtualPiece(OnyxConst.COLOR.getVirtualOposite(colorToPlay.bool))
-        );
-    }
-            
+                      
     private void initMoveRequest() {
         requestInitialized = colorToPlay != null;
     }

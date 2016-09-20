@@ -68,6 +68,11 @@ public class Main {
             og.moveVirtual(String.format(OnyxConst.POS_KEY_FORMAT, 1f, 1f));
             og.playMove();
             og.appendMove(og.requestMove(engnColor));
+            og.appendNewVirtual();
+            og.moveVirtual(String.format(OnyxConst.POS_KEY_FORMAT, 2f, 1f));
+            og.playMove();
+            og.appendMove(og.requestMove(engnColor));
+            og.appendNewVirtual();
         } catch (final InvalidOnyxPositionException | NoValidOnyxPositionsFoundException e) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, e);
             System.exit(0);

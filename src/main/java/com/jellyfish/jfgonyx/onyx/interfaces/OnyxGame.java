@@ -49,4 +49,11 @@ public interface OnyxGame {
      */
     void appendMove(final OnyxMove move);
     
+    /**
+     * Add new virtual for UI management.
+     * @throws NoValidOnyxPositionsFoundException if no valid position is available.
+     * @throws InvalidOnyxPositionException if no such position found.
+     */
+    void appendNewVirtual() throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException;    
+    
 }
