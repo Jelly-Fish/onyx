@@ -61,15 +61,16 @@ public class Main {
         }
         //</editor-fold>
         
-        final OnyxConst.COLOR engine = OnyxConst.COLOR.WHITE;
+        final OnyxConst.COLOR engnColor = OnyxConst.COLOR.WHITE;
         
         try {    
-            OnyxGame game = OnyxGameBuilder.newGame(engine);
-            game.moveVirtual(String.format(OnyxConst.POS_KEY_FORMAT, 1f, 1f));
-            game.playMove();
-            game.appendMove(game.requestMove(engine));
+            OnyxGame og = OnyxGameBuilder.newGame(engnColor);
+            og.moveVirtual(String.format(OnyxConst.POS_KEY_FORMAT, 1f, 1f));
+            og.playMove();
+            og.appendMove(og.requestMove(engnColor));
         } catch (final InvalidOnyxPositionException | NoValidOnyxPositionsFoundException e) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, e);
+            System.exit(0);
         }
         
     }

@@ -35,11 +35,15 @@ package com.jellyfish.jfgonyx.onyx;
 import com.jellyfish.jfgonyx.onyx.constants.OnyxConst;
 
 /**
- *
  * @author thw
  */
 public class OnyxGameBuilder {
     
+    /**
+     * Build a new Onyx game and define engine color.
+     * @param engineColor Onyx engine color.
+     * @return OnyxGame implementation for UI use.
+     */
     public static OnyxGameImpl newGame(final OnyxConst.COLOR engineColor) {
         return new OnyxGameImpl(engineColor);
     }
