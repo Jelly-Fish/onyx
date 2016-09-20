@@ -30,10 +30,12 @@
 
 package com.jellyfish.jfgonyx.main;
 
-import com.jellyfish.jfgonyx.onyx.OnyxGame;
+import com.jellyfish.jfgonyx.onyx.OnyxGameBuilder;
+import com.jellyfish.jfgonyx.onyx.OnyxGameImpl;
 import com.jellyfish.jfgonyx.onyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException;
+import com.jellyfish.jfgonyx.onyx.interfaces.OnyxGame;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.UIManager;
@@ -59,12 +61,13 @@ public class Main {
         }
         //</editor-fold>
         
+        final OnyxConst.COLOR engine = OnyxConst.COLOR.WHITE;
+        
         try {    
-            OnyxGame game = new OnyxGame(OnyxConst.COLOR.WHITE);
-            game.moveTmp(String.format(OnyxConst.POS_KEY_FORMAT, 1f, 1f));
+            OnyxGame game = OnyxGameBuilder.newGame(engine);
+            game.moveVirtual(String.format(OnyxConst.POS_KEY_FORMAT, 1f, 1f));
             game.playMove();
-            game.initMove(OnyxConst.COLOR.WHITE);
-            game.appendMove(game.requestMove());
+            game.appendMove(game.requestMove(engine));
         } catch (final InvalidOnyxPositionException | NoValidOnyxPositionsFoundException e) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, e);
         }

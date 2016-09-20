@@ -31,7 +31,7 @@
  */
 package com.jellyfish.jfgonyx.onyx.search;
 
-import com.jellyfish.jfgonyx.onyx.OnyxGame;
+import com.jellyfish.jfgonyx.onyx.OnyxGameImpl;
 import com.jellyfish.jfgonyx.onyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.abstractions.AbstractOnyxSearch;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
@@ -63,7 +63,7 @@ public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnecti
     private final List<OnyxMove> cnxMoves = new ArrayList<>();
     
     @Override
-    public OnyxMove search(final OnyxGame game, final OnyxConst.COLOR color) 
+    public OnyxMove search(final OnyxGameImpl game, final OnyxConst.COLOR color) 
             throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
         
         init();
@@ -103,7 +103,7 @@ public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnecti
      * @throws com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException
      * @throws com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException
      */
-    protected OnyxMove getTailMove(final OnyxGame game, 
+    protected OnyxMove getTailMove(final OnyxGameImpl game, 
             final OnyxConst.COLOR color) throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
         
         OnyxMove tmp = null;
@@ -128,7 +128,7 @@ public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnecti
      * @param color the color to check for win position.
      * @return winning onyx connection or null.
      */
-    private OnyxMove searchCounterWinLink(final OnyxGame game, final OnyxConst.COLOR color) 
+    private OnyxMove searchCounterWinLink(final OnyxGameImpl game, final OnyxConst.COLOR color) 
         throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {   
 
         int count = 0;
@@ -156,7 +156,7 @@ public class ConnectionSearch extends AbstractOnyxSearch implements OnyxConnecti
      * @return winning onyx connection or null.
      * @throws NoValidOnyxPositionsFoundException 
      */
-    private OnyxMove searchWinMove(final OnyxGame game, final OnyxConst.COLOR color) 
+    private OnyxMove searchWinMove(final OnyxGameImpl game, final OnyxConst.COLOR color) 
         throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {    
 
         List<OnyxMove> tmpMoves = null;

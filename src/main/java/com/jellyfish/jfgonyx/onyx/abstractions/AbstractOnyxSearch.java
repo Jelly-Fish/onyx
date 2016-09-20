@@ -31,7 +31,7 @@
  */
 package com.jellyfish.jfgonyx.onyx.abstractions;
 
-import com.jellyfish.jfgonyx.onyx.OnyxGame;
+import com.jellyfish.jfgonyx.onyx.OnyxGameImpl;
 import com.jellyfish.jfgonyx.onyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
@@ -85,7 +85,7 @@ public class AbstractOnyxSearch {
      * @return move with highest scoring.
      * @throws com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException
      */
-    protected final OnyxMove trim(final List<OnyxMove> moves, final OnyxGame game, 
+    protected final OnyxMove trim(final List<OnyxMove> moves, final OnyxGameImpl game, 
             final OnyxConst.COLOR color) throws InvalidOnyxPositionException {
         
         int count = 0;
@@ -147,7 +147,7 @@ public class AbstractOnyxSearch {
      * @return move with highest scoring.
      * @throws com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException
      */
-    protected final OnyxMove trim(final List<OnyxMove> moves, final OnyxGame game,
+    protected final OnyxMove trim(final List<OnyxMove> moves, final OnyxGameImpl game,
             final OnyxConst.COLOR color, final float minScore) throws InvalidOnyxPositionException {
         
         final List<OnyxMove> scoredMoves = new ArrayList<>();
@@ -158,7 +158,7 @@ public class AbstractOnyxSearch {
         return this.trim(scoredMoves, game, color);
     }
     
-    protected final OnyxMove initCaptures(final OnyxMove tmp, final OnyxGame game, 
+    protected final OnyxMove initCaptures(final OnyxMove tmp, final OnyxGameImpl game, 
             final OnyxConst.COLOR color) throws InvalidOnyxPositionException {
         
         List<OnyxPos> posSet = null;

@@ -31,7 +31,7 @@
  */
 package com.jellyfish.jfgonyx.onyx.search.subroutines.positionsearch;
 
-import com.jellyfish.jfgonyx.onyx.OnyxGame;
+import com.jellyfish.jfgonyx.onyx.OnyxGameImpl;
 import com.jellyfish.jfgonyx.onyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxDiamond;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
@@ -53,7 +53,7 @@ public class AttackPositionSubroutine extends AbstractSubroutine {
      * @return Strongest counter attack move found (to allow take on next move) 
      * or NULL if no such position has been found.
      */
-    public final OnyxMove getAttackPos(final OnyxPosCollection c, final OnyxGame game, final int bitColor) {
+    public final OnyxMove getAttackPos(final OnyxPosCollection c, final OnyxGameImpl game, final int bitColor) {
 
         int[] iPos = null; 
         OnyxPos tmp = null;

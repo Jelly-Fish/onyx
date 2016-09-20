@@ -31,7 +31,7 @@
  */
 package com.jellyfish.jfgonyx.onyx.search.subroutines.connectionsearch;
 
-import com.jellyfish.jfgonyx.onyx.OnyxGame;
+import com.jellyfish.jfgonyx.onyx.OnyxGameImpl;
 import com.jellyfish.jfgonyx.onyx.abstractions.AbstractSubroutine;
 import com.jellyfish.jfgonyx.onyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
@@ -51,7 +51,7 @@ public class VirtualConnectionSubroutine extends AbstractSubroutine {
     
     protected final AbstractSubroutine.SUBROUTINE_TYPE type;
     protected final OnyxPosCollection c;
-    protected final OnyxGame game;
+    protected final OnyxGameImpl game;
     protected final OnyxConst.COLOR color;
     protected final int opColorBit;
     protected final float max = GraphicsVars.getInstance().BOARD_SIDE_SQUARE_COUNT + 1f;
@@ -62,7 +62,7 @@ public class VirtualConnectionSubroutine extends AbstractSubroutine {
     private OnyxTail tail;
 
     public VirtualConnectionSubroutine(final OnyxConst.COLOR color, 
-            final OnyxGame game) {
+            final OnyxGameImpl game) {
         this.c = game.getPosCollection();
         this.color = color;
         this.opColorBit = OnyxConst.COLOR.getOposite(color.bool).bit;

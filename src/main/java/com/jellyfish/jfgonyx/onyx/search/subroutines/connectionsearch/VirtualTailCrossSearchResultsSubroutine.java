@@ -5,7 +5,7 @@
  */
 package com.jellyfish.jfgonyx.onyx.search.subroutines.connectionsearch;
 
-import com.jellyfish.jfgonyx.onyx.OnyxGame;
+import com.jellyfish.jfgonyx.onyx.OnyxGameImpl;
 import com.jellyfish.jfgonyx.onyx.abstractions.AbstractSubroutine;
 import com.jellyfish.jfgonyx.onyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
@@ -36,7 +36,7 @@ public class VirtualTailCrossSearchResultsSubroutine extends AbstractSubroutine 
      * @throws com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException
      */
     public OnyxPos crossTailSearch(final OnyxTail sT, final List<OnyxTail> sTails, 
-        final OnyxTail oT, final List<OnyxTail> opTails, final OnyxGame game, final OnyxConst.COLOR color, final OnyxConst.COLOR opColor) throws InvalidOnyxPositionException {
+        final OnyxTail oT, final List<OnyxTail> opTails, final OnyxGameImpl game, final OnyxConst.COLOR color, final OnyxConst.COLOR opColor) throws InvalidOnyxPositionException {
 
         if (sT == null || oT == null) return null;
         
@@ -59,7 +59,7 @@ public class VirtualTailCrossSearchResultsSubroutine extends AbstractSubroutine 
      * @throws InvalidOnyxPositionException 
      */
     private OnyxPos crossWithAllOnyxTails(final List<OnyxTail> sTails, final OnyxTail oT, 
-        final OnyxGame game, final OnyxPosCollection c, final OnyxConst.COLOR color, 
+        final OnyxGameImpl game, final OnyxPosCollection c, final OnyxConst.COLOR color, 
         final OnyxConst.COLOR opColor) throws InvalidOnyxPositionException {
         
         OnyxPos pos = null;
@@ -83,7 +83,7 @@ public class VirtualTailCrossSearchResultsSubroutine extends AbstractSubroutine 
      * @throws InvalidOnyxPositionException
      */
     private OnyxPos crossAllTails(final List<OnyxTail> sTails, final List<OnyxTail> opTails, 
-        final OnyxGame game, final OnyxPosCollection c, final OnyxConst.COLOR color, 
+        final OnyxGameImpl game, final OnyxPosCollection c, final OnyxConst.COLOR color, 
         final OnyxConst.COLOR opColor) throws InvalidOnyxPositionException {
         
         OnyxPos pos = null;
@@ -112,7 +112,7 @@ public class VirtualTailCrossSearchResultsSubroutine extends AbstractSubroutine 
      * @throws InvalidOnyxPositionException 
      */
     private OnyxPos crossMainTails(final OnyxTail sT, final OnyxTail oT, 
-        final OnyxGame game, final OnyxPosCollection c, final OnyxConst.COLOR color, 
+        final OnyxGameImpl game, final OnyxPosCollection c, final OnyxConst.COLOR color, 
         final OnyxConst.COLOR opColor) throws InvalidOnyxPositionException {
         
         if (sT == null || oT == null) return null;

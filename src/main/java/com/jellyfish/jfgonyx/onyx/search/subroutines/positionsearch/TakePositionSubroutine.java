@@ -31,7 +31,7 @@
  */
 package com.jellyfish.jfgonyx.onyx.search.subroutines.positionsearch;
 
-import com.jellyfish.jfgonyx.onyx.OnyxGame;
+import com.jellyfish.jfgonyx.onyx.OnyxGameImpl;
 import com.jellyfish.jfgonyx.onyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxDiamond;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
@@ -52,7 +52,7 @@ public class TakePositionSubroutine extends AbstractSubroutine {
      * @return Strongest take move key found or NULL if no such position has been found.
      * @throws com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException
      */
-    public final OnyxMove getTakePos(final OnyxGame game, 
+    public final OnyxMove getTakePos(final OnyxGameImpl game, 
             final int bitColor) throws InvalidOnyxPositionException {
         
         int count, i;

@@ -41,6 +41,7 @@ import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException;
 import com.jellyfish.jfgonyx.onyx.exceptions.OnyxGameSyncException;
+import com.jellyfish.jfgonyx.onyx.interfaces.OnyxGame;
 import com.jellyfish.jfgonyx.onyx.vars.GraphicsVars;
 import java.text.DecimalFormat;
 import java.util.HashMap;
@@ -49,32 +50,34 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
+ * Onyx game interface implementation.
  * @author thw
  */
-public class OnyxGame {
+public class OnyxGameImpl implements OnyxGame {
     
+    // <editor-fold defaultstate="collapsed" desc="private vars"> 
     private final OnyxDiamondCollection diamonds;
     private final OnyxPosCollection positions;
-    public boolean initialized = false;
-    public HashMap<Integer, OnyxMove> moves = new HashMap<>(); 
-    public boolean wait = false;
-    public OnyxConst.COLOR engineColor = null;    
+    private boolean initialized = false;
+    private HashMap<Integer, OnyxMove> moves = new HashMap<>();
+    private OnyxConst.COLOR engineColor = null;    
     private OnyxConst.COLOR colorToPlay = null;
     private boolean requestInitialized = false;
     private int moveCount = 0;
+    // </editor-fold> 
 
+    // <editor-fold defaultstate="collapsed" desc="Construct methods"> 
     /**
      * Construct.
      * @param engineColor engine color.
      */
-    public OnyxGame(final OnyxConst.COLOR engineColor) { 
+    OnyxGameImpl(final OnyxConst.COLOR engineColor) { 
         
             Onyx.gameEnd = false;
             Onyx.whitePlayingLowBorder = false;
             Onyx.blackPlayingLowBorder = false;
             this.diamonds = new OnyxDiamondCollection().build();
             this.positions = new OnyxPosCollection(this.diamonds);
-            this.wait = false;
             this.requestInitialized = false;
             this.colorToPlay = null;
             this.engineColor = engineColor;
@@ -83,23 +86,25 @@ public class OnyxGame {
             this.initStartLayout();        
             this.init(engineColor);
         } catch (final OnyxGameSyncException OGSEx) {
-            Logger.getLogger(OnyxGame.class.getName()).log(Level.SEVERE, null, OGSEx);
+            Logger.getLogger(OnyxGameImpl.class.getName()).log(Level.SEVERE, null, OGSEx);
             System.exit(0);
         }
     }
+    // </editor-fold> 
     
+    // <editor-fold defaultstate="collapsed" desc="Init private methods"> 
     private void init(final OnyxConst.COLOR engineColor) throws OnyxGameSyncException {
         
         if (initialized) throw new OnyxGameSyncException(OnyxGameSyncException.DEFAULT_MSG);
         initialized = true;  
         
-        if (!engineColor.bool) {            
+        if (engineColor.bool) {            
             initMove(OnyxConst.COLOR.getOposite(engineColor.bool));            
             try {
                 performMove(positions);
             } catch (OnyxGameSyncException | NoValidOnyxPositionsFoundException | InvalidOnyxPositionException ex) {
                 initialized = false;
-                Logger.getLogger(OnyxGame.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(OnyxGameImpl.class.getName()).log(Level.SEVERE, null, ex);
             }
         } else {
             positions.spawnVirtualPiece(OnyxConst.COLOR.VIRTUAL_BLACK);
@@ -151,10 +156,11 @@ public class OnyxGame {
         positions.getPosition(min + separator + max).addPiece(new OnyxPiece(OnyxConst.COLOR.WHITE));
         this.appendMove(new OnyxMove(positions.getPosition(min + separator + max), 
                 positions.getPosition(min + separator + max).getPiece()));
-        
-        System.out.println("END init start layout.");
     }
+    // </editor-fold> 
     
+    // <editor-fold defaultstate="collapsed" desc="Impl overrides"> 
+    @Override
     public boolean playMove() throws InvalidOnyxPositionException {
         
         List<OnyxPos> posSet = null;
@@ -185,7 +191,8 @@ public class OnyxGame {
         return true;
     }
     
-    public boolean moveTmp(final String k) throws InvalidOnyxPositionException {
+    @Override
+    public boolean moveVirtual(final String k) throws InvalidOnyxPositionException {
                       
         final String virtualK = positions.getVirtualPiece().getTmpOnyxPosition().getKey();
         
@@ -200,10 +207,34 @@ public class OnyxGame {
         return false;
     }
     
+    @Override
+    public OnyxMove requestMove(final OnyxConst.COLOR color) 
+            throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
+        
+        initMove(color);
+        final OnyxMove m = Onyx.search(this, colorToPlay);
+        if (Onyx.gameEnd) return null;
+        if (m == null) throw new NoValidOnyxPositionsFoundException();
+        else positions.clearOutlines();
+        positions.getPosition(m.getPos().getKey()).setPiece(new OnyxPiece(colorToPlay, true));
+        
+        return m;
+    }
+    
+    @Override
+    public void appendMove(final OnyxMove move) {
+        System.out.println("Appending move: " + move.toString() + " color: " + 
+            move.getPos().getPiece().color.str);
+        moves.put(moves.size() + 1, move);
+        ++moveCount;
+    }
+// </editor-fold> 
+    
+    // <editor-fold defaultstate="collapsed" desc="private methods"> 
     /**
      * Perform move - move request must be initialized first.
      * @throws com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException
-     * @see OnyxGame openRequest.
+     * @see OnyxGameImpl openRequest.
      * @param c OnyxPos collection.
      * @throws OnyxGameSyncException
      * @throws NoValidOnyxPositionsFoundException 
@@ -212,7 +243,7 @@ public class OnyxGame {
             throws OnyxGameSyncException, NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
         
         checkInit();
-        final OnyxMove m = requestMove();
+        final OnyxMove m = requestMove(colorToPlay);
         if (m != null && !Onyx.gameEnd) {
             appendMove(m);
             appendNewVirtual(c);
@@ -228,35 +259,11 @@ public class OnyxGame {
     /**
      * @param color the color to play next or to search move for and append to this.
      */
-    public void initMove(final OnyxConst.COLOR color) {
+    private void initMove(final OnyxConst.COLOR color) {
         colorToPlay = color;
         initMoveRequest();
     }
-    
-    private void appendMove(final OnyxPos pos, final OnyxPiece piece, final List<OnyxPos> captured) {
-        moves.put(moves.size() + 1, 
-            new OnyxMove(pos, piece,  captured.size() * OnyxConst.SCORE.TAKE.getValue())
-        );
-    }
-    
-    public void appendMove(final OnyxMove move) {
-        System.out.println("Onyx response: " + move.toString());
-        moves.put(moves.size() + 1, move);
-        ++moveCount;
-    }
-    
-    public OnyxMove requestMove() 
-            throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
-        
-        final OnyxMove m = Onyx.search(this, colorToPlay);
-        if (Onyx.gameEnd) return null;
-        if (m == null) throw new NoValidOnyxPositionsFoundException();
-        else positions.clearOutlines();
-        positions.getPosition(m.getPos().getKey()).setPiece(new OnyxPiece(colorToPlay, true));
-        
-        return m;
-    }
-    
+            
     private void appendNewVirtual(final OnyxPosCollection c) 
             throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
         
@@ -282,7 +289,7 @@ public class OnyxGame {
                 String.format(OnyxGameSyncException.WRONG_TURN_MSG, colorToPlay.str));
     }
     
-    public boolean isCenterPosPlayable(final String k) {
+    private boolean isCenterPosPlayable(final String k) {
         
         int counter = 0;
         if (k == null || !positions.containsPosition(k) || 
@@ -296,7 +303,9 @@ public class OnyxGame {
         
         return counter == 0;
     }
+    // </editor-fold> 
     
+    // <editor-fold defaultstate="collapsed" desc="public accessors & methods"> 
     /**
      * Is White/Black playing tails starting at high or low border ?
      * @param m Onyx move instance.
@@ -340,5 +349,6 @@ public class OnyxGame {
     public int getMoveCount() {
         return moveCount;
     }
+    // </editor-fold> 
     
 }

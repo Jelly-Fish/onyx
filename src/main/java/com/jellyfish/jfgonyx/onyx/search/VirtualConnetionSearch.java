@@ -31,7 +31,7 @@
  */
 package com.jellyfish.jfgonyx.onyx.search;
 
-import com.jellyfish.jfgonyx.onyx.OnyxGame;
+import com.jellyfish.jfgonyx.onyx.OnyxGameImpl;
 import com.jellyfish.jfgonyx.onyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
@@ -51,7 +51,7 @@ import java.util.List;
 public class VirtualConnetionSearch extends ConnectionSearch implements OnyxConnectionSearchable {
 
     @Override
-    public OnyxMove search(final OnyxGame game, 
+    public OnyxMove search(final OnyxGameImpl game, 
             final OnyxConst.COLOR color) throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
 
         final OnyxConst.COLOR opColor = OnyxConst.COLOR.getOposite(color.bool);

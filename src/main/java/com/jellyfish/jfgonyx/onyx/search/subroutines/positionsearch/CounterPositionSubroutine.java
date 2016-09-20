@@ -32,7 +32,7 @@
 package com.jellyfish.jfgonyx.onyx.search.subroutines.positionsearch;
 
 import com.jellyfish.jfgonyx.onyx.constants.OnyxConst;
-import com.jellyfish.jfgonyx.onyx.OnyxGame;
+import com.jellyfish.jfgonyx.onyx.OnyxGameImpl;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
@@ -62,7 +62,7 @@ public class CounterPositionSubroutine extends AbstractSubroutine {
      * @throws com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException if shit hits the fan.
      * @throws com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException if shit hits the fan.
      */
-    public final OnyxMove getCounterPos(final OnyxGame game, final OnyxConst.COLOR color) throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
+    public final OnyxMove getCounterPos(final OnyxGameImpl game, final OnyxConst.COLOR color) throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
         
         final List<OnyxMove> candidates = new ArrayList<>();
         candidates.add(counterPos(game.getPosCollection(), game, color));
@@ -73,7 +73,7 @@ public class CounterPositionSubroutine extends AbstractSubroutine {
         return move;
     }
     
-    private OnyxMove counterPos(final OnyxPosCollection c, final OnyxGame game, 
+    private OnyxMove counterPos(final OnyxPosCollection c, final OnyxGameImpl game, 
             final OnyxConst.COLOR color) throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
         
         final OnyxConst.COLOR opColor = OnyxConst.COLOR.getOposite(color.bool);
@@ -107,7 +107,7 @@ public class CounterPositionSubroutine extends AbstractSubroutine {
      * @throws NoValidOnyxPositionsFoundException if shit hits the fan.
      * @throws InvalidOnyxPositionException if shit hits the fan.
      */
-    private OnyxMove bigLock(final OnyxPosCollection c, final OnyxGame game, 
+    private OnyxMove bigLock(final OnyxPosCollection c, final OnyxGameImpl game, 
             final OnyxConst.COLOR color) throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
         
         int i, j;

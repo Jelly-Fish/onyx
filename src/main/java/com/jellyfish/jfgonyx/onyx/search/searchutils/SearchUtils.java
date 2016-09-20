@@ -32,7 +32,7 @@
 package com.jellyfish.jfgonyx.onyx.search.searchutils;
 
 import com.jellyfish.jfgonyx.onyx.constants.OnyxConst;
-import com.jellyfish.jfgonyx.onyx.OnyxGame;
+import com.jellyfish.jfgonyx.onyx.OnyxGameImpl;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException;
 
@@ -58,12 +58,12 @@ public class SearchUtils {
     }
     
     @Deprecated
-    public static float calibrateCenterMoves(final OnyxGame game, final float score) {
+    public static float calibrateCenterMoves(final OnyxGameImpl game, final float score) {
         return game.getMoveCount() < 12 ? OnyxConst.SCORE.OVERRIDE.getValue() + score : score;
     }
     
     @Deprecated
-    public static float calibrateTailMoves(final OnyxGame game, final float score) {
+    public static float calibrateTailMoves(final OnyxGameImpl game, final float score) {
         return (game.getMoveCount() < 14) ?
             OnyxConst.SCORE.OVERRIDE.getValue() + score : score;              
     }

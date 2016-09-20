@@ -32,7 +32,7 @@
 package com.jellyfish.jfgonyx.onyx.search.subroutines.connectionsearch;
 
 import com.jellyfish.jfgonyx.onyx.constants.OnyxConst;
-import com.jellyfish.jfgonyx.onyx.OnyxGame;
+import com.jellyfish.jfgonyx.onyx.OnyxGameImpl;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
@@ -53,7 +53,7 @@ public class TailConnectionSubroutine extends AbstractSubroutine {
     
     protected AbstractSubroutine.SUBROUTINE_TYPE type;
     protected final OnyxPosCollection c;
-    protected final OnyxGame game;
+    protected final OnyxGameImpl game;
     protected final OnyxConst.COLOR color;
     protected final List<OnyxMove> candidates = new ArrayList<>();
     protected final Set<String> keyCandidates = new HashSet();
@@ -65,7 +65,7 @@ public class TailConnectionSubroutine extends AbstractSubroutine {
     protected boolean counterSearch = false;
     
     public TailConnectionSubroutine(final OnyxConst.COLOR color, 
-            final OnyxGame game) {
+            final OnyxGameImpl game) {
         
         this.c = game.getPosCollection();
         this.color = color;

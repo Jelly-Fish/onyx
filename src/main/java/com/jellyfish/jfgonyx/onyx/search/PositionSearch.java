@@ -31,7 +31,7 @@
  */
 package com.jellyfish.jfgonyx.onyx.search;
 
-import com.jellyfish.jfgonyx.onyx.OnyxGame;
+import com.jellyfish.jfgonyx.onyx.OnyxGameImpl;
 import com.jellyfish.jfgonyx.onyx.search.subroutines.positionsearch.TakePositionSubroutine;
 import com.jellyfish.jfgonyx.onyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
@@ -53,7 +53,7 @@ import java.util.logging.Logger;
 public class PositionSearch extends AbstractOnyxSearch implements OnyxPositionSearchable {
 
     @Override
-    public OnyxMove search(final OnyxGame game, final OnyxConst.COLOR color) 
+    public OnyxMove search(final OnyxGameImpl game, final OnyxConst.COLOR color) 
             throws NoValidOnyxPositionsFoundException {
     
         final List<OnyxMove> moves = new ArrayList<>();

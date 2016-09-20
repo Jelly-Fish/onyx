@@ -31,7 +31,7 @@
  */
 package com.jellyfish.jfgonyx.onyx.interfaces.search;
 
-import com.jellyfish.jfgonyx.onyx.OnyxGame;
+import com.jellyfish.jfgonyx.onyx.OnyxGameImpl;
 import com.jellyfish.jfgonyx.onyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxDiamond;
@@ -58,7 +58,7 @@ public interface OnyxRandomSeachable extends OnyxAbstractSearchable {
      * @throws NoValidOnyxPositionsFoundException if no position if found, seems like all the board is occupied ???
      */
     @Override
-    OnyxMove search(final OnyxGame game, final OnyxConst.COLOR color) 
+    OnyxMove search(final OnyxGameImpl game, final OnyxConst.COLOR color) 
             throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException;
     
 }

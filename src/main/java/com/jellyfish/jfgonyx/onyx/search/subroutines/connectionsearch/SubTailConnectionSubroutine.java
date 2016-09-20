@@ -31,7 +31,7 @@
  */
 package com.jellyfish.jfgonyx.onyx.search.subroutines.connectionsearch;
 
-import com.jellyfish.jfgonyx.onyx.OnyxGame;
+import com.jellyfish.jfgonyx.onyx.OnyxGameImpl;
 import com.jellyfish.jfgonyx.onyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
@@ -52,7 +52,7 @@ public class SubTailConnectionSubroutine extends TailConnectionSubroutine {
     private final float minX, minY, maxX, maxY;    
     
     public SubTailConnectionSubroutine(final OnyxConst.COLOR color, 
-            final OnyxGame game, final float minX, final float minY, final float maxX, final float maxY) {
+            final OnyxGameImpl game, final float minX, final float minY, final float maxX, final float maxY) {
         super(color, game);
         this.type = AbstractSubroutine.SUBROUTINE_TYPE.COUNTER_SUBTAIL;
         this.minX = minX;

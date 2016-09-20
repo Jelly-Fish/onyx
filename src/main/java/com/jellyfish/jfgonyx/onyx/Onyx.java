@@ -91,7 +91,7 @@ class Onyx {
         }
     }
        
-    static OnyxMove search(final OnyxGame game, final OnyxConst.COLOR color) {
+    static OnyxMove search(final OnyxGameImpl game, final OnyxConst.COLOR color) {
         
         try {
             
@@ -123,7 +123,7 @@ class Onyx {
         return null;
     }
     
-    static OnyxMove getNewVirtual(final OnyxPosCollection c, final OnyxGame game, final OnyxConst.COLOR color) 
+    static OnyxMove getNewVirtual(final OnyxPosCollection c, final OnyxGameImpl game, final OnyxConst.COLOR color) 
             throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
         return SEARCH.get(STYPE.RANDOM).search(game, color);
     }

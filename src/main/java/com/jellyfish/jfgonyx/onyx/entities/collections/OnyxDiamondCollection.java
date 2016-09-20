@@ -88,9 +88,7 @@ public class OnyxDiamondCollection {
         
         for (OnyxDiamond d : diamonds.values()) {
             try {
-                if (d.getCenterPos().getKey().equals(k)) {
-                    return true;
-                }
+                if (d.isFivePosDiamond() && d.getCenterPos().getKey().equals(k)) return true;
             } catch (final InvalidOnyxPositionException IOPEx) { 
                 Logger.getLogger(OnyxDiamondCollection.class.getName()).log(Level.SEVERE, IOPEx.getMessage());
                 return false;

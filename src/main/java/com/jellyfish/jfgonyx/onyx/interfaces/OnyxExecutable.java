@@ -31,7 +31,7 @@
  */
 package com.jellyfish.jfgonyx.onyx.interfaces;
 
-import com.jellyfish.jfgonyx.onyx.OnyxGame;
+import com.jellyfish.jfgonyx.onyx.OnyxGameImpl;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import java.awt.event.InputEvent;
 
@@ -48,6 +48,6 @@ public interface OnyxExecutable {
      * @return true is move is validated and must swap turns.
      * @throws com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException
      */
-    boolean exec(final InputEvent e, final OnyxGame game) throws InvalidOnyxPositionException;
+    boolean exec(final InputEvent e, final OnyxGameImpl game) throws InvalidOnyxPositionException;
     
 }

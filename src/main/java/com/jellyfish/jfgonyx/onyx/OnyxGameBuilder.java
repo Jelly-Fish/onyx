@@ -29,24 +29,19 @@
  * POSSIBILITY OF SUCH DAMAGE. 
  ******************************************************************************
  */
-package com.jellyfish.jfgonyx.onyx.interfaces.search;
 
-import com.jellyfish.jfgonyx.onyx.OnyxGameImpl;
+package com.jellyfish.jfgonyx.onyx;
+
 import com.jellyfish.jfgonyx.onyx.constants.OnyxConst;
-import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
-import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
-import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
-import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException;
 
 /**
+ *
  * @author thw
  */
-public abstract interface OnyxAbstractSearchable {
+public class OnyxGameBuilder {
     
-    OnyxMove search(final OnyxGameImpl game, final OnyxConst.COLOR color) 
-            throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException;
- 
-    boolean isWin(final OnyxPosCollection c, final OnyxConst.COLOR color) 
-            throws NoValidOnyxPositionsFoundException;
+    public static OnyxGameImpl newGame(final OnyxConst.COLOR engineColor) {
+        return new OnyxGameImpl(engineColor);
+    }
     
 }
