@@ -40,6 +40,7 @@ import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxDiamondCollection;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException;
+import com.jellyfish.jfgonyx.onyx.exceptions.OnyxEndGameException;
 import com.jellyfish.jfgonyx.onyx.exceptions.OnyxGameSyncException;
 import com.jellyfish.jfgonyx.onyx.interfaces.OnyxGame;
 import com.jellyfish.jfgonyx.onyx.vars.GraphicsVars;
@@ -105,6 +106,8 @@ public class OnyxGameImpl implements OnyxGame {
             } catch (OnyxGameSyncException | NoValidOnyxPositionsFoundException | InvalidOnyxPositionException ex) {
                 initialized = false;
                 Logger.getLogger(OnyxGameImpl.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (final OnyxEndGameException OEGEx) {
+                Logger.getLogger(OnyxGameImpl.class.getName()).log(Level.SEVERE, null, OEGEx);
             }
         } else {
             positions.spawnVirtualPiece(OnyxConst.COLOR.VIRTUAL_BLACK);
@@ -211,11 +214,11 @@ public class OnyxGameImpl implements OnyxGame {
     
     @Override
     public OnyxMove requestMove(final OnyxConst.COLOR color) 
-            throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
+            throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException, OnyxEndGameException {
         
         initMove(color);
         final OnyxMove m = Onyx.search(this, colorToPlay);
-        if (Onyx.gameEnd) return null;
+        if (Onyx.gameEnd) throw new OnyxEndGameException(color);
         if (m == null) throw new NoValidOnyxPositionsFoundException();
         else positions.clearOutlines();
         positions.getPosition(m.getPos().getKey()).setPiece(new OnyxPiece(colorToPlay, true));
@@ -250,9 +253,11 @@ public class OnyxGameImpl implements OnyxGame {
      * @param c OnyxPos collection.
      * @throws OnyxGameSyncException
      * @throws NoValidOnyxPositionsFoundException 
+     * @throws OnyxEndGameException
      */
     private void performMove(final OnyxPosCollection c) 
-            throws OnyxGameSyncException, NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
+            throws OnyxGameSyncException, NoValidOnyxPositionsFoundException, 
+            InvalidOnyxPositionException, OnyxEndGameException {
         
         checkInit();
         final OnyxMove m = requestMove(colorToPlay);

@@ -36,12 +36,8 @@ import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
 import static com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection.KEY_FORMAT;
 import com.jellyfish.jfgonyx.onyx.vars.GraphicsVars;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.apache.commons.lang3.StringUtils;
 
 /**

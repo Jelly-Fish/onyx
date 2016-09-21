@@ -31,10 +31,10 @@
 package com.jellyfish.jfgonyx.main;
 
 import com.jellyfish.jfgonyx.onyx.OnyxGameBuilder;
-import com.jellyfish.jfgonyx.onyx.OnyxGameImpl;
 import com.jellyfish.jfgonyx.onyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException;
+import com.jellyfish.jfgonyx.onyx.exceptions.OnyxEndGameException;
 import com.jellyfish.jfgonyx.onyx.interfaces.OnyxGame;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -73,9 +73,11 @@ public class Main {
             og.playMove();
             og.appendMove(og.requestMove(engnColor));
             og.appendNewVirtual();
-        } catch (final InvalidOnyxPositionException | NoValidOnyxPositionsFoundException e) {
+        } catch (final InvalidOnyxPositionException | NoValidOnyxPositionsFoundException | OnyxEndGameException e) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, e);
-            System.exit(0);
+            if (e instanceof OnyxEndGameException) {
+                // Notify.
+            }
         }
         
     }
