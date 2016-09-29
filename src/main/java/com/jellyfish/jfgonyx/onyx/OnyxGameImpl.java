@@ -100,7 +100,7 @@ public class OnyxGameImpl implements OnyxGame {
         initialized = true;  
         
         if (engineColor.bool) {            
-            initMove(OnyxConst.COLOR.getOposite(engineColor.bool));            
+            initMove(OnyxConst.COLOR.BLACK);            
             try {
                 performMove(positions);
             } catch (OnyxGameSyncException | NoValidOnyxPositionsFoundException | InvalidOnyxPositionException ex) {
@@ -224,6 +224,12 @@ public class OnyxGameImpl implements OnyxGame {
         positions.getPosition(m.getPos().getKey()).setPiece(new OnyxPiece(colorToPlay, true));
         
         return m;
+    }
+    
+    @Override
+    public void requestNewMove(final OnyxConst.COLOR color) 
+            throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException, OnyxEndGameException {   
+        appendMove(requestMove(color));
     }
     
     @Override

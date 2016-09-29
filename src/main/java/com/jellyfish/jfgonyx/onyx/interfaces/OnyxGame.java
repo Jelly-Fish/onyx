@@ -46,6 +46,19 @@ public interface OnyxGame {
             throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException, OnyxEndGameException;
     
     /**
+     * Request engine to search for and play new move.
+     * @param color the color to search for which can be a UI side search. 
+     * @throws com.jellyfish.jfgonyx.onyx.exceptions.OnyxEndGameException 
+     * @see OnyxMove
+     * @throws NoValidOnyxPositionsFoundException if search result does not map to
+     * a valid onyx position on the board.
+     * @throws InvalidOnyxPositionException if no such position found.
+     */
+    void requestNewMove(final OnyxConst.COLOR color) 
+            throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException, OnyxEndGameException;
+    
+    
+    /**
      * Append a new move to the game - the move is therefor a valid Onyx move.
      * @param move move to append to game.
      */

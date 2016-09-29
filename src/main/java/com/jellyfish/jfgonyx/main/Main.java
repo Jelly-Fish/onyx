@@ -61,17 +61,21 @@ public class Main {
         }
         //</editor-fold>
         
-        final OnyxConst.COLOR engnColor = OnyxConst.COLOR.WHITE;
+        final OnyxConst.COLOR engnColor = OnyxConst.COLOR.BLACK;
         
         try {    
             OnyxGame og = OnyxGameBuilder.newGame(engnColor);
             og.moveVirtual(String.format(OnyxConst.POS_KEY_FORMAT, 1f, 1f));
             og.playMove();
-            og.appendMove(og.requestMove(engnColor));
+            og.requestNewMove(engnColor);
             og.appendNewVirtual();
             og.moveVirtual(String.format(OnyxConst.POS_KEY_FORMAT, 2f, 1f));
             og.playMove();
-            og.appendMove(og.requestMove(engnColor));
+            og.requestNewMove(engnColor);
+            og.appendNewVirtual();
+            og.moveVirtual(String.format(OnyxConst.POS_KEY_FORMAT, 3f, 1f));
+            og.playMove();
+            og.requestNewMove(engnColor);
             og.appendNewVirtual();
         } catch (final InvalidOnyxPositionException | NoValidOnyxPositionsFoundException | OnyxEndGameException e) {
             Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, e);
