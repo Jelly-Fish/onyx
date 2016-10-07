@@ -30,16 +30,12 @@
 
 package com.jellyfish.jfgonyx.main;
 
+import com.jellyfish.jfgonyx.main.console.OnyxConsoleBuilder;
 import com.jellyfish.jfgonyx.onyx.OnyxGameBuilder;
 import com.jellyfish.jfgonyx.onyx.constants.OnyxConst;
-import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
-import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException;
-import com.jellyfish.jfgonyx.onyx.exceptions.OnyxEndGameException;
-import com.jellyfish.jfgonyx.onyx.interfaces.OnyxGame;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author thw
@@ -49,9 +45,9 @@ public class Main {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {       
-            
-        // <editor-fold defaultstate="collapsed" desc="UI Manager">
+    public static void main(final String[] args) {       
+
+        // <editor-fold defaultstate="collapsed" desc="UI Manager">    
         try {
             // Set System L&F
             UIManager.setLookAndFeel(
@@ -59,30 +55,12 @@ public class Main {
         } catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
             System.err.println("Look & feel setup failed.");
         }
-        //</editor-fold>
+        //</editor-fold>        
         
-        final OnyxConst.COLOR engnColor = OnyxConst.COLOR.BLACK;
-        
-        try {    
-            OnyxGame og = OnyxGameBuilder.newGame(engnColor);
-            og.moveVirtual(String.format(OnyxConst.POS_KEY_FORMAT, 1f, 1f));
-            og.playMove();
-            og.requestNewMove(engnColor);
-            og.appendNewVirtual();
-            og.moveVirtual(String.format(OnyxConst.POS_KEY_FORMAT, 2f, 1f));
-            og.playMove();
-            og.requestNewMove(engnColor);
-            og.appendNewVirtual();
-            og.moveVirtual(String.format(OnyxConst.POS_KEY_FORMAT, 3f, 1f));
-            og.playMove();
-            og.requestNewMove(engnColor);
-            og.appendNewVirtual();
-        } catch (final InvalidOnyxPositionException | NoValidOnyxPositionsFoundException | OnyxEndGameException e) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, e);
-            if (e instanceof OnyxEndGameException) {
-                // Notify.
-            }
-        }
+        if (StringUtils.isBlank(args[0])) throw new IllegalArgumentException();
+        final OnyxConst.COLOR engnColor = OnyxConst.COLOR.WHITE;
+        OnyxConsoleBuilder.build(args[0].equals(OnyxConst.DISPLAY_CONSOLE), OnyxGameBuilder.newGame(engnColor),
+            engnColor);
         
     }
     

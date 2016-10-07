@@ -23,14 +23,14 @@ public interface OnyxGame {
      * @return true if successful.
      * @throws InvalidOnyxPositionException if no such position found.
      */
-    boolean moveVirtual(final String k) throws InvalidOnyxPositionException;
+    String moveVirtual(final String k) throws InvalidOnyxPositionException;
     
     /**
      * Validte virtual piece's position for move.
-     * @return true if successful.
+     * @return Move if successful.
      * @throws InvalidOnyxPositionException if no such position found.
      */
-    boolean playMove() throws InvalidOnyxPositionException;
+    String playMove() throws InvalidOnyxPositionException;
     
     /**
      * Request engine to search for new move.
@@ -48,27 +48,29 @@ public interface OnyxGame {
     /**
      * Request engine to search for and play new move.
      * @param color the color to search for which can be a UI side search. 
+     * @return move.
      * @throws com.jellyfish.jfgonyx.onyx.exceptions.OnyxEndGameException 
      * @see OnyxMove
      * @throws NoValidOnyxPositionsFoundException if search result does not map to
      * a valid onyx position on the board.
      * @throws InvalidOnyxPositionException if no such position found.
      */
-    void requestNewMove(final OnyxConst.COLOR color) 
+    String requestNewMove(final OnyxConst.COLOR color) 
             throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException, OnyxEndGameException;
-    
     
     /**
      * Append a new move to the game - the move is therefor a valid Onyx move.
      * @param move move to append to game.
+     * @return move position in alphanum.
      */
-    void appendMove(final OnyxMove move);
+    String appendMove(final OnyxMove move);
     
     /**
      * Add new virtual for UI management.
+     * @return new virtual position.
      * @throws NoValidOnyxPositionsFoundException if no valid position is available.
      * @throws InvalidOnyxPositionException if no such position found.
      */
-    void appendNewVirtual() throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException;    
+    String appendNewVirtual() throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException;    
     
 }

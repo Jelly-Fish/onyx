@@ -159,21 +159,19 @@ public class OnyxGameImpl implements OnyxGame {
         positions.getPosition(min + separator + max).addPiece(new OnyxPiece(OnyxConst.COLOR.WHITE));
         this.appendMove(new OnyxMove(positions.getPosition(min + separator + max), 
                 positions.getPosition(min + separator + max).getPiece()));
-        
-        System.out.println("END Start layout.");
     }
     // </editor-fold> 
     
     // <editor-fold defaultstate="collapsed" desc="Impl overrides"> 
     @Override
-    public boolean playMove() throws InvalidOnyxPositionException {
+    public String playMove() throws InvalidOnyxPositionException {
         
         List<OnyxPos> posSet = null;
         final OnyxVirtualPiece vp = positions.getVirtualPiece();
         final String k = vp.getTmpOnyxPosition().getKey();
         final OnyxPos tmpPos = positions.getPosition(k);
-        if (diamonds.isDiamondCenter(k) && !isCenterPosPlayable(k)) return false;
-        if (tmpPos.isOccupied()) return false;
+        if (diamonds.isDiamondCenter(k) && !isCenterPosPlayable(k)) return null;
+        if (tmpPos.isOccupied()) return null;
         
         positions.getPosition(k).setPiece(
             new OnyxPiece(vp.color.bool ? OnyxConst.COLOR.BLACK : OnyxConst.COLOR.WHITE)
@@ -191,25 +189,23 @@ public class OnyxGameImpl implements OnyxGame {
             m = new OnyxMove(positions.getPosition(k), positions.getPosition(k).getPiece());
         }
         
-        appendMove(m);
-        
-        return true;
+        return appendMove(m);
     }
     
     @Override
-    public boolean moveVirtual(final String k) throws InvalidOnyxPositionException {
+    public String moveVirtual(final String k) throws InvalidOnyxPositionException {
                       
         final String virtualK = positions.getVirtualPiece().getTmpOnyxPosition().getKey();
-        
+
         if (positions.getPositions().containsKey(k)) {
             positions.getVirtualPiece().setTmpOnyxPosition(positions.getPositions().get(k));
             positions.getPosition(k).setVirtualPiece(positions.getVirtualPiece());
             positions.getPosition(virtualK).setVirtualPiece(null);
             
-            return true;
+            return k;
         }
         
-        return false;
+        return null;
     }
     
     @Override
@@ -227,27 +223,28 @@ public class OnyxGameImpl implements OnyxGame {
     }
     
     @Override
-    public void requestNewMove(final OnyxConst.COLOR color) 
+    public String requestNewMove(final OnyxConst.COLOR color) 
             throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException, OnyxEndGameException {   
-        appendMove(requestMove(color));
+        return appendMove(requestMove(color));
     }
     
     @Override
-    public void appendMove(final OnyxMove move) {
-        System.out.println("Appending move: " + move.toString() + " color: " + 
-            move.getPos().getPiece().color.str);
+    public String appendMove(final OnyxMove move) {
         moves.put(moves.size() + 1, move);
         ++moveCount;
+        return move.toString() + " color: " + move.getPos().getPiece().color.str;
     }
     
     @Override
-    public void appendNewVirtual() throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
+    public String appendNewVirtual() throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
         
-        if (isGameEnd() || Onyx.isLose(positions, colorToPlay)) return;
+        if (isGameEnd() || Onyx.isLose(positions, colorToPlay)) return null;
         final OnyxMove m = Onyx.getNewVirtual(positions, this, colorToPlay);
         positions.getPosition(m.getPos().getKey()).setVirtualPiece(
             new OnyxVirtualPiece(OnyxConst.COLOR.getVirtualOposite(colorToPlay.bool))
         );
+        
+        return m.toString();
     }
     // </editor-fold> 
     
