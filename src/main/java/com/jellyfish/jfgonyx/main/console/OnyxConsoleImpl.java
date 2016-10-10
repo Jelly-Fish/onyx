@@ -36,18 +36,20 @@ import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException;
 import com.jellyfish.jfgonyx.onyx.exceptions.OnyxEndGameException;
 import com.jellyfish.jfgonyx.onyx.interfaces.OnyxGame;
+import com.jellyfish.jfgonyx.onyx.interfaces.OnyxObserver;
 import java.awt.event.KeyEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Utilities;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  *
  * @author thw
  */
-public class OnyxConsoleImpl extends javax.swing.JFrame implements OnyxConsole {
+public class OnyxConsoleImpl extends javax.swing.JFrame implements OnyxConsole, OnyxObserver {
    
     private javax.swing.JScrollPane scrollPane;
     private javax.swing.JTextArea textArea;
@@ -69,10 +71,13 @@ public class OnyxConsoleImpl extends javax.swing.JFrame implements OnyxConsole {
     }
     
     private void init() {
+        
         this.setTitle("Onyx console");
         final ImageIcon icn = new ImageIcon(getClass().getClassLoader().getResource("icons/icn.png"));
         this.setIconImage(icn.getImage());
         this.setLocation(0, 0);
+        this.og.setObserver(this);
+        this.og.notifyStartLayout(this);
     }
     
     private void OnyxConsoleClosing(java.awt.event.WindowEvent evt) {                                    
@@ -82,6 +87,11 @@ public class OnyxConsoleImpl extends javax.swing.JFrame implements OnyxConsole {
          */
         
         System.exit(0);
+    }
+    
+    @Override
+    public void notifyMove(final String m) {
+        textArea.append(String.format("%s>> onyx move: %s", OnyxConsole.BACKSLH_N, m));
     }
     
     private void textAreaKeyPressed(java.awt.event.KeyEvent evt) {                                    
@@ -96,15 +106,14 @@ public class OnyxConsoleImpl extends javax.swing.JFrame implements OnyxConsole {
                     end--;
                     start = Utilities.getRowStart(textArea, end);
                 }
-                
-                /**
-                 * FIXME : input must be N,N-N,N : example : "3,0-3,0",
-                 * Check input, if false, discard.
-                 */
-                final String input = textArea.getText(start, end - start); 
-                                
-                textArea.append(String.format("%smoving virtual: %s", OnyxConsole.BACKSLH_N,
-                    OnyxConst.POS_MAP.get(og.moveVirtual(input.toUpperCase()))));
+
+                final String input = textArea.getText(start, end - start).toUpperCase();
+                final String pos = OnyxConst.POS_MAP.get(input); 
+                if (StringUtils.isBlank(input) || StringUtils.isBlank(pos))
+                    throw new InvalidOnyxPositionException(InvalidOnyxPositionException.MSG);
+               
+                final String move = og.moveVirtual(input);
+                textArea.append(String.format("%smoving virtual: %s", OnyxConsole.BACKSLH_N, move));
                 textArea.append(String.format("%s%s", OnyxConsole.BACKSLH_N, og.playMove()));
                 textArea.append(String.format("%sengine response: %s", 
                     OnyxConsole.BACKSLH_N, og.requestNewMove(engnColor)));
@@ -112,8 +121,8 @@ public class OnyxConsoleImpl extends javax.swing.JFrame implements OnyxConsole {
                     OnyxConsole.BACKSLH_N, og.appendNewVirtual()));
                     
             } catch (final BadLocationException | InvalidOnyxPositionException | 
-                    NoValidOnyxPositionsFoundException | OnyxEndGameException e) {
-                Logger.getLogger(OnyxConsoleImpl.class.getName()).log(Level.SEVERE, null, e);
+                    NoValidOnyxPositionsFoundException | OnyxEndGameException e) {              
+                textArea.append(String.format("%s%s", OnyxConsole.BACKSLH_N, e.getMessage()));
             }
         }
         

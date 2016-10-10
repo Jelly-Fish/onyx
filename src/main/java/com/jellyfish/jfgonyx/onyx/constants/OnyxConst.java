@@ -31,6 +31,7 @@
  */
 package com.jellyfish.jfgonyx.onyx.constants;
 
+import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import com.jellyfish.jfgonyx.onyx.vars.GraphicsVars;
 import java.awt.Color;
 import org.apache.commons.lang3.StringUtils;
@@ -50,13 +51,12 @@ public class OnyxConst {
     private static final String COMMA = ",";
     private static final String POSITIVE_DECIMAL = "5";
     
-    
     public static final class POS_MAP {
         
         private static String strX, strY;
         private static float fX, fY;
         
-        public static String get(final String key) {
+        public static String get(final String key) throws InvalidOnyxPositionException {
             
             String pos = StringUtils.EMPTY;
             
@@ -80,8 +80,10 @@ public class OnyxConst {
                         ((GraphicsVars.getInstance().BOARD_SIDE_SQUARE_COUNT + 1f) + 1f))));
                 }    
             } catch (final Exception ex) {
-                pos = ">> [!] POS_MAP convertion failed for " + key + "\n>> " + ex.getMessage();
+                pos = null;
             }
+            
+            if (StringUtils.isBlank(pos)) throw new InvalidOnyxPositionException(InvalidOnyxPositionException.MSG);
             
             return pos;
         }

@@ -40,7 +40,8 @@ import com.jellyfish.jfgonyx.onyx.interfaces.OnyxGame;
  */
 public class OnyxConsoleBuilder {
     
-    public static final OnyxConsole build(final boolean display, final OnyxGame og, final OnyxConst.COLOR engnColor) {
+    public static final OnyxConsole build(final boolean display, 
+        final OnyxGame og, final OnyxConst.COLOR engnColor) {
         return new OnyxConsoleImpl(display, og, engnColor);
     }
     

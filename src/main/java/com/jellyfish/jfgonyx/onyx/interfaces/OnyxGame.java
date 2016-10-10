@@ -72,5 +72,16 @@ public interface OnyxGame {
      * @throws InvalidOnyxPositionException if no such position found.
      */
     String appendNewVirtual() throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException;    
+
+    /**
+     * Observer.
+     * @param observer. 
+     */
+    void setObserver(final OnyxObserver observer);
+    
+    /**
+     * Notify start layout to observer.
+     */
+    void notifyStartLayout(final OnyxObserver observer);
     
 }

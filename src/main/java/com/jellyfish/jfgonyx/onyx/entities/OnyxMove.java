@@ -32,8 +32,11 @@
 package com.jellyfish.jfgonyx.onyx.entities;
 
 import com.jellyfish.jfgonyx.onyx.constants.OnyxConst;
+import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import java.util.List;
 import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -105,14 +108,20 @@ public class OnyxMove {
     @Override
     public String toString() {
         
-        StringBuilder sb = new StringBuilder();
-        sb.append(OnyxConst.POS_MAP.get(pos.getKey()));
-        if (isCapture()) {
-            sb.append(captured.size() == 2 ? TAKE : captured.size() == 4 ? 
-                    TAKE + TAKE : StringUtils.EMPTY);
+        try {
+            StringBuilder sb = new StringBuilder();
+            sb.append(OnyxConst.POS_MAP.get(pos.getKey()));
+            if (isCapture()) {
+                sb.append(captured.size() == 2 ? TAKE : captured.size() == 4 ?
+                        TAKE + TAKE : StringUtils.EMPTY);
+            }
+            
+            return sb.toString();
+            
+        } catch (final InvalidOnyxPositionException iOPEx) {
+            Logger.getLogger(OnyxMove.class.getName()).log(Level.SEVERE, null, iOPEx);
+            return null;
         }
-        
-        return sb.toString();
     }
             
     @Override

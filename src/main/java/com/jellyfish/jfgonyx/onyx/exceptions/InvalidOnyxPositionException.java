@@ -41,6 +41,7 @@ public class InvalidOnyxPositionException extends OnyxException {
     public static final String MSG_FLOAT_ARGS = "Onyx position %f-%f is invalid.";
     public static final String INVALID_CENTER_POS = "Onyx diamond %s does not include a center position.";
     public static final String DEFAULT_MSG = "Position throws InvalidOnyxPositionException for color %s."; 
+    public static final String MSG = "invalid onyx position - format must be <n,nf-n,nf>"; 
     
     public InvalidOnyxPositionException() { }
 

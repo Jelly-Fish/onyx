@@ -43,12 +43,14 @@ import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException;
 import com.jellyfish.jfgonyx.onyx.exceptions.OnyxEndGameException;
 import com.jellyfish.jfgonyx.onyx.exceptions.OnyxGameSyncException;
 import com.jellyfish.jfgonyx.onyx.interfaces.OnyxGame;
+import com.jellyfish.jfgonyx.onyx.interfaces.OnyxObserver;
 import com.jellyfish.jfgonyx.onyx.vars.GraphicsVars;
 import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Onyx game interface implementation.
@@ -65,6 +67,7 @@ public class OnyxGameImpl implements OnyxGame {
     private OnyxConst.COLOR colorToPlay = null;
     private boolean requestInitialized = false;
     private int moveCount = 0;
+    private OnyxObserver observer = null;
     // </editor-fold> 
 
     // <editor-fold defaultstate="collapsed" desc="Construct methods"> 
@@ -205,7 +208,7 @@ public class OnyxGameImpl implements OnyxGame {
             return k;
         }
         
-        return null;
+        throw new InvalidOnyxPositionException(InvalidOnyxPositionException.MSG);
     }
     
     @Override
@@ -232,6 +235,7 @@ public class OnyxGameImpl implements OnyxGame {
     public String appendMove(final OnyxMove move) {
         moves.put(moves.size() + 1, move);
         ++moveCount;
+        if (observer != null) observer.notifyMove(move.toString());
         return move.toString() + " color: " + move.getPos().getPiece().color.str;
     }
     
@@ -245,6 +249,12 @@ public class OnyxGameImpl implements OnyxGame {
         );
         
         return m.toString();
+    }
+    
+    @Override
+    public void notifyStartLayout(final OnyxObserver observer) {     
+        if (observer == null) return;
+        for (OnyxMove m : moves.values()) observer.notifyMove(m.toString());
     }
     // </editor-fold> 
     
@@ -358,6 +368,11 @@ public class OnyxGameImpl implements OnyxGame {
     
     public int getMoveCount() {
         return moveCount;
+    }
+
+    @Override
+    public void setObserver(final OnyxObserver observer) {
+        this.observer = observer;
     }
     // </editor-fold> 
     

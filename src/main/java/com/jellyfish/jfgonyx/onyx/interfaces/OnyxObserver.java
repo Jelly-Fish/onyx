@@ -40,9 +40,9 @@ public interface OnyxObserver {
     
     /**
      * Notify move to process by observer.
-     * @param m the move display.
-     * @param color text color @see HTMLDisplayHelper
+     * @param m the move display via toString().
+     * @see OnyxMove
      */
-    void notifyMove(final OnyxMove m, final String color);
+    void notifyMove(final String m);
     
 }

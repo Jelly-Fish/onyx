@@ -33,6 +33,7 @@ package com.jellyfish.jfgonyx.main;
 import com.jellyfish.jfgonyx.main.console.OnyxConsoleBuilder;
 import com.jellyfish.jfgonyx.onyx.OnyxGameBuilder;
 import com.jellyfish.jfgonyx.onyx.constants.OnyxConst;
+import com.jellyfish.jfgonyx.onyx.interfaces.OnyxGame;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import org.apache.commons.lang3.StringUtils;
@@ -59,7 +60,8 @@ public class Main {
         
         if (StringUtils.isBlank(args[0])) throw new IllegalArgumentException();
         final OnyxConst.COLOR engnColor = OnyxConst.COLOR.WHITE;
-        OnyxConsoleBuilder.build(args[0].equals(OnyxConst.DISPLAY_CONSOLE), OnyxGameBuilder.newGame(engnColor),
+        final OnyxGame game = OnyxGameBuilder.newGame(engnColor);
+        OnyxConsoleBuilder.build(args[0].equals(OnyxConst.DISPLAY_CONSOLE), game,
             engnColor);
         
     }

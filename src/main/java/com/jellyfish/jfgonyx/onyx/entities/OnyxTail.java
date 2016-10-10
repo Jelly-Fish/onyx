@@ -32,7 +32,10 @@
 package com.jellyfish.jfgonyx.onyx.entities;
 
 import com.jellyfish.jfgonyx.onyx.constants.OnyxConst;
+import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import java.util.LinkedList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -105,10 +108,16 @@ public class OnyxTail {
     
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder(
-            String.format("tail start @%s to end: ", OnyxConst.POS_MAP.get(this.tailStartPos.getKey())));     
-        for (OnyxPos p : positions) sb.append(OnyxConst.POS_MAP.get(p.getKey())).append(StringUtils.SPACE);
-        return sb.toString().substring(0, sb.length() - 1);
+        
+        try {
+            final StringBuilder sb = new StringBuilder(
+                    String.format("tail start @%s to end: ", OnyxConst.POS_MAP.get(this.tailStartPos.getKey())));
+            for (OnyxPos p : positions) sb.append(OnyxConst.POS_MAP.get(p.getKey())).append(StringUtils.SPACE);
+            return sb.toString().substring(0, sb.length() - 1);
+        } catch (final InvalidOnyxPositionException iOPEx) {
+            Logger.getLogger(OnyxTail.class.getName()).log(Level.SEVERE, null, iOPEx);
+            return null;
+        }
     }
     
 }

@@ -35,9 +35,12 @@ import com.jellyfish.jfgonyx.onyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
 import static com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection.KEY_FORMAT;
+import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import com.jellyfish.jfgonyx.onyx.vars.GraphicsVars;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -150,11 +153,16 @@ public class OnyxConnectionHelper {
     public static final void systemPrint(final OnyxPosCollection c) {
         
         for (OnyxPos p : c.getPositions().values()) {
-            final String k = p.getKey();
-            final int count = p.connections.length;
-            System.out.println(String.format(PRINT_FORMAT_HEAD, OnyxConst.POS_MAP.get(p.getKey()), count));
-            for (int i = 0; i < count; ++i) {
-                System.out.println(String.format(PRINT_FORMAT_CNX, i, OnyxConst.POS_MAP.get(p.connections[i])));
+            
+            try {
+                final String k = p.getKey();
+                final int count = p.connections.length;
+                System.out.println(String.format(PRINT_FORMAT_HEAD, OnyxConst.POS_MAP.get(p.getKey()), count));
+                for (int i = 0; i < count; ++i) {
+                    System.out.println(String.format(PRINT_FORMAT_CNX, i, OnyxConst.POS_MAP.get(p.connections[i])));
+                }
+            } catch (final InvalidOnyxPositionException iOPEx) {
+                Logger.getLogger(OnyxConnectionHelper.class.getName()).log(Level.SEVERE, null, iOPEx);
             }
         }
     }
