@@ -44,7 +44,7 @@ import com.jellyfish.jfgonyx.onyx.exceptions.OnyxEndGameException;
 import com.jellyfish.jfgonyx.onyx.exceptions.OnyxGameSyncException;
 import com.jellyfish.jfgonyx.onyx.interfaces.OnyxGame;
 import com.jellyfish.jfgonyx.onyx.interfaces.OnyxObserver;
-import com.jellyfish.jfgonyx.onyx.vars.GraphicsVars;
+import com.jellyfish.jfgonyx.onyx.vars.OnyxCommonVars;
 import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.List;
@@ -127,9 +127,9 @@ public class OnyxGameImpl implements OnyxGame {
         
         for (OnyxPos p : positions.getPositions().values()) p.setPiece(null);
 
-        final String min = df.format(GraphicsVars.getInstance().BOARD_SIDE_POS_COUNT / 2f);
-        final String max = df.format(GraphicsVars.getInstance().BOARD_SIDE_POS_COUNT);
-        final String minPlus = df.format((GraphicsVars.getInstance().BOARD_SIDE_POS_COUNT / 2f) + 1f);
+        final String min = df.format(OnyxCommonVars.getInstance().BOARD_SIDE_POS_COUNT / 2f);
+        final String max = df.format(OnyxCommonVars.getInstance().BOARD_SIDE_POS_COUNT);
+        final String minPlus = df.format((OnyxCommonVars.getInstance().BOARD_SIDE_POS_COUNT / 2f) + 1f);
         
         positions.getPosition(one + separator + min).addPiece(new OnyxPiece(OnyxConst.COLOR.BLACK));      
         this.appendMove(new OnyxMove(positions.getPosition(one + separator + min), 

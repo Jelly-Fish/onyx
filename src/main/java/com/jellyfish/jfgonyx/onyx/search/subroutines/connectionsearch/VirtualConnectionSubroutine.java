@@ -37,7 +37,7 @@ import com.jellyfish.jfgonyx.onyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxTail;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
-import com.jellyfish.jfgonyx.onyx.vars.GraphicsVars;
+import com.jellyfish.jfgonyx.onyx.vars.OnyxCommonVars;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -54,7 +54,7 @@ public class VirtualConnectionSubroutine extends AbstractSubroutine {
     protected final OnyxGameImpl game;
     protected final OnyxConst.COLOR color;
     protected final int opColorBit;
-    protected final float max = GraphicsVars.getInstance().BOARD_SIDE_SQUARE_COUNT + 1f;
+    protected final float max = OnyxCommonVars.getInstance().BOARD_SIDE_SQUARE_COUNT + 1f;
     private final Set<String> checkedKeys = new HashSet();
     private boolean startLowBorder = false;
     private boolean linked = false;
@@ -194,7 +194,7 @@ public class VirtualConnectionSubroutine extends AbstractSubroutine {
         
         OnyxTail tmp = null;
         for (OnyxTail t : tails) {
-            if (t.lenght() < GraphicsVars.getInstance().BOARD_SIDE_SQUARE_COUNT) continue;
+            if (t.lenght() < OnyxCommonVars.getInstance().BOARD_SIDE_SQUARE_COUNT) continue;
             if (tmp == null || t.lenght() < tmp.lenght()) tmp = t;
         }
         

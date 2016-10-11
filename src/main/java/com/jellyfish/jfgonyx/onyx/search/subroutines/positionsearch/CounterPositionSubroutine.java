@@ -44,7 +44,7 @@ import com.jellyfish.jfgonyx.onyx.abstractions.AbstractSubroutine;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxDiamond;
 import com.jellyfish.jfgonyx.onyx.search.subroutines.connectionsearch.SubTailConnectionSubroutine;
 import com.jellyfish.jfgonyx.onyx.search.subroutines.connectionsearch.TailConnectionSubroutine;
-import com.jellyfish.jfgonyx.onyx.vars.GraphicsVars;
+import com.jellyfish.jfgonyx.onyx.vars.OnyxCommonVars;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
@@ -85,8 +85,8 @@ public class CounterPositionSubroutine extends AbstractSubroutine {
         for (OnyxPos p : pos) cnx.addAll(new TailConnectionSubroutine(opColor, game).getTailMoves(p, true));
         for (OnyxPos p : pos) {
             cnx.addAll(new SubTailConnectionSubroutine(opColor, game, 1f, 1f, 
-            GraphicsVars.getInstance().BOARD_SIDE_POS_COUNT - 1f, 
-            GraphicsVars.getInstance().BOARD_SIDE_POS_COUNT - 1f).getTailMoves(p, true));
+            OnyxCommonVars.getInstance().BOARD_SIDE_POS_COUNT - 1f, 
+            OnyxCommonVars.getInstance().BOARD_SIDE_POS_COUNT - 1f).getTailMoves(p, true));
         }
         
         tmp = trim(cnx, game, opColor, .01f);

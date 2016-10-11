@@ -35,7 +35,7 @@ import com.jellyfish.jfgonyx.onyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
 import com.jellyfish.jfgonyx.onyx.abstractions.AbstractSubroutine;
-import com.jellyfish.jfgonyx.onyx.vars.GraphicsVars;
+import com.jellyfish.jfgonyx.onyx.vars.OnyxCommonVars;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -48,7 +48,7 @@ public class WinConnectionSubroutine extends AbstractSubroutine {
     protected final OnyxPosCollection c;
     protected final OnyxConst.COLOR color;
     protected final boolean display;
-    protected final float max = GraphicsVars.getInstance().BOARD_SIDE_SQUARE_COUNT + 1f;
+    protected final float max = OnyxCommonVars.getInstance().BOARD_SIDE_SQUARE_COUNT + 1f;
     protected final Set<String> checked = new HashSet<>();
     protected boolean win = false;
     protected int iteration = -1;

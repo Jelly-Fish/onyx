@@ -33,7 +33,7 @@ package com.jellyfish.jfgonyx.onyx.entities;
 
 import com.jellyfish.jfgonyx.game.entities.OnyxPosRectangle;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
-import com.jellyfish.jfgonyx.onyx.vars.GraphicsVars;
+import com.jellyfish.jfgonyx.onyx.vars.OnyxCommonVars;
 import com.jellyfish.jfgonyx.onyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import com.jellyfish.jfgonyx.onyx.search.subroutines.positionsearch.OnyxPosStateSubroutine;
@@ -61,8 +61,8 @@ public class OnyxPos {
     public OnyxPos(final float x, final float y, final OnyxDiamond d) {
         this.x = x;
         this.y = y;
-        this.gX = ((int) x) * GraphicsVars.getInstance().SQUARE_WIDTH;
-        this.gY = ((int) y) * GraphicsVars.getInstance().SQUARE_WIDTH;
+        this.gX = ((int) x) * OnyxCommonVars.getInstance().SQUARE_WIDTH;
+        this.gY = ((int) y) * OnyxCommonVars.getInstance().SQUARE_WIDTH;
         this.diamond = d;
         this.init();
         this.rectangle = this.initRectangle(this.x, this.y);
@@ -99,7 +99,7 @@ public class OnyxPos {
     }
 
     public boolean isHighXBorder() {
-        return x > ((float) (GraphicsVars.getInstance().BOARD_SIDE_SQUARE_COUNT + 1)) -.1f;
+        return x > ((float) (OnyxCommonVars.getInstance().BOARD_SIDE_SQUARE_COUNT + 1)) -.1f;
     }
     
     public boolean isLowYBorder() {
@@ -107,7 +107,7 @@ public class OnyxPos {
     }
     
     public boolean isHighYBorder() {
-        return y > ((float) (GraphicsVars.getInstance().BOARD_SIDE_SQUARE_COUNT + 1)) - .1f;
+        return y > ((float) (OnyxCommonVars.getInstance().BOARD_SIDE_SQUARE_COUNT + 1)) - .1f;
     }
 
     public boolean hasNeighbour(final OnyxPosCollection c, final OnyxConst.COLOR color) {
@@ -220,8 +220,8 @@ public class OnyxPos {
         }
         
         return  new OnyxPosRectangle(
-            (pX * GraphicsVars.getInstance().SQUARE_WIDTH) - SELECT_CERCLE_RADIUS, 
-            (pY * GraphicsVars.getInstance().SQUARE_WIDTH) - SELECT_CERCLE_RADIUS, 
+            (pX * OnyxCommonVars.getInstance().SQUARE_WIDTH) - SELECT_CERCLE_RADIUS, 
+            (pY * OnyxCommonVars.getInstance().SQUARE_WIDTH) - SELECT_CERCLE_RADIUS, 
                 SELECT_CERCLE_RADIUS * 2f, SELECT_CERCLE_RADIUS * 2f
         );
     }

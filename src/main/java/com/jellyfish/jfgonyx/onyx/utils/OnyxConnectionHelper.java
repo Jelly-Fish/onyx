@@ -36,7 +36,7 @@ import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
 import static com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection.KEY_FORMAT;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
-import com.jellyfish.jfgonyx.onyx.vars.GraphicsVars;
+import com.jellyfish.jfgonyx.onyx.vars.OnyxCommonVars;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -63,8 +63,8 @@ public class OnyxConnectionHelper {
         String kF = StringUtils.EMPTY;
         OnyxPos[] pos = null;
         
-        for (int x = 2; x <= (GraphicsVars.getInstance().BOARD_SIDE_SQUARE_COUNT * 2) + 2; ++x) {
-            for (int y = 2; y <= (GraphicsVars.getInstance().BOARD_SIDE_SQUARE_COUNT * 2) + 2; ++y) {
+        for (int x = 2; x <= (OnyxCommonVars.getInstance().BOARD_SIDE_SQUARE_COUNT * 2) + 2; ++x) {
+            for (int y = 2; y <= (OnyxCommonVars.getInstance().BOARD_SIDE_SQUARE_COUNT * 2) + 2; ++y) {
                 
                 fX = x / 2f;
                 fY = y / 2f;

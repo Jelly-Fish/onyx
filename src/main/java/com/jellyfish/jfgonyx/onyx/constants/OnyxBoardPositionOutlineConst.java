@@ -31,7 +31,7 @@
  */
 package com.jellyfish.jfgonyx.onyx.constants;
 
-import com.jellyfish.jfgonyx.onyx.vars.GraphicsVars;
+import com.jellyfish.jfgonyx.onyx.vars.OnyxCommonVars;
 import java.awt.Font;
 import java.awt.Polygon;
 
@@ -47,7 +47,7 @@ public class OnyxBoardPositionOutlineConst {
     
     public final static Font POS_FONT = new Font("arial", Font.BOLD, 14);
     
-    public final static String[] CHAR_VALUES = new String[] { 
+    public final static String[] ALPHA_BOARD_SIDE_VALUES = new String[] { 
         "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N",
         "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"
     };
@@ -56,33 +56,44 @@ public class OnyxBoardPositionOutlineConst {
         
         OnyxBoardPositionOutlineConst.OUTLINE_POLYGONS[0] =
         new Polygon(
-            new int[] { 0, GraphicsVars.getInstance().BOARD_WIDTH, 
-                GraphicsVars.getInstance().BOARD_WIDTH - 24, 24 },
+            new int[] { 0, OnyxCommonVars.getInstance().BOARD_WIDTH, 
+                OnyxCommonVars.getInstance().BOARD_WIDTH - 24, 24 },
             new int[] { 0, 0, 24, 24 }, 4
         );
         OnyxBoardPositionOutlineConst.OUTLINE_POLYGONS[1] =
         new Polygon(
-            new int[] { GraphicsVars.getInstance().BOARD_WIDTH - 24, 
-                GraphicsVars.getInstance().BOARD_WIDTH, GraphicsVars.getInstance().BOARD_WIDTH,
-                GraphicsVars.getInstance().BOARD_WIDTH - 24 },
-            new int[] { 24, 0, GraphicsVars.getInstance().BOARD_WIDTH,
-                GraphicsVars.getInstance().BOARD_WIDTH - 24 }, 4
+            new int[] { OnyxCommonVars.getInstance().BOARD_WIDTH - 24, 
+                OnyxCommonVars.getInstance().BOARD_WIDTH, OnyxCommonVars.getInstance().BOARD_WIDTH,
+                OnyxCommonVars.getInstance().BOARD_WIDTH - 24 },
+            new int[] { 24, 0, OnyxCommonVars.getInstance().BOARD_WIDTH,
+                OnyxCommonVars.getInstance().BOARD_WIDTH - 24 }, 4
         );
         OnyxBoardPositionOutlineConst.OUTLINE_POLYGONS[2] =
         new Polygon(
-            new int[] { 24, GraphicsVars.getInstance().BOARD_WIDTH - 24, 
-                GraphicsVars.getInstance().BOARD_WIDTH, 0 },
-            new int[] { GraphicsVars.getInstance().BOARD_WIDTH - 24, 
-                GraphicsVars.getInstance().BOARD_WIDTH - 24, GraphicsVars.getInstance().BOARD_WIDTH,
-                GraphicsVars.getInstance().BOARD_WIDTH }, 4
+            new int[] { 24, OnyxCommonVars.getInstance().BOARD_WIDTH - 24, 
+                OnyxCommonVars.getInstance().BOARD_WIDTH, 0 },
+            new int[] { OnyxCommonVars.getInstance().BOARD_WIDTH - 24, 
+                OnyxCommonVars.getInstance().BOARD_WIDTH - 24, OnyxCommonVars.getInstance().BOARD_WIDTH,
+                OnyxCommonVars.getInstance().BOARD_WIDTH }, 4
         );
         OnyxBoardPositionOutlineConst.OUTLINE_POLYGONS[3] =
         new Polygon(
             new int[] { 0, 24, 24, 0 },
-            new int[] { 0, 24, GraphicsVars.getInstance().BOARD_WIDTH - 24,
-                GraphicsVars.getInstance().BOARD_WIDTH }, 4
+            new int[] { 0, 24, OnyxCommonVars.getInstance().BOARD_WIDTH - 24,
+                OnyxCommonVars.getInstance().BOARD_WIDTH }, 4
         );
         
+    }
+    
+    public static int getAlphaIndex(final String a) {
+        
+        for (int i = 0; i < OnyxBoardPositionOutlineConst.ALPHA_BOARD_SIDE_VALUES.length; ++i) {
+            if (OnyxBoardPositionOutlineConst.ALPHA_BOARD_SIDE_VALUES[i].equals(a)) {
+                return i;
+            }
+        }
+        
+        return -1;
     }
 
 }

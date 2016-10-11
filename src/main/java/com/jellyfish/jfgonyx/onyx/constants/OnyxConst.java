@@ -32,9 +32,12 @@
 package com.jellyfish.jfgonyx.onyx.constants;
 
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
-import com.jellyfish.jfgonyx.onyx.vars.GraphicsVars;
+import com.jellyfish.jfgonyx.onyx.vars.OnyxCommonVars;
 import java.awt.Color;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 
 /**
  * @author thw
@@ -57,7 +60,7 @@ public class OnyxConst {
         private static float fX, fY;
         
         public static String get(final String key) throws InvalidOnyxPositionException {
-            
+
             String pos = StringUtils.EMPTY;
             
             try {
@@ -68,24 +71,45 @@ public class OnyxConst {
                 fY = Float.valueOf(strY);
 
                 if (strX.substring(strX.indexOf(DOT) + 1, strX.length()).equals(POSITIVE_DECIMAL)) {
-                    pos += OnyxBoardPositionOutlineConst.CHAR_VALUES[(int) ((fX - .5f) - 1f)] + SPLIT;
-                    pos += OnyxBoardPositionOutlineConst.CHAR_VALUES[(int) ((fX + .5f) - 1f)] + SPLIT;
+                    pos += OnyxBoardPositionOutlineConst.ALPHA_BOARD_SIDE_VALUES[(int) ((fX - .5f) - 1f)] + SPLIT;
+                    pos += OnyxBoardPositionOutlineConst.ALPHA_BOARD_SIDE_VALUES[(int) ((fX + .5f) - 1f)] + SPLIT;
                     pos += String.valueOf(Math.abs((int) ((fY - .5f) - 
-                            (GraphicsVars.getInstance().BOARD_SIDE_SQUARE_COUNT + 1f))) + 1) + SPLIT;
+                            (OnyxCommonVars.getInstance().BOARD_SIDE_SQUARE_COUNT + 1f))) + 1) + SPLIT;
                     pos += String.valueOf(Math.abs((int) ((fY + .5f) - 
-                            (GraphicsVars.getInstance().BOARD_SIDE_SQUARE_COUNT + 1f))) + 1);                    
+                            (OnyxCommonVars.getInstance().BOARD_SIDE_SQUARE_COUNT + 1f))) + 1);                    
                 } else {
-                    pos += OnyxBoardPositionOutlineConst.CHAR_VALUES[(int) (fX - 1f)] + SPLIT;
+                    pos += OnyxBoardPositionOutlineConst.ALPHA_BOARD_SIDE_VALUES[(int) (fX - 1f)] + SPLIT;
                     pos += String.valueOf(Math.abs((int) (fY - 
-                        ((GraphicsVars.getInstance().BOARD_SIDE_SQUARE_COUNT + 1f) + 1f))));
-                }    
-            } catch (final Exception ex) {
+                        ((OnyxCommonVars.getInstance().BOARD_SIDE_SQUARE_COUNT + 1f) + 1f))));
+                }   
+                
+            } catch (final ArrayIndexOutOfBoundsException | NullPointerException | NumberFormatException e) {
+                Logger.getLogger(OnyxConst.class.getName()).log(Level.SEVERE, null, e);
                 pos = null;
             }
             
             if (StringUtils.isBlank(pos)) throw new InvalidOnyxPositionException(InvalidOnyxPositionException.MSG);
             
             return pos;
+        }
+        
+        private static boolean isPreformatted(final String ... values) {
+            
+            int alphaIndex = -1;
+            int count = 0;
+            
+            for (int i = 0; i < values.length; ++i) {
+                alphaIndex = OnyxBoardPositionOutlineConst.getAlphaIndex(values[i]);
+                if (i % 2 == 0 && !NumberUtils.isNumber(values[i]) && alphaIndex >= 0 &&
+                    alphaIndex <= OnyxCommonVars.getInstance().BOARD_SIDE_SQUARE_COUNT) {
+                    ++count;
+                } else if (NumberUtils.isNumber(values[i]) && Integer.valueOf(values[i]) > 0 &&
+                    Integer.valueOf(values[i]) <= OnyxCommonVars.getInstance().BOARD_SIDE_SQUARE_COUNT + 1) {
+                    ++count;
+                }
+            }
+            
+            return count == values.length;
         }
         
     }

@@ -36,9 +36,9 @@ import java.awt.Color;
 /**
  * @author thw
  */
-public class GraphicsVars implements java.io.Serializable {
+public class OnyxCommonVars implements java.io.Serializable {
     
-    private static GraphicsVars instance;
+    private static OnyxCommonVars instance;
     private static final int DEFAULT_BOARD_WIDTH = 670;
     
     public int EXTRA_SQUARES = 2;
@@ -62,17 +62,17 @@ public class GraphicsVars implements java.io.Serializable {
     public int TRANSLATION = 16;
     public int CENTER_TRANSLATION = 32;
     
-    private GraphicsVars() { 
+    private OnyxCommonVars() { 
         BOARD_WIDTH += EXTRA_SQUARES * SQUARE_WIDTH;
         BOARD_SIDE_POS_COUNT = ((float) BOARD_SIDE_SQUARE_COUNT) + 1f;
     }
 
-    public static GraphicsVars getInstance() {       
-        if (instance == null) instance = new GraphicsVars();
+    public static OnyxCommonVars getInstance() {       
+        if (instance == null) instance = new OnyxCommonVars();
         return instance;
     }
     
-    public static void setInstance(final GraphicsVars gv) {
+    public static void setInstance(final OnyxCommonVars gv) {
         instance = gv;
         instance.resetInstance();
     }

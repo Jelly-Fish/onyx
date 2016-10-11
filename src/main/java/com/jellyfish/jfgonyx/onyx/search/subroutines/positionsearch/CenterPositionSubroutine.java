@@ -40,7 +40,7 @@ import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import com.jellyfish.jfgonyx.onyx.search.searchutils.OnyxMoveUtils;
 import com.jellyfish.jfgonyx.onyx.abstractions.AbstractSubroutine;
 import com.jellyfish.jfgonyx.onyx.utils.RandomUtils;
-import com.jellyfish.jfgonyx.onyx.vars.GraphicsVars;
+import com.jellyfish.jfgonyx.onyx.vars.OnyxCommonVars;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -66,7 +66,7 @@ public class CenterPositionSubroutine extends AbstractSubroutine {
         float side = 3f;
         int counter = 0;
         final float minS = 1.5f -.01f;
-        float s = ((GraphicsVars.getInstance().BOARD_SIDE_SQUARE_COUNT + 1) / 2) - .5f;
+        float s = ((OnyxCommonVars.getInstance().BOARD_SIDE_SQUARE_COUNT + 1) / 2) - .5f;
         final List<OnyxPos> pos = new ArrayList<>();
         OnyxPos tmp = null;
         
