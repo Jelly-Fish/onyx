@@ -155,7 +155,6 @@ public class OnyxConnectionHelper {
         for (OnyxPos p : c.getPositions().values()) {
             
             try {
-                final String k = p.getKey();
                 final int count = p.connections.length;
                 System.out.println(String.format(PRINT_FORMAT_HEAD, OnyxConst.POS_MAP.get(p.getKey()), count));
                 for (int i = 0; i < count; ++i) {

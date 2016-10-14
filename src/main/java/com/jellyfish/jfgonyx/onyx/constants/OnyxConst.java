@@ -37,7 +37,6 @@ import java.awt.Color;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.math.NumberUtils;
 
 /**
  * @author thw
@@ -45,11 +44,10 @@ import org.apache.commons.lang3.math.NumberUtils;
 public class OnyxConst {
     
     public static final String DISPLAY_CONSOLE = "dispcons";
-    public static final String POS_KEY_FORMAT = "%.1f-%.1f";
     public static Color WHITE_PIECE = Color.WHITE;
     public static Color BLACK_PIECE = Color.BLACK;
     public static final String KEY_SEPARATOR = "/";
-    private static final String SPLIT = "-";
+    public static final String SPLIT = "-";
     private static final String DOT = ".";
     private static final String COMMA = ",";
     private static final String POSITIVE_DECIMAL = "5";
@@ -91,25 +89,6 @@ public class OnyxConst {
             if (StringUtils.isBlank(pos)) throw new InvalidOnyxPositionException(InvalidOnyxPositionException.MSG);
             
             return pos;
-        }
-        
-        private static boolean isPreformatted(final String ... values) {
-            
-            int alphaIndex = -1;
-            int count = 0;
-            
-            for (int i = 0; i < values.length; ++i) {
-                alphaIndex = OnyxBoardPositionOutlineConst.getAlphaIndex(values[i]);
-                if (i % 2 == 0 && !NumberUtils.isNumber(values[i]) && alphaIndex >= 0 &&
-                    alphaIndex <= OnyxCommonVars.getInstance().BOARD_SIDE_SQUARE_COUNT) {
-                    ++count;
-                } else if (NumberUtils.isNumber(values[i]) && Integer.valueOf(values[i]) > 0 &&
-                    Integer.valueOf(values[i]) <= OnyxCommonVars.getInstance().BOARD_SIDE_SQUARE_COUNT + 1) {
-                    ++count;
-                }
-            }
-            
-            return count == values.length;
         }
         
     }

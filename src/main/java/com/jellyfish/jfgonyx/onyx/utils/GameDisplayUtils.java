@@ -26,29 +26,50 @@
  * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
  * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGE. 
- ******************************************************************************
+ * POSSIBILITY OF SUCH DAMAGE.
+ * *****************************************************************************
  */
-package com.jellyfish.jfgonyx.onyx.interfaces;
+package com.jellyfish.jfgonyx.onyx.utils;
 
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
+import java.util.Map;
 
 /**
  * @author thw
  */
-public interface OnyxObserver {
+public class GameDisplayUtils {
+    
+    private static final String BLACK = "X";
+    private static final String WHITE = "O";
+    private static final String BACKSLASH_N = "\n";
+    private static final String FILLER = "-";
     
     /**
-     * Notify move to process by observer.
-     * @param m the move display via toString().
-     * @see OnyxMove
+     * Build game status/layout as text output.
+     * @param moves
+     * @param boardWidth borad width (starts at ZERO, therfor +1).
+     * @return data for output to file or ui.
      */
-    void notifyMove(final String m);
-    
-    /**
-     * Notify game layout as text output.
-     * @param data 
-     */
-    void notifyGameStatus(final String data);
+    public static String buildGameToTextOutput(final Map<Integer, OnyxMove> moves, final float boardWidth) {
+        
+        int x = 0, y = 0, virtualBoardWidth = ((int) boardWidth) * 2;
+        final StringBuilder sb = new StringBuilder();
+        final String[][] mtx = new String[virtualBoardWidth + 1][virtualBoardWidth + 1]; 
+        
+        for (OnyxMove move : moves.values()) {    
+            if (!move.getPos().isOccupied()) continue;
+            x = move.getPos().x > 1f ? (int) (((move.getPos().x) - 1f) * 2f) : 0;
+            y = move.getPos().y > 1f ? (int) (((move.getPos().y) - 1f) * 2f) : 0;            
+            mtx[x][y] = move.getPos().getPiece().isVirtual() ? "V" : 
+                move.getPos().getPiece().color.bool ? BLACK : WHITE;    
+        }
+        
+        for (int i = 0; i < virtualBoardWidth - 1; ++i) {
+            for (int j = 0; j < virtualBoardWidth - 1; ++j) sb.append(mtx[j][i] == null ? FILLER : mtx[j][i]);
+            sb.append(BACKSLASH_N);
+        }
+        
+        return sb.toString();
+    }
     
 }

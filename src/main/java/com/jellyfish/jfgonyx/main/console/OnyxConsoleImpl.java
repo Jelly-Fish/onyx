@@ -95,6 +95,11 @@ public class OnyxConsoleImpl extends javax.swing.JFrame implements OnyxConsole, 
         textArea.append(String.format("%s>> onyx move: %s", OnyxConsole.BACKSLH_N, m));
     }
     
+    @Override
+    public void notifyGameStatus(final String data) {
+        this.textArea.append(BACKSLH_N + data);
+    }
+    
     private void textAreaKeyPressed(java.awt.event.KeyEvent evt) {                                    
         
         if(evt.getKeyCode() == KeyEvent.VK_ENTER) {
@@ -109,10 +114,10 @@ public class OnyxConsoleImpl extends javax.swing.JFrame implements OnyxConsole, 
                     end--;
                     start = Utilities.getRowStart(textArea, end);
                 }
-
+                
                 input = textArea.getText(start, end - start).toUpperCase();
                 final String pos = OnyxConst.POS_MAP.get(input); 
-                if (StringUtils.isBlank(input) || StringUtils.isBlank(pos))
+                if (!input.contains(OnyxConst.SPLIT) || StringUtils.isBlank(input) || StringUtils.isBlank(pos))
                     throw new InvalidOnyxPositionException(InvalidOnyxPositionException.MSG);
                 
                 final String move = og.moveVirtual(input);
@@ -122,44 +127,13 @@ public class OnyxConsoleImpl extends javax.swing.JFrame implements OnyxConsole, 
                     OnyxConsole.BACKSLH_N, og.requestNewMove(engnColor)));
                 textArea.append(String.format("%snew virtual: %s", 
                     OnyxConsole.BACKSLH_N, og.appendNewVirtual()));
-                    
+                og.displayGameStatus(this);
+                
             } catch (final BadLocationException | InvalidOnyxPositionException | 
                     NoValidOnyxPositionsFoundException | OnyxEndGameException e) {              
                 textArea.append(String.format("%s%s", BACKSLH_N, e.getMessage()));
             }
-        }
-        
-        
-        
-        //OnyxConst.POS_MAP.get(pos.getKey())
-        
-        /*
-        try {
-            
-            OnyxGame og = OnyxGameBuilder.newGame(engnColor);
-            og.moveVirtual(String.format(OnyxConst.POS_KEY_FORMAT, 1f, 1f));
-            og.playMove();
-            og.requestNewMove(engnColor);
-            og.appendNewVirtual();
-            og.moveVirtual(String.format(OnyxConst.POS_KEY_FORMAT, 2f, 1f));
-            og.playMove();
-            og.requestNewMove(engnColor);
-            og.appendNewVirtual();
-            og.moveVirtual(String.format(OnyxConst.POS_KEY_FORMAT, 3f, 1f));
-            og.playMove();
-            og.requestNewMove(engnColor);
-            og.appendNewVirtual();
-            
-        } catch (final InvalidOnyxPositionException | NoValidOnyxPositionsFoundException | OnyxEndGameException e) {
-            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, e);
-            if (e instanceof OnyxEndGameException) {
-                // Notify.
-            }
-        }
-        */
-        
-        
-        
+        }    
     } 
     
     @SuppressWarnings("unchecked")

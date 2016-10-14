@@ -45,7 +45,7 @@ public class InvalidOnyxPositionException extends OnyxException {
     public static final String DEFAULT_MSG = "Position throws InvalidOnyxPositionException for color %s."; 
     public static final String MSG = 
         String.format("invalid onyx position - format must be <n,nf-n,nf> where n >= 1 and n <= %d, %s", 
-            OnyxCommonVars.getInstance().BOARD_SIDE_SQUARE_COUNT + 1, "center positions use n,5f notation."); 
+            OnyxCommonVars.getInstance().BOARD_SIDE_SQUARE_COUNT + 1, "\ncenter positions use n,5f notation"); 
     
     public InvalidOnyxPositionException() { }
 

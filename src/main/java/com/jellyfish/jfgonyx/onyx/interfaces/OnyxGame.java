@@ -81,7 +81,14 @@ public interface OnyxGame {
     
     /**
      * Notify start layout to observer.
+     * @param observer
      */
     void notifyStartLayout(final OnyxObserver observer);
+    
+    /**
+     * Display game layout as text towards observer.
+     * @param observer 
+     */
+    void displayGameStatus(final OnyxObserver observer);
     
 }

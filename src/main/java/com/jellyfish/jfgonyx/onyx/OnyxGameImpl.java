@@ -44,13 +44,14 @@ import com.jellyfish.jfgonyx.onyx.exceptions.OnyxEndGameException;
 import com.jellyfish.jfgonyx.onyx.exceptions.OnyxGameSyncException;
 import com.jellyfish.jfgonyx.onyx.interfaces.OnyxGame;
 import com.jellyfish.jfgonyx.onyx.interfaces.OnyxObserver;
+import com.jellyfish.jfgonyx.onyx.utils.GameDisplayUtils;
 import com.jellyfish.jfgonyx.onyx.vars.OnyxCommonVars;
 import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.apache.commons.lang3.StringUtils;
 
 /**
  * Onyx game interface implementation.
@@ -62,7 +63,7 @@ public class OnyxGameImpl implements OnyxGame {
     private final OnyxDiamondCollection diamonds;
     private final OnyxPosCollection positions;
     private boolean initialized = false;
-    private HashMap<Integer, OnyxMove> moves = new HashMap<>();
+    private Map<Integer, OnyxMove> moves = new HashMap<>();
     private OnyxConst.COLOR engineColor = null;    
     private OnyxConst.COLOR colorToPlay = null;
     private boolean requestInitialized = false;
@@ -197,7 +198,9 @@ public class OnyxGameImpl implements OnyxGame {
     
     @Override
     public String moveVirtual(final String k) throws InvalidOnyxPositionException {
-                      
+           
+        if (positions.getVirtualPiece().getTmpOnyxPosition().getKey().equals(k)) 
+            throw new InvalidOnyxPositionException(InvalidOnyxPositionException.MSG);
         final String virtualK = positions.getVirtualPiece().getTmpOnyxPosition().getKey();
 
         if (positions.getPositions().containsKey(k)) {
@@ -255,6 +258,13 @@ public class OnyxGameImpl implements OnyxGame {
     public void notifyStartLayout(final OnyxObserver observer) {     
         if (observer == null) return;
         for (OnyxMove m : moves.values()) observer.notifyMove(m.toString());
+        displayGameStatus(observer);
+    }
+        
+    @Override
+    public void displayGameStatus(final OnyxObserver observer) {
+        observer.notifyGameStatus(GameDisplayUtils.buildGameToTextOutput(moves, 
+            OnyxCommonVars.getInstance().BOARD_SIDE_POS_COUNT));
     }
     // </editor-fold> 
     
@@ -354,7 +364,7 @@ public class OnyxGameImpl implements OnyxGame {
         Onyx.gameEnd = b;
     }
     
-    public HashMap<Integer, OnyxMove> getMoves() {
+    public Map<Integer, OnyxMove> getMoves() {
         return moves;
     }
     
