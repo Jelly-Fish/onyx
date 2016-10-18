@@ -60,6 +60,8 @@ public class OnyxConst {
         public static String get(final String key) throws InvalidOnyxPositionException {
 
             String pos = StringUtils.EMPTY;
+            if (!key.contains(SPLIT)) throw new InvalidOnyxPositionException(
+                String.format(InvalidOnyxPositionException.MSG_STRING_ARG, key));
             
             try {
                 

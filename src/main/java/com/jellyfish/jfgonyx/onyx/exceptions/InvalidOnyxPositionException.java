@@ -40,6 +40,9 @@ import com.jellyfish.jfgonyx.onyx.vars.OnyxCommonVars;
 public class InvalidOnyxPositionException extends OnyxException {
 
     public static final String MSG_STRING_ARGS = "Onyx position %s-%s is invalid.";
+    public static final String MSG_STRING_ARG = "Onyx position %s is invalid.";
+    public static final String OCCUPIED = "Onyx position %s is already occupied.";
+    public static final String INVALID_CENTER = "Onyx center position %s is invalid.";
     public static final String MSG_FLOAT_ARGS = "Onyx position %f-%f is invalid.";
     public static final String INVALID_CENTER_POS = "Onyx diamond %s does not include a center position.";
     public static final String DEFAULT_MSG = "Position throws InvalidOnyxPositionException for color %s."; 

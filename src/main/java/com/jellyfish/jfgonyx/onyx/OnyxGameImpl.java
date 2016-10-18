@@ -174,8 +174,11 @@ public class OnyxGameImpl implements OnyxGame {
         final OnyxVirtualPiece vp = positions.getVirtualPiece();
         final String k = vp.getTmpOnyxPosition().getKey();
         final OnyxPos tmpPos = positions.getPosition(k);
-        if (diamonds.isDiamondCenter(k) && !isCenterPosPlayable(k)) return null;
-        if (tmpPos.isOccupied()) return null;
+        
+        if (diamonds.isDiamondCenter(k) && !isCenterPosPlayable(k)) throw new InvalidOnyxPositionException(   
+            String.format(InvalidOnyxPositionException.INVALID_CENTER, k));
+        if (tmpPos.isOccupied()) throw new InvalidOnyxPositionException(
+            String.format(InvalidOnyxPositionException.OCCUPIED, k));
         
         positions.getPosition(k).setPiece(
             new OnyxPiece(vp.color.bool ? OnyxConst.COLOR.BLACK : OnyxConst.COLOR.WHITE)
@@ -198,10 +201,10 @@ public class OnyxGameImpl implements OnyxGame {
     
     @Override
     public String moveVirtual(final String k) throws InvalidOnyxPositionException {
-           
-        if (positions.getVirtualPiece().getTmpOnyxPosition().getKey().equals(k)) 
-            throw new InvalidOnyxPositionException(InvalidOnyxPositionException.MSG);
+
         final String virtualK = positions.getVirtualPiece().getTmpOnyxPosition().getKey();
+
+        if (virtualK.equals(k) && positions.getPositions().containsKey(k)) return k;
 
         if (positions.getPositions().containsKey(k)) {
             positions.getVirtualPiece().setTmpOnyxPosition(positions.getPositions().get(k));
@@ -211,7 +214,8 @@ public class OnyxGameImpl implements OnyxGame {
             return k;
         }
         
-        throw new InvalidOnyxPositionException(InvalidOnyxPositionException.MSG);
+        throw new InvalidOnyxPositionException(
+            String.format(InvalidOnyxPositionException.MSG_STRING_ARG, k));
     }
     
     @Override
@@ -236,9 +240,11 @@ public class OnyxGameImpl implements OnyxGame {
     
     @Override
     public String appendMove(final OnyxMove move) {
+       
         moves.put(moves.size() + 1, move);
         ++moveCount;
         if (observer != null) observer.notifyMove(move.toString());
+        
         return move.toString() + " color: " + move.getPos().getPiece().color.str;
     }
     
@@ -263,7 +269,7 @@ public class OnyxGameImpl implements OnyxGame {
         
     @Override
     public void displayGameStatus(final OnyxObserver observer) {
-        observer.notifyGameStatus(GameDisplayUtils.buildGameToTextOutput(moves, 
+        observer.notifyGameStatus(GameDisplayUtils.buildGameToTextOutput(moves, positions,
             OnyxCommonVars.getInstance().BOARD_SIDE_POS_COUNT));
     }
     // </editor-fold> 

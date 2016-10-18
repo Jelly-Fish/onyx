@@ -32,7 +32,10 @@
 package com.jellyfish.jfgonyx.onyx.utils;
 
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
+import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
+import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
 import java.util.Map;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * @author thw
@@ -41,31 +44,44 @@ public class GameDisplayUtils {
     
     private static final String BLACK = "X";
     private static final String WHITE = "O";
+    private static final String VIRTUAL = "V";
     private static final String BACKSLASH_N = "\n";
     private static final String FILLER = "-";
+    private static final String SPACE = " ";
     
     /**
      * Build game status/layout as text output.
      * @param moves
+     * @param posCol
      * @param boardWidth borad width (starts at ZERO, therfor +1).
      * @return data for output to file or ui.
      */
-    public static String buildGameToTextOutput(final Map<Integer, OnyxMove> moves, final float boardWidth) {
+    public static String buildGameToTextOutput(final Map<Integer, OnyxMove> moves, final OnyxPosCollection posCol,
+        final float boardWidth) {
         
         int x = 0, y = 0, virtualBoardWidth = ((int) boardWidth) * 2;
         final StringBuilder sb = new StringBuilder();
-        final String[][] mtx = new String[virtualBoardWidth + 1][virtualBoardWidth + 1]; 
+        final String[][] mtx = new String[virtualBoardWidth + 2][virtualBoardWidth + 2]; 
         
+        for (OnyxPos pos : posCol.getPositions().values()) {
+            x = pos.x > 1f ? (int) (((pos.x) - 1f) * 2f) : 0;
+            y = pos.y > 1f ? (int) (((pos.y) - 1f) * 2f) : 0;    
+            mtx[x][y] = FILLER;
+        }
+                
         for (OnyxMove move : moves.values()) {    
             if (!move.getPos().isOccupied()) continue;
             x = move.getPos().x > 1f ? (int) (((move.getPos().x) - 1f) * 2f) : 0;
             y = move.getPos().y > 1f ? (int) (((move.getPos().y) - 1f) * 2f) : 0;            
-            mtx[x][y] = move.getPos().getPiece().isVirtual() ? "V" : 
+            mtx[x][y] = move.getPos().getPiece().isVirtual() ? VIRTUAL : 
                 move.getPos().getPiece().color.bool ? BLACK : WHITE;    
         }
-        
-        for (int i = 0; i < virtualBoardWidth - 1; ++i) {
-            for (int j = 0; j < virtualBoardWidth - 1; ++j) sb.append(mtx[j][i] == null ? FILLER : mtx[j][i]);
+
+        for (int i = 0; i <= virtualBoardWidth; ++i) {
+            for (int j = 0; j <= virtualBoardWidth; ++j) {
+                sb.append(StringUtils.isNumeric(mtx[j][i]) ? mtx[j][i] + SPACE :
+                mtx[j][i] == null ? SPACE + SPACE : SPACE + mtx[j][i]);
+            }
             sb.append(BACKSLASH_N);
         }
         
