@@ -47,8 +47,8 @@ public class InvalidOnyxPositionException extends OnyxException {
     public static final String INVALID_CENTER_POS = "Onyx diamond %s does not include a center position.";
     public static final String DEFAULT_MSG = "Position throws InvalidOnyxPositionException for color %s."; 
     public static final String MSG = 
-        String.format("invalid onyx position - format must be <n,nf-n,nf> where n >= 1 and n <= %d, %s", 
-            OnyxCommonVars.getInstance().BOARD_SIDE_SQUARE_COUNT + 1, "\ncenter positions use n,5f notation"); 
+        String.format("invalid onyx position - format type must check as n-n or n,n-n,n for center positions where n >= 1 and n <= %d, %s", 
+            OnyxCommonVars.getInstance().BOARD_SIDE_SQUARE_COUNT + 1, "\nfor center positions use n,5f notation"); 
     
     public InvalidOnyxPositionException() { }
 

@@ -16,7 +16,7 @@ public class OnyxEndGameException extends OnyxException {
     public static final String DEFAULT_MSG = "Game is finished, %s wins the game !";
 
     public OnyxEndGameException(final OnyxConst.COLOR color) {
-        super(String.format(OnyxGameSyncException.DEFAULT_MSG, color.str));
+        super(String.format(OnyxEndGameException.DEFAULT_MSG, color.str));
     }
     
 }

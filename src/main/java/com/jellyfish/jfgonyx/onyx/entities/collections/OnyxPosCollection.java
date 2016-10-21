@@ -52,7 +52,7 @@ public class OnyxPosCollection {
      * intmap mtx width & height int value = 24.
      */
     public static final int MTX_WH = 24;
-    public static final String KEY_FORMAT = "%.1f-%.1f";
+    public static final String KEY_FORMAT = OnyxConst.KEY_FORMAT;
     private final HashMap<String, OnyxPos> positions = new HashMap<>();
     
     public OnyxPosCollection(final OnyxDiamondCollection diamonds) {

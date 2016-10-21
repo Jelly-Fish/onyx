@@ -22,8 +22,9 @@ public interface OnyxGame {
      * @param k the key to move towrds.
      * @return true if successful.
      * @throws InvalidOnyxPositionException if no such position found.
+     * @throws com.jellyfish.jfgonyx.onyx.exceptions.OnyxEndGameException if game is in end state.
      */
-    String moveVirtual(final String k) throws InvalidOnyxPositionException;
+    String moveVirtual(final String k) throws InvalidOnyxPositionException, OnyxEndGameException;
     
     /**
      * Validte virtual piece's position for move.
@@ -90,5 +91,11 @@ public interface OnyxGame {
      * @param observer 
      */
     void displayGameStatus(final OnyxObserver observer);
+    
+    /**
+     * Get game observer.
+     * @return game observer.
+     */
+    OnyxObserver getObserver();
     
 }

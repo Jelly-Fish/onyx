@@ -43,6 +43,7 @@ import org.apache.commons.lang3.StringUtils;
  */
 public class OnyxConst {
     
+    public static final String KEY_FORMAT = "%.1f-%.1f";
     public static final String DISPLAY_CONSOLE = "dispcons";
     public static Color WHITE_PIECE = Color.WHITE;
     public static Color BLACK_PIECE = Color.BLACK;
@@ -91,6 +92,23 @@ public class OnyxConst {
             if (StringUtils.isBlank(pos)) throw new InvalidOnyxPositionException(InvalidOnyxPositionException.MSG);
             
             return pos;
+        }
+        
+        public static String formatInput(String input) throws InvalidOnyxPositionException {
+            
+            if (!input.contains(OnyxConst.SPLIT) || StringUtils.isBlank(input))
+                throw new InvalidOnyxPositionException(InvalidOnyxPositionException.MSG);
+            
+            try {
+                float x, y;
+                x = Float.valueOf(input.split(OnyxConst.SPLIT)[0].replaceAll(COMMA, DOT));
+                y = Float.valueOf(input.split(OnyxConst.SPLIT)[1].replaceAll(COMMA, DOT));
+                input = String.format(OnyxConst.KEY_FORMAT, x, y); 
+            } catch (final NumberFormatException | NullPointerException | IndexOutOfBoundsException e) {
+                throw new InvalidOnyxPositionException(InvalidOnyxPositionException.MSG);
+            }
+            
+            return input;
         }
         
     }

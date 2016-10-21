@@ -200,10 +200,10 @@ public class OnyxGameImpl implements OnyxGame {
     }
     
     @Override
-    public String moveVirtual(final String k) throws InvalidOnyxPositionException {
+    public String moveVirtual(final String k) throws InvalidOnyxPositionException, OnyxEndGameException {
 
+        if (Onyx.gameEnd) throw new OnyxEndGameException(colorToPlay);        
         final String virtualK = positions.getVirtualPiece().getTmpOnyxPosition().getKey();
-
         if (virtualK.equals(k) && positions.getPositions().containsKey(k)) return k;
 
         if (positions.getPositions().containsKey(k)) {
@@ -272,6 +272,11 @@ public class OnyxGameImpl implements OnyxGame {
         observer.notifyGameStatus(GameDisplayUtils.buildGameToTextOutput(moves, positions,
             OnyxCommonVars.getInstance().BOARD_SIDE_POS_COUNT));
     }
+    
+    @Override
+    public OnyxObserver getObserver() {
+        return observer;
+    }
     // </editor-fold> 
     
     // <editor-fold defaultstate="collapsed" desc="private methods"> 
@@ -318,8 +323,9 @@ public class OnyxGameImpl implements OnyxGame {
      * Check that move request color value has been set/initialized.
      * @throws OnyxGameSyncException 
      */
-    private void checkInit() throws OnyxGameSyncException {
+    private void checkInit() throws OnyxGameSyncException, OnyxEndGameException {
         
+        if (Onyx.gameEnd) throw new OnyxEndGameException(OnyxConst.COLOR.getOposite(colorToPlay.bool));
         if (colorToPlay == null) throw new OnyxGameSyncException();
         if (!requestInitialized) throw new OnyxGameSyncException(
                 String.format(OnyxGameSyncException.WRONG_TURN_MSG, colorToPlay.str));

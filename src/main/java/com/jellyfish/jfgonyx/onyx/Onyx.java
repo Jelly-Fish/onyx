@@ -106,7 +106,11 @@ class Onyx {
             // Assert game ended :
             Onyx.gameEnd = win || lose;
             
-            if (Onyx.gameEnd) return null;            
+            if (Onyx.gameEnd) {
+                game.getObserver().notify(String.format(WIN, OnyxConst.COLOR.getOposite(color.bool).str));
+                return null;
+            }            
+            
             final OnyxMove m = SearchUtils.assertByScore(posSearchRes, cnxSearchRes, virtualCnxRes);
             if (m.isCapture()) game.getPosCollection().performTake(
                 m.getPos().getKey(), color.bit, game.getDiamondCollection(), game.getPosCollection());

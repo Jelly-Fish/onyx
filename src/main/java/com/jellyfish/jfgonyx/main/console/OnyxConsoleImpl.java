@@ -41,7 +41,6 @@ import java.awt.event.KeyEvent;
 import javax.swing.ImageIcon;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Utilities;
-import org.apache.commons.lang3.StringUtils;
 
 /**
  *
@@ -74,6 +73,7 @@ public class OnyxConsoleImpl extends javax.swing.JFrame implements OnyxConsole, 
         final ImageIcon icn = new ImageIcon(getClass().getClassLoader().getResource("icons/icn.png"));
         this.setIconImage(icn.getImage());
         this.setLocation(0, 0);
+        this.textArea.setLineWrap(true);
         this.textArea.append(this.getClass().getName() + " v2.0");
         this.og.setObserver(this);
         this.og.notifyStartLayout(this);
@@ -100,13 +100,17 @@ public class OnyxConsoleImpl extends javax.swing.JFrame implements OnyxConsole, 
         this.textArea.append(BACKSLH_N + data);
     }
     
+    @Override
+    public void notify(final String data) {
+        this.textArea.append(BACKSLH_N + data);
+    }
+    
     private void textAreaKeyPressed(java.awt.event.KeyEvent evt) {                                    
         
         if(evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            
-            String input = StringUtils.EMPTY;
-            
+
             try {
+                
                 int end = textArea.getDocument().getLength();
                 int start = Utilities.getRowStart(textArea, end);
                 
@@ -114,13 +118,9 @@ public class OnyxConsoleImpl extends javax.swing.JFrame implements OnyxConsole, 
                     end--;
                     start = Utilities.getRowStart(textArea, end);
                 }
-                
-                input = textArea.getText(start, end - start).toUpperCase();
-                final String pos = OnyxConst.POS_MAP.get(input); 
-                if (!input.contains(OnyxConst.SPLIT) || StringUtils.isBlank(input) || StringUtils.isBlank(pos))
-                    throw new InvalidOnyxPositionException(InvalidOnyxPositionException.MSG);
-                
-                final String move = og.moveVirtual(input);
+                                          
+                final String move = og.moveVirtual(
+                    OnyxConst.POS_MAP.formatInput(textArea.getText(start, end - start).toUpperCase()));
                 textArea.append(String.format("%smoving virtual: %s", OnyxConsole.BACKSLH_N, move));
                 textArea.append(String.format("%s%s", OnyxConsole.BACKSLH_N, og.playMove()));
                 textArea.append(String.format("%sengine response: %s", 

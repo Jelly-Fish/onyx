@@ -39,6 +39,12 @@ import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
 public interface OnyxObserver {
     
     /**
+     * Notify data to process by observer.
+     * @param data notification data.
+     */
+    void notify(final String data);
+    
+    /**
      * Notify move to process by observer.
      * @param m the move display via toString().
      * @see OnyxMove

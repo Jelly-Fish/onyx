@@ -20,7 +20,7 @@ public class OnyxUtils {
         
         int counter = 0;
         if (k == null || !pc.containsPosition(k) || 
-                !isDiamondCenter(k, dc)) {
+            !isDiamondCenter(k, dc)) {
             return false;
         }
         
