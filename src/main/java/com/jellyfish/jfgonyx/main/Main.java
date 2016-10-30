@@ -63,7 +63,11 @@ public class Main {
         final OnyxGame game = OnyxGameBuilder.newGame(engnColor);
         OnyxConsoleBuilder.build(args[0].equals(OnyxConst.DISPLAY_CONSOLE), game,
             engnColor);
-        
+        /*
+        OnyxBoardGHelper.buildPolygons(game.getDiamonds());
+        final MainFrame mf = new MainFrame(new OnyxPanel(), 
+            new OnyxBoard(game.getDiamonds(), game.getPositions()));
+        */        
     }
     
 }

@@ -269,6 +269,16 @@ public class OnyxGameImpl implements OnyxGame {
     public OnyxObserver getObserver() {
         return observer;
     }
+       
+    @Override
+    public OnyxDiamondCollection getDiamonds() {
+        return diamonds;
+    }
+
+    @Override
+    public OnyxPosCollection getPositions() {
+        return positions;
+    }
     // </editor-fold> 
     
     // <editor-fold defaultstate="collapsed" desc="private methods"> 

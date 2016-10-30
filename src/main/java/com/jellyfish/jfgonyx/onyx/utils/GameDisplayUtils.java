@@ -47,6 +47,7 @@ public class GameDisplayUtils {
     private static final String VIRTUAL = "V";
     private static final String BACKSLASH_N = "\n";
     private static final String FILLER = "-";
+    private static final String LINK_FILLER = "~";
     private static final String SPACE = " ";
     
     /**
@@ -62,7 +63,7 @@ public class GameDisplayUtils {
         int x = 0, y = 0, virtualBoardWidth = ((int) boardWidth) * 2;
         final StringBuilder sb = new StringBuilder();
         final String[][] mtx = new String[virtualBoardWidth + 2][virtualBoardWidth + 2]; 
- 
+        
         for (OnyxPos pos : posCol.getPositions().values()) {
             x = pos.x > 1f ? (int) (((pos.x) - 1f) * 2f) : 0;
             y = pos.y > 1f ? (int) (((pos.y) - 1f) * 2f) : 0;

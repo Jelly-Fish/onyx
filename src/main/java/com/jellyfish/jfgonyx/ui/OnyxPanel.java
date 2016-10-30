@@ -29,58 +29,44 @@
  * POSSIBILITY OF SUCH DAMAGE. 
  ******************************************************************************
  */
-package com.jellyfish.jfgonyx.onyx.vars;
+package com.jellyfish.jfgonyx.ui;
 
-import java.awt.Color;
+import com.jellyfish.jfgonyx.onyx.interfaces.OnyxObserver;
+import com.jellyfish.jfgonyx.onyx.vars.OnyxCommonVars;
+import java.awt.Graphics;
+import java.util.LinkedList;
+import javax.swing.JPanel;
 
 /**
  * @author thw
  */
-public class OnyxCommonVars implements java.io.Serializable {
+public class OnyxPanel extends JPanel implements OnyxObserver {
+
+    private final LinkedList<String> move_labels = new LinkedList<>();
     
-    private static OnyxCommonVars instance;
-    private static final int DEFAULT_BOARD_WIDTH = 670;
+    public OnyxPanel() {
+        super();
+        setDoubleBuffered(true);
+        setBackground(OnyxCommonVars.getInstance().COMPONENTS_BACKGROUND_COLOR1);
+    }
     
-    public int EXTRA_SQUARES = 0;
-    public int BOARD_SIDE_SQUARE_COUNT = 11;
-    public float BOARD_SIDE_POS_COUNT = 11.0f;
-    public int SQUARE_WIDTH = 50;
-    public int BOARD_WIDTH = 670;
-    public int ZIGZAG = 12;
-    public Color WHITE_PIECE = Color.WHITE;
-    public Color BLACK_PIECE = Color.BLACK;
-    public Color COMPONENTS_BACKGROUND_COLOR1 = new Color(172,172,162);
-    public Color COMPONENTS_BACKGROUND_COLOR2 = new Color(124,124,124);
-    public Color BACKGROUND = new Color(210,160,48);
-    public Color FULL_DIAMOND = new Color(169,125,16);
-    public Color DIAMOND = new Color(212,170,54);
-    public Color LINE = new Color(12,12,12);
-    public Color WHITE_OUTLINE = new Color(16,16,16);
-    public Color BLACK_OUTLINE = new Color(64,64,64);
-    public Color VIRTUAL_OUTLINE = Color.CYAN;
-    public Color ONYX_ENGINE_MOVE_OUTLINE = Color.RED;
-    public int TRANSLATION = 16;
-    public int CENTER_TRANSLATION = 32;
-    
-    private OnyxCommonVars() { 
-        BOARD_WIDTH += EXTRA_SQUARES * SQUARE_WIDTH;
-        BOARD_SIDE_POS_COUNT = ((float) BOARD_SIDE_SQUARE_COUNT) + 1f;
+    @Override
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        super.setBackground(OnyxCommonVars.getInstance().COMPONENTS_BACKGROUND_COLOR1);
+        super.repaint();
     }
 
-    public static OnyxCommonVars getInstance() {       
-        if (instance == null) instance = new OnyxCommonVars();
-        return instance;
+    @Override
+    public void notify(String data) {
     }
-    
-    public static void setInstance(final OnyxCommonVars gv) {
-        instance = gv;
-        instance.resetInstance();
+
+    @Override
+    public void notifyMove(String m) {
     }
-    
-    public void resetInstance() {
-        BOARD_WIDTH = DEFAULT_BOARD_WIDTH;
-        BOARD_WIDTH += EXTRA_SQUARES * SQUARE_WIDTH;
-        BOARD_SIDE_POS_COUNT = ((float) BOARD_SIDE_SQUARE_COUNT) + 1f;
+
+    @Override
+    public void notifyGameStatus(String data) {
     }
     
 }

@@ -7,6 +7,8 @@ package com.jellyfish.jfgonyx.onyx.interfaces;
 
 import com.jellyfish.jfgonyx.onyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxMove;
+import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxDiamondCollection;
+import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
 import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import com.jellyfish.jfgonyx.onyx.exceptions.NoValidOnyxPositionsFoundException;
 import com.jellyfish.jfgonyx.onyx.exceptions.OnyxEndGameException;
@@ -98,5 +100,15 @@ public interface OnyxGame {
      * @return game observer.
      */
     OnyxObserver getObserver();
+    
+    /**
+     * @return diamond collection.
+     */
+    OnyxDiamondCollection getDiamonds();
+    
+    /**
+     * @return position collection.
+     */
+    OnyxPosCollection getPositions();
     
 }
