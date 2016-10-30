@@ -68,11 +68,12 @@ public interface OnyxGame {
     
     /**
      * Add new virtual for UI management.
+     * @param color
      * @return new virtual position.
      * @throws NoValidOnyxPositionsFoundException if no valid position is available.
      * @throws InvalidOnyxPositionException if no such position found.
      */
-    String appendNewVirtual() throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException;    
+    String appendNewVirtual(final OnyxConst.COLOR color) throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException;    
 
     /**
      * Observer.

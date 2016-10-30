@@ -64,9 +64,7 @@ public class OnyxGameImpl implements OnyxGame {
     private final OnyxPosCollection positions;
     private boolean initialized = false;
     private Map<Integer, OnyxMove> moves = new HashMap<>();
-    private OnyxConst.COLOR engineColor = null;    
-    private OnyxConst.COLOR colorToPlay = null;
-    private boolean requestInitialized = false;
+    private OnyxConst.COLOR engineColor = null;
     private int moveCount = 0;
     private OnyxObserver observer = null;
     // </editor-fold> 
@@ -83,8 +81,6 @@ public class OnyxGameImpl implements OnyxGame {
             Onyx.blackPlayingLowBorder = false;
             this.diamonds = new OnyxDiamondCollection().build();
             this.positions = new OnyxPosCollection(this.diamonds);
-            this.requestInitialized = false;
-            this.colorToPlay = null;
             this.engineColor = engineColor;
             
         try {
@@ -93,26 +89,21 @@ public class OnyxGameImpl implements OnyxGame {
         } catch (final OnyxGameSyncException OGSEx) {
             Logger.getLogger(OnyxGameImpl.class.getName()).log(Level.SEVERE, null, OGSEx);
             System.exit(0);
+        } catch (final NoValidOnyxPositionsFoundException | InvalidOnyxPositionException | OnyxEndGameException ex) {
+            Logger.getLogger(OnyxGameImpl.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     // </editor-fold> 
     
     // <editor-fold defaultstate="collapsed" desc="Init private methods"> 
-    private void init(final OnyxConst.COLOR engineColor) throws OnyxGameSyncException {
+    private void init(final OnyxConst.COLOR engineColor) throws OnyxGameSyncException, NoValidOnyxPositionsFoundException, 
+            InvalidOnyxPositionException, OnyxEndGameException {
         
         if (initialized) throw new OnyxGameSyncException(OnyxGameSyncException.DEFAULT_MSG);
         initialized = true;  
         
         if (engineColor.bool) {            
-            initMove(OnyxConst.COLOR.BLACK);            
-            try {
-                performMove(positions);
-            } catch (OnyxGameSyncException | NoValidOnyxPositionsFoundException | InvalidOnyxPositionException ex) {
-                initialized = false;
-                Logger.getLogger(OnyxGameImpl.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (final OnyxEndGameException OEGEx) {
-                Logger.getLogger(OnyxGameImpl.class.getName()).log(Level.SEVERE, null, OEGEx);
-            }
+            performMove(positions, engineColor);
         } else {
             positions.spawnVirtualPiece(OnyxConst.COLOR.VIRTUAL_BLACK);
         }
@@ -188,7 +179,7 @@ public class OnyxGameImpl implements OnyxGame {
                 
         positions.getPosition(k).setVirtualPiece(null);
         OnyxMove m = null;
-        if (posSet != null && !isGameEnd()) {
+        if (posSet != null && !Onyx.gameEnd) {
             posSet = positions.performTake(k, vp.color.bit, diamonds, positions);
             m = new OnyxMove(positions.getPosition(k), positions.getPosition(k).getPiece(), posSet, 
                 posSet.size() * OnyxConst.SCORE.TAKE.getValue());
@@ -202,7 +193,7 @@ public class OnyxGameImpl implements OnyxGame {
     @Override
     public String moveVirtual(final String k) throws InvalidOnyxPositionException, OnyxEndGameException {
 
-        if (Onyx.gameEnd) throw new OnyxEndGameException(colorToPlay);        
+        if (Onyx.gameEnd) throw new OnyxEndGameException(Onyx.winColor);        
         final String virtualK = positions.getVirtualPiece().getTmpOnyxPosition().getKey();
         if (virtualK.equals(k) && positions.getPositions().containsKey(k)) return k;
 
@@ -222,12 +213,13 @@ public class OnyxGameImpl implements OnyxGame {
     public OnyxMove requestMove(final OnyxConst.COLOR color) 
             throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException, OnyxEndGameException {
         
-        initMove(color);
-        final OnyxMove m = Onyx.search(this, colorToPlay);
-        if (Onyx.gameEnd) throw new OnyxEndGameException(color);
+        final OnyxMove m = Onyx.search(this, color);
+        if (Onyx.gameEnd) throw new OnyxEndGameException(Onyx.winColor);
         if (m == null) throw new NoValidOnyxPositionsFoundException();
         else positions.clearOutlines();
-        positions.getPosition(m.getPos().getKey()).setPiece(new OnyxPiece(colorToPlay, true));
+        positions.getPosition(m.getPos().getKey()).setPiece(new OnyxPiece(color, true));
+        
+        Onyx.assertEndGame(this, color);
         
         return m;
     }
@@ -249,12 +241,12 @@ public class OnyxGameImpl implements OnyxGame {
     }
     
     @Override
-    public String appendNewVirtual() throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
+    public String appendNewVirtual(final OnyxConst.COLOR color) throws NoValidOnyxPositionsFoundException, 
+            InvalidOnyxPositionException {
         
-        if (isGameEnd() || Onyx.isLose(positions, colorToPlay)) return null;
-        final OnyxMove m = Onyx.getNewVirtual(positions, this, colorToPlay);
+        final OnyxMove m = Onyx.getNewVirtual(positions, this, color);
         positions.getPosition(m.getPos().getKey()).setVirtualPiece(
-            new OnyxVirtualPiece(OnyxConst.COLOR.getVirtualOposite(colorToPlay.bool))
+            new OnyxVirtualPiece(color)
         );
         
         return m.toString();
@@ -289,46 +281,14 @@ public class OnyxGameImpl implements OnyxGame {
      * @throws NoValidOnyxPositionsFoundException 
      * @throws OnyxEndGameException
      */
-    private void performMove(final OnyxPosCollection c) 
+    private void performMove(final OnyxPosCollection c, final OnyxConst.COLOR color) 
             throws OnyxGameSyncException, NoValidOnyxPositionsFoundException, 
             InvalidOnyxPositionException, OnyxEndGameException {
         
-        checkInit();
-        final OnyxMove m = requestMove(colorToPlay);
+        final OnyxMove m = requestMove(color);
         if (m != null && !Onyx.gameEnd) {
             appendMove(m);
-            appendNewVirtual();
         }
-        closeMove();
-    }
-    
-    private void closeMove() {
-        colorToPlay = null;
-        initMoveRequest();
-    }
-      
-    /**
-     * @param color the color to play next or to search move for and append to this.
-     */
-    private void initMove(final OnyxConst.COLOR color) {
-        colorToPlay = color;
-        initMoveRequest();
-    }
-                      
-    private void initMoveRequest() {
-        requestInitialized = colorToPlay != null;
-    }
-    
-    /**
-     * Check that move request color value has been set/initialized.
-     * @throws OnyxGameSyncException 
-     */
-    private void checkInit() throws OnyxGameSyncException, OnyxEndGameException {
-        
-        if (Onyx.gameEnd) throw new OnyxEndGameException(OnyxConst.COLOR.getOposite(colorToPlay.bool));
-        if (colorToPlay == null) throw new OnyxGameSyncException();
-        if (!requestInitialized) throw new OnyxGameSyncException(
-                String.format(OnyxGameSyncException.WRONG_TURN_MSG, colorToPlay.str));
     }
     
     private boolean isCenterPosPlayable(final String k) {
@@ -366,14 +326,6 @@ public class OnyxGameImpl implements OnyxGame {
      
     public boolean getLowBorderTendency(final OnyxConst.COLOR color) {
         return color.bool ? Onyx.blackPlayingLowBorder : Onyx.whitePlayingLowBorder;
-    }
-    
-    public boolean isGameEnd() {
-        return Onyx.gameEnd;
-    }
-    
-    public void setGameEnd(final boolean b) {
-        Onyx.gameEnd = b;
     }
     
     public Map<Integer, OnyxMove> getMoves() {

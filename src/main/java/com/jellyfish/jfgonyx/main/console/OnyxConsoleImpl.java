@@ -126,7 +126,7 @@ public class OnyxConsoleImpl extends javax.swing.JFrame implements OnyxConsole, 
                 textArea.append(String.format("%sengine response: %s", 
                     OnyxConsole.BACKSLH_N, og.requestNewMove(engnColor)));
                 textArea.append(String.format("%snew virtual: %s", 
-                    OnyxConsole.BACKSLH_N, og.appendNewVirtual()));
+                    OnyxConsole.BACKSLH_N, og.appendNewVirtual(OnyxConst.COLOR.getOposite(engnColor.bool))));
                 og.displayGameStatus(this);
                 
             } catch (final BadLocationException | InvalidOnyxPositionException | 

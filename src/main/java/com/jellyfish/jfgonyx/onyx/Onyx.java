@@ -51,6 +51,7 @@ import java.util.logging.Logger;
  */
 class Onyx {
     
+    public static OnyxConst.COLOR winColor = null;
     public static boolean gameEnd = false;
     public static boolean whitePlayingLowBorder = false;
     public static boolean blackPlayingLowBorder = false;
@@ -96,21 +97,8 @@ class Onyx {
         try {
             
             final OnyxMove posSearchRes = SEARCH.get(STYPE.POSCOL).search(game, color);
-            final boolean win = ((ConnectionSearch) SEARCH.get(STYPE.CNX)).isWin(
-                game.getPosCollection(), OnyxConst.COLOR.getOposite(color.bool));
-            final boolean lose = ((ConnectionSearch) SEARCH.get(STYPE.CNX)).isWin(
-                game.getPosCollection(), color);
             final OnyxMove cnxSearchRes = SEARCH.get(STYPE.CNX).search(game, color);       
-            final OnyxMove virtualCnxRes = SEARCH.get(STYPE.VIRTUALCNX).search(game, color);
-            
-            // Assert game ended :
-            Onyx.gameEnd = win || lose;
-            
-            if (Onyx.gameEnd) {
-                game.getObserver().notify(String.format(WIN, OnyxConst.COLOR.getOposite(color.bool).str));
-                return null;
-            }            
-            
+            final OnyxMove virtualCnxRes = SEARCH.get(STYPE.VIRTUALCNX).search(game, color);            
             final OnyxMove m = SearchUtils.assertByScore(posSearchRes, cnxSearchRes, virtualCnxRes);
             if (m.isCapture()) game.getPosCollection().performTake(
                 m.getPos().getKey(), color.bit, game.getDiamondCollection(), game.getPosCollection());
@@ -131,11 +119,21 @@ class Onyx {
             throws NoValidOnyxPositionsFoundException, InvalidOnyxPositionException {
         return SEARCH.get(STYPE.RANDOM).search(game, color);
     }
-    
-    static boolean isLose(final OnyxPosCollection c, final OnyxConst.COLOR color) 
-            throws NoValidOnyxPositionsFoundException {
-        Onyx.gameEnd = ((ConnectionSearch) SEARCH.get(STYPE.CNX)).isWin(c, color);
-        return Onyx.gameEnd;
-    }
         
+    static void assertEndGame(final OnyxGameImpl game, final OnyxConst.COLOR color) throws NoValidOnyxPositionsFoundException {
+        
+        final boolean lose = ((ConnectionSearch) SEARCH.get(STYPE.CNX)).isWin(
+            game.getPosCollection(), OnyxConst.COLOR.getOposite(color.bool));
+        final boolean win = ((ConnectionSearch) SEARCH.get(STYPE.CNX)).isWin(
+            game.getPosCollection(), color);
+
+        Onyx.gameEnd = win || lose;
+
+        if (Onyx.gameEnd) {
+            Onyx.winColor = win ? color : OnyxConst.COLOR.getOposite(color.bool);
+            game.displayGameStatus(game.getObserver());
+            game.getObserver().notify(String.format(WIN, Onyx.winColor.str));
+        }      
+    }
+    
 }

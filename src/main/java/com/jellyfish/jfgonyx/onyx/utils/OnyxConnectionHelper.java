@@ -31,16 +31,12 @@
  */
 package com.jellyfish.jfgonyx.onyx.utils;
 
-import com.jellyfish.jfgonyx.onyx.constants.OnyxConst;
 import com.jellyfish.jfgonyx.onyx.entities.OnyxPos;
 import com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection;
 import static com.jellyfish.jfgonyx.onyx.entities.collections.OnyxPosCollection.KEY_FORMAT;
-import com.jellyfish.jfgonyx.onyx.exceptions.InvalidOnyxPositionException;
 import com.jellyfish.jfgonyx.onyx.vars.OnyxCommonVars;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.apache.commons.lang3.StringUtils;
 
 /**
@@ -133,14 +129,13 @@ public class OnyxConnectionHelper {
                         }
                     }
                     
-                    c.getPosition(kF).connections = OnyxConnectionHelper.trimConnections(pos, c);
+                    c.getPosition(kF).connections = OnyxConnectionHelper.trimConnections(pos);
                 }
             }
         }
     }
     
-    private static String[] trimConnections(final OnyxPos[] candidates, 
-            final OnyxPosCollection c) {
+    private static String[] trimConnections(final OnyxPos[] candidates) {
         
         final List<String> found = new ArrayList<>();
         for (OnyxPos pos : candidates) {
@@ -148,22 +143,6 @@ public class OnyxConnectionHelper {
         }
         
         return found.toArray(new String[found.size()]);
-    }
-    
-    public static final void systemPrint(final OnyxPosCollection c) {
-        
-        for (OnyxPos p : c.getPositions().values()) {
-            
-            try {
-                final int count = p.connections.length;
-                System.out.println(String.format(PRINT_FORMAT_HEAD, OnyxConst.POS_MAP.get(p.getKey()), count));
-                for (int i = 0; i < count; ++i) {
-                    System.out.println(String.format(PRINT_FORMAT_CNX, i, OnyxConst.POS_MAP.get(p.connections[i])));
-                }
-            } catch (final InvalidOnyxPositionException iOPEx) {
-                Logger.getLogger(OnyxConnectionHelper.class.getName()).log(Level.SEVERE, null, iOPEx);
-            }
-        }
     }
     
 }
