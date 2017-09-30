@@ -55,12 +55,6 @@ class Onyx {
     public static boolean gameEnd = false;
     public static boolean whitePlayingLowBorder = false;
     public static boolean blackPlayingLowBorder = false;
-    
-    // String formats.
-    private static final String ERR = "Something got messy :X >> %s";
-    private static final String POSCOL_SEARCH_FORMAT = "SEARCH.ONYXPOSCOL -> [%s] score -> [%.1f]";
-    private static final String CNX_SEARCH_FORMAT = "SEARCH.CNX -> [%s] score -> [%.3f]";
-    private static final String VCNX_SEARCH_FORMAT = "SEARCH.VCNX -> [%s] score -> [%.3f]";
     private static final String WIN = "%s's WIN ! WuHu !!!";
             
     private final static HashMap<STYPE, OnyxAbstractSearchable> SEARCH = new HashMap<>();
